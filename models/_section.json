@@ -50,7 +50,12 @@
         "hero",
         "cards",
         "columns",
-        "fragment"
+        "fragment",
+        "accordion",
+        "breadcrumbs",
+        "carousel",
+        "download",
+        "teaser"
       ]
     }
   ]

@@ -142,6 +142,58 @@
     ]
   },
   {
+    "id": "accordion",
+    "fields": [
+      {
+        "component": "boolean",
+        "name": "accordion-single-open",
+        "label": "Allow Only One Item Open at a Time"
+      }
+    ]
+  },
+  {
+    "id": "accordionitem",
+    "fields": [
+      {
+        "component": "text",
+        "name": "accordion-item-title",
+        "label": "Accordion Item Title",
+        "valueType": "string",
+        "value": ""
+      },
+      {
+        "component": "richtext",
+        "name": "accordion-item-content",
+        "label": "Accordion Item Content",
+        "valueType": "string",
+        "value": ""
+      },
+      {
+        "component": "reference",
+        "name": "image",
+        "label": "Image",
+        "valueType": "string",
+        "multi": false
+      },
+      {
+        "component": "boolean",
+        "name": "accordion-item-open",
+        "label": "Initially Open"
+      }
+    ]
+  },
+  {
+    "id": "breadcrumbs",
+    "fields": [
+      {
+        "component": "boolean",
+        "name": "showbreadcrumbs",
+        "value": "",
+        "label": "Show Breadcrumbs"
+      }
+    ]
+  },
+  {
     "id": "card",
     "fields": [
       {
@@ -156,6 +208,64 @@
         "name": "text",
         "value": "",
         "label": "Text",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "carousel",
+    "fields": [
+      {
+        "component": "select",
+        "name": "classes",
+        "value": "",
+        "label": "Background Color",
+        "description": "The button background color",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "Red",
+            "value": "bg-red"
+          },
+          {
+            "name": "Green",
+            "value": "bg-green"
+          },
+          {
+            "name": "Blue",
+            "value": "bg-blue"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "carouselitem",
+    "fields": [
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "image",
+        "label": "Image",
+        "multi": false
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "imageAlt",
+        "label": "Image Alt Text",
+        "value": ""
+      },
+      {
+        "component": "richtext",
+        "name": "slide_title",
+        "label": "Slide Title",
+        "valueType": "string"
+      },
+      {
+        "component": "button",
+        "name": "slide_button",
+        "label": "Slide Button",
         "valueType": "string"
       }
     ]
@@ -176,6 +286,119 @@
         "name": "rows",
         "value": "",
         "label": "Rows"
+      }
+    ]
+  },
+  {
+    "id": "custom-button",
+    "fields": [
+      {
+        "component": "aem-content",
+        "name": "custom-button-link",
+        "label": "Button Link"
+      },
+      {
+        "component": "text",
+        "name": "custom-button-label",
+        "label": "Button Label"
+      },
+      {
+        "component": "select",
+        "name": "custom-button-target",
+        "label": "Link Target",
+        "options": [
+          {
+            "name": "Same Window",
+            "value": ""
+          },
+          {
+            "name": "New Tab",
+            "value": "_blank"
+          }
+        ]
+      },
+      {
+        "component": "multiselect",
+        "name": "classes",
+        "label": "Style",
+        "valueType": "string",
+        "maxSize": 2,
+        "options": [
+          {
+            "name": "Style",
+            "children": [
+              {
+                "name": "Primary",
+                "value": "primary"
+              },
+              {
+                "name": "Secondary",
+                "value": "secondary"
+              },
+              {
+                "name": "Tertiary",
+                "value": "tertiary"
+              },
+              {
+                "name": "Text",
+                "value": "text"
+              }
+            ]
+          },
+          {
+            "name": "Type",
+            "children": [
+              {
+                "name": "Link",
+                "value": "link"
+              },
+              {
+                "name": "Download",
+                "value": "download"
+              },
+              {
+                "name": "Email",
+                "value": "email"
+              },
+              {
+                "name": "Telephone",
+                "value": "telephone"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "download",
+    "fields": [
+      {
+        "component": "text",
+        "name": "downloadtitle",
+        "value": "",
+        "label": "Title"
+      },
+      {
+        "component": "richtext",
+        "name": "downloaddescription",
+        "value": "",
+        "label": "Description"
+      },
+      {
+        "component": "text",
+        "name": "downloadbuttonlabel",
+        "label": "Download Button Label"
+      },
+      {
+        "component": "aem-content",
+        "name": "downloadfile",
+        "label": "Asset",
+        "value": "",
+        "valueType": "string",
+        "validation": {
+          "rootPath": "/content/dam/aem-xwalk"
+        }
       }
     ]
   },
@@ -212,6 +435,111 @@
         "value": "",
         "label": "Text",
         "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "teaser",
+    "fields": [
+      {
+        "component": "text",
+        "name": "teaser-title",
+        "value": "",
+        "label": "Title"
+      },
+      {
+        "component": "richtext",
+        "name": "teaser-description",
+        "value": "",
+        "label": "Description"
+      },
+      {
+        "component": "reference",
+        "name": "teaser-image",
+        "label": "Image",
+        "valueType": "string",
+        "multi": false
+      },
+      {
+        "name": "teaser-imageAlt",
+        "component": "text",
+        "title": "Image Alt Text"
+      },
+      {
+        "component": "aem-content",
+        "name": "custom-button-link",
+        "label": "Button Link"
+      },
+      {
+        "component": "text",
+        "name": "custom-button-label",
+        "label": "Button Label"
+      },
+      {
+        "component": "select",
+        "name": "custom-button-target",
+        "label": "Link Target",
+        "options": [
+          {
+            "name": "Same Window",
+            "value": ""
+          },
+          {
+            "name": "New Tab",
+            "value": "_blank"
+          }
+        ]
+      },
+      {
+        "component": "multiselect",
+        "name": "classes",
+        "label": "Style",
+        "valueType": "string",
+        "maxSize": 2,
+        "options": [
+          {
+            "name": "Style",
+            "children": [
+              {
+                "name": "Primary",
+                "value": "primary"
+              },
+              {
+                "name": "Secondary",
+                "value": "secondary"
+              },
+              {
+                "name": "Tertiary",
+                "value": "tertiary"
+              },
+              {
+                "name": "Text",
+                "value": "text"
+              }
+            ]
+          },
+          {
+            "name": "Type",
+            "children": [
+              {
+                "name": "Link",
+                "value": "link"
+              },
+              {
+                "name": "Download",
+                "value": "download"
+              },
+              {
+                "name": "Email",
+                "value": "email"
+              },
+              {
+                "name": "Telephone",
+                "value": "telephone"
+              }
+            ]
+          }
+        ]
       }
     ]
   }

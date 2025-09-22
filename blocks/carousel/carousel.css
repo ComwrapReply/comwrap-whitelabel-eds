@@ -1,0 +1,199 @@
+.carousel {
+  position: relative;
+  margin: 0 auto;
+  max-width: var(--content-width);
+}
+
+.carousel-slides-container {
+  position: relative;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+.carousel-slides {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-flow: row nowrap;
+  gap: 0;
+  scroll-snap-type: x mandatory;
+  overflow-x: scroll;
+  scrollbar-width: none;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.carousel-slides::-webkit-scrollbar {
+  display: none;
+}
+
+.carousel-slide {
+  flex: 0 0 100%;
+  scroll-snap-align: start;
+  position: relative;
+  gap: 2rem;
+}
+
+.carousel-slide[aria-hidden="true"] {
+  visibility: hidden;
+}
+
+.carousel-slide-image {
+  width: 100%;
+  flex: 1 1 auto;
+}
+
+.carousel-slide-image img {
+  width: 100%;
+  height: 100vh;
+  object-fit: cover;
+}
+
+.carousel-slide-content {
+  position: absolute;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  flex-flow: column nowrap;
+  gap: 0;
+  max-width: 100%;
+  color: rgb(var(--color-pure-white));
+  background: rgb(var(--color-pure-black));
+  opacity: 0.7;
+  padding: 1.25rem;
+  box-shadow: inset 0 0 12.5rem #000;
+  bottom: 4.6875rem;
+  z-index: 5;
+}
+
+.carousel-slide-content h1,
+.carousel-slide-content h2,
+.carousel-slide-content h3,
+.carousel-slide-content h4,
+.carousel-slide-content h5,
+.carousel-slide-content h6,
+.carousel-slide-content p {
+  margin: 0;
+}
+
+.carousel-slide-content .carousel-buttons {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-flow: row nowrap;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.carousel-slide-content .carousel-buttons a {
+  text-decoration: none;
+  margin: 0;
+}
+
+.carousel-slide-content .carousel-buttons a.secondary {
+  background: black;
+  border: 1px solid rgb(var(--color-pure-white));
+  color: rgb(var(--color-pure-white));
+}
+
+.carousel-slide-content .carousel-buttons a.secondary:hover {
+  background: rgb(var(--color-pure-white));
+  color: rgb(var(--color-pure-black));
+}
+
+.carousel-navigation-buttons {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  z-index: 1;
+  transform: translateY(-50%);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-flow: row nowrap;
+  gap: 0;
+  padding: 0 1rem;
+  pointer-events: none;
+}
+
+.carousel-navigation-buttons button {
+  width: 3rem;
+  height: 3rem;
+  border: 0;
+  border-radius: 50%;
+  background-color: var(--overlay-background-color);
+  cursor: pointer;
+  pointer-events: all;
+  position: relative;
+  transition: background-color 0.3s ease;
+}
+
+.carousel-slide-indicator button {
+  width: 0.75rem;
+  height: 0.75rem;
+  border: none;
+  border-radius: 50%;
+  background-color: rgb(var(--color-pure-white));
+  opacity: 0.5;
+  cursor: pointer;
+  padding: 0;
+  transition: background-color 0.3s ease;
+}
+
+.carousel-navigation-buttons button:hover {
+  background-color: var(--overlay-background-hover-color);
+}
+
+.carousel-navigation-buttons button::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0.75rem;
+  height: 0.75rem;
+  border-style: solid;
+  border-width: 0.1875rem 0.1875rem 0 0;
+  border-color: var(--background-color);
+}
+
+.carousel-navigation-buttons button.slide-prev::before {
+  transform: translate(-25%, -50%) rotate(-135deg);
+}
+
+.carousel-navigation-buttons button.slide-next::before {
+  transform: translate(-75%, -50%) rotate(45deg);
+}
+
+.carousel-slide-indicators {
+  position: absolute;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 0.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  z-index: 5;
+}
+
+.carousel-slide-indicator {
+  margin: 0;
+  padding: 0;
+}
+
+.carousel-slide-indicator button:hover {
+  background-color: rgb(var(--color-pure-white));
+  opacity: 0.8;
+}
+
+.carousel-slide-indicator button[disabled] {
+  background-color: rgb(var(--color-pure-white));
+  cursor: default;
+}
+
+.adobe-ue-edit .carousel-slide-image img {
+  height: 37.5rem;
+}

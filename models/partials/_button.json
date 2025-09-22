@@ -1,0 +1,41 @@
+{
+    "fields": [
+        {
+          "component": "aem-content",
+          "name": "custom-button-link",
+          "label": "Button Link"
+        },
+        {
+          "component": "text",
+          "name": "custom-button-label",
+          "label": "Button Label"
+        },
+        {
+          "component": "select",
+          "name": "custom-button-target",
+          "label": "Link Target",
+          "options": [
+            {
+              "name": "Same Window",
+              "value": ""
+            },
+            {
+              "name": "New Tab",
+              "value": "_blank"
+            }
+          ]
+        },
+        {
+          "component": "multiselect",
+          "name": "classes",
+          "label": "Style",
+          "valueType": "string",
+          "maxSize": 2,
+          "options": [
+            {
+              "...": "../../models/partials/_button-types.json#/options"
+            }
+          ]
+        }
+      ]
+    }
