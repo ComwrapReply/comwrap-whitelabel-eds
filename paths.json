@@ -1,10 +1,10 @@
 {
   "mappings": [
-    "/content/aem-boilerplate/:/",
-    "/content/aem-boilerplate/configuration:/.helix/config.json",
-    "/content/aem-boilerplate/metadata:/metadata.json"
+    "/content/comwrap-whitelabel-eds/:/",
+    "/content/comwrap-whitelabel-eds/configuration:/.helix/config.json",
+    "/content/comwrap-whitelabel-eds/metadata:/metadata.json"
   ],
   "includes": [
-    "/content/aem-boilerplate/"
+    "/content/comwrap-whitelabel-eds/"
   ]
 }
