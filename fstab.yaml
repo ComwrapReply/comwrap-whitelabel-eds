@@ -1,5 +1,5 @@
 mountpoints:
   /:
-    url: "https://author-p130360-e1272151.adobeaemcloud.com/bin/franklin.delivery/adobe-rnd/aem-boilerplate-xwalk/main"
+    url: "https://author-p24706-e491522.adobeaemcloud.com/bin/franklin.delivery/ComwrapReply/comwrap-whitelabel-eds/main"
     type: "markup"
     suffix: ".html"
