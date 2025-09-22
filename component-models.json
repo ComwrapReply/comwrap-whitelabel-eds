@@ -142,6 +142,47 @@
     ]
   },
   {
+    "id": "accordion",
+    "fields": [
+      {
+        "component": "boolean",
+        "name": "accordion-single-open",
+        "label": "Allow Only One Item Open at a Time"
+      }
+    ]
+  },
+  {
+    "id": "accordionitem",
+    "fields": [
+      {
+        "component": "text",
+        "name": "accordion-item-title",
+        "label": "Accordion Item Title",
+        "valueType": "string",
+        "value": ""
+      },
+      {
+        "component": "richtext",
+        "name": "accordion-item-content",
+        "label": "Accordion Item Content",
+        "valueType": "string",
+        "value": ""
+      },
+      {
+        "component": "reference",
+        "name": "image",
+        "label": "Image",
+        "valueType": "string",
+        "multi": false
+      },
+      {
+        "component": "boolean",
+        "name": "accordion-item-open",
+        "label": "Initially Open"
+      }
+    ]
+  },
+  {
     "id": "card",
     "fields": [
       {
