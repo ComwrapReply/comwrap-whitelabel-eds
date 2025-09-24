@@ -1,0 +1,216 @@
+name: Comment commits to Jira
+
+on:
+  push:
+    branches: ["**"]
+
+jobs:
+  comment:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout (no need to fetch history for this job)
+        uses: actions/checkout@v4
+
+      - name: Extract commits JSON
+        id: commits
+        run: |
+          echo 'commits<<EOF' >> $GITHUB_OUTPUT
+          echo '${{ toJson(github.event.commits) }}' >> $GITHUB_OUTPUT
+          echo 'EOF' >> $GITHUB_OUTPUT
+
+      - name: Build Jira comments per issue
+        id: build
+        run: |
+          python3 - << 'PY'
+          import json, re, os
+          
+          commits_json = os.environ.get("COMMITS", "[]")
+          if not commits_json or commits_json.strip() == "":
+              commits_json = "[]"
+          
+          try:
+              commits = json.loads(commits_json)
+          except json.JSONDecodeError as e:
+              print(f"Error parsing commits JSON: {e}")
+              print(f"Commits data: {commits_json}")
+              commits = []
+          
+          if not commits:
+              print("No commits found, skipping Jira comment generation")
+              with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+                  f.write("payloads=[]\n")
+              exit(0)
+          
+          key_re = re.compile(r"\b[A-Z][A-Z0-9]+-\d+\b")
+          by_issue = {}
+          
+          def create_adf_hyperlink(text, url):
+              """Create ADF hyperlink structure"""
+              return {
+                  "type": "text",
+                  "text": text,
+                  "marks": [
+                      {
+                          "type": "link",
+                          "attrs": {
+                              "href": url
+                          }
+                      }
+                  ]
+              }
+          
+          def create_adf_text(text):
+              """Create plain ADF text"""
+              return {
+                  "type": "text",
+                  "text": text
+              }
+          
+          def convert_urls_in_text(text):
+              """Convert any URLs in text to ADF hyperlink format"""
+              import re
+              url_pattern = r'https?://[^\s<>"{}|\\^`\[\]]+[^\s<>"{}|\\^`\[\].,;:!?\'")\]]'
+              
+              result = []
+              last_end = 0
+              
+              for match in re.finditer(url_pattern, text):
+                  # Add text before the URL
+                  if match.start() > last_end:
+                      before_text = text[last_end:match.start()]
+                      if before_text:
+                          result.append(create_adf_text(before_text))
+                  
+                  # Add the URL as hyperlink
+                  url = match.group(0)
+                  # Clean up any trailing punctuation that might have been included
+                  url = url.rstrip('.,;:!?"\'/)')
+                  
+                  # Create a shortened display text for long URLs
+                  if len(url) > 60:
+                      display_text = url[:30] + "..." + url[-27:]
+                  else:
+                      display_text = url
+                  
+                  result.append(create_adf_hyperlink(display_text, url))
+                  last_end = match.end()
+              
+              # Add any remaining text after the last URL
+              if last_end < len(text):
+                  remaining_text = text[last_end:]
+                  if remaining_text:
+                      result.append(create_adf_text(remaining_text))
+              
+              # If no URLs were found, return the original text as ADF text
+              if not result:
+                  result.append(create_adf_text(text))
+              
+              return result
+          
+          for c in commits:
+              msg = f"{c['message']}".strip()
+              commit_url = c.get('url') or f"{os.environ['GITHUB_SERVER_URL']}/{os.environ['GITHUB_REPOSITORY']}/commit/{c['id']}"
+              found = set(key_re.findall(msg))
+              if not found: 
+                  continue
+              
+              # Create ADF content with proper hyperlinks
+              content = []
+              
+              # 1. Commit message with auto-converted URLs
+              msg_content = convert_urls_in_text(f"{msg}\n")
+              content.extend(msg_content)
+              
+              # 2. GitHub commit link
+              content.append(create_adf_text("GitHub Commit: "))
+              content.append(create_adf_hyperlink(c['id'][:8], commit_url))
+              content.append(create_adf_text("\n"))
+              
+              # 3. Check for PR/MR link in commit message
+              pr_pattern = r'#(\d+)'
+              pr_match = re.search(pr_pattern, msg)
+              if pr_match:
+                  pr_number = pr_match.group(1)
+                  pr_url = f"{os.environ['GITHUB_SERVER_URL']}/{os.environ['GITHUB_REPOSITORY']}/pull/{pr_number}"
+                  content.append(create_adf_text("Pull Request: "))
+                  content.append(create_adf_hyperlink(f"#{pr_number}", pr_url))
+                  content.append(create_adf_text("\n"))
+              
+              # 4. Check for demo page link (look for common patterns)
+              demo_patterns = [
+                  r'demo[:\s]+([^\s"\'<>]+)',
+                  r'preview[:\s]+([^\s"\'<>]+)',
+                  r'live[:\s]+([^\s"\'<>]+)'
+              ]
+              for pattern in demo_patterns:
+                  demo_match = re.search(pattern, msg, re.IGNORECASE)
+                  if demo_match:
+                      demo_url = demo_match.group(1)
+                      # Clean up any trailing punctuation
+                      demo_url = demo_url.rstrip('.,;:!?"\'/)')
+                      if not demo_url.startswith('http'):
+                          demo_url = f"https://{demo_url}"
+                      content.append(create_adf_text("Demo Page: "))
+                      content.append(create_adf_hyperlink("View Demo", demo_url))
+                      content.append(create_adf_text("\n"))
+                      break
+              
+              # Create the formatted line for this commit
+              line_content = {
+                  "type": "paragraph",
+                  "content": content
+              }
+              
+              for key in found:
+                  by_issue.setdefault(key, []).append(line_content)
+
+          # Create proper ADF payloads
+          payloads = []
+          for k, v in by_issue.items():
+              adf_comment = {
+                  "type": "doc",
+                  "version": 1,
+                  "content": v  # v is already a list of ADF paragraph objects
+              }
+              payloads.append({"key": k, "comment": adf_comment})
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+              f.write(f"payloads={json.dumps(payloads)}\n")
+          PY
+        env:
+          COMMITS: ${{ steps.commits.outputs.commits }}
+
+      - name: Post comments to Jira
+        if: ${{ steps.build.outputs.payloads != '' && steps.build.outputs.payloads != '[]' }}
+        run: |
+          python3 - << 'PY'
+          import json, os, base64, urllib.request
+          
+          payloads = json.loads(os.environ["PAYLOADS"])
+          jira = os.environ["JIRA_BASE_URL"].rstrip("/")
+          auth = (os.environ["JIRA_EMAIL"] + ":" + os.environ["JIRA_API_TOKEN"]).encode()
+          b64 = base64.b64encode(auth).decode()
+
+          for p in payloads:
+              url = f"{jira}/rest/api/3/issue/{p['key']}/comment"
+              # Use the pre-built ADF comment structure
+              comment_body = {
+                  "body": p["comment"]  # p["comment"] is already in ADF format
+              }
+              data = json.dumps(comment_body).encode()
+              req = urllib.request.Request(url, data=data, headers={
+                  "Authorization": f"Basic {b64}",
+                  "Accept": "application/json",
+                  "Content-Type": "application/json"
+              })
+              try:
+                  with urllib.request.urlopen(req) as resp:
+                      print(p["key"], "->", resp.status)
+              except Exception as e:
+                  print("Failed", p["key"], e)
+          PY
+        env:
+          PAYLOADS: ${{ steps.build.outputs.payloads }}
+          JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
+          JIRA_EMAIL: ${{ secrets.JIRA_EMAIL }}
+          JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
