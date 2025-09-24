@@ -1,0 +1,40 @@
+.breadcrumbs nav {
+  padding: 1rem 0;
+}
+
+.breadcrumbs ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.breadcrumbs li {
+  display: flex;
+  align-items: center;
+}
+
+.breadcrumbs li:not(:last-child)::after {
+  content: "|";
+  margin: 0 0.5rem;
+  color: var(--text-color, #666);
+}
+
+.breadcrumbs a {
+  color: var(--link-color);
+  text-decoration: none;
+  font-size: 0.875rem;
+  border-radius: unset;
+}
+
+.breadcrumbs a:hover {
+  box-shadow: 0 2px rgb(var(--color-team-red));
+  cursor: pointer;
+}
+
+.breadcrumbs a[aria-current="page"] {
+  color: var(--text-color, #333);
+  pointer-events: none;
+}

@@ -1,0 +1,54 @@
+{
+    "definitions": [
+      {
+        "title": "Download",
+        "id": "download",
+        "plugins": {
+          "xwalk": {
+            "page": {
+              "resourceType": "core/franklin/components/block/v1/block",
+              "template": {
+                "name": "Download",
+                "model": "download"
+              }
+            }
+          }
+        }
+      }
+    ],
+    "models": [
+      {
+        "id": "download",
+        "fields": [
+          {
+            "component": "text",
+            "name": "downloadtitle",
+            "value": "",
+            "label": "Title"
+          },
+          {
+            "component": "richtext",
+            "name": "downloaddescription",
+            "value": "",
+            "label": "Description"
+          },
+          {
+            "component": "text",
+            "name": "downloadbuttonlabel",
+            "label": "Download Button Label"
+          },
+          {
+            "component": "aem-content",
+            "name": "downloadfile",
+            "label": "Asset",
+            "value": "",
+            "valueType": "string",
+            "validation": {
+                  "rootPath": "/content/dam/aem-xwalk"
+              }
+          }
+        ]
+      }
+    ],
+    "filters": []
+  }

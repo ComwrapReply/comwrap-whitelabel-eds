@@ -1,0 +1,46 @@
+{
+  "options": [
+    {
+      "name": "Style",
+      "children": [
+        {
+          "name": "Primary",
+          "value": "primary"
+        },
+        {
+          "name": "Secondary",
+          "value": "secondary"
+        },
+        {
+          "name": "Tertiary",
+          "value": "tertiary"
+        },
+        {
+          "name": "Text",
+          "value": "text"
+        }
+      ]
+    },
+    {
+      "name": "Type",
+      "children": [
+        {
+          "name": "Link",
+          "value": "link"
+        },
+        {
+          "name": "Download",
+          "value": "download"
+        },
+        {
+          "name": "Email",
+          "value": "email"
+        },
+        {
+          "name": "Telephone",
+          "value": "telephone"
+        }
+      ]
+    }
+  ]
+}

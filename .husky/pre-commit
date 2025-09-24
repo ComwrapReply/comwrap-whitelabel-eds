@@ -1,1 +1,17 @@
+#!/bin/sh
+
+# Source NVM if available
+if [ -s "$HOME/.nvm/nvm.sh" ]; then
+  . "$HOME/.nvm/nvm.sh"
+fi
+
+# Try to find node in PATH, fallback to common locations
+if ! command -v node >/dev/null 2>&1; then
+  if [ -f "$HOME/.nvm/versions/node/v22.19.0/bin/node" ]; then
+    export PATH="$HOME/.nvm/versions/node/v22.19.0/bin:$PATH"
+  elif [ -f "/usr/local/bin/node" ]; then
+    export PATH="/usr/local/bin:$PATH"
+  fi
+fi
+
 node .husky/pre-commit.mjs

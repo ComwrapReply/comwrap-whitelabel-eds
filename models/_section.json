@@ -51,7 +51,11 @@
         "cards",
         "columns",
         "fragment",
-        "accordion"
+        "accordion",
+        "breadcrumbs",
+        "carousel",
+        "download",
+        "teaser"
       ]
     }
   ]

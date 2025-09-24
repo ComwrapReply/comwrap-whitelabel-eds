@@ -1,0 +1,46 @@
+.teaser-image {
+  width: 100%;
+  max-width: 400px;
+  margin-bottom: var(--spacing-m);
+}
+
+.teaser-image img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 8px;
+}
+
+.teaser-content {
+  padding: var(--spacing-m);
+  background: var(--light-color);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px #0000000a;
+}
+
+.teaser-title {
+  font-size: var(--heading-font-size-m);
+  font-weight: var(--font-bold);
+  margin: 0 0 var(--spacing-s) 0;
+}
+
+.teaser-description {
+  font-size: var(--body-font-size-s);
+  margin: 0 0 var(--spacing-m) 0;
+}
+
+.teaser-button .teaser-btn {
+  display: inline-block;
+  padding: var(--btn-padding);
+  background: rgb(var(--button-primary));
+  color: rgb(var(--on-button-primary));
+  border-radius: 4px;
+  text-decoration: none;
+  font-weight: var(--font-bold);
+  transition: background 0.3s, color 0.3s;
+}
+
+.teaser-button .teaser-btn:hover {
+  background: rgb(var(--button-primary-hover));
+  color: rgb(var(--on-button-primary));
+} 

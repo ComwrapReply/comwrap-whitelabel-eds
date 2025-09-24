@@ -16,7 +16,11 @@
       "cards",
       "columns",
       "fragment",
-      "accordion"
+      "accordion",
+      "breadcrumbs",
+      "carousel",
+      "download",
+      "teaser"
     ]
   },
   {
@@ -29,6 +33,12 @@
     "id": "cards",
     "components": [
       "card"
+    ]
+  },
+  {
+    "id": "carousel",
+    "components": [
+      "carouselitem"
     ]
   },
   {
