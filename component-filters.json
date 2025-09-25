@@ -62,12 +62,5 @@
     "components": [
       "facts-figures-card"
     ]
-  },
-  {
-    "id": "facts-figures-card",
-    "components": [
-      "text",
-      "title"
-    ]
   }
 ]

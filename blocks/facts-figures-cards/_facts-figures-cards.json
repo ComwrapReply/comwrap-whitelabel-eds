@@ -33,20 +33,21 @@
   ],
   "models": [
     {
-      "id": "facts-figures-cards",
+      "id": "facts-figures-card",
       "fields": [
         {
-          "component": "select",
-          "name": "classes",
+          "component": "richtext",
+          "name": "text",
           "value": "",
-          "label": "Background Style",
-          "description": "The background style",
-          "valueType": "string",
-          "options": [
-            { "name": "Default", "value": "" },
-            { "name": "Blue", "value": "blue" },
-            { "name": "Grey", "value": "grey" }
-          ]
+          "label": "Text",
+          "valueType": "string"
+        },
+        {
+          "component": "text",
+          "name": "title",
+          "value": "",
+          "label": "Title",
+          "valueType": "string"
         }
       ]
     }
@@ -56,13 +57,6 @@
       "id": "facts-figures-cards",
       "components": [
         "facts-figures-card"
-      ]
-    },
-    {
-      "id": "facts-figures-card",
-      "components": [
-        "text",
-        "title"
       ]
     }
   ]
