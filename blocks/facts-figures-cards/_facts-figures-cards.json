@@ -35,6 +35,33 @@
   ],
   "models": [
     {
+      "id": "facts-figures-cards",
+        "fields": [
+          {
+            "component": "select",
+            "name": "classes",
+            "value": "",
+            "label": "Background Color",
+            "description": "The button background color",
+            "valueType": "string",
+            "options": [
+              {
+                "name": "Red",
+                "value": "bg-red"
+              },
+              {
+                "name": "Green",
+                "value": "bg-green"
+              },
+              {
+                "name": "Blue",
+                "value": "bg-blue"
+              }
+            ]
+          }
+        ]
+    },
+    {
       "id": "facts-figures-card",
       "fields": [
         {
@@ -43,28 +70,6 @@
           "value": "",
           "label": "Text",
           "valueType": "string"
-        },
-        {
-          "component": "select",
-          "valueType": "string",
-          "name": "classes",
-          "value": "",
-          "label": "Background Style",
-          "description": "The background style",
-          "options": [
-            {
-              "name": "Default",
-              "value": ""
-            },
-            {
-              "name": "Blue",
-              "value": "blue"
-            },
-            {
-              "name": "Grey",
-              "value": "grey"
-            }
-          ]
         }
       ]
     }
