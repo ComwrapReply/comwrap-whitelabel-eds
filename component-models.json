@@ -403,26 +403,43 @@
     ]
   },
   {
-    "id": "facts-figures-card",
+    "id": "facts-figures-cards",
     "fields": [
       {
         "component": "select",
         "name": "classes",
         "value": "",
-        "label": "Background Color",
-        "description": "The button background color",
+        "label": "Styles",
+        "description": "The styles of the columns",
         "valueType": "string",
         "options": [
           {
-            "name": "Red",
-            "value": "bg-red"
+            "name": "Default",
+            "value": ""
           },
           {
-            "name": "Green",
-            "value": "bg-green"
+            "name": "Card Style",
+            "value": "card"
+          },
+          {
+            "name": "Bordered",
+            "value": "bordered"
+          },
+          {
+            "name": "Highlighted",
+            "value": "highlighted"
+          },
+          {
+            "name": "Minimal",
+            "value": "minimal"
           }
         ]
-      },
+      }
+    ]
+  },
+  {
+    "id": "facts-figures-card",
+    "fields": [
       {
         "component": "richtext",
         "name": "text",
