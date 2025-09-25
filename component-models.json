@@ -403,7 +403,7 @@
     ]
   },
   {
-    "id": "facts-figures-cards",
+    "id": "facts-figures-card",
     "fields": [
       {
         "component": "select",
@@ -420,18 +420,9 @@
           {
             "name": "Green",
             "value": "bg-green"
-          },
-          {
-            "name": "Blue",
-            "value": "bg-blue"
           }
         ]
-      }
-    ]
-  },
-  {
-    "id": "facts-figures-card",
-    "fields": [
+      },
       {
         "component": "richtext",
         "name": "text",
