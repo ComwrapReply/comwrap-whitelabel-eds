@@ -41,13 +41,6 @@
           "value": "",
           "label": "Text",
           "valueType": "string"
-        },
-        {
-          "component": "text",
-          "name": "title",
-          "value": "",
-          "label": "Title",
-          "valueType": "string"
         }
       ]
     }
@@ -62,8 +55,7 @@
     {
       "id": "facts-figures-card",
       "components": [
-        "text",
-        "title"
+        "text"
       ]
     }
   ]
