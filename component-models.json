@@ -403,53 +403,21 @@
     ]
   },
   {
-    "id": "facts-figures-card",
+    "id": "facts-figures-cards",
     "fields": [
       {
         "component": "text",
-        "name": "figure",
-        "label": "Figure/Number",
-        "valueType": "string",
-        "value": ""
+        "valueType": "number",
+        "name": "columns",
+        "value": "",
+        "label": "Columns"
       },
       {
         "component": "text",
-        "name": "figureUnit",
-        "label": "Figure Unit (e.g., billion, %)",
-        "valueType": "string",
-        "value": ""
-      },
-      {
-        "component": "richtext",
-        "name": "description",
-        "label": "Description",
-        "valueType": "string",
-        "value": ""
-      },
-      {
-        "component": "multiselect",
-        "name": "classes",
-        "label": "Card Style",
-        "valueType": "string",
-        "options": [
-          {
-            "name": "Light Background",
-            "value": "light-bg"
-          },
-          {
-            "name": "Dark Background",
-            "value": "dark-bg"
-          },
-          {
-            "name": "Blue Gradient",
-            "value": "blue-gradient"
-          },
-          {
-            "name": "Grey Gradient",
-            "value": "grey-gradient"
-          }
-        ],
-        "value": ""
+        "valueType": "number",
+        "name": "rows",
+        "value": "",
+        "label": "Rows"
       }
     ]
   },

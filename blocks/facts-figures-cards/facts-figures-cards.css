@@ -1,11 +1,15 @@
 /* Facts and Figures Cards Block Styling */
 
+/* Aligned with columns block structure for consistency */
+
 /* Container Block - Main wrapper */
 .block.facts-figures-cards {
   margin: 2rem 0;
   padding: 0;
 
   /* Container has no styling options - only template properties for columns/rows */
+
+  /* Similar to columns block structure */
 }
 
 /* Block wrapper - Layout container */
@@ -28,6 +32,9 @@
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   opacity: 0;
   transform: translateY(30px);
+  margin: 0;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 /* Card animation states */
@@ -209,4 +216,23 @@
   .block.facts-figures-card.blue-gradient {
     border-color: var(--background-color);
   }
+}
+
+/* Additional block structure improvements */
+.facts-figures-cards-wrapper .block.facts-figures-card {
+  /* Ensure proper block behavior within wrapper */
+  display: block;
+  position: relative;
+}
+
+/* Ensure proper spacing between cards */
+.facts-figures-cards-wrapper .block.facts-figures-card + .block.facts-figures-card {
+  margin-top: 0; /* Reset any default margins */
+}
+
+/* Block content structure */
+.facts-figures-cards-wrapper .block.facts-figures-card > div {
+  /* Ensure child divs don't interfere with layout */
+  width: 100%;
+  height: 100%;
 }

@@ -2,6 +2,7 @@
  * Facts and Figures Cards Block
  * Displays statistical data in an animated card grid layout
  * Supports responsive columns, gradient backgrounds, and scroll animations
+ * Aligned with columns block structure for consistency
  */
 
 // Configuration object for animation and layout settings
@@ -185,12 +186,13 @@ function setupResponsiveHandler(wrapper) {
 
 /**
  * Extracts template properties from the block element
- * Similar to how columns block handles template properties
+ * Aligned with columns block structure for consistency
  * @param {HTMLElement} block - The main block element
  * @returns {Object} Template properties object
  */
 function getTemplateProperties(block) {
   // Get columns and rows from block attributes (set by template properties)
+  // This follows the same pattern as the columns block
   const columns = block.getAttribute('data-columns')
                  || block.dataset.columns
                  || CONFIG.defaultColumns.toString();
@@ -203,6 +205,7 @@ function getTemplateProperties(block) {
 
 /**
  * Main decoration function for Facts and Figures Cards block
+ * Aligned with columns block structure for consistency
  * @param {HTMLElement} block - The main block element
  */
 export default async function decorate(block) {
@@ -211,13 +214,13 @@ export default async function decorate(block) {
   }
 
   try {
-    // Extract template properties
+    // Extract template properties (columns and rows from template)
     const { columns, rows } = getTemplateProperties(block);
 
-    // Create wrapper element
+    // Create wrapper element with proper column configuration
     const wrapper = createWrapper(block, columns, rows);
 
-    // Get all child card elements
+    // Get all child card elements (these are the individual facts-figures-card blocks)
     const cards = [...block.children];
 
     if (cards.length === 0) {
@@ -227,6 +230,8 @@ export default async function decorate(block) {
     // Process each card and move to wrapper
     cards.forEach((card, index) => {
       if (card && card.nodeType === Node.ELEMENT_NODE) {
+        // Add the facts-figures-card class to each child block
+        card.classList.add('facts-figures-card');
         processCard(card, index);
         wrapper.appendChild(card);
       }
@@ -246,6 +251,7 @@ export default async function decorate(block) {
     block.setAttribute('role', 'region');
     block.setAttribute('aria-label', 'Facts and figures');
   } catch (error) {
+    console.error('Facts and Figures Cards decoration failed:', error);
     // Fallback: ensure cards are visible even if decoration fails
     const cards = block.querySelectorAll(SELECTORS.card);
     cards.forEach((card) => {
