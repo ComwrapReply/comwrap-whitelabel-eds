@@ -72,9 +72,13 @@ function pullItemClassesAndClean(card) {
     if (ITEM_CLASS_FIELDS.includes(head)) {
       picked = raw; // value-only cell
     } else {
-      // fallback: "classes_style: blue"
-      const m = raw.match(/^\s*classes_(style|size|emphasis)\s*:\s*(.+)\s*$/i);
-      if (m) picked = m[2];
+      // fallback: "classes_style: blue" or "facts-figures-card, grey"
+      const m = raw.match(/^\s*classes_(style|size|emphasis)\s*:\s*(.+)\s*$/i)
+        || raw.match(/^\s*facts-figures-card,\s*(.+)\s*$/i);
+      if (m) {
+        const [, pickedValue] = m;
+        picked = pickedValue;
+      }
     }
 
     if (picked) {
@@ -233,7 +237,6 @@ function processCard(card, index) {
     applyCardStyleClasses(card);
   }
 
-
   // Apply element grouping style classes to the card
   applyCardStyleClasses(card);
 
@@ -247,8 +250,10 @@ function processCard(card, index) {
   childDivs.forEach((div, divIndex) => {
     const text = div.textContent?.trim() || '';
 
-    // After cleanup above, just skip empties
-    if (!text) { return; }
+    // Skip empty divs or divs that contain only class information
+    if (!text || text.match(/^(?:facts-figures-card|facts-and-figures-card),\s*\w+$/)) {
+      return;
+    }
 
     // First non-empty div is likely the title
     if (!titleElement && divIndex === 0) {
@@ -310,6 +315,15 @@ function processCard(card, index) {
     const descriptionWrapper = processDescriptionElements(descriptionElements);
     textWrapper.appendChild(descriptionWrapper);
   }
+
+  // Final cleanup: remove any remaining class information from description
+  const descriptionParagraphs = textWrapper.querySelectorAll('.facts-figures-card-description p');
+  descriptionParagraphs.forEach((p) => {
+    const text = p.textContent?.trim() || '';
+    if (text.match(/^(?:facts-figures-card|facts-and-figures-card),\s*\w+$/)) {
+      p.remove();
+    }
+  });
 
   // Set up animation delay based on card index
   card.style.transitionDelay = `${index * CONFIG.animationDelay}ms`;
