@@ -34,24 +34,7 @@
   "models": [
     {
       "id": "facts-figures-cards",
-      "fields": [
-        {
-          "component": "select",
-          "name": "classes",
-          "value": "",
-          "label": "Styles",
-          "description": "The styles of the columns",
-          "valueType": "string",
-          "options": [
-            {"name": "Default", "value": ""},
-            {"name": "Blue", "value": "blue"},
-            {"name": "Grey", "value": "grey"},
-            {"name": "Bordered", "value": "bordered"},
-            {"name": "Highlighted", "value": "highlighted"},
-            {"name": "Minimal", "value": "minimal"}
-          ]
-        }
-      ]
+      "fields": []
     },
     {
       "id": "facts-figures-card",
@@ -62,13 +45,29 @@
           "value": "",
           "label": "Title",
           "valueType": "string"
-        },  
+        },
         {
           "component": "richtext",
           "name": "text",
           "value": "",
           "label": "Text",
           "valueType": "string"
+        },
+        {
+          "component": "select",
+          "name": "classes",
+          "value": "",
+          "label": "Background Style",
+          "description": "The background style of the card",
+          "valueType": "string",
+          "options": [
+            {"name": "Default", "value": ""},
+            {"name": "Blue", "value": "blue"},
+            {"name": "Grey", "value": "grey"},
+            {"name": "Bordered", "value": "bordered"},
+            {"name": "Highlighted", "value": "highlighted"},
+            {"name": "Minimal", "value": "minimal"}
+          ]
         }
       ]
     }
