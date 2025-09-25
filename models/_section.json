@@ -55,7 +55,8 @@
         "breadcrumbs",
         "carousel",
         "download",
-        "teaser"
+        "teaser",
+        "counter"
       ]
     }
   ]
