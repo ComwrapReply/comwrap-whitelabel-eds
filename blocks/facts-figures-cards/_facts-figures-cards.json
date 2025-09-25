@@ -39,20 +39,6 @@
       "id": "facts-figures-cards",
       "fields": [
         {
-          "component": "text",
-          "name": "columns",
-          "label": "Columns",
-          "valueType": "string",
-          "value": "3"
-        },
-        {
-          "component": "text",
-          "name": "rows",
-          "label": "Rows",
-          "valueType": "string",
-          "value": "1"
-        },
-        {
           "component": "multiselect",
           "name": "classes",
           "label": "Background Options",
