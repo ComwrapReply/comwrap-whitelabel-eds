@@ -1,8 +1,13 @@
 /* Counter Block Styles */
+
+/* Scope all selectors to avoid conflicts */
+
+/* Counter container - no styling applied as per specification */
 .counter-container {
-  /* No styling applied to container as per user rules */
+  /* Container styles handled by wrapper */
 }
 
+/* Counter wrapper - main content wrapper with layout and spacing */
 .counter-wrapper {
   display: flex;
   align-items: center;
@@ -11,151 +16,177 @@
   padding: 50px 200px;
   max-width: 1920px;
   margin: 0 auto;
-  position: relative;
-  overflow: hidden;
+  min-height: 168px;
 }
 
+/* Counter - main component styling */
 .counter {
   display: flex;
   align-items: center;
   gap: 30px;
   width: 100%;
-  max-width: 1520px;
 }
 
+/* Counter numbers display area */
 .counter-numbers {
   display: flex;
-  align-items: flex-end;
+  align-items: center;
+  gap: 0;
   height: 168px;
-  position: relative;
   overflow: hidden;
-  flex-shrink: 0;
+  position: relative;
 }
 
+/* Individual digit container */
 .counter-digit {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-end;
   height: 168px;
-  position: relative;
   overflow: hidden;
-  margin-right: 0;
-}
-
-.counter-digit-number {
+  position: relative;
   font-family: 'Albert Sans', sans-serif;
   font-weight: 600;
-  font-style: normal;
   font-size: 160px;
   line-height: 168px;
   text-align: right;
   white-space: nowrap;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  transition: transform 0.3s ease-in-out;
-  transform: translateY(100%);
 }
 
-.counter-digit-number.animate {
-  transform: translateY(0);
+/* Individual number in digit stack */
+.counter-number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 168px;
+  line-height: 168px;
+  transition: transform 0.6s ease-in-out;
+  position: relative;
 }
 
+/* Counter description area */
 .counter-description {
   font-family: 'Albert Sans', sans-serif;
   font-weight: 600;
-  font-style: normal;
   font-size: 32px;
   line-height: 40px;
-  flex: 1;
   max-width: 460px;
+  flex-shrink: 0;
 }
 
-/* Dark Mode Styles */
-.counter[data-mode="dark"] {
-  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+/* Dark theme styles */
+.counter.dark .counter-digit {
   color: #fff;
 }
 
-.counter[data-mode="dark"] .counter-digit-number {
+.counter.dark .counter-description {
   color: #fff;
 }
 
-.counter[data-mode="dark"] .counter-description {
-  color: #fff;
+.counter.dark .counter-wrapper {
+  background: linear-gradient(135deg, #0c2863 0%, #9f00a5 100%);
 }
 
-/* Light Mode Styles */
-.counter[data-mode="light"] {
-  background: linear-gradient(135deg, #f7f6f5 0%, #fff 100%);
-  color: #000;
-}
-
-.counter[data-mode="light"] .counter-digit-number {
+/* Light theme styles */
+.counter.light .counter-digit {
   color: #0063be;
 }
 
-.counter[data-mode="light"] .counter-description {
+.counter.light .counter-description {
   color: #000;
 }
 
-/* Mobile Styles */
+.counter.light .counter-wrapper {
+  background: linear-gradient(135deg, #f7f6f5 0%, #fff 100%);
+}
+
+/* Block options */
+.counter.centered .counter-wrapper {
+  text-align: center;
+}
+
+.counter.full-width .counter-wrapper {
+  width: 100%;
+  max-width: none;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+/* Mobile styles */
 @media (width <= 768px) {
   .counter-wrapper {
     flex-direction: column;
+    align-items: center;
     gap: 20px;
     padding: 76px 95px 50px;
+    min-height: auto;
   }
 
   .counter {
     flex-direction: column;
+    align-items: center;
     gap: 20px;
-    text-align: center;
-  }
-
-  .counter-numbers {
-    height: 100px;
-    justify-content: center;
   }
 
   .counter-digit {
+    font-size: 88px;
+    line-height: 100px;
     height: 100px;
   }
 
-  .counter-digit-number {
-    font-size: 88px;
+  .counter-number {
+    height: 100px;
     line-height: 100px;
   }
 
   .counter-description {
     font-size: 18px;
     line-height: 24px;
-    max-width: 100%;
     text-align: center;
+    max-width: 164px;
+  }
+
+  /* Mobile dark theme */
+  .counter.dark .counter-wrapper {
+    background: #000;
+  }
+
+  /* Mobile light theme */
+  .counter.light .counter-wrapper {
+    background: linear-gradient(135deg, #f7f6f5 0%, #fff 100%);
   }
 }
 
-/* Tablet Styles */
+/* Tablet styles */
 @media (width >= 769px) and (width <= 1024px) {
   .counter-wrapper {
     padding: 50px 100px;
   }
 
-  .counter-digit-number {
+  .counter-digit {
     font-size: 120px;
-    line-height: 128px;
+    line-height: 130px;
+    height: 130px;
+  }
+
+  .counter-number {
+    height: 130px;
+    line-height: 130px;
   }
 
   .counter-description {
-    font-size: 24px;
-    line-height: 32px;
+    font-size: 28px;
+    line-height: 36px;
   }
 }
 
-/* Animation Keyframes */
-@keyframes count-up {
+/* Animation states */
+.counter-number.animating {
+  animation: counter-slide-up 0.6s ease-in-out;
+}
+
+@keyframes counter-slide-up {
   from {
     transform: translateY(100%);
     opacity: 0;
@@ -167,72 +198,43 @@
   }
 }
 
-@keyframes slide-in-from-bottom {
-  from {
-    transform: translateY(50px);
-    opacity: 0;
-  }
-
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
-/* Animation Classes */
-.counter.animate-in {
-  animation: slide-in-from-bottom 0.6s ease-out forwards;
-}
-
-.counter-digit-number.counting {
-  animation: count-up 0.3s ease-out forwards;
-}
-
-/* Accessibility - Reduced Motion */
+/* Accessibility - reduced motion */
 @media (prefers-reduced-motion: reduce) {
-  .counter-digit-number {
+  .counter-number {
     transition: none;
+  }
+  
+  .counter-number.animating {
     animation: none;
   }
-
-  .counter.animate-in {
-    animation: none;
-  }
-
-  .counter-digit-number.counting {
-    animation: none;
-    transform: translateY(0);
+  
+  @keyframes counter-slide-up {
+    from, to {
+      transform: none;
+      opacity: 1;
+    }
   }
 }
 
-/* Focus States for Accessibility */
+/* Focus styles for accessibility */
 .counter:focus-within {
   outline: 2px solid #0063be;
-  outline-offset: 4px;
+  outline-offset: 2px;
 }
 
-/* High Contrast Mode Support */
+/* High contrast mode support */
 @media (prefers-contrast: more) {
-  .counter[data-mode="dark"] {
-    background: #000;
-    border: 2px solid #fff;
+  .counter.dark .counter-digit,
+  .counter.dark .counter-description {
+    color: #fff;
+    text-shadow: 1px 1px 2px rgb(0 0 0 / 80%);
   }
-
-  .counter[data-mode="light"] {
-    background: #fff;
-    border: 2px solid #000;
+  
+  .counter.light .counter-digit {
+    color: #000;
   }
-}
-
-/* Print Styles */
-@media print {
-  .counter {
-    background: none !important;
-    color: #000 !important;
-  }
-
-  .counter-digit-number,
-  .counter-description {
-    color: #000 !important;
+  
+  .counter.light .counter-description {
+    color: #000;
   }
 }

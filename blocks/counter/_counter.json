@@ -22,48 +22,51 @@
       "fields": [
         {
           "component": "text",
-          "name": "targetValue",
-          "label": "Target Value",
+          "name": "number",
+          "label": "Target Number",
           "valueType": "string",
-          "value": "325"
+          "value": "123"
         },
         {
           "component": "richtext",
           "name": "description",
-          "label": "Description Text",
+          "label": "Description",
           "valueType": "string",
           "value": "units of Fresubin clinical nutrition are consumed every minute worldwide."
         },
         {
           "component": "select",
-          "name": "mode",
-          "label": "Display Mode",
+          "name": "theme",
+          "label": "Theme",
           "valueType": "string",
           "options": [
             {
-              "name": "Light",
-              "value": "light"
-            },
-            {
               "name": "Dark",
               "value": "dark"
+            },
+            {
+              "name": "Light",
+              "value": "light"
             }
           ],
-          "value": "light"
+          "value": "dark"
         },
         {
-          "component": "text",
-          "name": "animationDuration",
-          "label": "Animation Duration (ms)",
+          "component": "multiselect",
+          "name": "classes",
+          "label": "Block Options",
           "valueType": "string",
-          "value": "2000"
-        },
-        {
-          "component": "text",
-          "name": "startDelay",
-          "label": "Start Delay (ms)",
-          "valueType": "string",
-          "value": "0"
+          "options": [
+            {
+              "name": "Layout",
+              "children": [
+                { "name": "Default", "value": "" },
+                { "name": "Centered", "value": "centered" },
+                { "name": "Full Width", "value": "full-width" }
+              ]
+            }
+          ],
+          "value": ""
         }
       ]
     }
