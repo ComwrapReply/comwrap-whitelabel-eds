@@ -415,6 +415,26 @@
     ]
   },
   {
+    "component": "select",
+    "valueType": "string",
+    "name": "classes",
+    "label": "Style",
+    "options": [
+      {
+        "name": "Default",
+        "value": ""
+      },
+      {
+        "name": "Blue",
+        "value": "blue"
+      },
+      {
+        "name": "Grey",
+        "value": "grey"
+      }
+    ]
+  },
+  {
     "id": "fragment",
     "fields": [
       {
