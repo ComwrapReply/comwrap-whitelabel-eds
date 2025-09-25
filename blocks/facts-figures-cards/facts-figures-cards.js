@@ -44,6 +44,48 @@ const ELEMENT_GROUPING_PATTERNS = {
   },
 };
 
+// Item-level fields we want to turn into CSS classes
+const ITEM_CLASS_FIELDS = ['classes_style', 'classes_size', 'classes_emphasis'];
+
+/** Split and sanitize text into safe CSS class tokens */
+function toClassTokens(value) {
+  return String(value || '')
+    .split(/[,\s]+/)
+    .map((t) => t.trim().toLowerCase())
+    .filter(Boolean)
+    .filter((t) => /^[a-z0-9\-_:]+$/.test(t));
+}
+
+/**
+ * Pull item-level classes from UE cells and remove those cells from DOM.
+ * Prefers data-head="classes_*". Falls back to "classes_*: value" inline text.
+ */
+function pullItemClassesAndClean(card) {
+  const tokens = [];
+  const cells = [...card.children].filter((el) => el.tagName === 'DIV');
+
+  cells.forEach((cell) => {
+    const head = (cell.getAttribute('data-head') || '').trim();
+    const raw = (cell.textContent || '').trim();
+    let picked = '';
+
+    if (ITEM_CLASS_FIELDS.includes(head)) {
+      picked = raw; // value-only cell
+    } else {
+      // fallback: "classes_style: blue"
+      const m = raw.match(/^\s*classes_(style|size|emphasis)\s*:\s*(.+)\s*$/i);
+      if (m) picked = m[2];
+    }
+
+    if (picked) {
+      tokens.push(...toClassTokens(picked));
+      cell.remove(); // clean paragraph/cell so it won't render
+    }
+  });
+
+  return [...new Set(tokens)]; // de-dupe
+}
+
 /**
  * Creates the wrapper element for the facts and figures cards
  * @param {number} columns - Number of columns
@@ -182,6 +224,16 @@ function processDescriptionElements(descriptionElements) {
 function processCard(card, index) {
   if (!card) return;
 
+  // Read item-level classes from cells, apply to the card, and remove those cells
+  const itemClasses = pullItemClassesAndClean(card);
+  if (itemClasses.length) {
+    itemClasses.forEach((c) => card.classList.add(c));
+  } else {
+    // Fallback to legacy regex (keeps older authoring content working)
+    applyCardStyleClasses(card);
+  }
+
+
   // Apply element grouping style classes to the card
   applyCardStyleClasses(card);
 
@@ -195,10 +247,8 @@ function processCard(card, index) {
   childDivs.forEach((div, divIndex) => {
     const text = div.textContent?.trim() || '';
 
-    // Skip empty divs or divs that contain only class information
-    if (!text || text.match(/^(?:facts-figures-card|facts-and-figures-card),\s*\w+$/)) {
-      return;
-    }
+    // After cleanup above, just skip empties
+    if (!text) { return; }
 
     // First non-empty div is likely the title
     if (!titleElement && divIndex === 0) {
