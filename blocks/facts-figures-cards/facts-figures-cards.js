@@ -144,27 +144,44 @@ function processCard(card, index) {
   // Apply element grouping style classes to the card
   applyCardStyleClasses(card);
 
-  // Find the title content (first div)
-  const titleContent = card.querySelector('div:first-child');
+  // Get all child divs (title and text content)
+  const childDivs = Array.from(card.children).filter(child => child.tagName === 'DIV');
+  
   let titleElement = null;
+  let textContent = null;
 
-  if (titleContent && titleContent.textContent?.trim()) {
-    // Create title element
-    titleElement = document.createElement('h3');
-    titleElement.className = CLASSES.title;
-    titleElement.textContent = titleContent.textContent.trim();
-  }
+  // Process each child div
+  childDivs.forEach((div, divIndex) => {
+    const text = div.textContent?.trim() || '';
+    
+    // Skip empty divs or divs that contain only class information
+    if (!text || text.match(/^(?:facts-figures-card|facts-and-figures-card),\s*\w+$/)) {
+      return;
+    }
 
-  // Find the text content (richtext field from the model - second div)
-  const textContent = card.querySelector('div:last-child');
-  if (!textContent) return;
+    // First non-empty div is likely the title
+    if (!titleElement && divIndex === 0) {
+      titleElement = document.createElement('h3');
+      titleElement.className = CLASSES.title;
+      titleElement.textContent = text;
+    } else {
+      // Subsequent divs are text content
+      textContent = div;
+    }
+  });
 
   // Create a wrapper for the text content
   const textWrapper = document.createElement('div');
   textWrapper.className = CLASSES.text;
-  textWrapper.innerHTML = textContent.innerHTML;
+  
+  if (textContent) {
+    textWrapper.innerHTML = textContent.innerHTML;
+  } else {
+    // If no text content found, use the card's innerHTML
+    textWrapper.innerHTML = card.innerHTML;
+  }
 
-  // Clear the original content and add our wrapper
+  // Clear the original content
   card.innerHTML = '';
 
   // Add title if it exists
@@ -172,18 +189,8 @@ function processCard(card, index) {
     card.appendChild(titleElement);
   }
 
+  // Add text wrapper
   card.appendChild(textWrapper);
-
-  // Clean up text content - remove class information that appears as text
-  const allTextElements = textWrapper.querySelectorAll('*');
-  allTextElements.forEach((element) => {
-    const text = element.textContent?.trim() || '';
-
-    // Remove class information that appears as text (e.g., "facts-and-figures-card, grey")
-    if (text.match(/^(?:facts-and-figures-card|facts-figures-card),\s*\w+$/)) {
-      element.remove();
-    }
-  });
 
   // Process the text content to identify figures and descriptions
   const figureElements = textWrapper.querySelectorAll('h1, h2, h3, h4, h5, h6, p');
@@ -318,25 +325,34 @@ function setupResponsiveHandler(wrapper) {
  */
 export default function decorate(block) {
   try {
-    // Get template properties (columns, rows)
+    // Get template properties (columns, rows) - these come from the block's data attributes
     const columns = block.getAttribute('data-columns') || CONFIG.defaultColumns;
     const rows = block.getAttribute('data-rows') || CONFIG.defaultRows;
 
     // Create wrapper
     const wrapper = createWrapper(parseInt(columns, 10), parseInt(rows, 10));
 
-    // Process each card
-    const cards = block.querySelectorAll(':scope > div');
-    cards.forEach((card, index) => {
-      // Add card class
-      card.classList.add(CLASSES.card);
+    // Process each child div as a card
+    const cards = Array.from(block.children).filter(child => child.tagName === 'DIV');
+    
+    if (cards.length === 0) {
+      // If no cards found, create a placeholder
+      const placeholder = document.createElement('div');
+      placeholder.className = CLASSES.card;
+      placeholder.innerHTML = '<p>No cards found. Please add Facts Figures Card items.</p>';
+      wrapper.appendChild(placeholder);
+    } else {
+      cards.forEach((card, index) => {
+        // Add card class
+        card.classList.add(CLASSES.card);
 
-      // Process card content
-      processCard(card, index);
+        // Process card content
+        processCard(card, index);
 
-      // Move card to wrapper
-      wrapper.appendChild(card);
-    });
+        // Move card to wrapper
+        wrapper.appendChild(card);
+      });
+    }
 
     // Apply container-level styling to all cards
     applyContainerStyleClasses(block, cards);
