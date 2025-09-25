@@ -1,0 +1,337 @@
+/* Product Teaser Block Styles */
+
+/* Base block container */
+.block.product-teaser {
+  position: relative;
+  width: 100%;
+  height: 350px;
+  border-radius: 1px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+/* Image wrapper for background */
+.product-teaser-image-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  overflow: hidden;
+}
+
+/* Background image */
+.product-teaser-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transition: transform 0.6s ease-in-out;
+  background-size: 100% 149.82%;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* Content wrapper */
+.product-teaser-content {
+  position: relative;
+  z-index: 1;
+  padding: 24px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  min-height: 100%;
+}
+
+/* Button styles */
+.product-teaser-button {
+  background-color: #0073DD;
+  color: #FFF;
+  border: none;
+  border-radius: 24px;
+  padding: 8px 24px;
+  font-family: 'Albert Sans', sans-serif;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 32px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+/* Button focus state */
+.product-teaser-button:focus {
+  outline: 2px solid #0073DD;
+  outline-offset: 2px;
+}
+
+/* Locked state button */
+.product-teaser-locked .product-teaser-button {
+  gap: 16px;
+}
+
+/* Lock icon */
+.product-teaser-lock-icon {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+/* Mobile button styles */
+.product-teaser-size-xxs .product-teaser-button {
+  padding: 12px;
+  font-size: 16px;
+  line-height: 24px;
+  gap: 16px;
+}
+
+/* Button press state */
+.product-teaser:active .product-teaser-button {
+  color: #CED4E0;
+}
+
+/* See All Products variant (no image) */
+.product-teaser-see-all {
+  background-color: #0073DD;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.product-teaser-see-all .product-teaser-content {
+  padding: 24px;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.product-teaser-see-all .product-teaser-headline {
+  color: #FFF;
+  font-family: 'Albert Sans', sans-serif;
+  font-weight: 600;
+  font-size: 44px;
+  line-height: 56px;
+  margin: 0 0 16px;
+}
+
+/* Arrow animation for See All Products */
+.product-teaser-arrow {
+  width: 42px;
+  height: 48px;
+  position: relative;
+  overflow: hidden;
+  transition: width 0.3s ease;
+}
+
+.product-teaser-arrow-line {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  height: 5px;
+  background-color: #FFF;
+  transform: translateY(-50%);
+  transition: width 0.3s ease;
+}
+
+.product-teaser-arrow-icon {
+  position: absolute;
+  top: 8.33%;
+  right: 0;
+  width: 23.834px;
+  height: 40px;
+  transform: scaleY(-1);
+}
+
+/* Mobile arrow styles */
+.product-teaser-size-xxs .product-teaser-arrow {
+  width: 20.668px;
+  height: 24px;
+}
+
+.product-teaser-size-xxs .product-teaser-arrow-line {
+  height: 2.248px;
+}
+
+.product-teaser-size-xxs .product-teaser-arrow-icon {
+  width: 11.917px;
+  height: 19.5px;
+  top: 9.4%;
+}
+
+/* Hover state for See All Products */
+.product-teaser-see-all:hover {
+  background-color: #0C2863;
+}
+
+.product-teaser-see-all:hover .product-teaser-arrow {
+  width: 90px;
+}
+
+/* Mobile styles (XXS size) */
+.product-teaser-size-xxs {
+  height: 194px;
+  width: 156px;
+}
+
+.product-teaser-size-xxs .product-teaser-content {
+  padding: 16px;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-end;
+}
+
+.product-teaser-size-xxs .product-teaser-lock-icon {
+  width: 24px;
+  height: 24px;
+}
+
+/* Mobile See All Products */
+.product-teaser-size-xxs.product-teaser-see-all .product-teaser-headline {
+  font-size: 28px;
+  line-height: 34px;
+  margin-bottom: 8px;
+}
+
+/* Mobile title below image */
+.product-teaser-size-xxs .product-teaser-title {
+  color: #000;
+  font-family: 'Albert Sans', sans-serif;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 24px;
+  margin-top: 14px;
+  margin-bottom: 0;
+}
+
+/* Press state for mobile */
+.product-teaser-press .product-teaser-title {
+  color: #CED4E0;
+}
+
+/* Hover effects */
+.product-teaser:hover .product-teaser-image {
+  transform: scale(1.01);
+}
+
+/* Button hover state */
+.product-teaser:hover .product-teaser-button {
+  background-color: #0C2863;
+}
+
+/* Mobile responsive styles */
+@media (width <= 768px) {
+  .product-teaser {
+    height: 194px;
+    width: 100%;
+  }
+  
+  .product-teaser-size-xxs {
+    width: 100%;
+  }
+}
+
+/* Grid layout for containers */
+.product-teaser-container {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 16px;
+  width: 100%;
+}
+
+.product-teaser-container .product-teaser {
+  grid-column: span 3;
+}
+
+/* Mobile grid layout */
+@media (width <= 768px) {
+  .product-teaser-container {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+  
+  .product-teaser-container .product-teaser {
+    grid-column: span 2;
+  }
+}
+
+/* Tablet layout */
+@media (769px <= width <= 1024px) {
+  .product-teaser-container {
+    grid-template-columns: repeat(8, 1fr);
+  }
+  
+  .product-teaser-container .product-teaser {
+    grid-column: span 2;
+  }
+}
+
+/* Alignment variants */
+.product-teaser-align-left {
+  align-items: flex-start;
+}
+
+.product-teaser-align-center {
+  align-items: center;
+}
+
+.product-teaser-align-right {
+  align-items: flex-end;
+}
+
+/* Size variants */
+.product-teaser-size-xl {
+  height: 350px;
+  width: 350px;
+}
+
+/* Responsive image handling */
+@media (width <= 768px) {
+  .product-teaser-image {
+    background-size: 100% 149.82%;
+    background-position: left;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: more) {
+  .product-teaser-button {
+    border: 2px solid #FFF;
+  }
+  
+  .product-teaser-see-all {
+    border: 2px solid #FFF;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .product-teaser,
+  .product-teaser-image,
+  .product-teaser-button,
+  .product-teaser-arrow {
+    transition: none;
+  }
+  
+  .product-teaser:hover .product-teaser-image {
+    transform: none;
+  }
+  
+  .product-teaser-see-all:hover .product-teaser-arrow {
+    width: 42px;
+  }
+  
+  .product-teaser-size-xxs.product-teaser-see-all:hover .product-teaser-arrow {
+    width: 20.668px;
+  }
+}

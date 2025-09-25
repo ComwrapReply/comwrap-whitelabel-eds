@@ -439,6 +439,119 @@
     ]
   },
   {
+    "id": "product-teaser",
+    "fields": [
+      {
+        "component": "text",
+        "name": "title",
+        "label": "Product Area Title",
+        "valueType": "string",
+        "value": ""
+      },
+      {
+        "component": "reference",
+        "name": "image",
+        "label": "Background Image",
+        "valueType": "string",
+        "multi": false
+      },
+      {
+        "component": "text",
+        "name": "imageAlt",
+        "label": "Image Alt Text",
+        "valueType": "string",
+        "value": ""
+      },
+      {
+        "component": "text",
+        "name": "link",
+        "label": "Link URL",
+        "valueType": "string",
+        "value": ""
+      },
+      {
+        "component": "text",
+        "name": "linkText",
+        "label": "Link Text",
+        "valueType": "string",
+        "value": ""
+      },
+      {
+        "component": "select",
+        "name": "variant",
+        "label": "Teaser Variant",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "With Image",
+            "value": "with-image"
+          },
+          {
+            "name": "See All Products (No Image)",
+            "value": "see-all"
+          }
+        ],
+        "value": "with-image"
+      },
+      {
+        "component": "select",
+        "name": "isLocked",
+        "label": "Locked State",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "Unlocked",
+            "value": "false"
+          },
+          {
+            "name": "Locked",
+            "value": "true"
+          }
+        ],
+        "value": "false"
+      },
+      {
+        "component": "multiselect",
+        "name": "classes",
+        "label": "Block Options",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "Size",
+            "children": [
+              {
+                "name": "Desktop (XL)",
+                "value": "size-xl"
+              },
+              {
+                "name": "Mobile (XXS)",
+                "value": "size-xxs"
+              }
+            ]
+          },
+          {
+            "name": "Alignment",
+            "children": [
+              {
+                "name": "Left",
+                "value": "align-left"
+              },
+              {
+                "name": "Center",
+                "value": "align-center"
+              },
+              {
+                "name": "Right",
+                "value": "align-right"
+              }
+            ]
+          }
+        ],
+        "value": ""
+      }
+    ]
+  },
+  {
     "id": "teaser",
     "fields": [
       {
