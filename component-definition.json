@@ -131,7 +131,7 @@
           }
         },
         {
-          "title": "Buttons Container",
+          "title": "Buttons",
           "id": "buttons",
           "plugins": {
             "xwalk": {
@@ -146,7 +146,7 @@
           }
         },
         {
-          "title": "Button Item",
+          "title": "Button",
           "id": "button-item",
           "plugins": {
             "xwalk": {
