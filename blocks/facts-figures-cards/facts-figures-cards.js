@@ -30,6 +30,20 @@ const SELECTORS = {
   text: '.facts-figures-card-text',
 };
 
+// Element grouping field patterns
+const ELEMENT_GROUPING_PATTERNS = {
+  container: {
+    style: /classes_style[^:]*:\s*(\w+)/,
+    layout: /classes_layout[^:]*:\s*(\w+)/,
+    animation: /classes_animation[^:]*:\s*(\w+)/,
+  },
+  card: {
+    style: /classes_style[^:]*:\s*(\w+)/,
+    size: /classes_size[^:]*:\s*(\w+)/,
+    emphasis: /classes_emphasis[^:]*:\s*(\w+)/,
+  },
+};
+
 /**
  * Creates the wrapper element for the facts and figures cards
  * @param {number} columns - Number of columns
@@ -50,47 +64,41 @@ function createWrapper(columns, rows) {
 }
 
 /**
+ * Extracts classes from element grouping fields using regex patterns
+ * @param {HTMLElement} element - The element to extract classes from
+ * @param {Object} patterns - The patterns to match against
+ * @returns {string[]} Array of class names to apply
+ */
+function extractElementGroupingClasses(element, patterns) {
+  const classesToApply = [];
+  const textContent = element.textContent || '';
+
+  Object.entries(patterns).forEach(([, pattern]) => {
+    const match = textContent.match(pattern);
+    if (match && match[1] && match[1] !== 'default' && match[1].trim()) {
+      classesToApply.push(match[1].trim());
+    }
+  });
+
+  return classesToApply;
+}
+
+/**
  * Applies style classes to all cards based on the container's element grouping fields
  * @param {HTMLElement} container - The container element
  * @param {HTMLElement[]} cards - Array of card elements
  */
 function applyContainerStyleClasses(container, cards) {
-  // Extract classes from element grouping fields
-  const classesToApply = [];
-
-  // Look for classes_style field
-  const styleMatch = container.textContent?.match(/classes_style[^:]*:\s*(\w+)/);
-  if (styleMatch && styleMatch[1] && styleMatch[1] !== 'default') {
-    classesToApply.push(styleMatch[1]);
-  }
-
-  // Look for classes_layout field
-  const layoutMatch = container.textContent?.match(/classes_layout[^:]*:\s*(\w+)/);
-  if (layoutMatch && layoutMatch[1] && layoutMatch[1] !== 'default') {
-    classesToApply.push(layoutMatch[1]);
-  }
-
-  // Look for classes_animation field
-  const animationMatch = container.textContent?.match(/classes_animation[^:]*:\s*(\w+)/);
-  if (animationMatch && animationMatch[1] && animationMatch[1] !== 'default') {
-    classesToApply.push(animationMatch[1]);
-  }
-
-  // Fallback: check for legacy single classes field
-  if (classesToApply.length === 0) {
-    const legacyMatch = container.textContent?.match(/(?:facts-and-figures-cards|facts-figures-cards),\s*(\w+)/);
-    if (legacyMatch && legacyMatch[1]) {
-      classesToApply.push(legacyMatch[1]);
-    }
-  }
+  const classesToApply = extractElementGroupingClasses(
+    container,
+    ELEMENT_GROUPING_PATTERNS.container,
+  );
 
   // Apply all classes to all cards
   if (classesToApply.length > 0) {
     cards.forEach((card) => {
       classesToApply.forEach((className) => {
-        if (className.trim()) {
-          card.classList.add(className.trim());
-        }
+        card.classList.add(className);
       });
     });
   }
@@ -101,40 +109,73 @@ function applyContainerStyleClasses(container, cards) {
  * @param {HTMLElement} card - Individual card element
  */
 function applyCardStyleClasses(card) {
-  // Extract classes from element grouping fields
-  const classesToApply = [];
-
-  // Look for classes_style field
-  const styleMatch = card.textContent?.match(/classes_style[^:]*:\s*(\w+)/);
-  if (styleMatch && styleMatch[1] && styleMatch[1] !== 'default') {
-    classesToApply.push(styleMatch[1]);
-  }
-
-  // Look for classes_size field
-  const sizeMatch = card.textContent?.match(/classes_size[^:]*:\s*(\w+)/);
-  if (sizeMatch && sizeMatch[1] && sizeMatch[1] !== 'default') {
-    classesToApply.push(sizeMatch[1]);
-  }
-
-  // Look for classes_emphasis field
-  const emphasisMatch = card.textContent?.match(/classes_emphasis[^:]*:\s*(\w+)/);
-  if (emphasisMatch && emphasisMatch[1] && emphasisMatch[1] !== 'default') {
-    classesToApply.push(emphasisMatch[1]);
-  }
+  const classesToApply = extractElementGroupingClasses(card, ELEMENT_GROUPING_PATTERNS.card);
 
   // Apply all classes to the card
   if (classesToApply.length > 0) {
     classesToApply.forEach((className) => {
-      if (className.trim()) {
-        card.classList.add(className.trim());
-      }
+      card.classList.add(className);
     });
   }
 }
 
 /**
+ * Creates a title element from text content
+ * @param {string} text - The title text
+ * @returns {HTMLElement} The title element
+ */
+function createTitleElement(text) {
+  const titleElement = document.createElement('h3');
+  titleElement.className = CLASSES.title;
+  titleElement.textContent = text;
+  return titleElement;
+}
+
+/**
+ * Processes figure content and extracts units
+ * @param {HTMLElement} element - The figure element
+ */
+function processFigureElement(element) {
+  element.className = CLASSES.figure;
+
+  const figureText = element.textContent || '';
+  const unitMatch = figureText.match(/([€$£¥%]|[A-Za-z]+)$/);
+
+  if (unitMatch) {
+    const unit = unitMatch[1];
+    const value = figureText.replace(unit, '').trim();
+
+    element.innerHTML = value;
+
+    const unitElement = document.createElement('span');
+    unitElement.className = CLASSES.figureUnit;
+    unitElement.textContent = unit;
+
+    element.appendChild(unitElement);
+  }
+}
+
+/**
+ * Processes description elements and wraps them
+ * @param {HTMLElement[]} descriptionElements - Array of description elements
+ * @returns {HTMLElement} The description wrapper
+ */
+function processDescriptionElements(descriptionElements) {
+  const descriptionWrapper = document.createElement('div');
+  descriptionWrapper.className = CLASSES.description;
+
+  descriptionElements.forEach((element) => {
+    const p = document.createElement('p');
+    p.innerHTML = element.innerHTML;
+    descriptionWrapper.appendChild(p);
+    element.remove();
+  });
+
+  return descriptionWrapper;
+}
+
+/**
  * Processes individual card content and applies semantic classes
- * Updated to handle title, richtext content and style classes from the card model
  * @param {HTMLElement} card - Individual card element
  * @param {number} index - Card index for animation delay
  */
@@ -145,15 +186,15 @@ function processCard(card, index) {
   applyCardStyleClasses(card);
 
   // Get all child divs (title and text content)
-  const childDivs = Array.from(card.children).filter(child => child.tagName === 'DIV');
-  
+  const childDivs = Array.from(card.children).filter((child) => child.tagName === 'DIV');
+
   let titleElement = null;
   let textContent = null;
 
   // Process each child div
   childDivs.forEach((div, divIndex) => {
     const text = div.textContent?.trim() || '';
-    
+
     // Skip empty divs or divs that contain only class information
     if (!text || text.match(/^(?:facts-figures-card|facts-and-figures-card),\s*\w+$/)) {
       return;
@@ -161,9 +202,7 @@ function processCard(card, index) {
 
     // First non-empty div is likely the title
     if (!titleElement && divIndex === 0) {
-      titleElement = document.createElement('h3');
-      titleElement.className = CLASSES.title;
-      titleElement.textContent = text;
+      titleElement = createTitleElement(text);
     } else {
       // Subsequent divs are text content
       textContent = div;
@@ -173,7 +212,7 @@ function processCard(card, index) {
   // Create a wrapper for the text content
   const textWrapper = document.createElement('div');
   textWrapper.className = CLASSES.text;
-  
+
   if (textContent) {
     textWrapper.innerHTML = textContent.innerHTML;
   } else {
@@ -213,38 +252,12 @@ function processCard(card, index) {
 
   // Process figure element
   if (figureElement) {
-    figureElement.className = CLASSES.figure;
-
-    // Extract unit if present (e.g., "€", "%", "M")
-    const figureText = figureElement.textContent || '';
-    const unitMatch = figureText.match(/([€$£¥%]|[A-Za-z]+)$/);
-
-    if (unitMatch) {
-      const unit = unitMatch[1];
-      const value = figureText.replace(unit, '').trim();
-
-      figureElement.innerHTML = value;
-
-      const unitElement = document.createElement('span');
-      unitElement.className = CLASSES.figureUnit;
-      unitElement.textContent = unit;
-
-      figureElement.appendChild(unitElement);
-    }
+    processFigureElement(figureElement);
   }
 
   // Process description elements
   if (descriptionElements.length > 0) {
-    const descriptionWrapper = document.createElement('div');
-    descriptionWrapper.className = CLASSES.description;
-
-    descriptionElements.forEach((element) => {
-      const p = document.createElement('p');
-      p.innerHTML = element.innerHTML;
-      descriptionWrapper.appendChild(p);
-      element.remove();
-    });
-
+    const descriptionWrapper = processDescriptionElements(descriptionElements);
     textWrapper.appendChild(descriptionWrapper);
   }
 
@@ -320,6 +333,41 @@ function setupResponsiveHandler(wrapper) {
 }
 
 /**
+ * Creates a placeholder card when no cards are found
+ * @returns {HTMLElement} The placeholder card element
+ */
+function createPlaceholderCard() {
+  const placeholder = document.createElement('div');
+  placeholder.className = CLASSES.card;
+  placeholder.innerHTML = '<p>No cards found. Please add Facts Figures Card items.</p>';
+  return placeholder;
+}
+
+/**
+ * Processes all cards and adds them to the wrapper
+ * @param {HTMLElement[]} cards - Array of card elements
+ * @param {HTMLElement} wrapper - The wrapper element
+ */
+function processCards(cards, wrapper) {
+  if (cards.length === 0) {
+    const placeholder = createPlaceholderCard();
+    wrapper.appendChild(placeholder);
+    return;
+  }
+
+  cards.forEach((card, index) => {
+    // Add card class
+    card.classList.add(CLASSES.card);
+
+    // Process card content
+    processCard(card, index);
+
+    // Move card to wrapper
+    wrapper.appendChild(card);
+  });
+}
+
+/**
  * Main decoration function
  * @param {HTMLElement} block - The main block element
  */
@@ -333,26 +381,10 @@ export default function decorate(block) {
     const wrapper = createWrapper(parseInt(columns, 10), parseInt(rows, 10));
 
     // Process each child div as a card
-    const cards = Array.from(block.children).filter(child => child.tagName === 'DIV');
-    
-    if (cards.length === 0) {
-      // If no cards found, create a placeholder
-      const placeholder = document.createElement('div');
-      placeholder.className = CLASSES.card;
-      placeholder.innerHTML = '<p>No cards found. Please add Facts Figures Card items.</p>';
-      wrapper.appendChild(placeholder);
-    } else {
-      cards.forEach((card, index) => {
-        // Add card class
-        card.classList.add(CLASSES.card);
+    const cards = Array.from(block.children).filter((child) => child.tagName === 'DIV');
 
-        // Process card content
-        processCard(card, index);
-
-        // Move card to wrapper
-        wrapper.appendChild(card);
-      });
-    }
+    // Process cards and add to wrapper
+    processCards(cards, wrapper);
 
     // Apply container-level styling to all cards
     applyContainerStyleClasses(block, cards);
