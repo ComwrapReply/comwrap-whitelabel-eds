@@ -25,6 +25,7 @@
             "resourceType": "core/franklin/components/block/v1/block/item",
             "template": {
               "name": "Facts and Figures Card",
+              "filter": "facts-figures-card",
               "model": "facts-figures-card"
             }
           }
@@ -49,7 +50,9 @@
             {"name": "Grey", "value": "grey"},
             {"name": "Bordered", "value": "bordered"},
             {"name": "Highlighted", "value": "highlighted"},
-            {"name": "Minimal", "value": "minimal"}
+            {"name": "Minimal", "value": "minimal"},
+            {"name": "Dark", "value": "dark"},
+            {"name": "Success", "value": "success"}
           ]
         }
       ]
@@ -81,7 +84,12 @@
           "options": [
             {"name": "Default", "value": ""},
             {"name": "Blue", "value": "blue"},
-            {"name": "Grey", "value": "grey"}
+            {"name": "Grey", "value": "grey"},
+            {"name": "Bordered", "value": "bordered"},
+            {"name": "Highlighted", "value": "highlighted"},
+            {"name": "Minimal", "value": "minimal"},
+            {"name": "Dark", "value": "dark"},
+            {"name": "Success", "value": "success"}
           ]
         }
       ]

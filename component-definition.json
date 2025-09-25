@@ -262,6 +262,7 @@
                 "resourceType": "core/franklin/components/block/v1/block/item",
                 "template": {
                   "name": "Facts and Figures Card",
+                  "filter": "facts-figures-card",
                   "model": "facts-figures-card"
                 }
               }

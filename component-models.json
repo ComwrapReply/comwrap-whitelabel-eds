@@ -436,6 +436,14 @@
           {
             "name": "Minimal",
             "value": "minimal"
+          },
+          {
+            "name": "Dark",
+            "value": "dark"
+          },
+          {
+            "name": "Success",
+            "value": "success"
           }
         ]
       }
@@ -477,6 +485,26 @@
           {
             "name": "Grey",
             "value": "grey"
+          },
+          {
+            "name": "Bordered",
+            "value": "bordered"
+          },
+          {
+            "name": "Highlighted",
+            "value": "highlighted"
+          },
+          {
+            "name": "Minimal",
+            "value": "minimal"
+          },
+          {
+            "name": "Dark",
+            "value": "dark"
+          },
+          {
+            "name": "Success",
+            "value": "success"
           }
         ]
       }

@@ -65,7 +65,7 @@ function applyContainerStyleClasses(container, cards) {
   let containerClass = '';
   if (classMatch) {
     const className = classMatch[1];
-    if (className && ['blue', 'grey', 'bordered', 'highlighted', 'minimal'].includes(className)) {
+    if (className && ['blue', 'grey', 'bordered', 'highlighted', 'minimal', 'dark', 'success'].includes(className)) {
       containerClass = className;
     }
   }
@@ -80,7 +80,7 @@ function applyContainerStyleClasses(container, cards) {
 
     if (classes) {
       const classList = classes.split(' ').filter((cls) => cls.trim());
-      containerClass = classList.find((cls) => ['blue', 'grey', 'bordered', 'highlighted', 'minimal'].includes(cls.trim())) || '';
+      containerClass = classList.find((cls) => ['blue', 'grey', 'bordered', 'highlighted', 'minimal', 'dark', 'success'].includes(cls.trim())) || '';
     }
   }
 
