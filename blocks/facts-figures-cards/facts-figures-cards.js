@@ -1,8 +1,8 @@
 /**
  * Facts and Figures Cards Block
- * Displays statistical data in an animated card grid layout
+ * Container block that displays individual Facts and Figures Card items
  * Supports responsive columns, gradient backgrounds, and scroll animations
- * Aligned with columns block structure for consistency
+ * Updated to handle container/item structure with individual card models
  */
 
 // Configuration object for animation and layout settings
@@ -10,7 +10,7 @@ const CONFIG = {
   animationDelay: 100,
   animationDuration: 600,
   intersectionThreshold: 0.1,
-  defaultColumns: 3,
+  defaultColumns: 2,
   defaultRows: 1,
 };
 
@@ -21,6 +21,7 @@ const SELECTORS = {
   figure: '.facts-figures-card-figure',
   figureUnit: '.facts-figures-card-figure-unit',
   description: '.facts-figures-card-description',
+  text: '.facts-figures-card-text',
 };
 
 // CSS classes for styling and animation
@@ -28,6 +29,7 @@ const CLASSES = {
   wrapper: 'facts-figures-cards-wrapper',
   animateIn: 'animate-in',
   cols: 'cols-',
+  card: 'facts-figures-card',
 };
 
 /**
@@ -53,14 +55,28 @@ function createWrapper(block, columns, rows) {
 
 /**
  * Processes individual card content and applies semantic classes
+ * Updated to handle richtext content from the card model
  * @param {HTMLElement} card - Individual card element
  * @param {number} index - Card index for animation delay
  */
 function processCard(card, index) {
   if (!card) return;
 
-  // Find and process the figure/number element
-  const figureElements = card.querySelectorAll('h1, h2, h3, h4, h5, h6, p');
+  // Find the text content (richtext field from the model)
+  const textContent = card.querySelector('div:last-child');
+  if (!textContent) return;
+
+  // Create a wrapper for the text content
+  const textWrapper = document.createElement('div');
+  textWrapper.className = 'facts-figures-card-text';
+  textWrapper.innerHTML = textContent.innerHTML;
+
+  // Clear the original content and add our wrapper
+  card.innerHTML = '';
+  card.appendChild(textWrapper);
+
+  // Process the text content to identify figures and descriptions
+  const figureElements = textWrapper.querySelectorAll('h1, h2, h3, h4, h5, h6, p');
   let figureElement = null;
   const descriptionElements = [];
 
@@ -104,7 +120,7 @@ function processCard(card, index) {
       element.remove();
     });
 
-    card.appendChild(descriptionWrapper);
+    textWrapper.appendChild(descriptionWrapper);
   }
 
   // Set up animation delay based on card index
@@ -205,7 +221,7 @@ function getTemplateProperties(block) {
 
 /**
  * Main decoration function for Facts and Figures Cards block
- * Aligned with columns block structure for consistency
+ * Updated to handle container/item structure with individual card models
  * @param {HTMLElement} block - The main block element
  */
 export default async function decorate(block) {
@@ -231,7 +247,7 @@ export default async function decorate(block) {
     cards.forEach((card, index) => {
       if (card && card.nodeType === Node.ELEMENT_NODE) {
         // Add the facts-figures-card class to each child block
-        card.classList.add('facts-figures-card');
+        card.classList.add(CLASSES.card);
         processCard(card, index);
         wrapper.appendChild(card);
       }

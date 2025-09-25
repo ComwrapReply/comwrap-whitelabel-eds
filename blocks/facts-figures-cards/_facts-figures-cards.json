@@ -8,8 +8,25 @@
           "page": {
             "resourceType": "core/franklin/components/block/v1/block",
             "template": {
+              "name": "Facts and Figures Cards",
+              "filter": "facts-figures-cards",
               "columns": "2",
               "rows": "1"
+            }
+          }
+        }
+      }
+    },
+    {
+      "title": "Facts and Figures Card",
+      "id": "facts-figures-card",
+      "plugins": {
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/block/v1/block/item",
+            "template": {
+              "name": "Facts and Figures Card",
+              "model": "facts-figures-card"
             }
           }
         }
@@ -18,21 +35,14 @@
   ],
   "models": [
     {
-      "id": "facts-figures-cards",
+      "id": "facts-figures-card",
       "fields": [
         {
-          "component": "text",
-          "valueType": "number",
-          "name": "columns",
+          "component": "richtext",
+          "name": "text",
           "value": "",
-          "label": "Columns"
-        },
-        {
-          "component": "text",
-          "valueType": "number",
-          "name": "rows",
-          "value": "",
-          "label": "Rows"
+          "label": "Text",
+          "valueType": "string"
         }
       ]
     }
@@ -42,12 +52,6 @@
       "id": "facts-figures-cards",
       "components": [
         "facts-figures-card"
-      ]
-    },
-    {
-      "id": "facts-figures-card",
-      "components": [
-        "text"
       ]
     }
   ]
