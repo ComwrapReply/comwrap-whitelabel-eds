@@ -50,40 +50,44 @@ function createWrapper(columns, rows) {
 }
 
 /**
- * Applies style classes to the card based on the classes field from the model
- * @param {HTMLElement} card - Individual card element
+ * Applies style classes to all cards based on the container's classes field
+ * @param {HTMLElement} container - The container element
+ * @param {HTMLElement[]} cards - Array of card elements
  */
-function applyStyleClasses(card) {
-  // Look for the classes in the text content of the card
-  // The classes field from the model appears as text content
-  const textContent = card.textContent || '';
+function applyContainerStyleClasses(container, cards) {
+  // Look for the classes in the container's text content
+  // The classes field from the container model appears as text content
+  const containerText = container.textContent || '';
 
-  // Check if the text contains class information (e.g., "facts-and-figures-card, grey")
-  const classMatch = textContent.match(/(?:facts-and-figures-card|facts-figures-card),\s*(\w+)/);
+  // Check if the text contains class information (e.g., "facts-and-figures-cards, blue")
+  const classMatch = containerText.match(/(?:facts-and-figures-cards|facts-figures-cards),\s*(\w+)/);
 
+  let containerClass = '';
   if (classMatch) {
     const className = classMatch[1];
     if (className && ['blue', 'grey', 'bordered', 'highlighted', 'minimal'].includes(className)) {
-      card.classList.add(className);
+      containerClass = className;
     }
   }
 
   // Also check for classes in data attributes as fallback
-  const classes = card.getAttribute('data-classes')
-    || card.dataset.classes
-    || card.getAttribute('data-style')
-    || card.dataset.style
-    || '';
+  if (!containerClass) {
+    const classes = container.getAttribute('data-classes')
+      || container.dataset.classes
+      || container.getAttribute('data-style')
+      || container.dataset.style
+      || '';
 
-  if (classes) {
-    // Split multiple classes if they exist
-    const classList = classes.split(' ').filter((cls) => cls.trim());
+    if (classes) {
+      const classList = classes.split(' ').filter((cls) => cls.trim());
+      containerClass = classList.find((cls) => ['blue', 'grey', 'bordered', 'highlighted', 'minimal'].includes(cls.trim())) || '';
+    }
+  }
 
-    // Apply each class to the card
-    classList.forEach((className) => {
-      if (className.trim()) {
-        card.classList.add(className.trim());
-      }
+  // Apply the container class to all cards
+  if (containerClass) {
+    cards.forEach((card) => {
+      card.classList.add(containerClass);
     });
   }
 }
@@ -96,9 +100,6 @@ function applyStyleClasses(card) {
  */
 function processCard(card, index) {
   if (!card) return;
-
-  // Apply style classes BEFORE processing content
-  applyStyleClasses(card);
 
   // Find the title content (first div)
   const titleContent = card.querySelector('div:first-child');
@@ -293,6 +294,9 @@ export default function decorate(block) {
       // Move card to wrapper
       wrapper.appendChild(card);
     });
+
+    // Apply container-level styling to all cards
+    applyContainerStyleClasses(block, cards);
 
     // Replace block content with wrapper
     block.innerHTML = '';

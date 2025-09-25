@@ -404,31 +404,13 @@
   },
   {
     "id": "facts-figures-cards",
-    "fields": []
-  },
-  {
-    "id": "facts-figures-card",
     "fields": [
-      {
-        "component": "text",
-        "name": "title",
-        "value": "",
-        "label": "Title",
-        "valueType": "string"
-      },
-      {
-        "component": "richtext",
-        "name": "text",
-        "value": "",
-        "label": "Text",
-        "valueType": "string"
-      },
       {
         "component": "select",
         "name": "classes",
         "value": "",
-        "label": "Background Style",
-        "description": "The background style of the card",
+        "label": "Card Style",
+        "description": "The background style for all cards",
         "valueType": "string",
         "options": [
           {
@@ -456,6 +438,25 @@
             "value": "minimal"
           }
         ]
+      }
+    ]
+  },
+  {
+    "id": "facts-figures-card",
+    "fields": [
+      {
+        "component": "text",
+        "name": "title",
+        "value": "",
+        "label": "Title",
+        "valueType": "string"
+      },
+      {
+        "component": "richtext",
+        "name": "text",
+        "value": "",
+        "label": "Text",
+        "valueType": "string"
       }
     ]
   },

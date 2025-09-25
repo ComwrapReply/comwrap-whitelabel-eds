@@ -34,7 +34,24 @@
   "models": [
     {
       "id": "facts-figures-cards",
-      "fields": []
+      "fields": [
+        {
+          "component": "select",
+          "name": "classes",
+          "value": "",
+          "label": "Card Style",
+          "description": "The background style for all cards",
+          "valueType": "string",
+          "options": [
+            {"name": "Default", "value": ""},
+            {"name": "Blue", "value": "blue"},
+            {"name": "Grey", "value": "grey"},
+            {"name": "Bordered", "value": "bordered"},
+            {"name": "Highlighted", "value": "highlighted"},
+            {"name": "Minimal", "value": "minimal"}
+          ]
+        }
+      ]
     },
     {
       "id": "facts-figures-card",
@@ -52,22 +69,6 @@
           "value": "",
           "label": "Text",
           "valueType": "string"
-        },
-        {
-          "component": "select",
-          "name": "classes",
-          "value": "",
-          "label": "Background Style",
-          "description": "The background style of the card",
-          "valueType": "string",
-          "options": [
-            {"name": "Default", "value": ""},
-            {"name": "Blue", "value": "blue"},
-            {"name": "Grey", "value": "grey"},
-            {"name": "Bordered", "value": "bordered"},
-            {"name": "Highlighted", "value": "highlighted"},
-            {"name": "Minimal", "value": "minimal"}
-          ]
         }
       ]
     }
