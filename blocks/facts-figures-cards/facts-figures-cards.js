@@ -39,14 +39,14 @@ const CLASSES = {
 function createWrapper(block, columns, rows) {
   const wrapper = document.createElement('div');
   wrapper.className = CLASSES.wrapper;
-  
+
   // Add dynamic column class based on template property
   const colCount = parseInt(columns, 10) || CONFIG.defaultColumns;
   wrapper.classList.add(`${CLASSES.cols}${colCount}`);
-  
+
   // Add row information as data attribute for potential future use
   wrapper.setAttribute('data-rows', rows || CONFIG.defaultRows);
-  
+
   return wrapper;
 }
 
@@ -57,58 +57,58 @@ function createWrapper(block, columns, rows) {
  */
 function processCard(card, index) {
   if (!card) return;
-  
+
   // Find and process the figure/number element
   const figureElements = card.querySelectorAll('h1, h2, h3, h4, h5, h6, p');
   let figureElement = null;
-  let descriptionElements = [];
-  
+  const descriptionElements = [];
+
   // Identify figure vs description based on content patterns
   figureElements.forEach((element) => {
     const text = element.textContent?.trim() || '';
-    
+
     // Check if this looks like a figure (contains numbers, currency, percentages)
     const isFigure = /[\d€$£¥%]/.test(text) && text.length < 50;
-    
+
     if (isFigure && !figureElement) {
       figureElement = element;
     } else {
       descriptionElements.push(element);
     }
   });
-  
+
   // Process figure element
   if (figureElement) {
     figureElement.className = 'facts-figures-card-figure';
-    
+
     // Extract unit from figure text (e.g., "€7.1 billion" -> "€7.1" + "billion")
     const text = figureElement.textContent?.trim() || '';
     const unitMatch = text.match(/^(.*?)(\s+(?:billion|million|thousand|%|percent|employees|customers|years|months|days))$/i);
-    
+
     if (unitMatch) {
       const [, figure, unit] = unitMatch;
       figureElement.innerHTML = `${figure.trim()}<span class="facts-figures-card-figure-unit">${unit.trim()}</span>`;
     }
   }
-  
+
   // Process description elements
   if (descriptionElements.length > 0) {
     const descriptionWrapper = document.createElement('div');
     descriptionWrapper.className = 'facts-figures-card-description';
-    
+
     descriptionElements.forEach((element) => {
       const p = document.createElement('p');
       p.innerHTML = element.innerHTML;
       descriptionWrapper.appendChild(p);
       element.remove();
     });
-    
+
     card.appendChild(descriptionWrapper);
   }
-  
+
   // Set up animation delay based on card index
   card.style.transitionDelay = `${index * CONFIG.animationDelay}ms`;
-  
+
   // Add accessibility attributes
   card.setAttribute('role', 'article');
   card.setAttribute('aria-label', `Fact card ${index + 1}`);
@@ -134,14 +134,14 @@ function setupScrollAnimation(block) {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
           const cards = entry.target.querySelectorAll(SELECTORS.card);
-          
+
           // Animate cards with staggered delay
           cards.forEach((card, index) => {
             setTimeout(() => {
               card.classList.add(CLASSES.animateIn);
             }, index * CONFIG.animationDelay);
           });
-          
+
           // Stop observing after animation is triggered
           observer.unobserve(entry.target);
         }
@@ -173,11 +173,11 @@ function setupResponsiveHandler(wrapper) {
       });
     }, 150);
   };
-  
+
   window.addEventListener('resize', handleResize);
-  
+
   // Cleanup function (stored on wrapper for potential future use)
-  wrapper._cleanup = () => {
+  wrapper.cleanupResize = () => {
     window.removeEventListener('resize', handleResize);
     clearTimeout(resizeTimeout);
   };
@@ -185,17 +185,19 @@ function setupResponsiveHandler(wrapper) {
 
 /**
  * Extracts template properties from the block element
+ * Similar to how columns block handles template properties
  * @param {HTMLElement} block - The main block element
  * @returns {Object} Template properties object
  */
 function getTemplateProperties(block) {
-  const columns = block.getAttribute('data-columns') || 
-                 block.dataset.columns || 
-                 CONFIG.defaultColumns.toString();
-  const rows = block.getAttribute('data-rows') || 
-              block.dataset.rows || 
-              CONFIG.defaultRows.toString();
-  
+  // Get columns and rows from block attributes (set by template properties)
+  const columns = block.getAttribute('data-columns')
+                 || block.dataset.columns
+                 || CONFIG.defaultColumns.toString();
+  const rows = block.getAttribute('data-rows')
+              || block.dataset.rows
+              || CONFIG.defaultRows.toString();
+
   return { columns, rows };
 }
 
@@ -205,25 +207,23 @@ function getTemplateProperties(block) {
  */
 export default async function decorate(block) {
   if (!block) {
-    console.warn('Facts and Figures Cards: Block element not found');
     return;
   }
-  
+
   try {
     // Extract template properties
     const { columns, rows } = getTemplateProperties(block);
-    
+
     // Create wrapper element
     const wrapper = createWrapper(block, columns, rows);
-    
+
     // Get all child card elements
     const cards = [...block.children];
-    
+
     if (cards.length === 0) {
-      console.warn('Facts and Figures Cards: No card elements found');
       return;
     }
-    
+
     // Process each card and move to wrapper
     cards.forEach((card, index) => {
       if (card && card.nodeType === Node.ELEMENT_NODE) {
@@ -231,26 +231,21 @@ export default async function decorate(block) {
         wrapper.appendChild(card);
       }
     });
-    
+
     // Clear block content and add wrapper
     block.innerHTML = '';
     block.appendChild(wrapper);
-    
+
     // Set up scroll-triggered animations
     setupScrollAnimation(block);
-    
+
     // Set up responsive handling
     setupResponsiveHandler(wrapper);
-    
+
     // Add block-level accessibility attributes
     block.setAttribute('role', 'region');
     block.setAttribute('aria-label', 'Facts and figures');
-    
-    console.log('Facts and Figures Cards: Block initialized successfully');
-    
   } catch (error) {
-    console.error('Facts and Figures Cards: Error during decoration:', error);
-    
     // Fallback: ensure cards are visible even if decoration fails
     const cards = block.querySelectorAll(SELECTORS.card);
     cards.forEach((card) => {

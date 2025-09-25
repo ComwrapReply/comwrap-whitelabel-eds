@@ -4,6 +4,8 @@
 .block.facts-figures-cards {
   margin: 2rem 0;
   padding: 0;
+
+  /* Container has no styling options - only template properties for columns/rows */
 }
 
 /* Block wrapper - Layout container */
@@ -38,13 +40,13 @@
 /* Card hover effects */
 .block.facts-figures-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 32px rgb(0 0 0 / 10%);
 }
 
 /* Card background variants */
 .block.facts-figures-card.light-bg {
   background: var(--light-color);
-  border: 1px solid rgba(0, 0, 0, 0.08);
+  border: 1px solid rgb(0 0 0 / 8%);
 }
 
 .block.facts-figures-card.dark-bg {
@@ -68,7 +70,7 @@
   font-size: var(--heading-font-size-xxl);
   font-weight: 700;
   line-height: 1;
-  margin: 0 0 0.5rem 0;
+  margin: 0 0 0.5rem;
   display: flex;
   align-items: baseline;
   gap: 0.25rem;
@@ -90,7 +92,7 @@
 }
 
 .facts-figures-card-description p {
-  margin: 0 0 0.75rem 0;
+  margin: 0 0 0.75rem;
 }
 
 .facts-figures-card-description p:last-child {
@@ -98,7 +100,7 @@
 }
 
 /* Responsive design - Tablet */
-@media (min-width: 768px) {
+@media (width >= 768px) {
   .facts-figures-cards-wrapper {
     grid-template-columns: repeat(2, 1fr);
     gap: 2rem;
@@ -115,7 +117,7 @@
 }
 
 /* Responsive design - Desktop */
-@media (min-width: 1024px) {
+@media (width >= 1024px) {
   .facts-figures-cards-wrapper {
     grid-template-columns: repeat(3, 1fr);
     gap: 2.5rem;
@@ -137,7 +139,7 @@
 }
 
 /* Large desktop */
-@media (min-width: 1200px) {
+@media (width >= 1200px) {
   .facts-figures-cards-wrapper {
     padding: 0;
   }
@@ -161,7 +163,7 @@
 }
 
 /* Mobile adjustments for dynamic columns */
-@media (max-width: 767px) {
+@media (width <= 767px) {
   .facts-figures-cards-wrapper.cols-1,
   .facts-figures-cards-wrapper.cols-2,
   .facts-figures-cards-wrapper.cols-3,
@@ -171,7 +173,7 @@
 }
 
 /* Tablet adjustments for dynamic columns */
-@media (min-width: 768px) and (max-width: 1023px) {
+@media (768px <= width <= 1023px) {
   .facts-figures-cards-wrapper.cols-3,
   .facts-figures-cards-wrapper.cols-4 {
     grid-template-columns: repeat(2, 1fr);
@@ -198,7 +200,7 @@
 }
 
 /* High contrast mode support */
-@media (prefers-contrast: high) {
+@media (prefers-contrast: more) {
   .block.facts-figures-card {
     border: 2px solid var(--text-color);
   }

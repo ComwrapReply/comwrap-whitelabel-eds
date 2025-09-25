@@ -403,28 +403,6 @@
     ]
   },
   {
-    "id": "facts-figures-cards",
-    "fields": [
-      {
-        "component": "multiselect",
-        "name": "classes",
-        "label": "Background Options",
-        "valueType": "string",
-        "options": [
-          {
-            "name": "Blue Gradient",
-            "value": "blue-gradient"
-          },
-          {
-            "name": "Grey Gradient",
-            "value": "grey-gradient"
-          }
-        ],
-        "value": ""
-      }
-    ]
-  },
-  {
     "id": "facts-figures-card",
     "fields": [
       {
