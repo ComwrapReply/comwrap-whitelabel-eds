@@ -439,6 +439,93 @@
     ]
   },
   {
+    "id": "facts-figures-cards",
+    "fields": [
+      {
+        "component": "text",
+        "name": "columns",
+        "label": "Columns",
+        "valueType": "string",
+        "value": "3"
+      },
+      {
+        "component": "text",
+        "name": "rows",
+        "label": "Rows",
+        "valueType": "string",
+        "value": "1"
+      },
+      {
+        "component": "multiselect",
+        "name": "classes",
+        "label": "Background Options",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "Blue Gradient",
+            "value": "blue-gradient"
+          },
+          {
+            "name": "Grey Gradient",
+            "value": "grey-gradient"
+          }
+        ],
+        "value": ""
+      }
+    ]
+  },
+  {
+    "id": "facts-figures-card",
+    "fields": [
+      {
+        "component": "text",
+        "name": "figure",
+        "label": "Figure/Number",
+        "valueType": "string",
+        "value": ""
+      },
+      {
+        "component": "text",
+        "name": "figureUnit",
+        "label": "Figure Unit (e.g., billion, %)",
+        "valueType": "string",
+        "value": ""
+      },
+      {
+        "component": "richtext",
+        "name": "description",
+        "label": "Description",
+        "valueType": "string",
+        "value": ""
+      },
+      {
+        "component": "multiselect",
+        "name": "classes",
+        "label": "Card Style",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "Light Background",
+            "value": "light-bg"
+          },
+          {
+            "name": "Dark Background",
+            "value": "dark-bg"
+          },
+          {
+            "name": "Blue Gradient",
+            "value": "blue-gradient"
+          },
+          {
+            "name": "Grey Gradient",
+            "value": "grey-gradient"
+          }
+        ],
+        "value": ""
+      }
+    ]
+  },
+  {
     "id": "teaser",
     "fields": [
       {

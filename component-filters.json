@@ -20,7 +20,8 @@
       "breadcrumbs",
       "carousel",
       "download",
-      "teaser"
+      "teaser",
+      "facts-figures-cards"
     ]
   },
   {
@@ -54,6 +55,18 @@
       "image",
       "button",
       "title"
+    ]
+  },
+  {
+    "id": "facts-figures-cards",
+    "components": [
+      "facts-figures-card"
+    ]
+  },
+  {
+    "id": "facts-figures-card",
+    "components": [
+      "text"
     ]
   }
 ]

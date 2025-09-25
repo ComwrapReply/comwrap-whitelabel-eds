@@ -1,0 +1,210 @@
+/* Facts and Figures Cards Block Styling */
+
+/* Container Block - Main wrapper */
+.block.facts-figures-cards {
+  margin: 2rem 0;
+  padding: 0;
+}
+
+/* Block wrapper - Layout container */
+.facts-figures-cards-wrapper {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: 1fr;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* Individual card styling */
+.block.facts-figures-card {
+  background: var(--background-color);
+  border-radius: 12px;
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+/* Card animation states */
+.block.facts-figures-card.animate-in {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+/* Card hover effects */
+.block.facts-figures-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+/* Card background variants */
+.block.facts-figures-card.light-bg {
+  background: var(--light-color);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.block.facts-figures-card.dark-bg {
+  background: var(--link-color);
+  color: var(--background-color);
+}
+
+.block.facts-figures-card.blue-gradient {
+  background: linear-gradient(135deg, var(--link-color) 0%, var(--link-hover-color) 100%);
+  color: var(--background-color);
+}
+
+.block.facts-figures-card.grey-gradient {
+  background: linear-gradient(135deg, var(--light-color) 0%, var(--dark-color) 100%);
+  color: var(--text-color);
+}
+
+/* Figure styling */
+.facts-figures-card-figure {
+  font-family: var(--heading-font-family);
+  font-size: var(--heading-font-size-xxl);
+  font-weight: 700;
+  line-height: 1;
+  margin: 0 0 0.5rem 0;
+  display: flex;
+  align-items: baseline;
+  gap: 0.25rem;
+}
+
+.facts-figures-card-figure-unit {
+  font-size: var(--heading-font-size-m);
+  font-weight: 600;
+  opacity: 0.9;
+}
+
+/* Description styling */
+.facts-figures-card-description {
+  font-family: var(--body-font-family);
+  font-size: var(--body-font-size-s);
+  line-height: 1.5;
+  margin: 0;
+  opacity: 0.9;
+}
+
+.facts-figures-card-description p {
+  margin: 0 0 0.75rem 0;
+}
+
+.facts-figures-card-description p:last-child {
+  margin-bottom: 0;
+}
+
+/* Responsive design - Tablet */
+@media (min-width: 768px) {
+  .facts-figures-cards-wrapper {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+    padding: 0 1.5rem;
+  }
+  
+  .block.facts-figures-card {
+    padding: 2.5rem;
+  }
+  
+  .facts-figures-card-figure {
+    font-size: calc(var(--heading-font-size-xxl) * 1.2);
+  }
+}
+
+/* Responsive design - Desktop */
+@media (min-width: 1024px) {
+  .facts-figures-cards-wrapper {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2.5rem;
+    padding: 0 2rem;
+  }
+  
+  .block.facts-figures-card {
+    padding: 3rem;
+  }
+  
+  .facts-figures-card-figure {
+    font-size: calc(var(--heading-font-size-xxl) * 1.4);
+    margin-bottom: 1rem;
+  }
+  
+  .facts-figures-card-description {
+    font-size: var(--body-font-size-m);
+  }
+}
+
+/* Large desktop */
+@media (min-width: 1200px) {
+  .facts-figures-cards-wrapper {
+    padding: 0;
+  }
+}
+
+/* Dynamic columns based on template properties */
+.facts-figures-cards-wrapper.cols-1 {
+  grid-template-columns: 1fr;
+}
+
+.facts-figures-cards-wrapper.cols-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.facts-figures-cards-wrapper.cols-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.facts-figures-cards-wrapper.cols-4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+/* Mobile adjustments for dynamic columns */
+@media (max-width: 767px) {
+  .facts-figures-cards-wrapper.cols-1,
+  .facts-figures-cards-wrapper.cols-2,
+  .facts-figures-cards-wrapper.cols-3,
+  .facts-figures-cards-wrapper.cols-4 {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Tablet adjustments for dynamic columns */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .facts-figures-cards-wrapper.cols-3,
+  .facts-figures-cards-wrapper.cols-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Accessibility and reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .block.facts-figures-card {
+    transition: none;
+    opacity: 1;
+    transform: none;
+  }
+  
+  .block.facts-figures-card:hover {
+    transform: none;
+  }
+}
+
+/* Focus styles for accessibility */
+.block.facts-figures-card:focus-within {
+  outline: 2px solid var(--link-color);
+  outline-offset: 2px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .block.facts-figures-card {
+    border: 2px solid var(--text-color);
+  }
+  
+  .block.facts-figures-card.dark-bg,
+  .block.facts-figures-card.blue-gradient {
+    border-color: var(--background-color);
+  }
+}
