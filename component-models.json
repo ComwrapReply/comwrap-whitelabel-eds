@@ -407,7 +407,7 @@
     "fields": [
       {
         "component": "select",
-        "name": "classes",
+        "name": "classes_style",
         "value": "",
         "label": "Card Style",
         "description": "The background style for all cards",
@@ -436,6 +436,66 @@
           {
             "name": "Minimal",
             "value": "minimal"
+          },
+          {
+            "name": "Dark",
+            "value": "dark"
+          },
+          {
+            "name": "Success",
+            "value": "success"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "name": "classes_layout",
+        "value": "",
+        "label": "Card Layout",
+        "description": "The layout style for all cards",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "Default",
+            "value": ""
+          },
+          {
+            "name": "Compact",
+            "value": "compact"
+          },
+          {
+            "name": "Spacious",
+            "value": "spacious"
+          },
+          {
+            "name": "Centered",
+            "value": "centered"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "name": "classes_animation",
+        "value": "",
+        "label": "Animation Style",
+        "description": "The animation style for all cards",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "Default",
+            "value": ""
+          },
+          {
+            "name": "Fade In",
+            "value": "fade-in"
+          },
+          {
+            "name": "Slide Up",
+            "value": "slide-up"
+          },
+          {
+            "name": "Scale In",
+            "value": "scale-in"
           }
         ]
       }
@@ -460,7 +520,7 @@
       },
       {
         "component": "select",
-        "name": "classes",
+        "name": "classes_style",
         "value": "",
         "label": "Card Style",
         "description": "The background style of the card",
@@ -477,6 +537,74 @@
           {
             "name": "Grey",
             "value": "grey"
+          },
+          {
+            "name": "Bordered",
+            "value": "bordered"
+          },
+          {
+            "name": "Highlighted",
+            "value": "highlighted"
+          },
+          {
+            "name": "Minimal",
+            "value": "minimal"
+          },
+          {
+            "name": "Dark",
+            "value": "dark"
+          },
+          {
+            "name": "Success",
+            "value": "success"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "name": "classes_size",
+        "value": "",
+        "label": "Card Size",
+        "description": "The size of the card",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "Default",
+            "value": ""
+          },
+          {
+            "name": "Small",
+            "value": "small"
+          },
+          {
+            "name": "Large",
+            "value": "large"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "name": "classes_emphasis",
+        "value": "",
+        "label": "Card Emphasis",
+        "description": "The emphasis level of the card",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "Default",
+            "value": ""
+          },
+          {
+            "name": "Subtle",
+            "value": "subtle"
+          },
+          {
+            "name": "Bold",
+            "value": "bold"
+          },
+          {
+            "name": "Accent",
+            "value": "accent"
           }
         ]
       }
