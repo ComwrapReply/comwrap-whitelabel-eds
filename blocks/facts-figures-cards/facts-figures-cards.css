@@ -1,6 +1,6 @@
 /* Facts and Figures Cards Block Styling */
 
-.facts-figures-cards-container {
+.facts-figures-cards-main-container {
   display: grid;
   grid-template-columns: repeat(var(--columns, 2), 1fr);
   gap: 1.5rem;
@@ -317,7 +317,7 @@
 
 /* Responsive design */
 @media (width <= 768px) {
-  .facts-figures-cards-container {
+  .facts-figures-cards-main-container {
     grid-template-columns: 1fr;
     gap: 1rem;
     margin: 1rem 0;
@@ -341,13 +341,13 @@
 }
 
 @media (769px <= width <= 1024px) {
-  .facts-figures-cards-container {
+  .facts-figures-cards-main-container {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
 @media (width >= 1025px) {
-  .facts-figures-cards-container {
+  .facts-figures-cards-main-container {
     grid-template-columns: repeat(var(--columns, 3), 1fr);
   }
 }
