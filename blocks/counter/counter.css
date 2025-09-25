@@ -1,0 +1,238 @@
+/* Counter Block Styles */
+.counter-container {
+  /* No styling applied to container as per user rules */
+}
+
+.counter-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+  padding: 50px 200px;
+  max-width: 1920px;
+  margin: 0 auto;
+  position: relative;
+  overflow: hidden;
+}
+
+.counter {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  width: 100%;
+  max-width: 1520px;
+}
+
+.counter-numbers {
+  display: flex;
+  align-items: flex-end;
+  height: 168px;
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.counter-digit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  height: 168px;
+  position: relative;
+  overflow: hidden;
+  margin-right: 0;
+}
+
+.counter-digit-number {
+  font-family: 'Albert Sans', sans-serif;
+  font-weight: 600;
+  font-style: normal;
+  font-size: 160px;
+  line-height: 168px;
+  text-align: right;
+  white-space: nowrap;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  transition: transform 0.3s ease-in-out;
+  transform: translateY(100%);
+}
+
+.counter-digit-number.animate {
+  transform: translateY(0);
+}
+
+.counter-description {
+  font-family: 'Albert Sans', sans-serif;
+  font-weight: 600;
+  font-style: normal;
+  font-size: 32px;
+  line-height: 40px;
+  flex: 1;
+  max-width: 460px;
+}
+
+/* Dark Mode Styles */
+.counter[data-mode="dark"] {
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  color: #fff;
+}
+
+.counter[data-mode="dark"] .counter-digit-number {
+  color: #fff;
+}
+
+.counter[data-mode="dark"] .counter-description {
+  color: #fff;
+}
+
+/* Light Mode Styles */
+.counter[data-mode="light"] {
+  background: linear-gradient(135deg, #f7f6f5 0%, #fff 100%);
+  color: #000;
+}
+
+.counter[data-mode="light"] .counter-digit-number {
+  color: #0063be;
+}
+
+.counter[data-mode="light"] .counter-description {
+  color: #000;
+}
+
+/* Mobile Styles */
+@media (width <= 768px) {
+  .counter-wrapper {
+    flex-direction: column;
+    gap: 20px;
+    padding: 76px 95px 50px;
+  }
+
+  .counter {
+    flex-direction: column;
+    gap: 20px;
+    text-align: center;
+  }
+
+  .counter-numbers {
+    height: 100px;
+    justify-content: center;
+  }
+
+  .counter-digit {
+    height: 100px;
+  }
+
+  .counter-digit-number {
+    font-size: 88px;
+    line-height: 100px;
+  }
+
+  .counter-description {
+    font-size: 18px;
+    line-height: 24px;
+    max-width: 100%;
+    text-align: center;
+  }
+}
+
+/* Tablet Styles */
+@media (width >= 769px) and (width <= 1024px) {
+  .counter-wrapper {
+    padding: 50px 100px;
+  }
+
+  .counter-digit-number {
+    font-size: 120px;
+    line-height: 128px;
+  }
+
+  .counter-description {
+    font-size: 24px;
+    line-height: 32px;
+  }
+}
+
+/* Animation Keyframes */
+@keyframes count-up {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slide-in-from-bottom {
+  from {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Animation Classes */
+.counter.animate-in {
+  animation: slide-in-from-bottom 0.6s ease-out forwards;
+}
+
+.counter-digit-number.counting {
+  animation: count-up 0.3s ease-out forwards;
+}
+
+/* Accessibility - Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .counter-digit-number {
+    transition: none;
+    animation: none;
+  }
+
+  .counter.animate-in {
+    animation: none;
+  }
+
+  .counter-digit-number.counting {
+    animation: none;
+    transform: translateY(0);
+  }
+}
+
+/* Focus States for Accessibility */
+.counter:focus-within {
+  outline: 2px solid #0063be;
+  outline-offset: 4px;
+}
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: more) {
+  .counter[data-mode="dark"] {
+    background: #000;
+    border: 2px solid #fff;
+  }
+
+  .counter[data-mode="light"] {
+    background: #fff;
+    border: 2px solid #000;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .counter {
+    background: none !important;
+    color: #000 !important;
+  }
+
+  .counter-digit-number,
+  .counter-description {
+    color: #000 !important;
+  }
+}
