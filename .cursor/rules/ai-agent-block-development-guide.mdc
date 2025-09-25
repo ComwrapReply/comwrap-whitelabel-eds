@@ -1,0 +1,1649 @@
+---
+alwaysApply: true
+---
+# AI Agent Block Development Guide for Universal Editor
+
+This comprehensive guide provides AI agents with best practices, patterns, and step-by-step instructions for creating and developing blocks in Adobe Experience Manager (AEM) Universal Editor projects using Edge Delivery Services.
+
+## Table of Contents
+
+1. [Overview](#overview)
+2. [Block Architecture](#block-architecture)
+3. [Block JSON Configuration](#block-json-configuration)
+4. [Block JavaScript Implementation](#block-javascript-implementation)
+5. [Block CSS Styling](#block-css-styling)
+6. [Block Options and Variants](#block-options-and-variants)
+7. [Container Blocks](#container-blocks)
+8. [Best Practices](#best-practices)
+9. [Common Patterns](#common-patterns)
+10. [Testing and Validation](#testing-and-validation)
+
+## Overview
+
+Blocks in Universal Editor are reusable content components that can be authored and styled independently. Each block consists of three main files:
+
+- `_blockname.json` - Block definition and content model
+- `blockname.js` - JavaScript functionality and DOM manipulation
+- `blockname.css` - Styling and visual presentation
+
+### Key Principles
+
+- **Semantic HTML**: Use proper semantic elements for accessibility
+- **Progressive Enhancement**: Start with basic functionality, enhance with JavaScript
+- **Responsive Design**: Ensure blocks work across all device sizes
+- **Performance**: Optimize for Core Web Vitals
+- **Accessibility**: Follow WCAG guidelines
+- **Maintainability**: Write clean, documented code
+
+## Block Architecture
+
+### File Structure
+
+```
+blocks/
+  blockname/
+    _blockname.json    # Block definition and model
+    blockname.js       # JavaScript implementation
+    blockname.css      # Styling
+    README.md          # Documentation (optional)
+```
+
+### Block Lifecycle
+
+1. **Definition**: Block is registered in `component-definitions.json`
+2. **Model**: Content structure defined in `component-models.json`
+3. **Rendering**: HTML structure created by AEM
+4. **Decoration**: JavaScript enhances the DOM
+5. **Styling**: CSS applies visual presentation
+
+## Block JSON Configuration
+
+### Basic Block Structure
+
+```json
+{
+  "definitions": [
+    {
+      "title": "Block Display Name",
+      "id": "block-id",
+      "plugins": {
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/block/v1/block",
+            "template": {
+              "name": "Block Name",
+              "model": "model-id"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "models": [
+    {
+      "id": "model-id",
+      "fields": [
+        // Field definitions here
+      ]
+    }
+  ],
+  "filters": []
+}
+```
+
+### Field Types and Components
+
+#### Text Fields
+```json
+{
+  "component": "text",
+  "name": "fieldName",
+  "label": "Field Label",
+  "valueType": "string",
+  "value": "default value"
+}
+```
+
+#### Rich Text Fields
+```json
+{
+  "component": "richtext",
+  "name": "description",
+  "label": "Description",
+  "valueType": "string",
+  "value": ""
+}
+```
+
+#### Image References
+```json
+{
+  "component": "reference",
+  "name": "image",
+  "label": "Image",
+  "valueType": "string",
+  "multi": false
+}
+```
+
+
+#### Content Links
+```json
+{
+  "component": "aem-content",
+  "name": "link",
+  "label": "Link"
+}
+```
+
+
+### Block Options Configuration
+
+This tutorial demonstrates how to use a select (dropdown) input type to let authors choose a single block option, which is then applied as a single, corresponding CSS class. Only one "name": "classes" is allow in block oprion configuration. This class can be use for "component": "select" with single class , "component": "select" with multiple classes , component": "multiselect",
+
+Block options allow authors to choose different visual variants of a block. Use the `classes` field with `select` component:
+
+```json
+{
+  "component": "select",
+  "name": "classes",
+  "label": "Layout Variant",
+  "valueType": "string",
+  "options": [
+    {
+      "name": "Default",
+      "value": "default"
+    },
+    {
+      "name": "Alternative",
+      "value": "alternative"
+    }
+  ],
+  "value": "default"
+}
+```
+
+
+### Block Options Configuration
+
+The select input type allows authors to choose a single block option, which can optionally map to multiple CSS classes. To achieve this, list the CSS classes as space-delimited values.
+
+Block options allow authors to choose different visual variants of a block. Use the `classes` field with `select` component:
+
+```json
+{
+  "component": "select",
+  "name": "classes",
+  "label": "Layout Variant",
+  "valueType": "string",
+  "options": [
+    {
+      "name": "Default",
+      "value": "default"
+    },
+    {
+      "name": "Alternative",
+      "value": "alternative blue right-to-left"
+    },
+    ,
+    {
+      "name": "Alternative",
+      "value": "alternative grey left-to-right"
+    }
+  ],
+  "value": "default"
+}
+```
+
+
+#### Multi-select Fields Options Configuration
+
+The input type of "component": "multiselect" allows the author to select multiple options simultaneously. This enables complex permutations of the block’s appearance by combining multiple design choices.
+
+Block options allow authors to choose different visual variants of a block. Use the `classes` field with `multiselect` component:
+
+```json
+{
+  "component": "multiselect",
+  "name": "classes",
+  "label": "Block Options",
+  "valueType": "string",
+  "options": [
+    {
+      "name": "Layout",
+      "children": [
+        { "name": "Default", "value": "" },
+        { "name": "Side by Side", "value": "side-by-side" },
+        { "name": "Stacked", "value": "stacked" }
+      ]
+    },
+    {
+      "name": "Style",
+      "children": [
+        { "name": "Light Theme", "value": "light" },
+        { "name": "Dark Theme", "value": "dark" }
+      ]
+    }
+  ],
+  "value": ""
+}
+```
+
+## Block JavaScript Implementation
+
+### Basic Structure
+
+```javascript
+/**
+ * Block name implementation
+ * Brief description of what the block does
+ */
+
+export default function decorate(block) {
+  // Block decoration logic here
+  processBlockContent(block);
+  addEventListeners(block);
+  initializeBlockFeatures(block);
+}
+
+/**
+ * Process and enhance block content
+ * @param {HTMLElement} block - The block DOM element
+ */
+function processBlockContent(block) {
+  // Content processing logic
+}
+
+/**
+ * Add event listeners for interactive features
+ * @param {HTMLElement} block - The block DOM element
+ */
+function addEventListeners(block) {
+  // Event listener setup
+}
+
+/**
+ * Initialize block-specific features
+ * @param {HTMLElement} block - The block DOM element
+ */
+function initializeBlockFeatures(block) {
+  // Feature initialization
+}
+```
+
+### Block Options Detection
+
+```javascript
+/**
+ * Get active block options from CSS classes
+ * @param {HTMLElement} block - The block DOM element
+ * @returns {string[]} Array of active option classes
+ */
+function getBlockOptions(block) {
+  return [...block.classList].filter((c) => 
+    !['block', 'blockname'].includes(c)
+  );
+}
+
+/**
+ * Check if a specific option is active
+ * @param {HTMLElement} block - The block DOM element
+ * @param {string} option - Option class to check
+ * @returns {boolean} True if option is active
+ */
+function hasOption(block, option) {
+  return getBlockOptions(block).includes(option);
+}
+```
+
+### Content Processing Patterns
+
+#### Image Processing
+```javascript
+function processImages(block) {
+  const images = block.querySelectorAll('img');
+  images.forEach((img) => {
+    img.classList.add('block-image');
+    
+    // Add lazy loading
+    if (!img.hasAttribute('loading')) {
+      img.setAttribute('loading', 'lazy');
+    }
+    
+    // Add error handling
+    img.addEventListener('error', () => {
+      img.style.display = 'none';
+    });
+  });
+}
+```
+
+#### Link Processing
+```javascript
+function processLinks(block) {
+  const links = block.querySelectorAll('a');
+  links.forEach((link) => {
+    link.classList.add('block-link');
+    
+    // Add external link indicators
+    if (link.hostname !== window.location.hostname) {
+      link.setAttribute('target', '_blank');
+      link.setAttribute('rel', 'noopener noreferrer');
+    }
+  });
+}
+```
+
+#### Heading Processing
+```javascript
+function processHeadings(block) {
+  const headings = block.querySelectorAll('h1, h2, h3, h4, h5, h6');
+  headings.forEach((heading) => {
+    heading.classList.add('block-heading');
+    
+    // Add ID for anchor links
+    if (!heading.id) {
+      const id = heading.textContent
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '');
+      heading.id = id;
+    }
+  });
+}
+```
+
+### Event Handling Patterns
+
+#### Click Events
+```javascript
+function addClickHandlers(block) {
+  const clickableElements = block.querySelectorAll('[data-clickable]');
+  
+  clickableElements.forEach((element) => {
+    element.addEventListener('click', (e) => {
+      e.preventDefault();
+      handleClick(element, e);
+    });
+  });
+}
+
+function handleClick(element, event) {
+  // Handle click logic
+  console.log('Element clicked:', element);
+}
+```
+
+#### Hover Events
+```javascript
+function addHoverEffects(block) {
+  const hoverElements = block.querySelectorAll('[data-hover]');
+  
+  hoverElements.forEach((element) => {
+    element.addEventListener('mouseenter', () => {
+      element.classList.add('hover-active');
+    });
+    
+    element.addEventListener('mouseleave', () => {
+      element.classList.remove('hover-active');
+    });
+  });
+}
+```
+
+### Analytics Integration
+
+```javascript
+function addAnalyticsTracking(block) {
+  const trackableElements = block.querySelectorAll('[data-track]');
+  
+  trackableElements.forEach((element) => {
+    element.addEventListener('click', (e) => {
+      const eventName = element.dataset.track;
+      const eventData = {
+        event: eventName,
+        block: 'blockname',
+        element: element.tagName.toLowerCase()
+      };
+      
+      // Send to analytics
+      if (window.dataLayer) {
+        window.dataLayer.push(eventData);
+      }
+    });
+  });
+}
+```
+
+## Block CSS Styling
+
+### CSS Structure
+
+```css
+/* Block container */
+.block.blockname {
+  /* Base block styles */
+}
+
+/* Block variants */
+.block.blockname.variant-name {
+  /* Variant-specific styles */
+}
+
+/* Block elements */
+.block.blockname .element-class {
+  /* Element styles */
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .block.blockname {
+    /* Mobile styles */
+  }
+}
+```
+
+### Block Options Styling
+
+```css
+/* Default option (no additional classes) */
+.block.blockname {
+  /* Default styles */
+}
+
+/* Side-by-side option */
+.block.blockname.side-by-side {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+/* Dark theme option */
+.block.blockname.dark {
+  background-color: #333;
+  color: white;
+}
+
+/* Combined options */
+.block.blockname.side-by-side.dark {
+  /* Styles for both options combined */
+}
+```
+
+### Responsive Design
+
+```css
+/* Mobile-first approach */
+.block.blockname {
+  /* Mobile styles */
+}
+
+/* Tablet */
+@media (min-width: 768px) {
+  .block.blockname {
+    /* Tablet styles */
+  }
+}
+
+/* Desktop */
+@media (min-width: 1024px) {
+  .block.blockname {
+    /* Desktop styles */
+  }
+}
+```
+
+### Animation and Transitions
+
+```css
+.block.blockname {
+  transition: all 0.3s ease;
+}
+
+.block.blockname:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Fade in animation */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.block.blockname {
+  animation: fadeIn 0.5s ease-in;
+}
+```
+
+## Container Blocks
+
+Container blocks can contain other blocks as children. They require both a container definition and child item definitions.
+
+### Container Block JSON
+
+```json
+{
+  "definitions": [
+    {
+      "title": "Cards Container",
+      "id": "cards",
+      "plugins": {
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/block/v1/block",
+            "template": {
+              "name": "Cards",
+              "filter": "cards"
+            }
+          }
+        }
+      }
+    },
+    {
+      "title": "Card Item",
+      "id": "card",
+      "plugins": {
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/block/v1/block/item",
+            "template": {
+              "name": "Card",
+              "model": "card"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "models": [
+    {
+      "id": "card",
+      "fields": [
+        // Card item fields
+      ]
+    }
+  ],
+  "filters": [
+    {
+      "id": "cards",
+      "components": ["card"]
+    }
+  ]
+}
+```
+
+### Container Block JavaScript
+
+```javascript
+export default function decorate(block) {
+  const [headerDiv, ...itemDivs] = block.children;
+  
+  // Process header
+  if (headerDiv) {
+    headerDiv.classList.add('cards-header');
+  }
+  
+  // Process items
+  itemDivs.forEach((item, index) => {
+    item.classList.add('card-item');
+    item.setAttribute('data-index', index);
+    
+    // Process individual card content
+    processCardItem(item);
+  });
+  
+  // Add container functionality
+  initializeContainer(block);
+}
+
+function processCardItem(item) {
+  // Process individual card content
+  const image = item.querySelector('img');
+  const title = item.querySelector('h1, h2, h3, h4, h5, h6');
+  const text = item.querySelector('p');
+  
+  if (image) image.classList.add('card-image');
+  if (title) title.classList.add('card-title');
+  if (text) text.classList.add('card-text');
+}
+```
+
+## Best Practices
+
+### Code Organization
+
+1. **Modular Functions**: Break down functionality into small, focused functions
+2. **Clear Naming**: Use descriptive names for functions, variables, and classes
+3. **Comments**: Document complex logic and business rules
+4. **Error Handling**: Always include error handling for external dependencies
+
+### Performance
+
+1. **Lazy Loading**: Implement lazy loading for images and non-critical content
+2. **Event Delegation**: Use event delegation for dynamic content
+3. **Debouncing**: Debounce scroll and resize events
+4. **Minimal DOM Manipulation**: Batch DOM operations when possible
+
+### Accessibility
+
+1. **Semantic HTML**: Use appropriate HTML elements
+2. **ARIA Labels**: Add ARIA labels for complex interactions
+3. **Keyboard Navigation**: Ensure all interactive elements are keyboard accessible
+4. **Focus Management**: Manage focus for dynamic content
+
+### SEO
+
+1. **Structured Data**: Add structured data where appropriate
+2. **Meta Information**: Include relevant meta information
+3. **Performance**: Optimize for Core Web Vitals
+4. **Semantic Markup**: Use semantic HTML for better content understanding
+
+## Common Patterns
+
+### Image Gallery Block
+
+```javascript
+export default function decorate(block) {
+  const images = block.querySelectorAll('img');
+  
+  if (images.length === 0) return;
+  
+  // Create gallery container
+  const gallery = document.createElement('div');
+  gallery.className = 'image-gallery';
+  
+  // Process images
+  images.forEach((img, index) => {
+    const galleryItem = document.createElement('div');
+    galleryItem.className = 'gallery-item';
+    
+    const link = document.createElement('a');
+    link.href = img.src;
+    link.setAttribute('data-lightbox', 'gallery');
+    link.setAttribute('data-title', img.alt);
+    
+    link.appendChild(img.cloneNode(true));
+    galleryItem.appendChild(link);
+    gallery.appendChild(galleryItem);
+  });
+  
+  block.innerHTML = '';
+  block.appendChild(gallery);
+}
+```
+
+### Accordion Block
+
+```javascript
+export default function decorate(block) {
+  const items = [...block.children];
+  
+  items.forEach((item, index) => {
+    item.classList.add('accordion-item');
+    
+    const header = item.querySelector('h1, h2, h3, h4, h5, h6');
+    const content = item.querySelector('p, div');
+    
+    if (header && content) {
+      header.classList.add('accordion-header');
+      content.classList.add('accordion-content');
+      
+      // Add click handler
+      header.addEventListener('click', () => {
+        toggleAccordionItem(item);
+      });
+      
+      // Set initial state
+      if (index === 0) {
+        item.classList.add('active');
+      } else {
+        content.style.display = 'none';
+      }
+    }
+  });
+}
+
+function toggleAccordionItem(item) {
+  const content = item.querySelector('.accordion-content');
+  const isActive = item.classList.contains('active');
+  
+  if (isActive) {
+    item.classList.remove('active');
+    content.style.display = 'none';
+  } else {
+    item.classList.add('active');
+    content.style.display = 'block';
+  }
+}
+```
+
+### Tab Block
+
+```javascript
+export default function decorate(block) {
+  const [tabList, ...tabPanels] = block.children;
+  
+  // Create tab navigation
+  const nav = document.createElement('nav');
+  nav.className = 'tab-navigation';
+  
+  const tabButtons = [];
+  tabPanels.forEach((panel, index) => {
+    const title = panel.querySelector('h1, h2, h3, h4, h5, h6');
+    if (title) {
+      const button = document.createElement('button');
+      button.textContent = title.textContent;
+      button.className = 'tab-button';
+      button.setAttribute('data-tab', index);
+      
+      button.addEventListener('click', () => {
+        switchTab(index, tabButtons, tabPanels);
+      });
+      
+      tabButtons.push(button);
+      nav.appendChild(button);
+    }
+  });
+  
+  // Insert navigation
+  block.insertBefore(nav, tabList);
+  
+  // Initialize first tab
+  if (tabButtons.length > 0) {
+    switchTab(0, tabButtons, tabPanels);
+  }
+}
+
+function switchTab(activeIndex, buttons, panels) {
+  buttons.forEach((button, index) => {
+    if (index === activeIndex) {
+      button.classList.add('active');
+      panels[index].classList.add('active');
+    } else {
+      button.classList.remove('active');
+      panels[index].classList.remove('active');
+    }
+  });
+}
+```
+
+## Testing and Validation
+
+### Manual Testing Checklist
+
+- [ ] Block renders correctly in Universal Editor
+- [ ] All field types work as expected
+- [ ] Block options function properly
+- [ ] Responsive design works on all breakpoints
+- [ ] Accessibility features work (keyboard navigation, screen readers)
+- [ ] Performance is acceptable (no layout shifts, fast loading)
+- [ ] Cross-browser compatibility
+
+### Automated Testing
+
+```javascript
+// Example test structure
+describe('Block Functionality', () => {
+  let block;
+  
+  beforeEach(() => {
+    block = document.createElement('div');
+    block.className = 'block blockname';
+    document.body.appendChild(block);
+  });
+  
+  afterEach(() => {
+    document.body.removeChild(block);
+  });
+  
+  test('should initialize correctly', () => {
+    decorate(block);
+    expect(block.querySelector('.block-content')).toBeTruthy();
+  });
+  
+  test('should handle block options', () => {
+    block.classList.add('side-by-side');
+    decorate(block);
+    expect(block.classList.contains('side-by-side')).toBe(true);
+  });
+});
+```
+
+### Performance Testing
+
+- Use Lighthouse to test Core Web Vitals
+- Monitor bundle size impact
+- Test on slow connections
+- Validate image optimization
+
+## Conclusion
+
+This guide provides comprehensive patterns and best practices for creating blocks in Universal Editor projects. Follow these guidelines to ensure your blocks are:
+
+- **Maintainable**: Clean, well-documented code
+- **Performant**: Optimized for speed and efficiency
+- **Accessible**: Usable by all users
+- **Responsive**: Works across all devices
+- **Extensible**: Easy to modify and enhance
+
+Remember to always test your blocks thoroughly and follow the established patterns in your project for consistency.
+
+## References
+
+- [AEM Universal Editor Documentation](https://www.aem.live/developer/ue-tutorial)
+- [Edge Delivery Services Documentation](https://www.aem.live/developer/component-model-definitions)
+- [Block Options Tutorial](https://experienceleague.adobe.com/en/docs/experience-manager-learn/sites/edge-delivery-services/developing/universal-editor/how-to/block-options)
+- [Creating New Blocks Tutorial](https://experienceleague.adobe.com/en/docs/experience-manager-learn/sites/edge-delivery-services/developing/universal-editor/5-new-block)
+# AI Agent Block Development Guide for Universal Editor
+
+This comprehensive guide provides AI agents with best practices, patterns, and step-by-step instructions for creating and developing blocks in Adobe Experience Manager (AEM) Universal Editor projects using Edge Delivery Services.
+
+## Table of Contents
+
+1. [Overview](#overview)
+2. [Block Architecture](#block-architecture)
+3. [Block JSON Configuration](#block-json-configuration)
+4. [Block JavaScript Implementation](#block-javascript-implementation)
+5. [Block CSS Styling](#block-css-styling)
+6. [Block Options and Variants](#block-options-and-variants)
+7. [Container Blocks](#container-blocks)
+8. [Best Practices](#best-practices)
+9. [Common Patterns](#common-patterns)
+10. [Testing and Validation](#testing-and-validation)
+
+## Overview
+
+Blocks in Universal Editor are reusable content components that can be authored and styled independently. Each block consists of three main files:
+
+- `_blockname.json` - Block definition and content model
+- `blockname.js` - JavaScript functionality and DOM manipulation
+- `blockname.css` - Styling and visual presentation
+
+### Key Principles
+
+- **Semantic HTML**: Use proper semantic elements for accessibility
+- **Progressive Enhancement**: Start with basic functionality, enhance with JavaScript
+- **Responsive Design**: Ensure blocks work across all device sizes
+- **Performance**: Optimize for Core Web Vitals
+- **Accessibility**: Follow WCAG guidelines
+- **Maintainability**: Write clean, documented code
+
+## Block Architecture
+
+### File Structure
+
+```
+blocks/
+  blockname/
+    _blockname.json    # Block definition and model
+    blockname.js       # JavaScript implementation
+    blockname.css      # Styling
+    README.md          # Documentation (optional)
+```
+
+### Block Lifecycle
+
+1. **Definition**: Block is registered in `component-definitions.json`
+2. **Model**: Content structure defined in `component-models.json`
+3. **Rendering**: HTML structure created by AEM
+4. **Decoration**: JavaScript enhances the DOM
+5. **Styling**: CSS applies visual presentation
+
+## Block JSON Configuration
+
+### Basic Block Structure
+
+```json
+{
+  "definitions": [
+    {
+      "title": "Block Display Name",
+      "id": "block-id",
+      "plugins": {
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/block/v1/block",
+            "template": {
+              "name": "Block Name",
+              "model": "model-id"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "models": [
+    {
+      "id": "model-id",
+      "fields": [
+        // Field definitions here
+      ]
+    }
+  ],
+  "filters": []
+}
+```
+
+### Field Types and Components
+
+#### Text Fields
+```json
+{
+  "component": "text",
+  "name": "fieldName",
+  "label": "Field Label",
+  "valueType": "string",
+  "value": "default value"
+}
+```
+
+#### Rich Text Fields
+```json
+{
+  "component": "richtext",
+  "name": "description",
+  "label": "Description",
+  "valueType": "string",
+  "value": ""
+}
+```
+
+#### Image References
+```json
+{
+  "component": "reference",
+  "name": "image",
+  "label": "Image",
+  "valueType": "string",
+  "multi": false
+}
+```
+
+#### Select Dropdowns
+```json
+{
+  "component": "select",
+  "name": "variant",
+  "label": "Layout Variant",
+  "valueType": "string",
+  "options": [
+    {
+      "name": "Default",
+      "value": "default"
+    },
+    {
+      "name": "Alternative",
+      "value": "alternative"
+    }
+  ],
+  "value": "default"
+}
+```
+
+#### Multi-select Fields
+```json
+{
+  "component": "multiselect",
+  "name": "classes",
+  "label": "Style Options",
+  "valueType": "string",
+  "options": [
+    {
+      "name": "Background",
+      "children": [
+        { "name": "Light", "value": "bg-light" },
+        { "name": "Dark", "value": "bg-dark" }
+      ]
+    }
+  ],
+  "value": ""
+}
+```
+
+#### Content Links
+```json
+{
+  "component": "aem-content",
+  "name": "link",
+  "label": "Link"
+}
+```
+
+### Block Options Configuration
+
+Block options allow authors to choose different visual variants of a block. Use the `classes` field with `multiselect` component:
+
+```json
+{
+  "component": "multiselect",
+  "name": "classes",
+  "label": "Block Options",
+  "valueType": "string",
+  "options": [
+    {
+      "name": "Layout",
+      "children": [
+        { "name": "Default", "value": "" },
+        { "name": "Side by Side", "value": "side-by-side" },
+        { "name": "Stacked", "value": "stacked" }
+      ]
+    },
+    {
+      "name": "Style",
+      "children": [
+        { "name": "Light Theme", "value": "light" },
+        { "name": "Dark Theme", "value": "dark" }
+      ]
+    }
+  ],
+  "value": ""
+}
+```
+
+## Block JavaScript Implementation
+
+### Basic Structure
+
+```javascript
+/**
+ * Block name implementation
+ * Brief description of what the block does
+ */
+
+export default function decorate(block) {
+  // Block decoration logic here
+  processBlockContent(block);
+  addEventListeners(block);
+  initializeBlockFeatures(block);
+}
+
+/**
+ * Process and enhance block content
+ * @param {HTMLElement} block - The block DOM element
+ */
+function processBlockContent(block) {
+  // Content processing logic
+}
+
+/**
+ * Add event listeners for interactive features
+ * @param {HTMLElement} block - The block DOM element
+ */
+function addEventListeners(block) {
+  // Event listener setup
+}
+
+/**
+ * Initialize block-specific features
+ * @param {HTMLElement} block - The block DOM element
+ */
+function initializeBlockFeatures(block) {
+  // Feature initialization
+}
+```
+
+### Block Options Detection
+
+```javascript
+/**
+ * Get active block options from CSS classes
+ * @param {HTMLElement} block - The block DOM element
+ * @returns {string[]} Array of active option classes
+ */
+function getBlockOptions(block) {
+  return [...block.classList].filter((c) => 
+    !['block', 'blockname'].includes(c)
+  );
+}
+
+/**
+ * Check if a specific option is active
+ * @param {HTMLElement} block - The block DOM element
+ * @param {string} option - Option class to check
+ * @returns {boolean} True if option is active
+ */
+function hasOption(block, option) {
+  return getBlockOptions(block).includes(option);
+}
+```
+
+### Content Processing Patterns
+
+#### Image Processing
+```javascript
+function processImages(block) {
+  const images = block.querySelectorAll('img');
+  images.forEach((img) => {
+    img.classList.add('block-image');
+    
+    // Add lazy loading
+    if (!img.hasAttribute('loading')) {
+      img.setAttribute('loading', 'lazy');
+    }
+    
+    // Add error handling
+    img.addEventListener('error', () => {
+      img.style.display = 'none';
+    });
+  });
+}
+```
+
+#### Link Processing
+```javascript
+function processLinks(block) {
+  const links = block.querySelectorAll('a');
+  links.forEach((link) => {
+    link.classList.add('block-link');
+    
+    // Add external link indicators
+    if (link.hostname !== window.location.hostname) {
+      link.setAttribute('target', '_blank');
+      link.setAttribute('rel', 'noopener noreferrer');
+    }
+  });
+}
+```
+
+#### Heading Processing
+```javascript
+function processHeadings(block) {
+  const headings = block.querySelectorAll('h1, h2, h3, h4, h5, h6');
+  headings.forEach((heading) => {
+    heading.classList.add('block-heading');
+    
+    // Add ID for anchor links
+    if (!heading.id) {
+      const id = heading.textContent
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '');
+      heading.id = id;
+    }
+  });
+}
+```
+
+### Event Handling Patterns
+
+#### Click Events
+```javascript
+function addClickHandlers(block) {
+  const clickableElements = block.querySelectorAll('[data-clickable]');
+  
+  clickableElements.forEach((element) => {
+    element.addEventListener('click', (e) => {
+      e.preventDefault();
+      handleClick(element, e);
+    });
+  });
+}
+
+function handleClick(element, event) {
+  // Handle click logic
+  console.log('Element clicked:', element);
+}
+```
+
+#### Hover Events
+```javascript
+function addHoverEffects(block) {
+  const hoverElements = block.querySelectorAll('[data-hover]');
+  
+  hoverElements.forEach((element) => {
+    element.addEventListener('mouseenter', () => {
+      element.classList.add('hover-active');
+    });
+    
+    element.addEventListener('mouseleave', () => {
+      element.classList.remove('hover-active');
+    });
+  });
+}
+```
+
+### Analytics Integration
+
+```javascript
+function addAnalyticsTracking(block) {
+  const trackableElements = block.querySelectorAll('[data-track]');
+  
+  trackableElements.forEach((element) => {
+    element.addEventListener('click', (e) => {
+      const eventName = element.dataset.track;
+      const eventData = {
+        event: eventName,
+        block: 'blockname',
+        element: element.tagName.toLowerCase()
+      };
+      
+      // Send to analytics
+      if (window.dataLayer) {
+        window.dataLayer.push(eventData);
+      }
+    });
+  });
+}
+```
+
+## Block CSS Styling
+
+### CSS Structure
+
+```css
+/* Block container */
+.block.blockname {
+  /* Base block styles */
+}
+
+/* Block variants */
+.block.blockname.variant-name {
+  /* Variant-specific styles */
+}
+
+/* Block elements */
+.block.blockname .element-class {
+  /* Element styles */
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .block.blockname {
+    /* Mobile styles */
+  }
+}
+```
+
+### Block Options Styling
+
+```css
+/* Default option (no additional classes) */
+.block.blockname {
+  /* Default styles */
+}
+
+/* Side-by-side option */
+.block.blockname.side-by-side {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+/* Dark theme option */
+.block.blockname.dark {
+  background-color: #333;
+  color: white;
+}
+
+/* Combined options */
+.block.blockname.side-by-side.dark {
+  /* Styles for both options combined */
+}
+```
+
+### Responsive Design
+
+```css
+/* Mobile-first approach */
+.block.blockname {
+  /* Mobile styles */
+}
+
+/* Tablet */
+@media (min-width: 768px) {
+  .block.blockname {
+    /* Tablet styles */
+  }
+}
+
+/* Desktop */
+@media (min-width: 1024px) {
+  .block.blockname {
+    /* Desktop styles */
+  }
+}
+```
+
+### Animation and Transitions
+
+```css
+.block.blockname {
+  transition: all 0.3s ease;
+}
+
+.block.blockname:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Fade in animation */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.block.blockname {
+  animation: fadeIn 0.5s ease-in;
+}
+```
+
+## Container Blocks
+
+Container blocks can contain other blocks as children. They require both a container definition and child item definitions.
+
+### Container Block JSON
+
+```json
+{
+  "definitions": [
+    {
+      "title": "Cards Container",
+      "id": "cards",
+      "plugins": {
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/block/v1/block",
+            "template": {
+              "name": "Cards",
+              "filter": "cards"
+            }
+          }
+        }
+      }
+    },
+    {
+      "title": "Card Item",
+      "id": "card",
+      "plugins": {
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/block/v1/block/item",
+            "template": {
+              "name": "Card",
+              "model": "card"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "models": [
+    {
+      "id": "card",
+      "fields": [
+        // Card item fields
+      ]
+    }
+  ],
+  "filters": [
+    {
+      "id": "cards",
+      "components": ["card"]
+    }
+  ]
+}
+```
+
+### Container Block JavaScript
+
+```javascript
+export default function decorate(block) {
+  const [headerDiv, ...itemDivs] = block.children;
+  
+  // Process header
+  if (headerDiv) {
+    headerDiv.classList.add('cards-header');
+  }
+  
+  // Process items
+  itemDivs.forEach((item, index) => {
+    item.classList.add('card-item');
+    item.setAttribute('data-index', index);
+    
+    // Process individual card content
+    processCardItem(item);
+  });
+  
+  // Add container functionality
+  initializeContainer(block);
+}
+
+function processCardItem(item) {
+  // Process individual card content
+  const image = item.querySelector('img');
+  const title = item.querySelector('h1, h2, h3, h4, h5, h6');
+  const text = item.querySelector('p');
+  
+  if (image) image.classList.add('card-image');
+  if (title) title.classList.add('card-title');
+  if (text) text.classList.add('card-text');
+}
+```
+
+## Best Practices
+
+### Code Organization
+
+1. **Modular Functions**: Break down functionality into small, focused functions
+2. **Clear Naming**: Use descriptive names for functions, variables, and classes
+3. **Comments**: Document complex logic and business rules
+4. **Error Handling**: Always include error handling for external dependencies
+
+### Performance
+
+1. **Lazy Loading**: Implement lazy loading for images and non-critical content
+2. **Event Delegation**: Use event delegation for dynamic content
+3. **Debouncing**: Debounce scroll and resize events
+4. **Minimal DOM Manipulation**: Batch DOM operations when possible
+
+### Accessibility
+
+1. **Semantic HTML**: Use appropriate HTML elements
+2. **ARIA Labels**: Add ARIA labels for complex interactions
+3. **Keyboard Navigation**: Ensure all interactive elements are keyboard accessible
+4. **Focus Management**: Manage focus for dynamic content
+
+### SEO
+
+1. **Structured Data**: Add structured data where appropriate
+2. **Meta Information**: Include relevant meta information
+3. **Performance**: Optimize for Core Web Vitals
+4. **Semantic Markup**: Use semantic HTML for better content understanding
+
+## Common Patterns
+
+### Image Gallery Block
+
+```javascript
+export default function decorate(block) {
+  const images = block.querySelectorAll('img');
+  
+  if (images.length === 0) return;
+  
+  // Create gallery container
+  const gallery = document.createElement('div');
+  gallery.className = 'image-gallery';
+  
+  // Process images
+  images.forEach((img, index) => {
+    const galleryItem = document.createElement('div');
+    galleryItem.className = 'gallery-item';
+    
+    const link = document.createElement('a');
+    link.href = img.src;
+    link.setAttribute('data-lightbox', 'gallery');
+    link.setAttribute('data-title', img.alt);
+    
+    link.appendChild(img.cloneNode(true));
+    galleryItem.appendChild(link);
+    gallery.appendChild(galleryItem);
+  });
+  
+  block.innerHTML = '';
+  block.appendChild(gallery);
+}
+```
+
+### Accordion Block
+
+```javascript
+export default function decorate(block) {
+  const items = [...block.children];
+  
+  items.forEach((item, index) => {
+    item.classList.add('accordion-item');
+    
+    const header = item.querySelector('h1, h2, h3, h4, h5, h6');
+    const content = item.querySelector('p, div');
+    
+    if (header && content) {
+      header.classList.add('accordion-header');
+      content.classList.add('accordion-content');
+      
+      // Add click handler
+      header.addEventListener('click', () => {
+        toggleAccordionItem(item);
+      });
+      
+      // Set initial state
+      if (index === 0) {
+        item.classList.add('active');
+      } else {
+        content.style.display = 'none';
+      }
+    }
+  });
+}
+
+function toggleAccordionItem(item) {
+  const content = item.querySelector('.accordion-content');
+  const isActive = item.classList.contains('active');
+  
+  if (isActive) {
+    item.classList.remove('active');
+    content.style.display = 'none';
+  } else {
+    item.classList.add('active');
+    content.style.display = 'block';
+  }
+}
+```
+
+### Tab Block
+
+```javascript
+export default function decorate(block) {
+  const [tabList, ...tabPanels] = block.children;
+  
+  // Create tab navigation
+  const nav = document.createElement('nav');
+  nav.className = 'tab-navigation';
+  
+  const tabButtons = [];
+  tabPanels.forEach((panel, index) => {
+    const title = panel.querySelector('h1, h2, h3, h4, h5, h6');
+    if (title) {
+      const button = document.createElement('button');
+      button.textContent = title.textContent;
+      button.className = 'tab-button';
+      button.setAttribute('data-tab', index);
+      
+      button.addEventListener('click', () => {
+        switchTab(index, tabButtons, tabPanels);
+      });
+      
+      tabButtons.push(button);
+      nav.appendChild(button);
+    }
+  });
+  
+  // Insert navigation
+  block.insertBefore(nav, tabList);
+  
+  // Initialize first tab
+  if (tabButtons.length > 0) {
+    switchTab(0, tabButtons, tabPanels);
+  }
+}
+
+function switchTab(activeIndex, buttons, panels) {
+  buttons.forEach((button, index) => {
+    if (index === activeIndex) {
+      button.classList.add('active');
+      panels[index].classList.add('active');
+    } else {
+      button.classList.remove('active');
+      panels[index].classList.remove('active');
+    }
+  });
+}
+```
+
+## Testing and Validation
+
+### Manual Testing Checklist
+
+- [ ] Block renders correctly in Universal Editor
+- [ ] All field types work as expected
+- [ ] Block options function properly
+- [ ] Responsive design works on all breakpoints
+- [ ] Accessibility features work (keyboard navigation, screen readers)
+- [ ] Performance is acceptable (no layout shifts, fast loading)
+- [ ] Cross-browser compatibility
+
+### Automated Testing
+
+```javascript
+// Example test structure
+describe('Block Functionality', () => {
+  let block;
+  
+  beforeEach(() => {
+    block = document.createElement('div');
+    block.className = 'block blockname';
+    document.body.appendChild(block);
+  });
+  
+  afterEach(() => {
+    document.body.removeChild(block);
+  });
+  
+  test('should initialize correctly', () => {
+    decorate(block);
+    expect(block.querySelector('.block-content')).toBeTruthy();
+  });
+  
+  test('should handle block options', () => {
+    block.classList.add('side-by-side');
+    decorate(block);
+    expect(block.classList.contains('side-by-side')).toBe(true);
+  });
+});
+```
+
+### Performance Testing
+
+- Use Lighthouse to test Core Web Vitals
+- Monitor bundle size impact
+- Test on slow connections
+- Validate image optimization
+
+## Conclusion
+
+This guide provides comprehensive patterns and best practices for creating blocks in Universal Editor projects. Follow these guidelines to ensure your blocks are:
+
+- **Maintainable**: Clean, well-documented code
+- **Performant**: Optimized for speed and efficiency
+- **Accessible**: Usable by all users
+- **Responsive**: Works across all devices
+- **Extensible**: Easy to modify and enhance
+
+Remember to always test your blocks thoroughly and follow the established patterns in your project for consistency.
+
+## References
+
+- [AEM Universal Editor Documentation](https://www.aem.live/developer/ue-tutorial)
+- [Edge Delivery Services Documentation](https://www.aem.live/developer/component-model-definitions)
+- [Block Options Tutorial](https://experienceleague.adobe.com/en/docs/experience-manager-learn/sites/edge-delivery-services/developing/universal-editor/how-to/block-options)
+- [Creating New Blocks Tutorial](https://experienceleague.adobe.com/en/docs/experience-manager-learn/sites/edge-delivery-services/developing/universal-editor/5-new-block)

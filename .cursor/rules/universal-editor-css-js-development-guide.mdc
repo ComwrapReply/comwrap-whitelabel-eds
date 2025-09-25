@@ -1,0 +1,1574 @@
+---
+alwaysApply: true
+---
+
+# Universal Editor Block Development with CSS and JavaScript
+
+This comprehensive guide teaches you how to develop blocks with CSS and JavaScript for Adobe Experience Manager (AEM) Universal Editor using Edge Delivery Services. Based on the [Adobe Experience League tutorial](https://experienceleague.adobe.com/en/docs/experience-manager-learn/sites/edge-delivery-services/developing/universal-editor/7b-block-js-css), this guide covers advanced block development techniques.
+
+## Table of Contents
+
+1. [Overview](#overview)
+2. [Block Development Approach](#block-development-approach)
+3. [Understanding Block HTML Structure](#understanding-block-html-structure)
+4. [JavaScript Block Implementation](#javascript-block-implementation)
+5. [CSS Styling for Blocks](#css-styling-for-blocks)
+6. [Advanced Features](#advanced-features)
+7. [Best Practices](#best-practices)
+8. [Common Use Cases](#common-use-cases)
+9. [Testing and Validation](#testing-and-validation)
+
+## Overview
+
+This approach to block development combines CSS and JavaScript to create rich, interactive components. It's particularly useful when:
+
+- **External CSS Management**: Block CSS is managed outside Edge Delivery Services
+- **Additional Attributes**: Extra attributes like ARIA for accessibility or microdata are required
+- **JavaScript Enhancements**: Interactive features like event listeners are necessary
+
+### Key Principles
+
+- Use browser-native JavaScript DOM manipulation
+- Apply semantic CSS classes for better maintainability
+- Minimize DOM alterations to avoid disrupting Universal Editor
+- Design content models thoughtfully to reduce extensive DOM changes
+
+## Block Development Approach
+
+### File Structure
+
+Each block requires three main files:
+
+```
+blocks/
+  blockname/
+    _blockname.json    # Block definition and model
+    blockname.js       # JavaScript functionality
+    blockname.css      # Styling and visual presentation
+```
+
+### Development Workflow
+
+1. **Review DOM Structure**: Inspect the block's HTML in the browser
+2. **Create JavaScript**: Add functionality and semantic classes
+3. **Style with CSS**: Apply visual presentation
+4. **Test and Validate**: Ensure functionality works across devices
+5. **Deploy**: Push changes to Universal Editor
+
+## Understanding Block HTML Structure
+
+### Inspecting Block DOM
+
+To understand the block structure, inspect the DOM in your local development environment:
+
+```html
+<div class="teaser block" data-block-name="teaser" data-block-status="loaded">
+  <div>
+    <div>
+      <picture>
+        <source type="image/webp" srcset="..." media="(min-width: 600px)">
+        <source type="image/webp" srcset="...">
+        <source type="image/jpeg" srcset="..." media="(min-width: 600px)">
+        <img loading="eager" alt="Description" src="..." width="1600" height="900">
+      </picture>
+    </div>
+  </div>
+  <div>
+    <div>
+      <h2 id="title">Block Title</h2>
+      <p>Block description text content.</p>
+      <p class="button-container">
+        <a href="/" title="Action" class="button">Action Button</a>
+      </p>
+    </div>
+  </div>
+</div>
+```
+
+### Key DOM Elements
+
+- **Block Container**: `.block.blockname` - Main block wrapper
+- **Image Container**: First `div` contains the `picture` element
+- **Content Container**: Second `div` contains text and interactive elements
+- **Button Container**: `.button-container` with `.button` class
+
+## JavaScript Block Implementation
+
+### Basic Block Structure
+
+Create a JavaScript file in the block's directory (e.g., `/blocks/teaser/teaser.js`):
+
+```javascript
+/**
+ * Block name implementation
+ * Brief description of block functionality
+ */
+
+export default function decorate(block) {
+  // Block decoration logic here
+  addSemanticClasses(block);
+  addEventListeners(block);
+  processSpecialContent(block);
+}
+```
+
+### Adding Semantic CSS Classes
+
+Apply semantic classes to make the CSS more maintainable:
+
+```javascript
+/**
+ * Add semantic CSS classes to block elements
+ * @param {HTMLElement} block - The block DOM element
+ */
+function addSemanticClasses(block) {
+  // Add class to image wrapper
+  const picture = block.querySelector('picture');
+  if (picture) {
+    picture.classList.add('image-wrapper');
+  }
+
+  // Add class to image element
+  const image = block.querySelector('.image-wrapper img');
+  if (image) {
+    image.classList.add('image');
+  }
+
+  // Mark content area
+  const contentDiv = block.querySelector(':scope > div:last-child');
+  if (contentDiv) {
+    contentDiv.classList.add('content');
+  }
+
+  // Mark title element
+  const title = block.querySelector('h1,h2,h3,h4,h5,h6');
+  if (title) {
+    title.classList.add('title');
+  }
+}
+```
+
+### Event Listeners and Interactions
+
+Add interactive features using event listeners:
+
+```javascript
+/**
+ * Add event listeners for interactive features
+ * @param {HTMLElement} block - The block DOM element
+ */
+function addEventListeners(block) {
+  const button = block.querySelector('.button');
+  const image = block.querySelector('.image');
+
+  if (button && image) {
+    // Image zoom on button hover
+    button.addEventListener('mouseover', () => {
+      image.classList.add('zoom');
+    });
+
+    button.addEventListener('mouseout', () => {
+      image.classList.remove('zoom');
+    });
+
+    // Analytics tracking
+    button.addEventListener('click', (e) => {
+      trackButtonClick(block, e);
+    });
+  }
+}
+
+/**
+ * Track button clicks for analytics
+ * @param {HTMLElement} block - The block DOM element
+ * @param {Event} event - Click event
+ */
+function trackButtonClick(block, event) {
+  if (window.dataLayer) {
+    window.dataLayer.push({
+      event: 'block_interaction',
+      block_type: 'teaser',
+      action: 'button_click',
+      element: event.target.textContent.trim()
+    });
+  }
+}
+```
+
+### Processing Special Content
+
+Handle special content patterns like terms and conditions:
+
+```javascript
+/**
+ * Process special content patterns
+ * @param {HTMLElement} block - The block DOM element
+ */
+function processSpecialContent(block) {
+  // Process paragraphs for special styling
+  block.querySelectorAll('p').forEach((paragraph) => {
+    const innerHTML = paragraph.innerHTML?.trim();
+    
+    // Add special class for terms and conditions
+    if (innerHTML?.startsWith('Terms and conditions:')) {
+      paragraph.classList.add('terms-and-conditions');
+    }
+    
+    // Add special class for disclaimers
+    if (innerHTML?.startsWith('*')) {
+      paragraph.classList.add('disclaimer');
+    }
+  });
+}
+```
+
+### Complete JavaScript Example
+
+Here's a complete example based on the Adobe tutorial:
+
+```javascript
+/* /blocks/teaser/teaser.js */
+
+/**
+ * Adds a zoom effect to image using event listeners.
+ * When the CTA button is hovered over, the image zooms in.
+ * @param {HTMLElement} block - The block's DOM tree
+ */
+function addEventListeners(block) {
+  const button = block.querySelector('.button');
+  const image = block.querySelector('.image');
+
+  if (button && image) {
+    button.addEventListener('mouseover', () => {
+      image.classList.add('zoom');
+    });
+
+    button.addEventListener('mouseout', () => {
+      image.classList.remove('zoom');
+    });
+  }
+}
+
+/**
+ * Entry point to block's JavaScript.
+ * Must be exported as default and accept a block's DOM element.
+ * @param {HTMLElement} block - The block's DOM element/tree
+ */
+export default function decorate(block) {
+  // Add semantic CSS classes for better maintainability
+  block.querySelector('picture')?.classList.add('image-wrapper');
+  block.querySelector('.image-wrapper img')?.classList.add('image');
+  block.querySelector(':scope > div:last-child')?.classList.add('content');
+  block.querySelector('h1,h2,h3,h4,h5,h6')?.classList.add('title');
+
+  // Process special content
+  block.querySelectorAll('p').forEach((p) => {
+    const innerHTML = p.innerHTML?.trim();
+    if (innerHTML?.startsWith('Terms and conditions:')) {
+      p.classList.add('terms-and-conditions');
+    }
+  });
+
+  // Add interactive features
+  addEventListeners(block);
+}
+```
+
+## CSS Styling for Blocks
+
+### CSS Structure and Scoping
+
+Always scope CSS to the block to avoid conflicts:
+
+```css
+/* /blocks/teaser/teaser.css */
+
+/* Scope each selector with .block.teaser to avoid conflicts */
+.block.teaser {
+  /* Base block styles */
+  animation: teaser-fade-in 1s;
+  position: relative;
+  width: 1600px;
+  max-width: 100vw;
+  left: 50%;
+  transform: translateX(-50%);
+  height: 500px;
+  overflow: hidden;
+}
+```
+
+### Image Styling
+
+Style images with proper responsive behavior:
+
+```css
+.block.teaser {
+  /* Image wrapper positioning */
+  .image-wrapper {
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    box-sizing: border-box;
+    overflow: hidden;
+
+    .image {
+      object-fit: cover;
+      object-position: center;
+      width: 100%;
+      height: 100%;
+      transform: scale(1);
+      transition: transform 0.6s ease-in-out;
+
+      /* Zoom effect on hover */
+      &.zoom {
+        transform: scale(1.1);
+      }
+    }
+  }
+}
+```
+
+### Content Styling
+
+Style text content with proper typography:
+
+```css
+.block.teaser {
+  /* Content area styling */
+  .content {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--background-color);
+    padding: 1.5rem 1.5rem 1rem;
+    width: 80vw;
+    max-width: 1200px;
+
+    .title {
+      font-size: var(--heading-font-size-xl);
+      margin: 0;
+    }
+
+    p {
+      font-size: var(--body-font-size-s);
+      margin-bottom: 1rem;
+      animation: teaser-fade-in .6s;
+
+      /* Special styling for terms and conditions */
+      &.terms-and-conditions {
+        font-size: var(--body-font-size-xs);
+        color: var(--secondary-color);
+        padding: .5rem 1rem;
+        font-style: italic;
+        border: solid var(--light-color);
+        border-width: 0 0 0 10px;
+      }
+    }
+  }
+}
+```
+
+### Button Styling
+
+Style buttons with proper interactive states:
+
+```css
+.block.teaser {
+  .content {
+    /* Button container */
+    .button-container {
+      margin: 0;
+      padding: 0;
+
+      .button {
+        background-color: var(--primary-color);
+        border-radius: 0;
+        color: var(--dark-color);
+        font-size: var(--body-font-size-xs);
+        font-weight: bold;
+        padding: 1em 2.5em;
+        margin: 0;
+        text-transform: uppercase;
+        transition: all 0.3s ease;
+
+        &:hover {
+          background-color: var(--primary-color-dark);
+          transform: translateY(-2px);
+        }
+
+        &:focus {
+          outline: 2px solid var(--primary-color);
+          outline-offset: 2px;
+        }
+      }
+    }
+  }
+}
+```
+
+### Animations and Transitions
+
+Add smooth animations and transitions:
+
+```css
+/* Block-level animations */
+@keyframes teaser-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.block.teaser {
+  animation: teaser-fade-in 1s;
+  
+  .content p {
+    animation: teaser-fade-in .6s;
+  }
+}
+```
+
+### Responsive Design
+
+Ensure blocks work across all device sizes:
+
+```css
+.block.teaser {
+  /* Mobile styles */
+  @media (max-width: 768px) {
+    width: 100%;
+    height: auto;
+    position: relative;
+    left: auto;
+    transform: none;
+    
+    .image-wrapper {
+      position: relative;
+      height: 300px;
+    }
+    
+    .content {
+      position: relative;
+      left: auto;
+      transform: none;
+      width: 100%;
+      padding: 1rem;
+    }
+  }
+  
+  /* Tablet styles */
+  @media (min-width: 769px) and (max-width: 1024px) {
+    width: 90vw;
+    height: 400px;
+  }
+}
+```
+
+## Advanced Features
+
+### Accessibility Enhancements
+
+Add ARIA attributes and keyboard navigation:
+
+```javascript
+/**
+ * Add accessibility features
+ * @param {HTMLElement} block - The block DOM element
+ */
+function addAccessibilityFeatures(block) {
+  // Add ARIA labels
+  const image = block.querySelector('.image');
+  if (image && !image.getAttribute('aria-label')) {
+    image.setAttribute('aria-label', 'Block image');
+  }
+
+  // Add keyboard navigation
+  const button = block.querySelector('.button');
+  if (button) {
+    button.setAttribute('tabindex', '0');
+    
+    // Handle keyboard events
+    button.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        button.click();
+      }
+    });
+  }
+}
+```
+
+### Performance Optimization
+
+Optimize for performance with lazy loading and efficient event handling:
+
+```javascript
+/**
+ * Add performance optimizations
+ * @param {HTMLElement} block - The block DOM element
+ */
+function addPerformanceOptimizations(block) {
+  // Lazy load images
+  const images = block.querySelectorAll('img[data-src]');
+  const imageObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const img = entry.target;
+        img.src = img.dataset.src;
+        img.removeAttribute('data-src');
+        imageObserver.unobserve(img);
+      }
+    });
+  });
+  
+  images.forEach(img => imageObserver.observe(img));
+
+  // Debounce scroll events
+  let scrollTimeout;
+  const handleScroll = () => {
+    clearTimeout(scrollTimeout);
+    scrollTimeout = setTimeout(() => {
+      // Handle scroll logic
+    }, 100);
+  };
+  
+  window.addEventListener('scroll', handleScroll);
+}
+```
+
+### Analytics Integration
+
+Add comprehensive analytics tracking:
+
+```javascript
+/**
+ * Add analytics tracking
+ * @param {HTMLElement} block - The block DOM element
+ */
+function addAnalyticsTracking(block) {
+  // Track block impressions
+  const blockObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        trackBlockImpression(block);
+        blockObserver.unobserve(entry.target);
+      }
+    });
+  });
+  
+  blockObserver.observe(block);
+
+  // Track interactions
+  const interactiveElements = block.querySelectorAll('[data-track]');
+  interactiveElements.forEach(element => {
+    element.addEventListener('click', (e) => {
+      trackInteraction(block, element, e);
+    });
+  });
+}
+
+function trackBlockImpression(block) {
+  if (window.dataLayer) {
+    window.dataLayer.push({
+      event: 'block_impression',
+      block_type: 'teaser',
+      block_id: block.dataset.blockName
+    });
+  }
+}
+
+function trackInteraction(block, element, event) {
+  if (window.dataLayer) {
+    window.dataLayer.push({
+      event: 'block_interaction',
+      block_type: 'teaser',
+      element_type: element.tagName.toLowerCase(),
+      action: 'click'
+    });
+  }
+}
+```
+
+## Best Practices
+
+### Code Organization
+
+1. **Modular Functions**: Break functionality into small, focused functions
+2. **Clear Documentation**: Add JSDoc comments for all functions
+3. **Error Handling**: Always include error handling for external dependencies
+4. **Performance**: Use efficient DOM queries and event handling
+
+### CSS Best Practices
+
+1. **Scoping**: Always scope CSS to the block class
+2. **Variables**: Use CSS custom properties for consistent theming
+3. **Responsive**: Mobile-first responsive design approach
+4. **Accessibility**: Include focus states and high contrast support
+
+### JavaScript Best Practices
+
+1. **Defensive Coding**: Check for element existence before manipulation
+2. **Event Cleanup**: Remove event listeners when blocks are destroyed
+3. **Performance**: Use efficient selectors and avoid unnecessary DOM queries
+4. **Browser Support**: Use modern JavaScript features with appropriate polyfills
+
+## Common Use Cases
+
+### Image Gallery Block
+
+```javascript
+export default function decorate(block) {
+  const images = block.querySelectorAll('img');
+  
+  if (images.length === 0) return;
+  
+  // Create gallery structure
+  const gallery = document.createElement('div');
+  gallery.className = 'image-gallery';
+  
+  images.forEach((img, index) => {
+    const item = document.createElement('div');
+    item.className = 'gallery-item';
+    
+    const link = document.createElement('a');
+    link.href = img.src;
+    link.setAttribute('data-lightbox', 'gallery');
+    link.setAttribute('data-title', img.alt);
+    
+    link.appendChild(img.cloneNode(true));
+    item.appendChild(link);
+    gallery.appendChild(item);
+  });
+  
+  block.innerHTML = '';
+  block.appendChild(gallery);
+}
+```
+
+### Accordion Block
+
+```javascript
+export default function decorate(block) {
+  const items = [...block.children];
+  
+  items.forEach((item, index) => {
+    item.classList.add('accordion-item');
+    
+    const header = item.querySelector('h1, h2, h3, h4, h5, h6');
+    const content = item.querySelector('p, div');
+    
+    if (header && content) {
+      header.classList.add('accordion-header');
+      content.classList.add('accordion-content');
+      
+      // Add click handler
+      header.addEventListener('click', () => {
+        toggleAccordionItem(item);
+      });
+      
+      // Set initial state
+      if (index === 0) {
+        item.classList.add('active');
+      } else {
+        content.style.display = 'none';
+      }
+    }
+  });
+}
+
+function toggleAccordionItem(item) {
+  const content = item.querySelector('.accordion-content');
+  const isActive = item.classList.contains('active');
+  
+  if (isActive) {
+    item.classList.remove('active');
+    content.style.display = 'none';
+  } else {
+    item.classList.add('active');
+    content.style.display = 'block';
+  }
+}
+```
+
+## Testing and Validation
+
+### Manual Testing Checklist
+
+- [ ] Block renders correctly in Universal Editor
+- [ ] All interactive features work as expected
+- [ ] Responsive design works on all breakpoints
+- [ ] Accessibility features function properly
+- [ ] Performance is acceptable (no layout shifts)
+- [ ] Analytics tracking works correctly
+
+### Browser Testing
+
+Test across different browsers and devices:
+
+- Chrome (latest)
+- Firefox (latest)
+- Safari (latest)
+- Edge (latest)
+- Mobile browsers (iOS Safari, Chrome Mobile)
+
+### Performance Testing
+
+- Use Lighthouse to test Core Web Vitals
+- Monitor bundle size impact
+- Test on slow connections
+- Validate image optimization
+
+### Code Quality
+
+```bash
+# Lint your code regularly
+npm run lint
+
+# Run tests if available
+npm test
+
+# Check for accessibility issues
+npm run a11y
+```
+
+## Development Workflow
+
+### Local Development
+
+1. Start local development server:
+   ```bash
+   aem up
+   ```
+
+2. Make changes to block files
+3. Test in browser at `http://localhost:3000`
+4. Use browser dev tools to inspect and debug
+
+### Universal Editor Testing
+
+1. Commit and push changes to a branch:
+   ```bash
+   git add .
+   git commit -m "Add CSS and JavaScript to block"
+   git push origin feature-branch
+   ```
+
+2. Test in Universal Editor with branch parameter:
+   ```
+   https://your-site.aem.page/page?ref=feature-branch
+   ```
+
+3. Verify all functionality works in authoring mode
+
+### Deployment
+
+1. Merge changes to main branch
+2. Verify production deployment
+3. Monitor for any issues
+4. Update documentation if needed
+
+## Conclusion
+
+This guide provides comprehensive patterns for developing blocks with CSS and JavaScript in Universal Editor. By following these practices, you can create:
+
+- **Maintainable**: Clean, well-documented code
+- **Performant**: Optimized for speed and efficiency
+- **Accessible**: Usable by all users
+- **Responsive**: Works across all devices
+- **Interactive**: Rich user experiences
+
+Remember to always test thoroughly and follow the established patterns in your project for consistency.
+
+## References
+
+- [Adobe Experience League Tutorial](https://experienceleague.adobe.com/en/docs/experience-manager-learn/sites/edge-delivery-services/developing/universal-editor/7b-block-js-css)
+- [Universal Editor Documentation](https://www.aem.live/developer/ue-tutorial)
+- [Edge Delivery Services Documentation](https://www.aem.live/developer/component-model-definitions)
+# Universal Editor Block Development with CSS and JavaScript
+
+This comprehensive guide teaches you how to develop blocks with CSS and JavaScript for Adobe Experience Manager (AEM) Universal Editor using Edge Delivery Services. Based on the [Adobe Experience League tutorial](https://experienceleague.adobe.com/en/docs/experience-manager-learn/sites/edge-delivery-services/developing/universal-editor/7b-block-js-css), this guide covers advanced block development techniques.
+
+## Table of Contents
+
+1. [Overview](#overview)
+2. [Block Development Approach](#block-development-approach)
+3. [Understanding Block HTML Structure](#understanding-block-html-structure)
+4. [JavaScript Block Implementation](#javascript-block-implementation)
+5. [CSS Styling for Blocks](#css-styling-for-blocks)
+6. [Advanced Features](#advanced-features)
+7. [Best Practices](#best-practices)
+8. [Common Use Cases](#common-use-cases)
+9. [Testing and Validation](#testing-and-validation)
+
+## Overview
+
+This approach to block development combines CSS and JavaScript to create rich, interactive components. It's particularly useful when:
+
+- **External CSS Management**: Block CSS is managed outside Edge Delivery Services
+- **Additional Attributes**: Extra attributes like ARIA for accessibility or microdata are required
+- **JavaScript Enhancements**: Interactive features like event listeners are necessary
+
+### Key Principles
+
+- Use browser-native JavaScript DOM manipulation
+- Apply semantic CSS classes for better maintainability
+- Minimize DOM alterations to avoid disrupting Universal Editor
+- Design content models thoughtfully to reduce extensive DOM changes
+
+## Block Development Approach
+
+### File Structure
+
+Each block requires three main files:
+
+```
+blocks/
+  blockname/
+    _blockname.json    # Block definition and model
+    blockname.js       # JavaScript functionality
+    blockname.css      # Styling and visual presentation
+```
+
+### Development Workflow
+
+1. **Review DOM Structure**: Inspect the block's HTML in the browser
+2. **Create JavaScript**: Add functionality and semantic classes
+3. **Style with CSS**: Apply visual presentation
+4. **Test and Validate**: Ensure functionality works across devices
+5. **Deploy**: Push changes to Universal Editor
+
+## Understanding Block HTML Structure
+
+### Inspecting Block DOM
+
+To understand the block structure, inspect the DOM in your local development environment:
+
+```html
+<div class="teaser block" data-block-name="teaser" data-block-status="loaded">
+  <div>
+    <div>
+      <picture>
+        <source type="image/webp" srcset="..." media="(min-width: 600px)">
+        <source type="image/webp" srcset="...">
+        <source type="image/jpeg" srcset="..." media="(min-width: 600px)">
+        <img loading="eager" alt="Description" src="..." width="1600" height="900">
+      </picture>
+    </div>
+  </div>
+  <div>
+    <div>
+      <h2 id="title">Block Title</h2>
+      <p>Block description text content.</p>
+      <p class="button-container">
+        <a href="/" title="Action" class="button">Action Button</a>
+      </p>
+    </div>
+  </div>
+</div>
+```
+
+### Key DOM Elements
+
+- **Block Container**: `.block.blockname` - Main block wrapper
+- **Image Container**: First `div` contains the `picture` element
+- **Content Container**: Second `div` contains text and interactive elements
+- **Button Container**: `.button-container` with `.button` class
+
+## JavaScript Block Implementation
+
+### Basic Block Structure
+
+Create a JavaScript file in the block's directory (e.g., `/blocks/teaser/teaser.js`):
+
+```javascript
+/**
+ * Block name implementation
+ * Brief description of block functionality
+ */
+
+export default function decorate(block) {
+  // Block decoration logic here
+  addSemanticClasses(block);
+  addEventListeners(block);
+  processSpecialContent(block);
+}
+```
+
+### Adding Semantic CSS Classes
+
+Apply semantic classes to make the CSS more maintainable:
+
+```javascript
+/**
+ * Add semantic CSS classes to block elements
+ * @param {HTMLElement} block - The block DOM element
+ */
+function addSemanticClasses(block) {
+  // Add class to image wrapper
+  const picture = block.querySelector('picture');
+  if (picture) {
+    picture.classList.add('image-wrapper');
+  }
+
+  // Add class to image element
+  const image = block.querySelector('.image-wrapper img');
+  if (image) {
+    image.classList.add('image');
+  }
+
+  // Mark content area
+  const contentDiv = block.querySelector(':scope > div:last-child');
+  if (contentDiv) {
+    contentDiv.classList.add('content');
+  }
+
+  // Mark title element
+  const title = block.querySelector('h1,h2,h3,h4,h5,h6');
+  if (title) {
+    title.classList.add('title');
+  }
+}
+```
+
+### Event Listeners and Interactions
+
+Add interactive features using event listeners:
+
+```javascript
+/**
+ * Add event listeners for interactive features
+ * @param {HTMLElement} block - The block DOM element
+ */
+function addEventListeners(block) {
+  const button = block.querySelector('.button');
+  const image = block.querySelector('.image');
+
+  if (button && image) {
+    // Image zoom on button hover
+    button.addEventListener('mouseover', () => {
+      image.classList.add('zoom');
+    });
+
+    button.addEventListener('mouseout', () => {
+      image.classList.remove('zoom');
+    });
+
+    // Analytics tracking
+    button.addEventListener('click', (e) => {
+      trackButtonClick(block, e);
+    });
+  }
+}
+
+/**
+ * Track button clicks for analytics
+ * @param {HTMLElement} block - The block DOM element
+ * @param {Event} event - Click event
+ */
+function trackButtonClick(block, event) {
+  if (window.dataLayer) {
+    window.dataLayer.push({
+      event: 'block_interaction',
+      block_type: 'teaser',
+      action: 'button_click',
+      element: event.target.textContent.trim()
+    });
+  }
+}
+```
+
+### Processing Special Content
+
+Handle special content patterns like terms and conditions:
+
+```javascript
+/**
+ * Process special content patterns
+ * @param {HTMLElement} block - The block DOM element
+ */
+function processSpecialContent(block) {
+  // Process paragraphs for special styling
+  block.querySelectorAll('p').forEach((paragraph) => {
+    const innerHTML = paragraph.innerHTML?.trim();
+    
+    // Add special class for terms and conditions
+    if (innerHTML?.startsWith('Terms and conditions:')) {
+      paragraph.classList.add('terms-and-conditions');
+    }
+    
+    // Add special class for disclaimers
+    if (innerHTML?.startsWith('*')) {
+      paragraph.classList.add('disclaimer');
+    }
+  });
+}
+```
+
+### Complete JavaScript Example
+
+Here's a complete example based on the Adobe tutorial:
+
+```javascript
+/* /blocks/teaser/teaser.js */
+
+/**
+ * Adds a zoom effect to image using event listeners.
+ * When the CTA button is hovered over, the image zooms in.
+ * @param {HTMLElement} block - The block's DOM tree
+ */
+function addEventListeners(block) {
+  const button = block.querySelector('.button');
+  const image = block.querySelector('.image');
+
+  if (button && image) {
+    button.addEventListener('mouseover', () => {
+      image.classList.add('zoom');
+    });
+
+    button.addEventListener('mouseout', () => {
+      image.classList.remove('zoom');
+    });
+  }
+}
+
+/**
+ * Entry point to block's JavaScript.
+ * Must be exported as default and accept a block's DOM element.
+ * @param {HTMLElement} block - The block's DOM element/tree
+ */
+export default function decorate(block) {
+  // Add semantic CSS classes for better maintainability
+  block.querySelector('picture')?.classList.add('image-wrapper');
+  block.querySelector('.image-wrapper img')?.classList.add('image');
+  block.querySelector(':scope > div:last-child')?.classList.add('content');
+  block.querySelector('h1,h2,h3,h4,h5,h6')?.classList.add('title');
+
+  // Process special content
+  block.querySelectorAll('p').forEach((p) => {
+    const innerHTML = p.innerHTML?.trim();
+    if (innerHTML?.startsWith('Terms and conditions:')) {
+      p.classList.add('terms-and-conditions');
+    }
+  });
+
+  // Add interactive features
+  addEventListeners(block);
+}
+```
+
+## CSS Styling for Blocks
+
+### CSS Structure and Scoping
+
+Always scope CSS to the block to avoid conflicts:
+
+```css
+/* /blocks/teaser/teaser.css */
+
+/* Scope each selector with .block.teaser to avoid conflicts */
+.block.teaser {
+  /* Base block styles */
+  animation: teaser-fade-in 1s;
+  position: relative;
+  width: 1600px;
+  max-width: 100vw;
+  left: 50%;
+  transform: translateX(-50%);
+  height: 500px;
+  overflow: hidden;
+}
+```
+
+### Image Styling
+
+Style images with proper responsive behavior:
+
+```css
+.block.teaser {
+  /* Image wrapper positioning */
+  .image-wrapper {
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    box-sizing: border-box;
+    overflow: hidden;
+
+    .image {
+      object-fit: cover;
+      object-position: center;
+      width: 100%;
+      height: 100%;
+      transform: scale(1);
+      transition: transform 0.6s ease-in-out;
+
+      /* Zoom effect on hover */
+      &.zoom {
+        transform: scale(1.1);
+      }
+    }
+  }
+}
+```
+
+### Content Styling
+
+Style text content with proper typography:
+
+```css
+.block.teaser {
+  /* Content area styling */
+  .content {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--background-color);
+    padding: 1.5rem 1.5rem 1rem;
+    width: 80vw;
+    max-width: 1200px;
+
+    .title {
+      font-size: var(--heading-font-size-xl);
+      margin: 0;
+    }
+
+    p {
+      font-size: var(--body-font-size-s);
+      margin-bottom: 1rem;
+      animation: teaser-fade-in .6s;
+
+      /* Special styling for terms and conditions */
+      &.terms-and-conditions {
+        font-size: var(--body-font-size-xs);
+        color: var(--secondary-color);
+        padding: .5rem 1rem;
+        font-style: italic;
+        border: solid var(--light-color);
+        border-width: 0 0 0 10px;
+      }
+    }
+  }
+}
+```
+
+### Button Styling
+
+Style buttons with proper interactive states:
+
+```css
+.block.teaser {
+  .content {
+    /* Button container */
+    .button-container {
+      margin: 0;
+      padding: 0;
+
+      .button {
+        background-color: var(--primary-color);
+        border-radius: 0;
+        color: var(--dark-color);
+        font-size: var(--body-font-size-xs);
+        font-weight: bold;
+        padding: 1em 2.5em;
+        margin: 0;
+        text-transform: uppercase;
+        transition: all 0.3s ease;
+
+        &:hover {
+          background-color: var(--primary-color-dark);
+          transform: translateY(-2px);
+        }
+
+        &:focus {
+          outline: 2px solid var(--primary-color);
+          outline-offset: 2px;
+        }
+      }
+    }
+  }
+}
+```
+
+### Animations and Transitions
+
+Add smooth animations and transitions:
+
+```css
+/* Block-level animations */
+@keyframes teaser-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.block.teaser {
+  animation: teaser-fade-in 1s;
+  
+  .content p {
+    animation: teaser-fade-in .6s;
+  }
+}
+```
+
+### Responsive Design
+
+Ensure blocks work across all device sizes:
+
+```css
+.block.teaser {
+  /* Mobile styles */
+  @media (max-width: 768px) {
+    width: 100%;
+    height: auto;
+    position: relative;
+    left: auto;
+    transform: none;
+    
+    .image-wrapper {
+      position: relative;
+      height: 300px;
+    }
+    
+    .content {
+      position: relative;
+      left: auto;
+      transform: none;
+      width: 100%;
+      padding: 1rem;
+    }
+  }
+  
+  /* Tablet styles */
+  @media (min-width: 769px) and (max-width: 1024px) {
+    width: 90vw;
+    height: 400px;
+  }
+}
+```
+
+## Advanced Features
+
+### Accessibility Enhancements
+
+Add ARIA attributes and keyboard navigation:
+
+```javascript
+/**
+ * Add accessibility features
+ * @param {HTMLElement} block - The block DOM element
+ */
+function addAccessibilityFeatures(block) {
+  // Add ARIA labels
+  const image = block.querySelector('.image');
+  if (image && !image.getAttribute('aria-label')) {
+    image.setAttribute('aria-label', 'Block image');
+  }
+
+  // Add keyboard navigation
+  const button = block.querySelector('.button');
+  if (button) {
+    button.setAttribute('tabindex', '0');
+    
+    // Handle keyboard events
+    button.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        button.click();
+      }
+    });
+  }
+}
+```
+
+### Performance Optimization
+
+Optimize for performance with lazy loading and efficient event handling:
+
+```javascript
+/**
+ * Add performance optimizations
+ * @param {HTMLElement} block - The block DOM element
+ */
+function addPerformanceOptimizations(block) {
+  // Lazy load images
+  const images = block.querySelectorAll('img[data-src]');
+  const imageObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const img = entry.target;
+        img.src = img.dataset.src;
+        img.removeAttribute('data-src');
+        imageObserver.unobserve(img);
+      }
+    });
+  });
+  
+  images.forEach(img => imageObserver.observe(img));
+
+  // Debounce scroll events
+  let scrollTimeout;
+  const handleScroll = () => {
+    clearTimeout(scrollTimeout);
+    scrollTimeout = setTimeout(() => {
+      // Handle scroll logic
+    }, 100);
+  };
+  
+  window.addEventListener('scroll', handleScroll);
+}
+```
+
+### Analytics Integration
+
+Add comprehensive analytics tracking:
+
+```javascript
+/**
+ * Add analytics tracking
+ * @param {HTMLElement} block - The block DOM element
+ */
+function addAnalyticsTracking(block) {
+  // Track block impressions
+  const blockObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        trackBlockImpression(block);
+        blockObserver.unobserve(entry.target);
+      }
+    });
+  });
+  
+  blockObserver.observe(block);
+
+  // Track interactions
+  const interactiveElements = block.querySelectorAll('[data-track]');
+  interactiveElements.forEach(element => {
+    element.addEventListener('click', (e) => {
+      trackInteraction(block, element, e);
+    });
+  });
+}
+
+function trackBlockImpression(block) {
+  if (window.dataLayer) {
+    window.dataLayer.push({
+      event: 'block_impression',
+      block_type: 'teaser',
+      block_id: block.dataset.blockName
+    });
+  }
+}
+
+function trackInteraction(block, element, event) {
+  if (window.dataLayer) {
+    window.dataLayer.push({
+      event: 'block_interaction',
+      block_type: 'teaser',
+      element_type: element.tagName.toLowerCase(),
+      action: 'click'
+    });
+  }
+}
+```
+
+## Best Practices
+
+### Code Organization
+
+1. **Modular Functions**: Break functionality into small, focused functions
+2. **Clear Documentation**: Add JSDoc comments for all functions
+3. **Error Handling**: Always include error handling for external dependencies
+4. **Performance**: Use efficient DOM queries and event handling
+
+### CSS Best Practices
+
+1. **Scoping**: Always scope CSS to the block class
+2. **Variables**: Use CSS custom properties for consistent theming
+3. **Responsive**: Mobile-first responsive design approach
+4. **Accessibility**: Include focus states and high contrast support
+
+### JavaScript Best Practices
+
+1. **Defensive Coding**: Check for element existence before manipulation
+2. **Event Cleanup**: Remove event listeners when blocks are destroyed
+3. **Performance**: Use efficient selectors and avoid unnecessary DOM queries
+4. **Browser Support**: Use modern JavaScript features with appropriate polyfills
+
+## Common Use Cases
+
+### Image Gallery Block
+
+```javascript
+export default function decorate(block) {
+  const images = block.querySelectorAll('img');
+  
+  if (images.length === 0) return;
+  
+  // Create gallery structure
+  const gallery = document.createElement('div');
+  gallery.className = 'image-gallery';
+  
+  images.forEach((img, index) => {
+    const item = document.createElement('div');
+    item.className = 'gallery-item';
+    
+    const link = document.createElement('a');
+    link.href = img.src;
+    link.setAttribute('data-lightbox', 'gallery');
+    link.setAttribute('data-title', img.alt);
+    
+    link.appendChild(img.cloneNode(true));
+    item.appendChild(link);
+    gallery.appendChild(item);
+  });
+  
+  block.innerHTML = '';
+  block.appendChild(gallery);
+}
+```
+
+### Accordion Block
+
+```javascript
+export default function decorate(block) {
+  const items = [...block.children];
+  
+  items.forEach((item, index) => {
+    item.classList.add('accordion-item');
+    
+    const header = item.querySelector('h1, h2, h3, h4, h5, h6');
+    const content = item.querySelector('p, div');
+    
+    if (header && content) {
+      header.classList.add('accordion-header');
+      content.classList.add('accordion-content');
+      
+      // Add click handler
+      header.addEventListener('click', () => {
+        toggleAccordionItem(item);
+      });
+      
+      // Set initial state
+      if (index === 0) {
+        item.classList.add('active');
+      } else {
+        content.style.display = 'none';
+      }
+    }
+  });
+}
+
+function toggleAccordionItem(item) {
+  const content = item.querySelector('.accordion-content');
+  const isActive = item.classList.contains('active');
+  
+  if (isActive) {
+    item.classList.remove('active');
+    content.style.display = 'none';
+  } else {
+    item.classList.add('active');
+    content.style.display = 'block';
+  }
+}
+```
+
+## Testing and Validation
+
+### Manual Testing Checklist
+
+- [ ] Block renders correctly in Universal Editor
+- [ ] All interactive features work as expected
+- [ ] Responsive design works on all breakpoints
+- [ ] Accessibility features function properly
+- [ ] Performance is acceptable (no layout shifts)
+- [ ] Analytics tracking works correctly
+
+### Browser Testing
+
+Test across different browsers and devices:
+
+- Chrome (latest)
+- Firefox (latest)
+- Safari (latest)
+- Edge (latest)
+- Mobile browsers (iOS Safari, Chrome Mobile)
+
+### Performance Testing
+
+- Use Lighthouse to test Core Web Vitals
+- Monitor bundle size impact
+- Test on slow connections
+- Validate image optimization
+
+### Code Quality
+
+```bash
+# Lint your code regularly
+npm run lint
+
+# Run tests if available
+npm test
+
+# Check for accessibility issues
+npm run a11y
+```
+
+## Development Workflow
+
+### Local Development
+
+1. Start local development server:
+   ```bash
+   aem up
+   ```
+
+2. Make changes to block files
+3. Test in browser at `http://localhost:3000`
+4. Use browser dev tools to inspect and debug
+
+### Universal Editor Testing
+
+1. Commit and push changes to a branch:
+   ```bash
+   git add .
+   git commit -m "Add CSS and JavaScript to block"
+   git push origin feature-branch
+   ```
+
+2. Test in Universal Editor with branch parameter:
+   ```
+   https://your-site.aem.page/page?ref=feature-branch
+   ```
+
+3. Verify all functionality works in authoring mode
+
+### Deployment
+
+1. Merge changes to main branch
+2. Verify production deployment
+3. Monitor for any issues
+4. Update documentation if needed
+
+## Conclusion
+
+This guide provides comprehensive patterns for developing blocks with CSS and JavaScript in Universal Editor. By following these practices, you can create:
+
+- **Maintainable**: Clean, well-documented code
+- **Performant**: Optimized for speed and efficiency
+- **Accessible**: Usable by all users
+- **Responsive**: Works across all devices
+- **Interactive**: Rich user experiences
+
+Remember to always test thoroughly and follow the established patterns in your project for consistency.
+
+## References
+
+- [Adobe Experience League Tutorial](https://experienceleague.adobe.com/en/docs/experience-manager-learn/sites/edge-delivery-services/developing/universal-editor/7b-block-js-css)
+- [Universal Editor Documentation](https://www.aem.live/developer/ue-tutorial)
+- [Edge Delivery Services Documentation](https://www.aem.live/developer/component-model-definitions)

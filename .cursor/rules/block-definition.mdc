@@ -1,0 +1,1036 @@
+---
+alwaysApply: true
+---
+# Block Definition Guide for Adobe Edge Delivery Services
+
+This guide explains how to create and configure block definitions for the Universal Editor in Adobe Edge Delivery Services (EDS).
+
+## Overview
+
+Block definitions consist of three main components:
+- **Definitions**: Register components with the Universal Editor
+- **Models**: Define data structure and form fields for authoring
+- **Filters**: Control which components can be nested inside containers
+
+## File Structure
+
+Each block should have a `_blockname.json` file in the `blocks/blockname/` directory:
+
+```
+blocks/
+  hero/
+    _hero.json          ← Block definition
+    hero.css           ← Block styles
+    hero.js            ← Block functionality
+```
+
+## 1. Definitions
+
+Definitions register components with the Universal Editor and define their metadata.
+
+### Basic Structure
+
+```json
+{
+  "definitions": [
+    {
+      "title": "Display Name",
+      "id": "unique-id",
+      "plugins": {
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/type/v1/type",
+            "template": {
+              "name": "Template Name",
+              "model": "model-id",
+              "filter": "filter-id"
+            }
+          }
+        }
+      }
+    }
+  ]
+}
+```
+
+### Resource Types
+
+- `core/franklin/components/block/v1/block` - Standard block
+- `core/franklin/components/block/v1/block/item` - Child item in container
+- `core/franklin/components/text/v1/text` - Text component
+- `core/franklin/components/button/v1/button` - Button component
+- `core/franklin/components/section/v1/section` - Section container
+
+### Examples
+
+**Simple Block:**
+```json
+{
+  "definitions": [
+    {
+      "title": "Hero",
+      "id": "hero",
+      "plugins": {
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/block/v1/block",
+            "template": {
+              "name": "Hero",
+              "model": "hero"
+            }
+          }
+        }
+      }
+    }
+  ]
+}
+```
+
+**Container with Child Items:**
+```json
+{
+  "definitions": [
+    {
+      "title": "Cards Container",
+      "id": "cards",
+      "plugins": {
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/block/v1/block",
+            "template": {
+              "name": "Cards",
+              "filter": "cards"
+            }
+          }
+        }
+      }
+    },
+    {
+      "title": "Card Item",
+      "id": "card",
+      "plugins": {
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/block/v1/block/item",
+            "template": {
+              "name": "Card",
+              "model": "card"
+            }
+          }
+        }
+      }
+    }
+  ]
+}
+```
+
+## 2. Models
+
+Models define the data structure and form fields that authors can edit.
+
+### Field Components
+
+| Component | Purpose | Properties |
+|-----------|---------|------------|
+| `text` | Simple text input | `name`, `label`, `value`, `valueType` |
+| `richtext` | Rich text editor | `name`, `label`, `value`, `valueType` |
+| `reference` | File/asset picker | `name`, `label`, `multi`, `valueType` |
+| `aem-content` | Internal content links | `name`, `label` |
+| `select` | Dropdown selection | `name`, `label`, `options` |
+| `multiselect` | Multiple selections | `name`, `label`, `options` |
+
+### Basic Model Structure
+
+```json
+{
+  "models": [
+    {
+      "id": "model-id",
+      "fields": [
+        {
+          "component": "field-type",
+          "name": "field-name",
+          "label": "Display Label",
+          "value": "default-value"
+        }
+      ]
+    }
+  ]
+}
+```
+
+### Field Examples
+
+**Text Field:**
+```json
+{
+  "component": "text",
+  "valueType": "string",
+  "name": "title",
+  "label": "Title",
+  "value": ""
+}
+```
+
+**Rich Text Field:**
+```json
+{
+  "component": "richtext",
+  "name": "description",
+  "label": "Description",
+  "value": "",
+  "valueType": "string"
+}
+```
+
+**Image Reference:**
+```json
+{
+  "component": "reference",
+  "valueType": "string",
+  "name": "image",
+  "label": "Image",
+  "multi": false
+}
+```
+
+**Dropdown Selection:**
+```json
+{
+  "component": "select",
+  "name": "style",
+  "label": "Style",
+  "options": [
+    {
+      "name": "Default",
+      "value": ""
+    },
+    {
+      "name": "Primary",
+      "value": "primary"
+    },
+    {
+      "name": "Secondary", 
+      "value": "secondary"
+    }
+  ]
+}
+```
+
+**Content Link:**
+```json
+{
+  "component": "aem-content",
+  "name": "link",
+  "label": "Link"
+}
+```
+
+### Complete Model Example
+
+```json
+{
+  "models": [
+    {
+      "id": "hero",
+      "fields": [
+        {
+          "component": "reference",
+          "valueType": "string",
+          "name": "image",
+          "label": "Background Image",
+          "multi": false
+        },
+        {
+          "component": "text",
+          "name": "imageAlt",
+          "label": "Image Alt Text",
+          "value": ""
+        },
+        {
+          "component": "text",
+          "name": "title",
+          "label": "Headline",
+          "value": ""
+        },
+        {
+          "component": "richtext",
+          "name": "text",
+          "label": "Description",
+          "value": "",
+          "valueType": "string"
+        },
+        {
+          "component": "aem-content",
+          "name": "link",
+          "label": "Call-to-Action Link"
+        },
+        {
+          "component": "text",
+          "name": "linkText",
+          "label": "Button Text"
+        }
+      ]
+    }
+  ]
+}
+```
+
+## 3. Filters
+
+Filters control which components can be placed inside container components.
+
+### Basic Filter Structure
+
+```json
+{
+  "filters": [
+    {
+      "id": "filter-id",
+      "components": [
+        "component-id-1",
+        "component-id-2"
+      ]
+    }
+  ]
+}
+```
+
+### Filter Examples
+
+**Empty Filter (No Children):**
+```json
+{
+  "filters": []
+}
+```
+
+**Simple Container:**
+```json
+{
+  "filters": [
+    {
+      "id": "cards",
+      "components": [
+        "card"
+      ]
+    }
+  ]
+}
+```
+
+**Complex Container (Section):**
+```json
+{
+  "filters": [
+    {
+      "id": "section",
+      "components": [
+        "text",
+        "image", 
+        "button",
+        "title",
+        "hero",
+        "cards",
+        "columns"
+      ]
+    }
+  ]
+}
+```
+
+## Complete Block Definition Examples
+
+### Simple Block (Quote)
+
+```json
+{
+  "definitions": [
+    {
+      "title": "Quote",
+      "id": "quote",
+      "plugins": {
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/block/v1/block",
+            "template": {
+              "name": "Quote",
+              "model": "quote"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "models": [
+    {
+      "id": "quote",
+      "fields": [
+        {
+          "component": "richtext",
+          "name": "text",
+          "label": "Quote Text",
+          "value": "",
+          "valueType": "string"
+        },
+        {
+          "component": "text",
+          "name": "author",
+          "label": "Author",
+          "value": ""
+        },
+        {
+          "component": "text",
+          "name": "citation",
+          "label": "Citation",
+          "value": ""
+        }
+      ]
+    }
+  ],
+  "filters": []
+}
+```
+
+### Container Block (Tabs)
+
+```json
+{
+  "definitions": [
+    {
+      "title": "Tabs",
+      "id": "tabs",
+      "plugins": {
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/block/v1/block",
+            "template": {
+              "name": "Tabs",
+              "filter": "tabs"
+            }
+          }
+        }
+      }
+    },
+    {
+      "title": "Tab",
+      "id": "tab",
+      "plugins": {
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/block/v1/block/item",
+            "template": {
+              "name": "Tab",
+              "model": "tab"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "models": [
+    {
+      "id": "tab",
+      "fields": [
+        {
+          "component": "text",
+          "name": "title",
+          "label": "Tab Title",
+          "value": ""
+        },
+        {
+          "component": "richtext",
+          "name": "content",
+          "label": "Tab Content",
+          "value": "",
+          "valueType": "string"
+        }
+      ]
+    }
+  ],
+  "filters": [
+    {
+      "id": "tabs",
+      "components": [
+        "tab"
+      ]
+    }
+  ]
+}
+```
+
+## Build Process
+
+After creating or modifying block definitions, run the build command:
+
+```bash
+npm run build:json
+```
+
+This command:
+1. Merges all `_*.json` files from `blocks/` directories
+2. Combines them with base models from `models/` directory  
+3. Generates `component-definition.json`, `component-models.json`, and `component-filters.json`
+
+## Best Practices
+
+1. **Naming Conventions:**
+   - Use kebab-case for IDs: `hero-banner`, `product-card`
+   - Use descriptive titles: "Hero Banner", "Product Card"
+
+2. **Field Organization:**
+   - Group related fields logically
+   - Use clear, descriptive labels
+   - Provide helpful descriptions for complex fields
+
+3. **Filters:**
+   - Always include a `filters` section (can be empty array)
+   - Be specific about allowed child components
+   - Consider authoring workflow when designing filters
+
+4. **Models:**
+   - Use appropriate field types for data
+   - Set sensible default values
+   - Consider validation needs
+
+5. **Resource Types:**
+   - Use standard Franklin resource types when possible
+   - Follow the container/item pattern for multi-item blocks
+
+## Troubleshooting
+
+**Build Error: "Reference '/filters' not found"**
+- Ensure your block definition includes a `filters` section, even if empty
+
+**Component Not Appearing in Universal Editor**
+- Check that the definition is properly registered
+- Verify the build process completed successfully
+- Ensure the component ID is unique
+
+**Form Fields Not Showing**
+- Verify the model ID matches the template model reference
+- Check field component types are valid
+- Ensure required properties are included
+
+## Related Files
+
+- `component-definition.json` - Generated component registry
+- `component-models.json` - Generated model definitions  
+- `component-filters.json` - Generated filter configurations
+- `models/_component-*.json` - Base component definitions# Block Definition Guide for Adobe Edge Delivery Services
+
+This guide explains how to create and configure block definitions for the Universal Editor in Adobe Edge Delivery Services (EDS).
+
+## Overview
+
+Block definitions consist of three main components:
+- **Definitions**: Register components with the Universal Editor
+- **Models**: Define data structure and form fields for authoring
+- **Filters**: Control which components can be nested inside containers
+
+## File Structure
+
+Each block should have a `_blockname.json` file in the `blocks/blockname/` directory:
+
+```
+blocks/
+  hero/
+    _hero.json          ← Block definition
+    hero.css           ← Block styles
+    hero.js            ← Block functionality
+```
+
+## 1. Definitions
+
+Definitions register components with the Universal Editor and define their metadata.
+
+### Basic Structure
+
+```json
+{
+  "definitions": [
+    {
+      "title": "Display Name",
+      "id": "unique-id",
+      "plugins": {
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/type/v1/type",
+            "template": {
+              "name": "Template Name",
+              "model": "model-id",
+              "filter": "filter-id"
+            }
+          }
+        }
+      }
+    }
+  ]
+}
+```
+
+### Resource Types
+
+- `core/franklin/components/block/v1/block` - Standard block
+- `core/franklin/components/block/v1/block/item` - Child item in container
+- `core/franklin/components/text/v1/text` - Text component
+- `core/franklin/components/button/v1/button` - Button component
+- `core/franklin/components/section/v1/section` - Section container
+
+### Examples
+
+**Simple Block:**
+```json
+{
+  "definitions": [
+    {
+      "title": "Hero",
+      "id": "hero",
+      "plugins": {
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/block/v1/block",
+            "template": {
+              "name": "Hero",
+              "model": "hero"
+            }
+          }
+        }
+      }
+    }
+  ]
+}
+```
+
+**Container with Child Items:**
+```json
+{
+  "definitions": [
+    {
+      "title": "Cards Container",
+      "id": "cards",
+      "plugins": {
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/block/v1/block",
+            "template": {
+              "name": "Cards",
+              "filter": "cards"
+            }
+          }
+        }
+      }
+    },
+    {
+      "title": "Card Item",
+      "id": "card",
+      "plugins": {
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/block/v1/block/item",
+            "template": {
+              "name": "Card",
+              "model": "card"
+            }
+          }
+        }
+      }
+    }
+  ]
+}
+```
+
+## 2. Models
+
+Models define the data structure and form fields that authors can edit.
+
+### Field Components
+
+| Component | Purpose | Properties |
+|-----------|---------|------------|
+| `text` | Simple text input | `name`, `label`, `value`, `valueType` |
+| `richtext` | Rich text editor | `name`, `label`, `value`, `valueType` |
+| `reference` | File/asset picker | `name`, `label`, `multi`, `valueType` |
+| `aem-content` | Internal content links | `name`, `label` |
+| `select` | Dropdown selection | `name`, `label`, `options` |
+| `multiselect` | Multiple selections | `name`, `label`, `options` |
+
+### Basic Model Structure
+
+```json
+{
+  "models": [
+    {
+      "id": "model-id",
+      "fields": [
+        {
+          "component": "field-type",
+          "name": "field-name",
+          "label": "Display Label",
+          "value": "default-value"
+        }
+      ]
+    }
+  ]
+}
+```
+
+### Field Examples
+
+**Text Field:**
+```json
+{
+  "component": "text",
+  "valueType": "string",
+  "name": "title",
+  "label": "Title",
+  "value": ""
+}
+```
+
+**Rich Text Field:**
+```json
+{
+  "component": "richtext",
+  "name": "description",
+  "label": "Description",
+  "value": "",
+  "valueType": "string"
+}
+```
+
+**Image Reference:**
+```json
+{
+  "component": "reference",
+  "valueType": "string",
+  "name": "image",
+  "label": "Image",
+  "multi": false
+}
+```
+
+**Dropdown Selection:**
+```json
+{
+  "component": "select",
+  "name": "style",
+  "label": "Style",
+  "options": [
+    {
+      "name": "Default",
+      "value": ""
+    },
+    {
+      "name": "Primary",
+      "value": "primary"
+    },
+    {
+      "name": "Secondary", 
+      "value": "secondary"
+    }
+  ]
+}
+```
+
+**Content Link:**
+```json
+{
+  "component": "aem-content",
+  "name": "link",
+  "label": "Link"
+}
+```
+
+### Complete Model Example
+
+```json
+{
+  "models": [
+    {
+      "id": "hero",
+      "fields": [
+        {
+          "component": "reference",
+          "valueType": "string",
+          "name": "image",
+          "label": "Background Image",
+          "multi": false
+        },
+        {
+          "component": "text",
+          "name": "imageAlt",
+          "label": "Image Alt Text",
+          "value": ""
+        },
+        {
+          "component": "text",
+          "name": "title",
+          "label": "Headline",
+          "value": ""
+        },
+        {
+          "component": "richtext",
+          "name": "text",
+          "label": "Description",
+          "value": "",
+          "valueType": "string"
+        },
+        {
+          "component": "aem-content",
+          "name": "link",
+          "label": "Call-to-Action Link"
+        },
+        {
+          "component": "text",
+          "name": "linkText",
+          "label": "Button Text"
+        }
+      ]
+    }
+  ]
+}
+```
+
+## 3. Filters
+
+Filters control which components can be placed inside container components.
+
+### Basic Filter Structure
+
+```json
+{
+  "filters": [
+    {
+      "id": "filter-id",
+      "components": [
+        "component-id-1",
+        "component-id-2"
+      ]
+    }
+  ]
+}
+```
+
+### Filter Examples
+
+**Empty Filter (No Children):**
+```json
+{
+  "filters": []
+}
+```
+
+**Simple Container:**
+```json
+{
+  "filters": [
+    {
+      "id": "cards",
+      "components": [
+        "card"
+      ]
+    }
+  ]
+}
+```
+
+**Complex Container (Section):**
+```json
+{
+  "filters": [
+    {
+      "id": "section",
+      "components": [
+        "text",
+        "image", 
+        "button",
+        "title",
+        "hero",
+        "cards",
+        "columns"
+      ]
+    }
+  ]
+}
+```
+
+## Complete Block Definition Examples
+
+### Simple Block (Quote)
+
+```json
+{
+  "definitions": [
+    {
+      "title": "Quote",
+      "id": "quote",
+      "plugins": {
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/block/v1/block",
+            "template": {
+              "name": "Quote",
+              "model": "quote"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "models": [
+    {
+      "id": "quote",
+      "fields": [
+        {
+          "component": "richtext",
+          "name": "text",
+          "label": "Quote Text",
+          "value": "",
+          "valueType": "string"
+        },
+        {
+          "component": "text",
+          "name": "author",
+          "label": "Author",
+          "value": ""
+        },
+        {
+          "component": "text",
+          "name": "citation",
+          "label": "Citation",
+          "value": ""
+        }
+      ]
+    }
+  ],
+  "filters": []
+}
+```
+
+### Container Block (Tabs)
+
+```json
+{
+  "definitions": [
+    {
+      "title": "Tabs",
+      "id": "tabs",
+      "plugins": {
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/block/v1/block",
+            "template": {
+              "name": "Tabs",
+              "filter": "tabs"
+            }
+          }
+        }
+      }
+    },
+    {
+      "title": "Tab",
+      "id": "tab",
+      "plugins": {
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/block/v1/block/item",
+            "template": {
+              "name": "Tab",
+              "model": "tab"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "models": [
+    {
+      "id": "tab",
+      "fields": [
+        {
+          "component": "text",
+          "name": "title",
+          "label": "Tab Title",
+          "value": ""
+        },
+        {
+          "component": "richtext",
+          "name": "content",
+          "label": "Tab Content",
+          "value": "",
+          "valueType": "string"
+        }
+      ]
+    }
+  ],
+  "filters": [
+    {
+      "id": "tabs",
+      "components": [
+        "tab"
+      ]
+    }
+  ]
+}
+```
+
+## Build Process
+
+After creating or modifying block definitions, run the build command:
+
+```bash
+npm run build:json
+```
+
+This command:
+1. Merges all `_*.json` files from `blocks/` directories
+2. Combines them with base models from `models/` directory  
+3. Generates `component-definition.json`, `component-models.json`, and `component-filters.json`
+
+## Best Practices
+
+1. **Naming Conventions:**
+   - Use kebab-case for IDs: `hero-banner`, `product-card`
+   - Use descriptive titles: "Hero Banner", "Product Card"
+
+2. **Field Organization:**
+   - Group related fields logically
+   - Use clear, descriptive labels
+   - Provide helpful descriptions for complex fields
+
+3. **Filters:**
+   - Always include a `filters` section (can be empty array)
+   - Be specific about allowed child components
+   - Consider authoring workflow when designing filters
+
+4. **Models:**
+   - Use appropriate field types for data
+   - Set sensible default values
+   - Consider validation needs
+
+5. **Resource Types:**
+   - Use standard Franklin resource types when possible
+   - Follow the container/item pattern for multi-item blocks
+
+## Troubleshooting
+
+**Build Error: "Reference '/filters' not found"**
+- Ensure your block definition includes a `filters` section, even if empty
+
+**Component Not Appearing in Universal Editor**
+- Check that the definition is properly registered
+- Verify the build process completed successfully
+- Ensure the component ID is unique
+
+**Form Fields Not Showing**
+- Verify the model ID matches the template model reference
+- Check field component types are valid
+- Ensure required properties are included
+
+## Related Files
+
+- `component-definition.json` - Generated component registry
+- `component-models.json` - Generated model definitions  
+- `component-filters.json` - Generated filter configurations
+- `models/_component-*.json` - Base component definitions

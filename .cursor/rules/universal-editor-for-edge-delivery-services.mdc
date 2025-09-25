@@ -1,0 +1,1348 @@
+---
+alwaysApply: true
+---
+# Universal Editor Master Prompt Guide for AI Agents
+
+## Overview
+
+This comprehensive guide serves as a master prompt for AI agents creating templates, components, and blocks for AEM Live projects using the Universal Editor. Follow these patterns and principles to ensure consistent, high-quality, and standards-compliant implementations.
+
+## Core Principles
+
+### Development Philosophy
+- **Buildless Approach**: Code runs directly from GitHub repositories
+- **Content Source Agnostic**: Support both AEM authoring and document-based authoring
+- **Semantic Content Models**: Create meaningful, reusable content structures
+- **Performance First**: Optimize for Core Web Vitals and fast loading
+- **Developer Experience**: Intuitive content structures that are easy to author
+
+### Technical Requirements
+- Compatible with AEM Boilerplate
+- No external dependencies
+- Responsive across all breakpoints
+- Context-aware CSS inheritance
+- SEO and accessibility compliant
+- Localizable content (no hard-coded text)
+
+## Project Structure & File Organization
+
+### Essential Configuration Files
+
+#### 1. `component-definitions.json`
+Defines components available in the Universal Editor:
+
+```json
+{
+  "title": "Component Name",
+  "id": "component-id",
+  "plugins": {
+    "xwalk": {
+      "page": {
+        "resourceType": "core/franklin/components/block/v1/block",
+        "template": {
+          "name": "Block Name",
+          "model": "model-id",
+          "property1": "default value",
+          "property2": "default value"
+        }
+      }
+    }
+  }
+}
+```
+
+#### 2. `component-models.json`
+Defines the content model and field structure:
+
+```json
+{
+  "id": "model-id",
+  "fields": [
+    {
+      "component": "richtext|text|reference|select|multiselect",
+      "name": "fieldName",
+      "label": "Field Label",
+      "value": "default value",
+      "valueType": "string",
+      "options": [...] // for select/multiselect
+    }
+  ]
+}
+```
+
+#### 3. `component-filters.json`
+Controls which components can be added where:
+
+```json
+{
+  "id": "section",
+  "components": [
+    "text", "image", "button", "custom-block"
+  ]
+}
+```
+
+#### 4. `paths.json`
+Maps AEM paths to public URLs:
+
+```json
+{
+  "mappings": [
+    "/content/site-name/:/",
+    "/content/site-name/configuration:/.helix/config.json"
+  ],
+  "includes": [
+    "/content/site-name/"
+  ]
+}
+```
+
+### Project Directory Structure
+
+```
+project-root/
+├── head.html                 # HTML head injection
+├── 404.html                  # Custom 404 page
+├── component-definitions.json
+├── component-models.json
+├── component-filters.json
+├── paths.json
+├── fstab.yaml                # Content source connection
+├── helix-query.yaml          # Indexing configuration
+├── helix-sitemap.yaml        # Sitemap automation
+├── robots.txt
+├── .hlxignore               # Files to exclude from serving
+├── scripts/
+│   ├── scripts.js           # Global JavaScript entry point
+│   ├── delayed.js           # Deferred loading scripts
+│   └── aem.js              # AEM-specific functionality
+├── styles/
+│   ├── styles.css          # Global styles (critical path)
+│   └── lazy-styles.css     # Non-critical styles
+├── blocks/
+│   └── [block-name]/
+│       ├── [block-name].js
+│       └── [block-name].css
+└── icons/
+    └── *.svg               # Icon files
+```
+
+## Content Modeling Patterns
+
+### Field Types and Components
+
+#### Text Input Components
+```json
+{
+  "component": "text",
+  "name": "title",
+  "label": "Title",
+  "valueType": "string",
+  "value": ""
+}
+```
+
+#### Rich Text Components
+```json
+{
+  "component": "richtext",
+  "name": "description",
+  "label": "Description",
+  "valueType": "string",
+  "value": ""
+}
+```
+
+#### Asset References
+```json
+{
+  "component": "reference",
+  "name": "image",
+  "label": "Image",
+  "valueType": "string",
+  "multi": false
+}
+```
+
+#### Select Dropdowns
+```json
+{
+  "component": "select",
+  "name": "variant",
+  "label": "Variant",
+  "valueType": "string",
+  "options": [
+    {"name": "Primary", "value": "primary"},
+    {"name": "Secondary", "value": "secondary"}
+  ]
+}
+```
+
+### Content Model Strategies
+
+#### 1. Type Inference
+The system automatically infers semantic meaning:
+- **Images**: References to assets with `image/` MIME type → `<picture><img>`
+- **Links**: URLs or references → `<a href>`
+- **Rich Text**: Content starting with block elements → semantic HTML
+- **Classes**: Special property for block styling options
+
+#### 2. Field Collapse
+Combine related fields using naming conventions:
+
+```json
+{
+  "link": "https://example.com",
+  "linkText": "Click Here",
+  "linkTitle": "Navigate to example",
+  "linkType": "primary"
+}
+```
+
+Renders as:
+```html
+<strong><a href="https://example.com" title="Navigate to example">Click Here</a></strong>
+```
+
+#### 3. Element Grouping
+Group related content using underscore notation:
+
+```json
+{
+  "heroContent_title": "Welcome",
+  "heroContent_titleType": "h1",
+  "heroContent_subtitle": "Get started today",
+  "heroContent_description": "<p>Learn more about our services</p>"
+}
+```
+
+Renders grouped in a single table cell with proper semantic structure.
+
+## Block Development Patterns
+
+### Block Structure Types
+
+#### 1. Simple Blocks
+Each property renders as a separate row:
+
+```javascript
+// blocks/hero/hero.js
+export default function decorate(block) {
+  const [imageDiv, textDiv] = block.children;
+  
+  // Enhance the structure
+  block.classList.add('hero-enhanced');
+  
+  // Process image
+  const img = imageDiv.querySelector('img');
+  if (img) {
+    img.classList.add('hero-image');
+  }
+  
+  // Process text content
+  const heading = textDiv.querySelector('h1, h2, h3');
+  if (heading) {
+    heading.classList.add('hero-title');
+  }
+}
+```
+
+#### 2. Key-Value Blocks
+For configuration-style content:
+
+```json
+{
+  "name": "Configuration",
+  "model": "config",
+  "key-value": true,
+  "source": "/data/config.json",
+  "limit": 10
+}
+```
+
+#### 3. Container Blocks
+Support multiple child items:
+
+```javascript
+export default function decorate(block) {
+  const [headerDiv, ...itemDivs] = block.children;
+  
+  // Process header
+  headerDiv.classList.add('container-header');
+  
+  // Process items
+  itemDivs.forEach((item, index) => {
+    item.classList.add('container-item');
+    item.setAttribute('data-index', index);
+  });
+}
+```
+
+### Block Styling Patterns
+
+#### CSS Structure
+```css
+/* Block container */
+.block.hero {
+  margin: 2rem 0;
+  padding: 2rem;
+}
+
+/* Block variants */
+.block.hero.dark-theme {
+  background-color: #333;
+  color: white;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .block.hero {
+    padding: 1rem;
+  }
+}
+
+/* Content elements */
+.block.hero .hero-title {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.block.hero .hero-image {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+```
+
+### Block Options Pattern
+Add styling variants through the `classes` property:
+
+```json
+{
+  "component": "select",
+  "name": "classes",
+  "label": "Style Variant",
+  "valueType": "string",
+  "options": [
+    {"name": "Dark Theme", "value": "dark-theme"},
+    {"name": "Centered", "value": "centered"},
+    {"name": "Full Width", "value": "full-width"}
+  ]
+}
+```
+
+## Section and Metadata Patterns
+
+### Custom Sections
+```json
+{
+  "title": "Special Section",
+  "id": "special-section",
+  "plugins": {
+    "xwalk": {
+      "page": {
+        "resourceType": "core/franklin/components/section/v1/section",
+        "template": {
+          "name": "Special Section",
+          "model": "special-section",
+          "filter": "section"
+        }
+      }
+    }
+  }
+}
+```
+
+### Section Metadata Model
+```json
+{
+  "id": "section",
+  "fields": [
+    {
+      "component": "multiselect",
+      "name": "style",
+      "label": "Section Style",
+      "valueType": "string",
+      "options": [
+        {"name": "Highlighted", "value": "highlight"},
+        {"name": "Dark Background", "value": "dark-bg"}
+      ]
+    },
+    {
+      "component": "reference",
+      "name": "backgroundImage",
+      "label": "Background Image",
+      "valueType": "string"
+    }
+  ]
+}
+```
+
+### Page Metadata
+```json
+{
+  "id": "page-metadata",
+  "fields": [
+    {
+      "component": "text",
+      "name": "theme",
+      "label": "Page Theme"
+    },
+    {
+      "component": "text",
+      "name": "customProperty",
+      "label": "Custom Property"
+    }
+  ]
+}
+```
+
+## Development Workflow
+
+### Three-Phase Approach
+
+#### Phase 1: Definition and Model
+1. Create component definition in `component-definitions.json`
+2. Define content model in `component-models.json`
+3. Add to filters in `component-filters.json`
+4. Commit changes to repository
+
+#### Phase 2: Content Creation
+1. Open Universal Editor
+2. Add component to page
+3. Configure content through authoring interface
+4. Publish page to test structure
+
+#### Phase 3: Implementation and Styling
+1. Create block folder: `/blocks/[block-name]/`
+2. Implement decoration: `[block-name].js`
+3. Add styling: `[block-name].css`
+4. Test and iterate
+
+### Branch Management
+- Use feature branches for development
+- Test with `?ref=<branch>` parameter in Universal Editor
+- Merge to main after review
+
+## Performance Optimization
+
+### Critical Path Optimization
+- Keep `styles.css` minimal (LCP content only)
+- Use `lazy-styles.css` for below-fold content
+- Defer non-critical JavaScript to `delayed.js`
+
+### Block Loading Strategy
+```javascript
+// Efficient block decoration
+export default function decorate(block) {
+  // Minimal DOM manipulation
+  // Use CSS classes for styling
+  // Avoid heavy JavaScript operations
+  
+  // Example: Lazy load images
+  const images = block.querySelectorAll('img[data-src]');
+  const imageObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const img = entry.target;
+        img.src = img.dataset.src;
+        img.removeAttribute('data-src');
+        imageObserver.unobserve(img);
+      }
+    });
+  });
+  
+  images.forEach(img => imageObserver.observe(img));
+}
+```
+
+## Accessibility Guidelines
+
+### Semantic HTML
+```javascript
+export default function decorate(block) {
+  // Use proper heading hierarchy
+  const title = block.querySelector('h1, h2, h3, h4, h5, h6');
+  if (title && !title.id) {
+    title.id = `heading-${Math.random().toString(36).substr(2, 9)}`;
+  }
+  
+  // Add ARIA attributes
+  const list = block.querySelector('ul, ol');
+  if (list) {
+    list.setAttribute('role', 'list');
+  }
+  
+  // Ensure interactive elements are keyboard accessible
+  const buttons = block.querySelectorAll('.action-button');
+  buttons.forEach(button => {
+    if (!button.getAttribute('tabindex')) {
+      button.setAttribute('tabindex', '0');
+    }
+  });
+}
+```
+
+### Focus Management
+```css
+.block button:focus,
+.block a:focus {
+  outline: 2px solid #0078d4;
+  outline-offset: 2px;
+}
+
+.block [tabindex]:focus {
+  outline: 2px solid #0078d4;
+  outline-offset: 2px;
+}
+```
+
+## Testing and Quality Assurance
+
+### Content Model Validation
+- Ensure all required fields have appropriate validation
+- Test field combinations and edge cases
+- Verify type inference works correctly
+- Check responsive behavior across devices
+
+### Block Functionality Testing
+- Test with minimal content
+- Test with maximum content
+- Verify graceful degradation
+- Check loading performance
+- Validate accessibility compliance
+
+### Cross-Compatibility
+- Test with both AEM authoring and document-based authoring
+- Ensure block works in Universal Editor
+- Verify published output matches expectations
+- Test on different browsers and devices
+
+## Common Patterns and Examples
+
+### Card Block Pattern
+```json
+{
+  "id": "card",
+  "fields": [
+    {
+      "component": "reference",
+      "name": "image",
+      "label": "Image"
+    },
+    {
+      "component": "text",
+      "name": "title",
+      "label": "Title"
+    },
+    {
+      "component": "richtext",
+      "name": "description",
+      "label": "Description"
+    },
+    {
+      "component": "text",
+      "name": "link",
+      "label": "Link URL"
+    },
+    {
+      "component": "text",
+      "name": "linkText",
+      "label": "Link Text"
+    }
+  ]
+}
+```
+
+### Hero Block Pattern
+```json
+{
+  "id": "hero",
+  "fields": [
+    {
+      "component": "reference",
+      "name": "backgroundImage",
+      "label": "Background Image"
+    },
+    {
+      "component": "text",
+      "name": "title",
+      "label": "Title"
+    },
+    {
+      "component": "text",
+      "name": "titleType",
+      "label": "Title Type",
+      "value": "h1"
+    },
+    {
+      "component": "richtext",
+      "name": "description",
+      "label": "Description"
+    },
+    {
+      "component": "text",
+      "name": "primaryCTA",
+      "label": "Primary CTA URL"
+    },
+    {
+      "component": "text",
+      "name": "primaryCTAText",
+      "label": "Primary CTA Text"
+    }
+  ]
+}
+```
+
+### Navigation Block Pattern
+```json
+{
+  "id": "navigation",
+  "fields": [
+    {
+      "component": "reference",
+      "name": "logo",
+      "label": "Logo"
+    },
+    {
+      "component": "text",
+      "name": "logoAlt",
+      "label": "Logo Alt Text"
+    }
+  ]
+}
+```
+
+## Error Handling and Debugging
+
+### Common Issues and Solutions
+
+#### Component Not Appearing in Universal Editor
+- Check `component-definitions.json` syntax
+- Verify resource type is `core/franklin/components/block/v1/block`
+- Ensure component is added to `component-filters.json`
+
+#### Styling Not Applied
+- Verify block name matches folder name and CSS filename
+- Check CSS class naming convention (`.block.blockname`)
+- Ensure styles.css imports are correct
+
+#### Content Not Rendering Correctly
+- Validate content model field types
+- Check for proper field naming conventions
+- Verify type inference is working as expected
+
+### Debugging Tools
+```javascript
+// Add to block decoration for debugging
+export default function decorate(block) {
+  if (window.location.hostname.includes('aem.page')) {
+    console.log('Block data:', block);
+    console.log('Block children:', [...block.children]);
+  }
+  
+  // Your decoration code here
+}
+```
+
+## Best Practices Summary
+
+### Content Modeling
+1. Keep models simple and intuitive
+2. Use semantic field names
+3. Leverage type inference when possible
+4. Group related fields with underscores
+5. Provide sensible default values
+
+### Block Development
+1. Follow the three-phase development approach
+2. Keep JavaScript lightweight and efficient
+3. Use CSS for styling, avoid inline styles
+4. Implement proper accessibility features
+5. Test across different content scenarios
+
+### Performance
+1. Minimize critical path resources
+2. Use lazy loading for non-critical content
+3. Optimize images and assets
+4. Defer non-essential JavaScript
+
+### Maintenance
+1. Use semantic versioning for changes
+2. Document component usage and options
+3. Test thoroughly before deployment
+4. Monitor performance metrics
+
+This master prompt guide provides the foundation for creating consistent, high-quality Universal Editor components that follow AEM Live best practices and standards.# Universal Editor Master Prompt Guide for AI Agents
+
+## Overview
+
+This comprehensive guide serves as a master prompt for AI agents creating templates, components, and blocks for AEM Live projects using the Universal Editor. Follow these patterns and principles to ensure consistent, high-quality, and standards-compliant implementations.
+
+## Core Principles
+
+### Development Philosophy
+- **Buildless Approach**: Code runs directly from GitHub repositories
+- **Content Source Agnostic**: Support both AEM authoring and document-based authoring
+- **Semantic Content Models**: Create meaningful, reusable content structures
+- **Performance First**: Optimize for Core Web Vitals and fast loading
+- **Developer Experience**: Intuitive content structures that are easy to author
+
+### Technical Requirements
+- Compatible with AEM Boilerplate
+- No external dependencies
+- Responsive across all breakpoints
+- Context-aware CSS inheritance
+- SEO and accessibility compliant
+- Localizable content (no hard-coded text)
+
+## Project Structure & File Organization
+
+### Essential Configuration Files
+
+#### 1. `component-definitions.json`
+Defines components available in the Universal Editor:
+
+```json
+{
+  "title": "Component Name",
+  "id": "component-id",
+  "plugins": {
+    "xwalk": {
+      "page": {
+        "resourceType": "core/franklin/components/block/v1/block",
+        "template": {
+          "name": "Block Name",
+          "model": "model-id",
+          "property1": "default value",
+          "property2": "default value"
+        }
+      }
+    }
+  }
+}
+```
+
+#### 2. `component-models.json`
+Defines the content model and field structure:
+
+```json
+{
+  "id": "model-id",
+  "fields": [
+    {
+      "component": "richtext|text|reference|select|multiselect",
+      "name": "fieldName",
+      "label": "Field Label",
+      "value": "default value",
+      "valueType": "string",
+      "options": [...] // for select/multiselect
+    }
+  ]
+}
+```
+
+#### 3. `component-filters.json`
+Controls which components can be added where:
+
+```json
+{
+  "id": "section",
+  "components": [
+    "text", "image", "button", "custom-block"
+  ]
+}
+```
+
+#### 4. `paths.json`
+Maps AEM paths to public URLs:
+
+```json
+{
+  "mappings": [
+    "/content/site-name/:/",
+    "/content/site-name/configuration:/.helix/config.json"
+  ],
+  "includes": [
+    "/content/site-name/"
+  ]
+}
+```
+
+### Project Directory Structure
+
+```
+project-root/
+├── head.html                 # HTML head injection
+├── 404.html                  # Custom 404 page
+├── component-definitions.json
+├── component-models.json
+├── component-filters.json
+├── paths.json
+├── fstab.yaml                # Content source connection
+├── helix-query.yaml          # Indexing configuration
+├── helix-sitemap.yaml        # Sitemap automation
+├── robots.txt
+├── .hlxignore               # Files to exclude from serving
+├── scripts/
+│   ├── scripts.js           # Global JavaScript entry point
+│   ├── delayed.js           # Deferred loading scripts
+│   └── aem.js              # AEM-specific functionality
+├── styles/
+│   ├── styles.css          # Global styles (critical path)
+│   └── lazy-styles.css     # Non-critical styles
+├── blocks/
+│   └── [block-name]/
+│       ├── [block-name].js
+│       └── [block-name].css
+└── icons/
+    └── *.svg               # Icon files
+```
+
+## Content Modeling Patterns
+
+### Field Types and Components
+
+#### Text Input Components
+```json
+{
+  "component": "text",
+  "name": "title",
+  "label": "Title",
+  "valueType": "string",
+  "value": ""
+}
+```
+
+#### Rich Text Components
+```json
+{
+  "component": "richtext",
+  "name": "description",
+  "label": "Description",
+  "valueType": "string",
+  "value": ""
+}
+```
+
+#### Asset References
+```json
+{
+  "component": "reference",
+  "name": "image",
+  "label": "Image",
+  "valueType": "string",
+  "multi": false
+}
+```
+
+#### Select Dropdowns
+```json
+{
+  "component": "select",
+  "name": "variant",
+  "label": "Variant",
+  "valueType": "string",
+  "options": [
+    {"name": "Primary", "value": "primary"},
+    {"name": "Secondary", "value": "secondary"}
+  ]
+}
+```
+
+### Content Model Strategies
+
+#### 1. Type Inference
+The system automatically infers semantic meaning:
+- **Images**: References to assets with `image/` MIME type → `<picture><img>`
+- **Links**: URLs or references → `<a href>`
+- **Rich Text**: Content starting with block elements → semantic HTML
+- **Classes**: Special property for block styling options
+
+#### 2. Field Collapse
+Combine related fields using naming conventions:
+
+```json
+{
+  "link": "https://example.com",
+  "linkText": "Click Here",
+  "linkTitle": "Navigate to example",
+  "linkType": "primary"
+}
+```
+
+Renders as:
+```html
+<strong><a href="https://example.com" title="Navigate to example">Click Here</a></strong>
+```
+
+#### 3. Element Grouping
+Group related content using underscore notation:
+
+```json
+{
+  "heroContent_title": "Welcome",
+  "heroContent_titleType": "h1",
+  "heroContent_subtitle": "Get started today",
+  "heroContent_description": "<p>Learn more about our services</p>"
+}
+```
+
+Renders grouped in a single table cell with proper semantic structure.
+
+## Block Development Patterns
+
+### Block Structure Types
+
+#### 1. Simple Blocks
+Each property renders as a separate row:
+
+```javascript
+// blocks/hero/hero.js
+export default function decorate(block) {
+  const [imageDiv, textDiv] = block.children;
+  
+  // Enhance the structure
+  block.classList.add('hero-enhanced');
+  
+  // Process image
+  const img = imageDiv.querySelector('img');
+  if (img) {
+    img.classList.add('hero-image');
+  }
+  
+  // Process text content
+  const heading = textDiv.querySelector('h1, h2, h3');
+  if (heading) {
+    heading.classList.add('hero-title');
+  }
+}
+```
+
+#### 2. Key-Value Blocks
+For configuration-style content:
+
+```json
+{
+  "name": "Configuration",
+  "model": "config",
+  "key-value": true,
+  "source": "/data/config.json",
+  "limit": 10
+}
+```
+
+#### 3. Container Blocks
+Support multiple child items:
+
+```javascript
+export default function decorate(block) {
+  const [headerDiv, ...itemDivs] = block.children;
+  
+  // Process header
+  headerDiv.classList.add('container-header');
+  
+  // Process items
+  itemDivs.forEach((item, index) => {
+    item.classList.add('container-item');
+    item.setAttribute('data-index', index);
+  });
+}
+```
+
+### Block Styling Patterns
+
+#### CSS Structure
+```css
+/* Block container */
+.block.hero {
+  margin: 2rem 0;
+  padding: 2rem;
+}
+
+/* Block variants */
+.block.hero.dark-theme {
+  background-color: #333;
+  color: white;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .block.hero {
+    padding: 1rem;
+  }
+}
+
+/* Content elements */
+.block.hero .hero-title {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.block.hero .hero-image {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+```
+
+### Block Options Pattern
+Add styling variants through the `classes` property:
+
+```json
+{
+  "component": "select",
+  "name": "classes",
+  "label": "Style Variant",
+  "valueType": "string",
+  "options": [
+    {"name": "Dark Theme", "value": "dark-theme"},
+    {"name": "Centered", "value": "centered"},
+    {"name": "Full Width", "value": "full-width"}
+  ]
+}
+```
+
+## Section and Metadata Patterns
+
+### Custom Sections
+```json
+{
+  "title": "Special Section",
+  "id": "special-section",
+  "plugins": {
+    "xwalk": {
+      "page": {
+        "resourceType": "core/franklin/components/section/v1/section",
+        "template": {
+          "name": "Special Section",
+          "model": "special-section",
+          "filter": "section"
+        }
+      }
+    }
+  }
+}
+```
+
+### Section Metadata Model
+```json
+{
+  "id": "section",
+  "fields": [
+    {
+      "component": "multiselect",
+      "name": "style",
+      "label": "Section Style",
+      "valueType": "string",
+      "options": [
+        {"name": "Highlighted", "value": "highlight"},
+        {"name": "Dark Background", "value": "dark-bg"}
+      ]
+    },
+    {
+      "component": "reference",
+      "name": "backgroundImage",
+      "label": "Background Image",
+      "valueType": "string"
+    }
+  ]
+}
+```
+
+### Page Metadata
+```json
+{
+  "id": "page-metadata",
+  "fields": [
+    {
+      "component": "text",
+      "name": "theme",
+      "label": "Page Theme"
+    },
+    {
+      "component": "text",
+      "name": "customProperty",
+      "label": "Custom Property"
+    }
+  ]
+}
+```
+
+## Development Workflow
+
+### Three-Phase Approach
+
+#### Phase 1: Definition and Model
+1. Create component definition in `component-definitions.json`
+2. Define content model in `component-models.json`
+3. Add to filters in `component-filters.json`
+4. Commit changes to repository
+
+#### Phase 2: Content Creation
+1. Open Universal Editor
+2. Add component to page
+3. Configure content through authoring interface
+4. Publish page to test structure
+
+#### Phase 3: Implementation and Styling
+1. Create block folder: `/blocks/[block-name]/`
+2. Implement decoration: `[block-name].js`
+3. Add styling: `[block-name].css`
+4. Test and iterate
+
+### Branch Management
+- Use feature branches for development
+- Test with `?ref=<branch>` parameter in Universal Editor
+- Merge to main after review
+
+## Performance Optimization
+
+### Critical Path Optimization
+- Keep `styles.css` minimal (LCP content only)
+- Use `lazy-styles.css` for below-fold content
+- Defer non-critical JavaScript to `delayed.js`
+
+### Block Loading Strategy
+```javascript
+// Efficient block decoration
+export default function decorate(block) {
+  // Minimal DOM manipulation
+  // Use CSS classes for styling
+  // Avoid heavy JavaScript operations
+  
+  // Example: Lazy load images
+  const images = block.querySelectorAll('img[data-src]');
+  const imageObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const img = entry.target;
+        img.src = img.dataset.src;
+        img.removeAttribute('data-src');
+        imageObserver.unobserve(img);
+      }
+    });
+  });
+  
+  images.forEach(img => imageObserver.observe(img));
+}
+```
+
+## Accessibility Guidelines
+
+### Semantic HTML
+```javascript
+export default function decorate(block) {
+  // Use proper heading hierarchy
+  const title = block.querySelector('h1, h2, h3, h4, h5, h6');
+  if (title && !title.id) {
+    title.id = `heading-${Math.random().toString(36).substr(2, 9)}`;
+  }
+  
+  // Add ARIA attributes
+  const list = block.querySelector('ul, ol');
+  if (list) {
+    list.setAttribute('role', 'list');
+  }
+  
+  // Ensure interactive elements are keyboard accessible
+  const buttons = block.querySelectorAll('.action-button');
+  buttons.forEach(button => {
+    if (!button.getAttribute('tabindex')) {
+      button.setAttribute('tabindex', '0');
+    }
+  });
+}
+```
+
+### Focus Management
+```css
+.block button:focus,
+.block a:focus {
+  outline: 2px solid #0078d4;
+  outline-offset: 2px;
+}
+
+.block [tabindex]:focus {
+  outline: 2px solid #0078d4;
+  outline-offset: 2px;
+}
+```
+
+## Testing and Quality Assurance
+
+### Content Model Validation
+- Ensure all required fields have appropriate validation
+- Test field combinations and edge cases
+- Verify type inference works correctly
+- Check responsive behavior across devices
+
+### Block Functionality Testing
+- Test with minimal content
+- Test with maximum content
+- Verify graceful degradation
+- Check loading performance
+- Validate accessibility compliance
+
+### Cross-Compatibility
+- Test with both AEM authoring and document-based authoring
+- Ensure block works in Universal Editor
+- Verify published output matches expectations
+- Test on different browsers and devices
+
+## Common Patterns and Examples
+
+### Card Block Pattern
+```json
+{
+  "id": "card",
+  "fields": [
+    {
+      "component": "reference",
+      "name": "image",
+      "label": "Image"
+    },
+    {
+      "component": "text",
+      "name": "title",
+      "label": "Title"
+    },
+    {
+      "component": "richtext",
+      "name": "description",
+      "label": "Description"
+    },
+    {
+      "component": "text",
+      "name": "link",
+      "label": "Link URL"
+    },
+    {
+      "component": "text",
+      "name": "linkText",
+      "label": "Link Text"
+    }
+  ]
+}
+```
+
+### Hero Block Pattern
+```json
+{
+  "id": "hero",
+  "fields": [
+    {
+      "component": "reference",
+      "name": "backgroundImage",
+      "label": "Background Image"
+    },
+    {
+      "component": "text",
+      "name": "title",
+      "label": "Title"
+    },
+    {
+      "component": "text",
+      "name": "titleType",
+      "label": "Title Type",
+      "value": "h1"
+    },
+    {
+      "component": "richtext",
+      "name": "description",
+      "label": "Description"
+    },
+    {
+      "component": "text",
+      "name": "primaryCTA",
+      "label": "Primary CTA URL"
+    },
+    {
+      "component": "text",
+      "name": "primaryCTAText",
+      "label": "Primary CTA Text"
+    }
+  ]
+}
+```
+
+### Navigation Block Pattern
+```json
+{
+  "id": "navigation",
+  "fields": [
+    {
+      "component": "reference",
+      "name": "logo",
+      "label": "Logo"
+    },
+    {
+      "component": "text",
+      "name": "logoAlt",
+      "label": "Logo Alt Text"
+    }
+  ]
+}
+```
+
+## Error Handling and Debugging
+
+### Common Issues and Solutions
+
+#### Component Not Appearing in Universal Editor
+- Check `component-definitions.json` syntax
+- Verify resource type is `core/franklin/components/block/v1/block`
+- Ensure component is added to `component-filters.json`
+
+#### Styling Not Applied
+- Verify block name matches folder name and CSS filename
+- Check CSS class naming convention (`.block.blockname`)
+- Ensure styles.css imports are correct
+
+#### Content Not Rendering Correctly
+- Validate content model field types
+- Check for proper field naming conventions
+- Verify type inference is working as expected
+
+### Debugging Tools
+```javascript
+// Add to block decoration for debugging
+export default function decorate(block) {
+  if (window.location.hostname.includes('aem.page')) {
+    console.log('Block data:', block);
+    console.log('Block children:', [...block.children]);
+  }
+  
+  // Your decoration code here
+}
+```
+
+## Best Practices Summary
+
+### Content Modeling
+1. Keep models simple and intuitive
+2. Use semantic field names
+3. Leverage type inference when possible
+4. Group related fields with underscores
+5. Provide sensible default values
+
+### Block Development
+1. Follow the three-phase development approach
+2. Keep JavaScript lightweight and efficient
+3. Use CSS for styling, avoid inline styles
+4. Implement proper accessibility features
+5. Test across different content scenarios
+
+### Performance
+1. Minimize critical path resources
+2. Use lazy loading for non-critical content
+3. Optimize images and assets
+4. Defer non-essential JavaScript
+
+### Maintenance
+1. Use semantic versioning for changes
+2. Document component usage and options
+3. Test thoroughly before deployment
+4. Monitor performance metrics
+
+This master prompt guide provides the foundation for creating consistent, high-quality Universal Editor components that follow AEM Live best practices and standards.

@@ -1,0 +1,117 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Rule: Generating Component Requirements Document (CRD) from Figma Design
+
+## Goal
+
+To guide an AI assistant in creating a detailed Component Requirements Document (CRD) in Markdown format, based on Figma design analysis using MCP (Model Content Protocol). The CRD should be clear, actionable, and suitable for a junior developer to understand and implement a Franklin Block in Adobe Experience Manager (AEM) Edge Delivery Services (EDS).
+
+## Process
+
+1.  **Receive Figma Design Reference:** The user provides a Figma URL or node ID for the design to be implemented as a Franklin Block.
+2.  **Analyze Figma Design using MCP:** Use MCP tools to extract design details, components, styles, and specifications from the Figma design.
+3.  **Ask Clarifying Questions:** Based on the Figma analysis, ask clarifying questions to gather additional requirements and context.
+4.  **Generate CRD:** Based on the Figma design analysis and user answers, generate a Component Requirements Document using the EDS-specific structure outlined below.
+5.  **Save CRD:** Save the generated document as `COMPONENT_REQUIREMENTS_[block-name].md` inside the `/blocks/[block-name]/` directory.
+
+## MCP Figma Analysis Process
+
+### Step 1: Extract Design Information
+Use MCP tools to analyze the Figma design:
+- **Get Design Metadata:** Use `mcp_Figma_get_metadata` to understand the overall structure
+- **Extract Code/Components:** Use `mcp_Figma_get_code` to get component structure and styling
+- **Get Variable Definitions:** Use `mcp_Figma_get_variable_defs` to extract design tokens and variables
+- **Capture Screenshots:** Use `mcp_Figma_get_screenshot` for visual reference
+
+### Step 2: Analyze Design Specifications
+Extract the following from Figma:
+- **Component Structure:** Layout, hierarchy, and organization
+- **Typography:** Font families, sizes, weights, line heights
+- **Colors:** Primary, secondary, accent colors and their usage
+- **Spacing:** Margins, padding, gaps between elements
+- **Responsive Behavior:** Different states for mobile, tablet, desktop
+- **Interactive States:** Hover, focus, active, disabled states
+- **Accessibility:** Color contrast, text alternatives, keyboard navigation
+
+## Clarifying Questions (EDS-Specific)
+
+Based on Figma analysis, ask these EDS-specific questions:
+
+*   **Block Purpose:** "What is the primary purpose of this Franklin Block? What content will it display?"
+*   **Content Management:** "What content will authors need to manage? (text, images, links, etc.)"
+*   **Block Variants:** "Are there different visual variants or states for this block?"
+*   **Responsive Behavior:** "How should this block adapt across different screen sizes?"
+*   **Interactive Features:** "What interactive elements are required? (hover effects, animations, etc.)"
+*   **Accessibility Requirements:** "What accessibility features are needed? (ARIA labels, keyboard navigation, etc.)"
+*   **Content Limits:** "Are there character limits, image size restrictions, or other content constraints?"
+*   **Integration Points:** "Does this block need to integrate with other blocks or external systems?"
+*   **Performance Considerations:** "Are there any performance requirements or optimizations needed?"
+
+## CRD Structure (EDS-Specific)
+
+The generated Component Requirements Document should include the following sections:
+
+1.  **Overview:** Briefly describe the Franklin Block and its purpose. State the goal and reference the Figma design.
+2.  **Component Structure:** Describe the block's layout, hierarchy, and organization based on Figma analysis.
+3.  **Design System Integration:** Detail how the block integrates with the EDS theme system using CSS custom properties.
+4.  **Content Model:** Define the content fields authors will manage (text, images, links, etc.).
+5.  **Block Variants:** List different visual variants or states for the block.
+6.  **Responsive Design:** Describe how the block adapts across different screen sizes.
+7.  **Interactive Features:** Detail hover effects, animations, and interactive elements.
+8.  **Accessibility Requirements:** Specify ARIA labels, keyboard navigation, and other accessibility features.
+9.  **Technical Implementation:** EDS-specific technical requirements and constraints.
+10. **Performance Considerations:** Any performance requirements or optimizations needed.
+11. **Browser Support:** Supported browsers and fallback requirements.
+12. **Testing Requirements:** Unit tests, integration tests, and visual regression tests needed.
+
+## EDS Architecture Requirements
+
+### Block Structure
+- **Block Classes**: `(blockname)-container`, `(blockname)-wrapper`, `(blockname)`
+- **No Direct Styling**: Never apply styling to the container, only to wrapper or block itself
+- **Component Group**: `{site.name} - Content` for AEMaaCS components
+- **Package Domain**: `com.szymon` for new packages
+
+### File Structure
+```
+blocks/[block-name]/
+├── _[block-name].json          # Block definition and model
+├── [block-name].css            # Block styles (scoped to .block.[block-name])
+├── [block-name].js             # Block functionality
+├── index.js                    # Block entry point
+└── COMPONENT_REQUIREMENTS_[block-name].md  # Generated CRD
+```
+
+### CSS Requirements
+- **MANDATORY**: Use CSS custom properties from `styles/styles.css` for all styling
+- **Scoping**: All CSS must be scoped to `.block.[block-name]` to prevent conflicts
+- **No Hardcoded Values**: No hardcoded colors, fonts, or sizes
+- **Mobile-First**: Follow mobile-first responsive design approach
+
+### JavaScript Requirements
+- Use `const` for variables that don't get reassigned
+- Group `const` variables into config objects
+- Use `await` instead of `.then()` in async JavaScript
+- Follow defensive coding rules and Airbnb style guide
+- Comment the code thoroughly
+
+## Target Audience
+
+Assume the primary reader of the CRD is a **junior developer** implementing Franklin Blocks in EDS. Requirements should be explicit, unambiguous, and include specific EDS architecture details.
+
+## Output
+
+*   **Format:** Markdown (`.md`)
+*   **Location:** `/blocks/[block-name]/`
+*   **Filename:** `COMPONENT_REQUIREMENTS_[block-name].md`
+
+## Final Instructions
+
+1. **Use MCP Tools**: Always analyze the Figma design using MCP tools before creating the CRD
+2. **Ask Clarifying Questions**: Based on Figma analysis, ask EDS-specific clarifying questions
+3. **Follow EDS Architecture**: Ensure all requirements align with EDS patterns and constraints
+4. **Do NOT Start Implementation**: Only create the CRD, not the actual block implementation
+5. **Reference Figma Design**: Include specific details extracted from the Figma design

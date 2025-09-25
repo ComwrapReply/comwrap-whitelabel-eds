@@ -50,44 +50,84 @@ function createWrapper(columns, rows) {
 }
 
 /**
- * Applies style classes to all cards based on the container's classes field
+ * Applies style classes to all cards based on the container's element grouping fields
  * @param {HTMLElement} container - The container element
  * @param {HTMLElement[]} cards - Array of card elements
  */
 function applyContainerStyleClasses(container, cards) {
-  // Look for the classes in the container's text content
-  // The classes field from the container model appears as text content
-  const containerText = container.textContent || '';
+  // Extract classes from element grouping fields
+  const classesToApply = [];
 
-  // Check if the text contains class information (e.g., "facts-and-figures-cards, blue")
-  const classMatch = containerText.match(/(?:facts-and-figures-cards|facts-figures-cards),\s*(\w+)/);
+  // Look for classes_style field
+  const styleMatch = container.textContent?.match(/classes_style[^:]*:\s*(\w+)/);
+  if (styleMatch && styleMatch[1] && styleMatch[1] !== 'default') {
+    classesToApply.push(styleMatch[1]);
+  }
 
-  let containerClass = '';
-  if (classMatch) {
-    const className = classMatch[1];
-    if (className && ['blue', 'grey', 'bordered', 'highlighted', 'minimal'].includes(className)) {
-      containerClass = className;
+  // Look for classes_layout field
+  const layoutMatch = container.textContent?.match(/classes_layout[^:]*:\s*(\w+)/);
+  if (layoutMatch && layoutMatch[1] && layoutMatch[1] !== 'default') {
+    classesToApply.push(layoutMatch[1]);
+  }
+
+  // Look for classes_animation field
+  const animationMatch = container.textContent?.match(/classes_animation[^:]*:\s*(\w+)/);
+  if (animationMatch && animationMatch[1] && animationMatch[1] !== 'default') {
+    classesToApply.push(animationMatch[1]);
+  }
+
+  // Fallback: check for legacy single classes field
+  if (classesToApply.length === 0) {
+    const legacyMatch = container.textContent?.match(/(?:facts-and-figures-cards|facts-figures-cards),\s*(\w+)/);
+    if (legacyMatch && legacyMatch[1]) {
+      classesToApply.push(legacyMatch[1]);
     }
   }
 
-  // Also check for classes in data attributes as fallback
-  if (!containerClass) {
-    const classes = container.getAttribute('data-classes')
-      || container.dataset.classes
-      || container.getAttribute('data-style')
-      || container.dataset.style
-      || '';
-
-    if (classes) {
-      const classList = classes.split(' ').filter((cls) => cls.trim());
-      containerClass = classList.find((cls) => ['blue', 'grey', 'bordered', 'highlighted', 'minimal'].includes(cls.trim())) || '';
-    }
-  }
-
-  // Apply the container class to all cards
-  if (containerClass) {
+  // Apply all classes to all cards
+  if (classesToApply.length > 0) {
     cards.forEach((card) => {
-      card.classList.add(containerClass);
+      classesToApply.forEach((className) => {
+        if (className.trim()) {
+          card.classList.add(className.trim());
+        }
+      });
+    });
+  }
+}
+
+/**
+ * Applies style classes to individual card based on element grouping fields
+ * @param {HTMLElement} card - Individual card element
+ */
+function applyCardStyleClasses(card) {
+  // Extract classes from element grouping fields
+  const classesToApply = [];
+
+  // Look for classes_style field
+  const styleMatch = card.textContent?.match(/classes_style[^:]*:\s*(\w+)/);
+  if (styleMatch && styleMatch[1] && styleMatch[1] !== 'default') {
+    classesToApply.push(styleMatch[1]);
+  }
+
+  // Look for classes_size field
+  const sizeMatch = card.textContent?.match(/classes_size[^:]*:\s*(\w+)/);
+  if (sizeMatch && sizeMatch[1] && sizeMatch[1] !== 'default') {
+    classesToApply.push(sizeMatch[1]);
+  }
+
+  // Look for classes_emphasis field
+  const emphasisMatch = card.textContent?.match(/classes_emphasis[^:]*:\s*(\w+)/);
+  if (emphasisMatch && emphasisMatch[1] && emphasisMatch[1] !== 'default') {
+    classesToApply.push(emphasisMatch[1]);
+  }
+
+  // Apply all classes to the card
+  if (classesToApply.length > 0) {
+    classesToApply.forEach((className) => {
+      if (className.trim()) {
+        card.classList.add(className.trim());
+      }
     });
   }
 }
@@ -100,6 +140,9 @@ function applyContainerStyleClasses(container, cards) {
  */
 function processCard(card, index) {
   if (!card) return;
+
+  // Apply element grouping style classes to the card
+  applyCardStyleClasses(card);
 
   // Find the title content (first div)
   const titleContent = card.querySelector('div:first-child');

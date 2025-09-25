@@ -1,0 +1,2096 @@
+---
+alwaysApply: true
+---
+
+# Universal Editor Block Styling Guide for AI Agents
+
+This comprehensive guide provides AI agents with the knowledge and patterns needed to create and style blocks for Adobe Experience Manager (AEM) Universal Editor using Edge Delivery Services, with proper multisite theming integration.
+
+## Table of Contents
+
+1. [Overview](#overview)
+2. [Project Structure and Theming](#project-structure-and-theming)
+3. [Block Development Patterns](#block-development-patterns)
+4. [CSS-Only Block Styling](#css-only-block-styling)
+5. [CSS + JavaScript Block Styling](#css--javascript-block-styling)
+6. [Multisite Theming Integration](#multisite-theming-integration)
+7. [Block Options and Variants](#block-options-and-variants)
+8. [Responsive Design Patterns](#responsive-design-patterns)
+9. [Accessibility Guidelines](#accessibility-guidelines)
+10. [Best Practices and Common Patterns](#best-practices-and-common-patterns)
+
+## Overview
+
+Blocks in Universal Editor are reusable content components that can be authored and styled independently. Each block consists of:
+
+- `_blockname.json` - Block definition and content model
+- `blockname.js` - JavaScript functionality and DOM manipulation (optional)
+- `blockname.css` - Styling and visual presentation
+
+### Key Principles
+
+- **Theming Integration**: All styling must use CSS custom properties from the theme system
+- **Multisite Compatibility**: Blocks must work across different brand themes
+- **Progressive Enhancement**: Start with CSS-only approach, enhance with JavaScript when needed
+- **Responsive Design**: Mobile-first approach with proper breakpoints
+- **Accessibility**: Follow WCAG guidelines and semantic HTML patterns
+
+## Project Structure and Theming
+
+### CSS Loading Order
+
+The project follows a specific CSS loading hierarchy to ensure proper theming:
+
+```html
+<!-- In head.html -->
+<link rel="stylesheet" href="/styles/styles.css"/>    <!-- Base variables and global styles -->
+<link rel="stylesheet" href="/styles/theme.css"/>     <!-- Brand-specific theme overrides -->
+```
+
+### Theme Variable System
+
+The project uses a comprehensive CSS custom property system:
+
+#### Base Variables (styles/styles.css)
+```css
+:root {
+  /* Core colors */
+  --background-color: white;
+  --text-color: #131313;
+  --heading-text-color: #200a80;
+  --link-color: #3b63fb;
+  --link-hover-color: #1d3ecf;
+  
+  /* Typography */
+  --body-font-family: roboto, roboto-fallback, sans-serif;
+  --heading-font-family: roboto-condensed, roboto-condensed-fallback, sans-serif;
+  
+  /* Font sizes */
+  --body-font-size-m: 22px;
+  --body-font-size-s: 19px;
+  --body-font-size-xs: 17px;
+  --heading-font-size-xxl: 55px;
+  --heading-font-size-xl: 44px;
+  --heading-font-size-l: 34px;
+  --heading-font-size-m: 27px;
+  --heading-font-size-s: 24px;
+  --heading-font-size-xs: 22px;
+}
+```
+
+#### Brand-Specific Overrides (.multisite/brand/styles/theme.css)
+```css
+:root {
+  /* Brand-specific color overrides */
+  --text-color: gold;
+  --background-color-header: purple;
+  --hero-background-color: linear-gradient(200deg,#0c2863, rgb(159, 0, 165));
+  --card-background-color: gold;
+}
+```
+
+### Available Theme Variables
+
+When creating blocks, use these theme variables:
+
+#### Colors
+- `--background-color` - Primary background
+- `--text-color` - Primary text color
+- `--heading-text-color` - Heading text color
+- `--link-color` - Link color
+- `--link-hover-color` - Link hover color
+- `--light-color` - Light background/shadow color
+- `--dark-color` - Dark text/border color
+
+#### Typography
+- `--body-font-family` - Body text font
+- `--heading-font-family` - Heading font
+- `--body-font-size-m` - Medium body text size
+- `--body-font-size-s` - Small body text size
+- `--body-font-size-xs` - Extra small body text size
+- `--heading-font-size-xxl` - Extra large heading
+- `--heading-font-size-xl` - Large heading
+- `--heading-font-size-l` - Large heading
+- `--heading-font-size-m` - Medium heading
+- `--heading-font-size-s` - Small heading
+- `--heading-font-size-xs` - Extra small heading
+
+## Block Development Patterns
+
+### File Structure
+
+Each block must follow this structure:
+
+```
+blocks/
+  blockname/
+    _blockname.json    # Block definition and model
+    blockname.js       # JavaScript functionality (optional)
+    blockname.css      # Styling with theme variables
+    README.md          # Documentation (optional)
+```
+
+### Block Naming Convention
+
+- Use kebab-case for block names: `hero-banner`, `product-card`
+- CSS classes follow pattern: `.block.blockname`
+- Container classes: `(blockname)-container`, `(blockname)-wrapper`, `(blockname)`
+
+### CSS Class Hierarchy
+
+```css
+/* Block container - main wrapper */
+.block.blockname {
+  /* Base block styles using theme variables */
+}
+
+/* Block wrapper - content container */
+.blockname-wrapper {
+  /* Layout and positioning */
+}
+
+/* Block content - inner content */
+.blockname {
+  /* Specific content styling */
+}
+
+/* Block elements */
+.block.blockname .element-class {
+  /* Element-specific styles */
+}
+```
+
+## CSS-Only Block Styling
+
+### Basic CSS Structure
+
+```css
+/* blocks/blockname/blockname.css */
+
+/* Scope all selectors to avoid conflicts */
+.block.blockname {
+  /* Use theme variables for all styling */
+  background-color: var(--background-color);
+  color: var(--text-color);
+  font-family: var(--body-font-family);
+  margin: 2rem 0;
+  padding: 2rem;
+}
+
+/* Target specific elements within the block */
+.block.blockname h1,
+.block.blockname h2,
+.block.blockname h3,
+.block.blockname h4,
+.block.blockname h5,
+.block.blockname h6 {
+  color: var(--heading-text-color);
+  font-family: var(--heading-font-family);
+  font-size: var(--heading-font-size-l);
+  margin: 0 0 1rem 0;
+}
+
+.block.blockname p {
+  font-size: var(--body-font-size-s);
+  line-height: 1.6;
+  margin: 0 0 1rem 0;
+}
+
+.block.blockname a {
+  color: var(--link-color);
+  text-decoration: none;
+}
+
+.block.blockname a:hover {
+  color: var(--link-hover-color);
+  text-decoration: underline;
+}
+```
+
+### Block Options Styling
+
+```css
+/* Default option (no additional classes) */
+.block.blockname {
+  /* Default styles */
+}
+
+/* Block option variants */
+.block.blockname.dark-theme {
+  background-color: var(--dark-color);
+  color: var(--background-color);
+}
+
+.block.blockname.centered {
+  text-align: center;
+}
+
+.block.blockname.full-width {
+  width: 100%;
+  margin: 0;
+  padding: 2rem 0;
+}
+
+/* Combined options */
+.block.blockname.dark-theme.centered {
+  /* Styles for both options combined */
+}
+```
+
+### Responsive Design
+
+```css
+/* Mobile-first approach */
+.block.blockname {
+  /* Mobile styles */
+  padding: 1rem;
+  margin: 1rem 0;
+}
+
+/* Tablet */
+@media (min-width: 768px) {
+  .block.blockname {
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+  }
+}
+
+/* Desktop */
+@media (min-width: 1024px) {
+  .block.blockname {
+    padding: 2rem;
+    margin: 2rem 0;
+  }
+}
+```
+
+## CSS + JavaScript Block Styling
+
+### JavaScript Enhancement Pattern
+
+```javascript
+// blocks/blockname/blockname.js
+
+/**
+ * Block name implementation
+ * Brief description of block functionality
+ */
+
+export default function decorate(block) {
+  // Add semantic CSS classes for better maintainability
+  addSemanticClasses(block);
+  
+  // Process special content patterns
+  processSpecialContent(block);
+  
+  // Add interactive features
+  addEventListeners(block);
+  
+  // Add accessibility features
+  addAccessibilityFeatures(block);
+}
+
+/**
+ * Add semantic CSS classes to block elements
+ * @param {HTMLElement} block - The block DOM element
+ */
+function addSemanticClasses(block) {
+  // Add class to image wrapper
+  const picture = block.querySelector('picture');
+  if (picture) {
+    picture.classList.add('blockname-image-wrapper');
+  }
+
+  // Add class to image element
+  const image = block.querySelector('.blockname-image-wrapper img');
+  if (image) {
+    image.classList.add('blockname-image');
+  }
+
+  // Mark content area
+  const contentDiv = block.querySelector(':scope > div:last-child');
+  if (contentDiv) {
+    contentDiv.classList.add('blockname-content');
+  }
+
+  // Mark title element
+  const title = block.querySelector('h1,h2,h3,h4,h5,h6');
+  if (title) {
+    title.classList.add('blockname-title');
+  }
+}
+
+/**
+ * Process special content patterns
+ * @param {HTMLElement} block - The block DOM element
+ */
+function processSpecialContent(block) {
+  // Process paragraphs for special styling
+  block.querySelectorAll('p').forEach((paragraph) => {
+    const innerHTML = paragraph.innerHTML?.trim();
+    
+    // Add special class for terms and conditions
+    if (innerHTML?.startsWith('Terms and conditions:')) {
+      paragraph.classList.add('terms-and-conditions');
+    }
+    
+    // Add special class for disclaimers
+    if (innerHTML?.startsWith('*')) {
+      paragraph.classList.add('disclaimer');
+    }
+  });
+}
+
+/**
+ * Add event listeners for interactive features
+ * @param {HTMLElement} block - The block DOM element
+ */
+function addEventListeners(block) {
+  const button = block.querySelector('.button');
+  const image = block.querySelector('.blockname-image');
+
+  if (button && image) {
+    // Image zoom on button hover
+    button.addEventListener('mouseover', () => {
+      image.classList.add('zoom');
+    });
+
+    button.addEventListener('mouseout', () => {
+      image.classList.remove('zoom');
+    });
+
+    // Analytics tracking
+    button.addEventListener('click', (e) => {
+      trackButtonClick(block, e);
+    });
+  }
+}
+
+/**
+ * Add accessibility features
+ * @param {HTMLElement} block - The block DOM element
+ */
+function addAccessibilityFeatures(block) {
+  // Add ARIA labels
+  const image = block.querySelector('.blockname-image');
+  if (image && !image.getAttribute('aria-label')) {
+    image.setAttribute('aria-label', 'Block image');
+  }
+
+  // Add keyboard navigation
+  const button = block.querySelector('.button');
+  if (button) {
+    button.setAttribute('tabindex', '0');
+    
+    // Handle keyboard events
+    button.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        button.click();
+      }
+    });
+  }
+}
+
+/**
+ * Track button clicks for analytics
+ * @param {HTMLElement} block - The block DOM element
+ * @param {Event} event - Click event
+ */
+function trackButtonClick(block, event) {
+  if (window.dataLayer) {
+    window.dataLayer.push({
+      event: 'block_interaction',
+      block_type: 'blockname',
+      action: 'button_click',
+      element: event.target.textContent.trim()
+    });
+  }
+}
+```
+
+### Enhanced CSS with JavaScript Classes
+
+```css
+/* blocks/blockname/blockname.css */
+
+/* Scope each selector with .block.blockname to avoid conflicts */
+.block.blockname {
+  /* Use theme variables for all styling */
+  background-color: var(--background-color);
+  color: var(--text-color);
+  font-family: var(--body-font-family);
+  margin: 2rem 0;
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Image wrapper with semantic class */
+.block.blockname .blockname-image-wrapper {
+  position: relative;
+  width: 100%;
+  height: 300px;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.block.blockname .blockname-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transition: transform 0.6s ease-in-out;
+}
+
+.block.blockname .blockname-image.zoom {
+  transform: scale(1.1);
+}
+
+/* Content area with semantic class */
+.block.blockname .blockname-content {
+  padding: 1.5rem;
+  background: var(--background-color);
+}
+
+.block.blockname .blockname-title {
+  color: var(--heading-text-color);
+  font-family: var(--heading-font-family);
+  font-size: var(--heading-font-size-l);
+  margin: 0 0 1rem 0;
+}
+
+.block.blockname p {
+  font-size: var(--body-font-size-s);
+  line-height: 1.6;
+  margin: 0 0 1rem 0;
+}
+
+/* Special content styling */
+.block.blockname .terms-and-conditions {
+  font-size: var(--body-font-size-xs);
+  color: var(--dark-color);
+  padding: 0.5rem 1rem;
+  font-style: italic;
+  border: solid var(--light-color);
+  border-width: 0 0 0 10px;
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.block.blockname .disclaimer {
+  font-size: var(--body-font-size-xs);
+  color: var(--dark-color);
+  font-style: italic;
+}
+
+/* Button styling using theme variables */
+.block.blockname .button {
+  background-color: var(--link-color);
+  color: var(--background-color);
+  border: none;
+  border-radius: 4px;
+  padding: 0.75rem 1.5rem;
+  font-family: var(--body-font-family);
+  font-size: var(--body-font-size-xs);
+  font-weight: 500;
+  text-decoration: none;
+  display: inline-block;
+  transition: background-color 0.3s ease;
+  cursor: pointer;
+}
+
+.block.blockname .button:hover {
+  background-color: var(--link-hover-color);
+  text-decoration: none;
+  color: var(--background-color);
+}
+
+.block.blockname .button:focus {
+  outline: 2px solid var(--link-color);
+  outline-offset: 2px;
+}
+```
+
+## Multisite Theming Integration
+
+### Theme Variable Usage
+
+When creating blocks, **ALWAYS** use theme variables instead of hardcoded values:
+
+```css
+/* ✅ CORRECT - Uses theme variables */
+.block.blockname {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  border: 1px solid var(--light-color);
+}
+
+/* ❌ INCORRECT - Hardcoded values */
+.block.blockname {
+  background-color: #ffffff;
+  color: #000000;
+  border: 1px solid #f0f0f0;
+}
+```
+
+### Brand-Specific Styling
+
+For brand-specific styling, create overrides in the multisite theme files:
+
+```css
+/* .multisite/demo-gold/styles/theme.css */
+:root {
+  /* Brand-specific block overrides */
+  --blockname-background: linear-gradient(135deg, #ffd700, #ffed4e);
+  --blockname-text: #000000;
+  --blockname-accent: #ff6b35;
+}
+
+/* .multisite/demo-silver/styles/theme.css */
+:root {
+  /* Brand-specific block overrides */
+  --blockname-background: linear-gradient(135deg, #c0c0c0, #e8e8e8);
+  --blockname-text: #333333;
+  --blockname-accent: #666666;
+}
+```
+
+### Block-Specific Theme Variables
+
+When creating new theme variables for blocks, follow this naming convention:
+
+```css
+/* In base theme (styles/theme.css) */
+:root {
+  /* Block-specific variables */
+  --blockname-background: var(--background-color);
+  --blockname-text: var(--text-color);
+  --blockname-accent: var(--link-color);
+  --blockname-border: var(--light-color);
+}
+
+/* In brand themes (.multisite/brand/styles/theme.css) */
+:root {
+  /* Override block-specific variables */
+  --blockname-background: #brand-specific-color;
+  --blockname-accent: #brand-accent-color;
+}
+```
+
+## Block Options and Variants
+
+### Block Options Configuration
+
+Define block options in the JSON model:
+
+```json
+{
+  "component": "multiselect",
+  "name": "classes",
+  "label": "Block Options",
+  "valueType": "string",
+  "options": [
+    {
+      "name": "Layout",
+      "children": [
+        { "name": "Default", "value": "" },
+        { "name": "Centered", "value": "centered" },
+        { "name": "Full Width", "value": "full-width" }
+      ]
+    },
+    {
+      "name": "Style",
+      "children": [
+        { "name": "Light Theme", "value": "light" },
+        { "name": "Dark Theme", "value": "dark" },
+        { "name": "Highlighted", "value": "highlighted" }
+      ]
+    }
+  ],
+  "value": ""
+}
+```
+
+### CSS for Block Options
+
+```css
+/* Default option (no additional classes) */
+.block.blockname {
+  /* Default styles using theme variables */
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+/* Layout options */
+.block.blockname.centered {
+  text-align: center;
+}
+
+.block.blockname.full-width {
+  width: 100%;
+  margin: 0;
+  padding: 2rem 0;
+}
+
+/* Style options */
+.block.blockname.light {
+  background-color: var(--light-color);
+  border: 1px solid var(--light-color);
+}
+
+.block.blockname.dark {
+  background-color: var(--dark-color);
+  color: var(--background-color);
+}
+
+.block.blockname.highlighted {
+  background: linear-gradient(135deg, 
+    var(--light-color) 0%, 
+    var(--background-color) 100%);
+  border-left: 4px solid var(--link-color);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Combined options */
+.block.blockname.centered.dark {
+  text-align: center;
+  background-color: var(--dark-color);
+  color: var(--background-color);
+}
+```
+
+## Responsive Design Patterns
+
+### Mobile-First Approach
+
+```css
+/* Mobile styles (default) */
+.block.blockname {
+  padding: 1rem;
+  margin: 1rem 0;
+  font-size: var(--body-font-size-s);
+}
+
+.block.blockname .blockname-title {
+  font-size: var(--heading-font-size-m);
+  margin-bottom: 0.75rem;
+}
+
+/* Tablet */
+@media (min-width: 768px) {
+  .block.blockname {
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+  }
+  
+  .block.blockname .blockname-title {
+    font-size: var(--heading-font-size-l);
+    margin-bottom: 1rem;
+  }
+}
+
+/* Desktop */
+@media (min-width: 1024px) {
+  .block.blockname {
+    padding: 2rem;
+    margin: 2rem 0;
+  }
+  
+  .block.blockname .blockname-title {
+    font-size: var(--heading-font-size-xl);
+    margin-bottom: 1.25rem;
+  }
+}
+```
+
+### Flexible Layout Patterns
+
+```css
+/* Flexbox layout */
+.block.blockname .blockname-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .block.blockname .blockname-wrapper {
+    flex-direction: row;
+    align-items: center;
+    gap: 2rem;
+  }
+}
+
+/* Grid layout */
+.block.blockname .blockname-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .block.blockname .blockname-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .block.blockname .blockname-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+```
+
+## Accessibility Guidelines
+
+### Semantic HTML Structure
+
+```javascript
+// Ensure proper heading hierarchy
+function addAccessibilityFeatures(block) {
+  const headings = block.querySelectorAll('h1, h2, h3, h4, h5, h6');
+  headings.forEach((heading, index) => {
+    if (!heading.id) {
+      heading.id = `heading-${Math.random().toString(36).substr(2, 9)}`;
+    }
+  });
+  
+  // Add ARIA attributes
+  const list = block.querySelector('ul, ol');
+  if (list) {
+    list.setAttribute('role', 'list');
+  }
+}
+```
+
+### Focus Management
+
+```css
+/* Focus styles using theme variables */
+.block.blockname button:focus,
+.block.blockname a:focus,
+.block.blockname [tabindex]:focus {
+  outline: 2px solid var(--link-color);
+  outline-offset: 2px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .block.blockname {
+    border: 2px solid var(--text-color);
+  }
+  
+  .block.blockname .button {
+    border: 2px solid var(--text-color);
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .block.blockname * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+```
+
+### Screen Reader Support
+
+```javascript
+// Add screen reader support
+function addScreenReaderSupport(block) {
+  // Add ARIA labels for images
+  const images = block.querySelectorAll('img');
+  images.forEach(img => {
+    if (!img.getAttribute('aria-label') && !img.getAttribute('alt')) {
+      img.setAttribute('aria-label', 'Decorative image');
+    }
+  });
+  
+  // Add ARIA live regions for dynamic content
+  const dynamicContent = block.querySelector('.dynamic-content');
+  if (dynamicContent) {
+    dynamicContent.setAttribute('aria-live', 'polite');
+  }
+}
+```
+
+## Best Practices and Common Patterns
+
+### CSS Organization
+
+```css
+/* blocks/blockname/blockname.css */
+
+/* 1. Block container styles */
+.block.blockname {
+  /* Base styles using theme variables */
+}
+
+/* 2. Block variants */
+.block.blockname.variant-name {
+  /* Variant-specific styles */
+}
+
+/* 3. Block elements */
+.block.blockname .element-class {
+  /* Element styles */
+}
+
+/* 4. Interactive states */
+.block.blockname .element-class:hover,
+.block.blockname .element-class:focus {
+  /* Hover/focus styles */
+}
+
+/* 5. Responsive design */
+@media (min-width: 768px) {
+  .block.blockname {
+    /* Tablet styles */
+  }
+}
+
+/* 6. Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .block.blockname * {
+    /* Reduced motion styles */
+  }
+}
+```
+
+### JavaScript Best Practices
+
+```javascript
+// Use defensive coding
+export default function decorate(block) {
+  // Check if block exists
+  if (!block) return;
+  
+  // Use const for variables that don't change
+  const config = {
+    animationDuration: 300,
+    breakpoints: {
+      mobile: 768,
+      tablet: 1024
+    }
+  };
+  
+  // Group related functionality
+  const selectors = {
+    image: '.blockname-image',
+    title: '.blockname-title',
+    button: '.button'
+  };
+  
+  // Use async/await instead of .then()
+  async function initializeBlock() {
+    try {
+      await addSemanticClasses(block);
+      await processSpecialContent(block);
+      await addEventListeners(block);
+    } catch (error) {
+      console.error('Block initialization failed:', error);
+    }
+  }
+  
+  initializeBlock();
+}
+```
+
+### Performance Optimization
+
+```css
+/* Use efficient selectors */
+.block.blockname .element-class {
+  /* Specific selector */
+}
+
+/* Avoid deep nesting */
+.block.blockname > .direct-child {
+  /* Direct child selector */
+}
+
+/* Use CSS custom properties for animations */
+.block.blockname {
+  --animation-duration: 0.3s;
+  --animation-easing: ease-in-out;
+  
+  transition: transform var(--animation-duration) var(--animation-easing);
+}
+```
+
+```javascript
+// Lazy load images
+function addLazyLoading(block) {
+  const images = block.querySelectorAll('img[data-src]');
+  const imageObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const img = entry.target;
+        img.src = img.dataset.src;
+        img.removeAttribute('data-src');
+        imageObserver.unobserve(img);
+      }
+    });
+  });
+  
+  images.forEach(img => imageObserver.observe(img));
+}
+```
+
+### Common Block Patterns
+
+#### Card Block Pattern
+
+```css
+.block.card {
+  background: var(--background-color);
+  border: 1px solid var(--light-color);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.block.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.block.card .card-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.block.card .card-content {
+  padding: 1.5rem;
+}
+
+.block.card .card-title {
+  color: var(--heading-text-color);
+  font-family: var(--heading-font-family);
+  font-size: var(--heading-font-size-m);
+  margin: 0 0 1rem 0;
+}
+
+.block.card .card-text {
+  color: var(--text-color);
+  font-size: var(--body-font-size-s);
+  line-height: 1.6;
+  margin: 0 0 1.5rem 0;
+}
+```
+
+#### Hero Block Pattern
+
+```css
+.block.hero {
+  position: relative;
+  min-height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--background-color);
+  color: var(--text-color);
+  overflow: hidden;
+}
+
+.block.hero .hero-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+
+.block.hero .hero-content {
+  text-align: center;
+  max-width: 800px;
+  padding: 2rem;
+  z-index: 1;
+}
+
+.block.hero .hero-title {
+  color: var(--heading-text-color);
+  font-family: var(--heading-font-family);
+  font-size: var(--heading-font-size-xxl);
+  margin: 0 0 1.5rem 0;
+  line-height: 1.2;
+}
+
+.block.hero .hero-description {
+  font-size: var(--body-font-size-m);
+  line-height: 1.6;
+  margin: 0 0 2rem 0;
+}
+```
+
+## Implementation Checklist
+
+When creating a new block, ensure:
+
+- [ ] Block uses only theme variables for styling
+- [ ] CSS is scoped to `.block.blockname` to avoid conflicts
+- [ ] Responsive design follows mobile-first approach
+- [ ] Accessibility features are implemented
+- [ ] JavaScript uses defensive coding patterns
+- [ ] Block options are properly configured
+- [ ] Multisite theming is considered
+- [ ] Performance optimizations are applied
+- [ ] Code follows project conventions
+- [ ] Documentation is created
+
+## Conclusion
+
+This guide provides the foundation for creating consistent, accessible, and themeable blocks for Universal Editor. By following these patterns and using the theme variable system, AI agents can create blocks that work seamlessly across different brand themes while maintaining high code quality and user experience standards.
+
+Remember: Always use theme variables, follow the mobile-first approach, implement proper accessibility features, and test across different brand themes to ensure compatibility.
+# Universal Editor Block Styling Guide for AI Agents
+
+This comprehensive guide provides AI agents with the knowledge and patterns needed to create and style blocks for Adobe Experience Manager (AEM) Universal Editor using Edge Delivery Services, with proper multisite theming integration.
+
+## Table of Contents
+
+1. [Overview](#overview)
+2. [Project Structure and Theming](#project-structure-and-theming)
+3. [Block Development Patterns](#block-development-patterns)
+4. [CSS-Only Block Styling](#css-only-block-styling)
+5. [CSS + JavaScript Block Styling](#css--javascript-block-styling)
+6. [Multisite Theming Integration](#multisite-theming-integration)
+7. [Block Options and Variants](#block-options-and-variants)
+8. [Responsive Design Patterns](#responsive-design-patterns)
+9. [Accessibility Guidelines](#accessibility-guidelines)
+10. [Best Practices and Common Patterns](#best-practices-and-common-patterns)
+
+## Overview
+
+Blocks in Universal Editor are reusable content components that can be authored and styled independently. Each block consists of:
+
+- `_blockname.json` - Block definition and content model
+- `blockname.js` - JavaScript functionality and DOM manipulation (optional)
+- `blockname.css` - Styling and visual presentation
+
+### Key Principles
+
+- **Theming Integration**: All styling must use CSS custom properties from the theme system
+- **Multisite Compatibility**: Blocks must work across different brand themes
+- **Progressive Enhancement**: Start with CSS-only approach, enhance with JavaScript when needed
+- **Responsive Design**: Mobile-first approach with proper breakpoints
+- **Accessibility**: Follow WCAG guidelines and semantic HTML patterns
+
+## Project Structure and Theming
+
+### CSS Loading Order
+
+The project follows a specific CSS loading hierarchy to ensure proper theming:
+
+```html
+<!-- In head.html -->
+<link rel="stylesheet" href="/styles/styles.css"/>    <!-- Base variables and global styles -->
+<link rel="stylesheet" href="/styles/theme.css"/>     <!-- Brand-specific theme overrides -->
+```
+
+### Theme Variable System
+
+The project uses a comprehensive CSS custom property system:
+
+#### Base Variables (styles/styles.css)
+```css
+:root {
+  /* Core colors */
+  --background-color: white;
+  --text-color: #131313;
+  --heading-text-color: #200a80;
+  --link-color: #3b63fb;
+  --link-hover-color: #1d3ecf;
+  
+  /* Typography */
+  --body-font-family: roboto, roboto-fallback, sans-serif;
+  --heading-font-family: roboto-condensed, roboto-condensed-fallback, sans-serif;
+  
+  /* Font sizes */
+  --body-font-size-m: 22px;
+  --body-font-size-s: 19px;
+  --body-font-size-xs: 17px;
+  --heading-font-size-xxl: 55px;
+  --heading-font-size-xl: 44px;
+  --heading-font-size-l: 34px;
+  --heading-font-size-m: 27px;
+  --heading-font-size-s: 24px;
+  --heading-font-size-xs: 22px;
+}
+```
+
+#### Brand-Specific Overrides (.multisite/brand/styles/theme.css)
+```css
+:root {
+  /* Brand-specific color overrides */
+  --text-color: gold;
+  --background-color-header: purple;
+  --hero-background-color: linear-gradient(200deg,#0c2863, rgb(159, 0, 165));
+  --card-background-color: gold;
+}
+```
+
+### Available Theme Variables
+
+When creating blocks, use these theme variables:
+
+#### Colors
+- `--background-color` - Primary background
+- `--text-color` - Primary text color
+- `--heading-text-color` - Heading text color
+- `--link-color` - Link color
+- `--link-hover-color` - Link hover color
+- `--light-color` - Light background/shadow color
+- `--dark-color` - Dark text/border color
+
+#### Typography
+- `--body-font-family` - Body text font
+- `--heading-font-family` - Heading font
+- `--body-font-size-m` - Medium body text size
+- `--body-font-size-s` - Small body text size
+- `--body-font-size-xs` - Extra small body text size
+- `--heading-font-size-xxl` - Extra large heading
+- `--heading-font-size-xl` - Large heading
+- `--heading-font-size-l` - Large heading
+- `--heading-font-size-m` - Medium heading
+- `--heading-font-size-s` - Small heading
+- `--heading-font-size-xs` - Extra small heading
+
+## Block Development Patterns
+
+### File Structure
+
+Each block must follow this structure:
+
+```
+blocks/
+  blockname/
+    _blockname.json    # Block definition and model
+    blockname.js       # JavaScript functionality (optional)
+    blockname.css      # Styling with theme variables
+    README.md          # Documentation (optional)
+```
+
+### Block Naming Convention
+
+- Use kebab-case for block names: `hero-banner`, `product-card`
+- CSS classes follow pattern: `.block.blockname`
+- Container classes: `(blockname)-container`, `(blockname)-wrapper`, `(blockname)`
+
+### CSS Class Hierarchy
+
+```css
+/* Block container - main wrapper */
+.block.blockname {
+  /* Base block styles using theme variables */
+}
+
+/* Block wrapper - content container */
+.blockname-wrapper {
+  /* Layout and positioning */
+}
+
+/* Block content - inner content */
+.blockname {
+  /* Specific content styling */
+}
+
+/* Block elements */
+.block.blockname .element-class {
+  /* Element-specific styles */
+}
+```
+
+## CSS-Only Block Styling
+
+### Basic CSS Structure
+
+```css
+/* blocks/blockname/blockname.css */
+
+/* Scope all selectors to avoid conflicts */
+.block.blockname {
+  /* Use theme variables for all styling */
+  background-color: var(--background-color);
+  color: var(--text-color);
+  font-family: var(--body-font-family);
+  margin: 2rem 0;
+  padding: 2rem;
+}
+
+/* Target specific elements within the block */
+.block.blockname h1,
+.block.blockname h2,
+.block.blockname h3,
+.block.blockname h4,
+.block.blockname h5,
+.block.blockname h6 {
+  color: var(--heading-text-color);
+  font-family: var(--heading-font-family);
+  font-size: var(--heading-font-size-l);
+  margin: 0 0 1rem 0;
+}
+
+.block.blockname p {
+  font-size: var(--body-font-size-s);
+  line-height: 1.6;
+  margin: 0 0 1rem 0;
+}
+
+.block.blockname a {
+  color: var(--link-color);
+  text-decoration: none;
+}
+
+.block.blockname a:hover {
+  color: var(--link-hover-color);
+  text-decoration: underline;
+}
+```
+
+### Block Options Styling
+
+```css
+/* Default option (no additional classes) */
+.block.blockname {
+  /* Default styles */
+}
+
+/* Block option variants */
+.block.blockname.dark-theme {
+  background-color: var(--dark-color);
+  color: var(--background-color);
+}
+
+.block.blockname.centered {
+  text-align: center;
+}
+
+.block.blockname.full-width {
+  width: 100%;
+  margin: 0;
+  padding: 2rem 0;
+}
+
+/* Combined options */
+.block.blockname.dark-theme.centered {
+  /* Styles for both options combined */
+}
+```
+
+### Responsive Design
+
+```css
+/* Mobile-first approach */
+.block.blockname {
+  /* Mobile styles */
+  padding: 1rem;
+  margin: 1rem 0;
+}
+
+/* Tablet */
+@media (min-width: 768px) {
+  .block.blockname {
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+  }
+}
+
+/* Desktop */
+@media (min-width: 1024px) {
+  .block.blockname {
+    padding: 2rem;
+    margin: 2rem 0;
+  }
+}
+```
+
+## CSS + JavaScript Block Styling
+
+### JavaScript Enhancement Pattern
+
+```javascript
+// blocks/blockname/blockname.js
+
+/**
+ * Block name implementation
+ * Brief description of block functionality
+ */
+
+export default function decorate(block) {
+  // Add semantic CSS classes for better maintainability
+  addSemanticClasses(block);
+  
+  // Process special content patterns
+  processSpecialContent(block);
+  
+  // Add interactive features
+  addEventListeners(block);
+  
+  // Add accessibility features
+  addAccessibilityFeatures(block);
+}
+
+/**
+ * Add semantic CSS classes to block elements
+ * @param {HTMLElement} block - The block DOM element
+ */
+function addSemanticClasses(block) {
+  // Add class to image wrapper
+  const picture = block.querySelector('picture');
+  if (picture) {
+    picture.classList.add('blockname-image-wrapper');
+  }
+
+  // Add class to image element
+  const image = block.querySelector('.blockname-image-wrapper img');
+  if (image) {
+    image.classList.add('blockname-image');
+  }
+
+  // Mark content area
+  const contentDiv = block.querySelector(':scope > div:last-child');
+  if (contentDiv) {
+    contentDiv.classList.add('blockname-content');
+  }
+
+  // Mark title element
+  const title = block.querySelector('h1,h2,h3,h4,h5,h6');
+  if (title) {
+    title.classList.add('blockname-title');
+  }
+}
+
+/**
+ * Process special content patterns
+ * @param {HTMLElement} block - The block DOM element
+ */
+function processSpecialContent(block) {
+  // Process paragraphs for special styling
+  block.querySelectorAll('p').forEach((paragraph) => {
+    const innerHTML = paragraph.innerHTML?.trim();
+    
+    // Add special class for terms and conditions
+    if (innerHTML?.startsWith('Terms and conditions:')) {
+      paragraph.classList.add('terms-and-conditions');
+    }
+    
+    // Add special class for disclaimers
+    if (innerHTML?.startsWith('*')) {
+      paragraph.classList.add('disclaimer');
+    }
+  });
+}
+
+/**
+ * Add event listeners for interactive features
+ * @param {HTMLElement} block - The block DOM element
+ */
+function addEventListeners(block) {
+  const button = block.querySelector('.button');
+  const image = block.querySelector('.blockname-image');
+
+  if (button && image) {
+    // Image zoom on button hover
+    button.addEventListener('mouseover', () => {
+      image.classList.add('zoom');
+    });
+
+    button.addEventListener('mouseout', () => {
+      image.classList.remove('zoom');
+    });
+
+    // Analytics tracking
+    button.addEventListener('click', (e) => {
+      trackButtonClick(block, e);
+    });
+  }
+}
+
+/**
+ * Add accessibility features
+ * @param {HTMLElement} block - The block DOM element
+ */
+function addAccessibilityFeatures(block) {
+  // Add ARIA labels
+  const image = block.querySelector('.blockname-image');
+  if (image && !image.getAttribute('aria-label')) {
+    image.setAttribute('aria-label', 'Block image');
+  }
+
+  // Add keyboard navigation
+  const button = block.querySelector('.button');
+  if (button) {
+    button.setAttribute('tabindex', '0');
+    
+    // Handle keyboard events
+    button.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        button.click();
+      }
+    });
+  }
+}
+
+/**
+ * Track button clicks for analytics
+ * @param {HTMLElement} block - The block DOM element
+ * @param {Event} event - Click event
+ */
+function trackButtonClick(block, event) {
+  if (window.dataLayer) {
+    window.dataLayer.push({
+      event: 'block_interaction',
+      block_type: 'blockname',
+      action: 'button_click',
+      element: event.target.textContent.trim()
+    });
+  }
+}
+```
+
+### Enhanced CSS with JavaScript Classes
+
+```css
+/* blocks/blockname/blockname.css */
+
+/* Scope each selector with .block.blockname to avoid conflicts */
+.block.blockname {
+  /* Use theme variables for all styling */
+  background-color: var(--background-color);
+  color: var(--text-color);
+  font-family: var(--body-font-family);
+  margin: 2rem 0;
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Image wrapper with semantic class */
+.block.blockname .blockname-image-wrapper {
+  position: relative;
+  width: 100%;
+  height: 300px;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.block.blockname .blockname-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transition: transform 0.6s ease-in-out;
+}
+
+.block.blockname .blockname-image.zoom {
+  transform: scale(1.1);
+}
+
+/* Content area with semantic class */
+.block.blockname .blockname-content {
+  padding: 1.5rem;
+  background: var(--background-color);
+}
+
+.block.blockname .blockname-title {
+  color: var(--heading-text-color);
+  font-family: var(--heading-font-family);
+  font-size: var(--heading-font-size-l);
+  margin: 0 0 1rem 0;
+}
+
+.block.blockname p {
+  font-size: var(--body-font-size-s);
+  line-height: 1.6;
+  margin: 0 0 1rem 0;
+}
+
+/* Special content styling */
+.block.blockname .terms-and-conditions {
+  font-size: var(--body-font-size-xs);
+  color: var(--dark-color);
+  padding: 0.5rem 1rem;
+  font-style: italic;
+  border: solid var(--light-color);
+  border-width: 0 0 0 10px;
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.block.blockname .disclaimer {
+  font-size: var(--body-font-size-xs);
+  color: var(--dark-color);
+  font-style: italic;
+}
+
+/* Button styling using theme variables */
+.block.blockname .button {
+  background-color: var(--link-color);
+  color: var(--background-color);
+  border: none;
+  border-radius: 4px;
+  padding: 0.75rem 1.5rem;
+  font-family: var(--body-font-family);
+  font-size: var(--body-font-size-xs);
+  font-weight: 500;
+  text-decoration: none;
+  display: inline-block;
+  transition: background-color 0.3s ease;
+  cursor: pointer;
+}
+
+.block.blockname .button:hover {
+  background-color: var(--link-hover-color);
+  text-decoration: none;
+  color: var(--background-color);
+}
+
+.block.blockname .button:focus {
+  outline: 2px solid var(--link-color);
+  outline-offset: 2px;
+}
+```
+
+## Multisite Theming Integration
+
+### Theme Variable Usage
+
+When creating blocks, **ALWAYS** use theme variables instead of hardcoded values:
+
+```css
+/* ✅ CORRECT - Uses theme variables */
+.block.blockname {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  border: 1px solid var(--light-color);
+}
+
+/* ❌ INCORRECT - Hardcoded values */
+.block.blockname {
+  background-color: #ffffff;
+  color: #000000;
+  border: 1px solid #f0f0f0;
+}
+```
+
+### Brand-Specific Styling
+
+For brand-specific styling, create overrides in the multisite theme files:
+
+```css
+/* .multisite/demo-gold/styles/theme.css */
+:root {
+  /* Brand-specific block overrides */
+  --blockname-background: linear-gradient(135deg, #ffd700, #ffed4e);
+  --blockname-text: #000000;
+  --blockname-accent: #ff6b35;
+}
+
+/* .multisite/demo-silver/styles/theme.css */
+:root {
+  /* Brand-specific block overrides */
+  --blockname-background: linear-gradient(135deg, #c0c0c0, #e8e8e8);
+  --blockname-text: #333333;
+  --blockname-accent: #666666;
+}
+```
+
+### Block-Specific Theme Variables
+
+When creating new theme variables for blocks, follow this naming convention:
+
+```css
+/* In base theme (styles/theme.css) */
+:root {
+  /* Block-specific variables */
+  --blockname-background: var(--background-color);
+  --blockname-text: var(--text-color);
+  --blockname-accent: var(--link-color);
+  --blockname-border: var(--light-color);
+}
+
+/* In brand themes (.multisite/brand/styles/theme.css) */
+:root {
+  /* Override block-specific variables */
+  --blockname-background: #brand-specific-color;
+  --blockname-accent: #brand-accent-color;
+}
+```
+
+## Block Options and Variants
+
+### Block Options Configuration
+
+Define block options in the JSON model:
+
+```json
+{
+  "component": "multiselect",
+  "name": "classes",
+  "label": "Block Options",
+  "valueType": "string",
+  "options": [
+    {
+      "name": "Layout",
+      "children": [
+        { "name": "Default", "value": "" },
+        { "name": "Centered", "value": "centered" },
+        { "name": "Full Width", "value": "full-width" }
+      ]
+    },
+    {
+      "name": "Style",
+      "children": [
+        { "name": "Light Theme", "value": "light" },
+        { "name": "Dark Theme", "value": "dark" },
+        { "name": "Highlighted", "value": "highlighted" }
+      ]
+    }
+  ],
+  "value": ""
+}
+```
+
+### CSS for Block Options
+
+```css
+/* Default option (no additional classes) */
+.block.blockname {
+  /* Default styles using theme variables */
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+/* Layout options */
+.block.blockname.centered {
+  text-align: center;
+}
+
+.block.blockname.full-width {
+  width: 100%;
+  margin: 0;
+  padding: 2rem 0;
+}
+
+/* Style options */
+.block.blockname.light {
+  background-color: var(--light-color);
+  border: 1px solid var(--light-color);
+}
+
+.block.blockname.dark {
+  background-color: var(--dark-color);
+  color: var(--background-color);
+}
+
+.block.blockname.highlighted {
+  background: linear-gradient(135deg, 
+    var(--light-color) 0%, 
+    var(--background-color) 100%);
+  border-left: 4px solid var(--link-color);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Combined options */
+.block.blockname.centered.dark {
+  text-align: center;
+  background-color: var(--dark-color);
+  color: var(--background-color);
+}
+```
+
+## Responsive Design Patterns
+
+### Mobile-First Approach
+
+```css
+/* Mobile styles (default) */
+.block.blockname {
+  padding: 1rem;
+  margin: 1rem 0;
+  font-size: var(--body-font-size-s);
+}
+
+.block.blockname .blockname-title {
+  font-size: var(--heading-font-size-m);
+  margin-bottom: 0.75rem;
+}
+
+/* Tablet */
+@media (min-width: 768px) {
+  .block.blockname {
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+  }
+  
+  .block.blockname .blockname-title {
+    font-size: var(--heading-font-size-l);
+    margin-bottom: 1rem;
+  }
+}
+
+/* Desktop */
+@media (min-width: 1024px) {
+  .block.blockname {
+    padding: 2rem;
+    margin: 2rem 0;
+  }
+  
+  .block.blockname .blockname-title {
+    font-size: var(--heading-font-size-xl);
+    margin-bottom: 1.25rem;
+  }
+}
+```
+
+### Flexible Layout Patterns
+
+```css
+/* Flexbox layout */
+.block.blockname .blockname-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .block.blockname .blockname-wrapper {
+    flex-direction: row;
+    align-items: center;
+    gap: 2rem;
+  }
+}
+
+/* Grid layout */
+.block.blockname .blockname-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .block.blockname .blockname-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .block.blockname .blockname-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+```
+
+## Accessibility Guidelines
+
+### Semantic HTML Structure
+
+```javascript
+// Ensure proper heading hierarchy
+function addAccessibilityFeatures(block) {
+  const headings = block.querySelectorAll('h1, h2, h3, h4, h5, h6');
+  headings.forEach((heading, index) => {
+    if (!heading.id) {
+      heading.id = `heading-${Math.random().toString(36).substr(2, 9)}`;
+    }
+  });
+  
+  // Add ARIA attributes
+  const list = block.querySelector('ul, ol');
+  if (list) {
+    list.setAttribute('role', 'list');
+  }
+}
+```
+
+### Focus Management
+
+```css
+/* Focus styles using theme variables */
+.block.blockname button:focus,
+.block.blockname a:focus,
+.block.blockname [tabindex]:focus {
+  outline: 2px solid var(--link-color);
+  outline-offset: 2px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .block.blockname {
+    border: 2px solid var(--text-color);
+  }
+  
+  .block.blockname .button {
+    border: 2px solid var(--text-color);
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .block.blockname * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+```
+
+### Screen Reader Support
+
+```javascript
+// Add screen reader support
+function addScreenReaderSupport(block) {
+  // Add ARIA labels for images
+  const images = block.querySelectorAll('img');
+  images.forEach(img => {
+    if (!img.getAttribute('aria-label') && !img.getAttribute('alt')) {
+      img.setAttribute('aria-label', 'Decorative image');
+    }
+  });
+  
+  // Add ARIA live regions for dynamic content
+  const dynamicContent = block.querySelector('.dynamic-content');
+  if (dynamicContent) {
+    dynamicContent.setAttribute('aria-live', 'polite');
+  }
+}
+```
+
+## Best Practices and Common Patterns
+
+### CSS Organization
+
+```css
+/* blocks/blockname/blockname.css */
+
+/* 1. Block container styles */
+.block.blockname {
+  /* Base styles using theme variables */
+}
+
+/* 2. Block variants */
+.block.blockname.variant-name {
+  /* Variant-specific styles */
+}
+
+/* 3. Block elements */
+.block.blockname .element-class {
+  /* Element styles */
+}
+
+/* 4. Interactive states */
+.block.blockname .element-class:hover,
+.block.blockname .element-class:focus {
+  /* Hover/focus styles */
+}
+
+/* 5. Responsive design */
+@media (min-width: 768px) {
+  .block.blockname {
+    /* Tablet styles */
+  }
+}
+
+/* 6. Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .block.blockname * {
+    /* Reduced motion styles */
+  }
+}
+```
+
+### JavaScript Best Practices
+
+```javascript
+// Use defensive coding
+export default function decorate(block) {
+  // Check if block exists
+  if (!block) return;
+  
+  // Use const for variables that don't change
+  const config = {
+    animationDuration: 300,
+    breakpoints: {
+      mobile: 768,
+      tablet: 1024
+    }
+  };
+  
+  // Group related functionality
+  const selectors = {
+    image: '.blockname-image',
+    title: '.blockname-title',
+    button: '.button'
+  };
+  
+  // Use async/await instead of .then()
+  async function initializeBlock() {
+    try {
+      await addSemanticClasses(block);
+      await processSpecialContent(block);
+      await addEventListeners(block);
+    } catch (error) {
+      console.error('Block initialization failed:', error);
+    }
+  }
+  
+  initializeBlock();
+}
+```
+
+### Performance Optimization
+
+```css
+/* Use efficient selectors */
+.block.blockname .element-class {
+  /* Specific selector */
+}
+
+/* Avoid deep nesting */
+.block.blockname > .direct-child {
+  /* Direct child selector */
+}
+
+/* Use CSS custom properties for animations */
+.block.blockname {
+  --animation-duration: 0.3s;
+  --animation-easing: ease-in-out;
+  
+  transition: transform var(--animation-duration) var(--animation-easing);
+}
+```
+
+```javascript
+// Lazy load images
+function addLazyLoading(block) {
+  const images = block.querySelectorAll('img[data-src]');
+  const imageObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const img = entry.target;
+        img.src = img.dataset.src;
+        img.removeAttribute('data-src');
+        imageObserver.unobserve(img);
+      }
+    });
+  });
+  
+  images.forEach(img => imageObserver.observe(img));
+}
+```
+
+### Common Block Patterns
+
+#### Card Block Pattern
+
+```css
+.block.card {
+  background: var(--background-color);
+  border: 1px solid var(--light-color);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.block.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.block.card .card-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.block.card .card-content {
+  padding: 1.5rem;
+}
+
+.block.card .card-title {
+  color: var(--heading-text-color);
+  font-family: var(--heading-font-family);
+  font-size: var(--heading-font-size-m);
+  margin: 0 0 1rem 0;
+}
+
+.block.card .card-text {
+  color: var(--text-color);
+  font-size: var(--body-font-size-s);
+  line-height: 1.6;
+  margin: 0 0 1.5rem 0;
+}
+```
+
+#### Hero Block Pattern
+
+```css
+.block.hero {
+  position: relative;
+  min-height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--background-color);
+  color: var(--text-color);
+  overflow: hidden;
+}
+
+.block.hero .hero-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+
+.block.hero .hero-content {
+  text-align: center;
+  max-width: 800px;
+  padding: 2rem;
+  z-index: 1;
+}
+
+.block.hero .hero-title {
+  color: var(--heading-text-color);
+  font-family: var(--heading-font-family);
+  font-size: var(--heading-font-size-xxl);
+  margin: 0 0 1.5rem 0;
+  line-height: 1.2;
+}
+
+.block.hero .hero-description {
+  font-size: var(--body-font-size-m);
+  line-height: 1.6;
+  margin: 0 0 2rem 0;
+}
+```
+
+## Implementation Checklist
+
+When creating a new block, ensure:
+
+- [ ] Block uses only theme variables for styling
+- [ ] CSS is scoped to `.block.blockname` to avoid conflicts
+- [ ] Responsive design follows mobile-first approach
+- [ ] Accessibility features are implemented
+- [ ] JavaScript uses defensive coding patterns
+- [ ] Block options are properly configured
+- [ ] Multisite theming is considered
+- [ ] Performance optimizations are applied
+- [ ] Code follows project conventions
+- [ ] Documentation is created
+
+## Conclusion
+
+This guide provides the foundation for creating consistent, accessible, and themeable blocks for Universal Editor. By following these patterns and using the theme variable system, AI agents can create blocks that work seamlessly across different brand themes while maintaining high code quality and user experience standards.
+
+Remember: Always use theme variables, follow the mobile-first approach, implement proper accessibility features, and test across different brand themes to ensure compatibility.

@@ -1,0 +1,144 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Rule: Generating a Task List from a PRD for EDS Franklin Blocks
+
+## Goal
+
+To guide an AI assistant in creating a detailed, step-by-step task list in Markdown format based on an existing Product Requirements Document (PRD) for Adobe Experience Manager (AEM) Edge Delivery Services (EDS) Franklin Blocks. The task list should guide a developer through implementation following EDS architecture and best practices.
+
+## Output
+
+- **Format:** Markdown (`.md`)
+- **Location:** `/blocks/[block-name]/`
+- **Filename:** `tasks-[block-name].md` (e.g., `tasks-facts-figures-cards.md`)
+
+## Process
+
+1.  **Receive PRD Reference:** The user points the AI to a specific PRD file
+2.  **Analyze PRD:** The AI reads and analyzes the functional requirements, user stories, and other sections of the specified PRD.
+3.  **Phase 1: Generate Parent Tasks:** Based on the PRD analysis, create the file and generate the main, high-level tasks required to implement the Franklin Block. Use your judgement on how many high-level tasks to use. It's likely to be about 5-7. Present these tasks to the user in the specified format (without sub-tasks yet). Inform the user: "I have generated the high-level tasks based on the PRD. Ready to generate the sub-tasks? Respond with 'Go' to proceed."
+4.  **Wait for Confirmation:** Pause and wait for the user to respond with "Go".
+5.  **Phase 2: Generate Sub-Tasks:** Once the user confirms, break down each parent task into smaller, actionable sub-tasks necessary to complete the parent task. Ensure sub-tasks logically follow from the parent task and cover the implementation details implied by the PRD.
+6.  **Identify Relevant Files:** Based on the tasks and PRD, identify potential files that will need to be created or modified following EDS patterns. List these under the `Relevant Files` section.
+7.  **Generate Final Output:** Combine the parent tasks, sub-tasks, relevant files, and notes into the final Markdown structure.
+8.  **Save Task List:** Save the generated document in the `/blocks/[block-name]/` directory with the filename `tasks-[block-name].md`.
+
+## EDS Architecture Requirements
+
+### Block Structure
+- **Block Classes**: `(blockname)-container`, `(blockname)-wrapper`, `(blockname)`
+- **No Direct Styling**: Never apply styling to the container, only to wrapper or block itself
+- **Component Group**: `{site.name} - Content` for AEMaaCS components
+- **Package Domain**: `com.szymon` for new packages
+
+### File Structure
+```
+blocks/[block-name]/
+├── _[block-name].json          # Block definition and model
+├── [block-name].css            # Block styles (scoped to .block.[block-name])
+├── [block-name].js             # Block functionality                   # Block entry point
+└── tasks-[block-name].md       # Generated task list
+```
+
+### JavaScript Requirements
+- Use `const` for variables that don't get reassigned
+- Group `const` variables into config objects
+- Create selectors, classes and patterns
+- Comment the code thoroughly
+- Use `await` instead of `.then()` in async JavaScript
+- Use defensive coding rules
+- Follow Airbnb style guide
+
+### CSS Requirements
+- Scope all selectors to `.block.[block-name]` to avoid conflicts
+- **MUST use CSS custom properties from `styles/styles.css`** for all styling
+- Follow mobile-first responsive design
+- Implement proper accessibility features
+- Use semantic class naming
+- Available theme variables include:
+  - Colors: `--background-color`, `--light-color`, `--dark-color`, `--text-color`, `--link-color`, `--link-hover-color`
+  - Typography: `--body-font-family`, `--heading-font-family`
+  - Font sizes: `--body-font-size-m`, `--body-font-size-s`, `--body-font-size-xs`, `--heading-font-size-xxl`, `--heading-font-size-xl`, `--heading-font-size-l`, `--heading-font-size-m`, `--heading-font-size-s`, `--heading-font-size-xs`
+  - Layout: `--nav-height`
+
+### AEMaaCS Integration
+- **Resource Type**: `core/franklin/components/block/v1/block`
+- **Template**: Block name
+- **Model**: Block model ID
+- **Filter**: Block filter ID (if container block)
+
+## Output Format
+
+The generated task list _must_ follow this structure:
+
+```markdown
+## Relevant Files
+
+- `blocks/[block-name]/_[block-name].json` - Block definition and content model configuration
+- `blocks/[block-name]/[block-name].css` - Block styling with theme variable integration
+- `blocks/[block-name]/[block-name].js` - Block JavaScript functionality and DOM manipulation
+- `blocks/[block-name]/index.js` - Block entry point and export
+- `component-definition.json` - Update to register new block component
+- `component-models.json` - Update to include block model definition
+- `component-filters.json` - Update to include block filter (if container block)
+- `moodels/_section.json` - Update to include block filter (if container block)
+- `styles/styles.css` - Update theme variables if new ones are needed
+
+### Notes
+
+- All CSS must be scoped to `.block.[block-name]` to prevent conflicts
+- **CRITICAL**: All styling must use CSS custom properties from `styles/styles.css` - NO hardcoded values
+- JavaScript must use defensive coding and follow Airbnb style guide
+- Block classes follow pattern: `(blockname)-container`, `(blockname)-wrapper`, `(blockname)`
+- No styling should be applied to the container class
+- Use theme variables from `styles/styles.css` for consistent theming across all breakpoints
+- Follow mobile-first responsive design approach
+- Implement proper accessibility features (ARIA labels, keyboard navigation, etc.)
+- Example: Use `color: var(--text-color)` instead of `color: #131313`
+
+## Tasks
+
+- [ ] 1.0 Parent Task Title
+  - [ ] 1.1 [Sub-task description 1.1]
+  - [ ] 1.2 [Sub-task description 1.2]
+- [ ] 2.0 Parent Task Title
+  - [ ] 2.1 [Sub-task description 2.1]
+- [ ] 3.0 Parent Task Title (may not require sub-tasks if purely structural or configuration)
+```
+
+## EDS-Specific Task Patterns
+
+### Common Parent Tasks for Franklin Blocks
+1. **Block Definition and Model Setup** - Create JSON configuration files
+2. **CSS Styling Implementation** - Implement responsive, themeable styles using `styles/styles.css` variables
+3. **JavaScript Functionality** - Add interactive features and DOM manipulation
+4. **AEMaaCS Integration** - Update component definitions and filters
+5. **Accessibility Implementation** - Add ARIA labels and keyboard navigation
+6. **Testing and Validation** - Test across devices and browsers
+7. **Documentation** - Create usage documentation and examples
+
+### Theme Variable Usage Requirements
+- **MANDATORY**: All color values must use CSS custom properties from `styles/styles.css`
+- **MANDATORY**: All typography must use theme font families and sizes
+- **MANDATORY**: All spacing and layout must be consistent with theme system
+- **PROHIBITED**: No hardcoded color values (e.g., `#ffffff`, `#000000`)
+- **PROHIBITED**: No hardcoded font sizes (e.g., `16px`, `24px`)
+- **PROHIBITED**: No hardcoded font families (e.g., `Arial`, `Helvetica`)
+
+### Block-Specific Considerations
+- **Container Blocks**: Require both parent and child item definitions
+- **Simple Blocks**: Single component with content model
+- **Interactive Blocks**: May require event listeners and state management
+- **Responsive Blocks**: Must work across all breakpoints
+- **Themeable Blocks**: Must use CSS custom properties
+
+## Interaction Model
+
+The process explicitly requires a pause after generating parent tasks to get user confirmation ("Go") before proceeding to generate the detailed sub-tasks. This ensures the high-level plan aligns with user expectations before diving into details.
+
+## Target Audience
+
+Assume the primary reader of the task list is a **junior developer** who will implement the Franklin Block following EDS architecture and best practices.

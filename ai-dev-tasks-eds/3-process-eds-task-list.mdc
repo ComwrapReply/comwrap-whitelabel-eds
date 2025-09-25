@@ -1,0 +1,87 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Task List Management for EDS Franklin Blocks
+
+Guidelines for managing task lists in markdown files to track progress on completing Franklin Block implementations in Adobe Experience Manager (AEM) Edge Delivery Services (EDS)
+
+## Task Implementation
+- **One sub-task at a time:** Do **NOT** start the next sub‑task until you ask the user for permission and they say "yes" or "y"
+- **Completion protocol:**  
+  1. When you finish a **sub‑task**, immediately mark it as completed by changing `[ ]` to `[x]`.  
+  2. If **all** subtasks underneath a parent task are now `[x]`, also mark the **parent task** as completed.  
+- Stop after each sub‑task and wait for the user's go‑ahead.
+
+## EDS-Specific Implementation Guidelines
+
+### Block Development Standards
+- **File Structure**: Follow the EDS pattern: `_[block-name].json`, `[block-name].css`, `[block-name].js`, `index.js`
+- **CSS Scoping**: All CSS must be scoped to `.block.[block-name]` to prevent conflicts
+- **Theme Variables**: **MANDATORY** use of CSS custom properties from `styles/styles.css`
+- **Block Classes**: Use pattern `(blockname)-container`, `(blockname)-wrapper`, `(blockname)`
+- **No Container Styling**: Never apply styling to the container class
+
+### Code Quality Requirements
+- **JavaScript**: Use `const` for variables, defensive coding, Airbnb style guide
+- **Async/Await**: Use `await` instead of `.then()` in async JavaScript
+- **Comments**: Thoroughly comment all code
+- **Accessibility**: Implement ARIA labels, keyboard navigation, semantic HTML
+
+## Task List Maintenance
+
+1. **Update the task list as you work:**
+   - Mark tasks and subtasks as completed (`[x]`) per the protocol above.
+   - Add new tasks as they emerge.
+
+2. **Maintain the "Relevant Files" section:**
+   - List every file created or modified following EDS patterns.
+   - Give each file a one‑line description of its purpose.
+   - Include EDS-specific files: `_[block-name].json`, `[block-name].css`, `[block-name].js`, `index.js`
+   - Track updates to: `component-definition.json`, `component-models.json`, `component-filters.json`
+
+3. **EDS File Tracking:**
+   - **Block Files**: Track all files in `/blocks/[block-name]/` directory
+   - **Configuration Files**: Track updates to component definitions and models
+   - **Theme Files**: Track any new variables added to `styles/styles.css`
+   - **Documentation**: Track README files and usage examples
+
+## AI Instructions
+
+When working with task lists, the AI must:
+
+1. **Regularly update the task list file** after finishing any significant work.
+2. **Follow the completion protocol:**
+   - Mark each finished **sub‑task** `[x]`.
+   - Mark the **parent task** `[x]` once **all** its subtasks are `[x]`.
+3. **Add newly discovered tasks** as they emerge during implementation.
+4. **Keep "Relevant Files" accurate and up to date** with EDS-specific file patterns.
+5. **Before starting work**, check which sub‑task is next.
+6. **After implementing a sub‑task**, update the file and then pause for user approval.
+
+## EDS-Specific Validation Checklist
+
+Before marking any task as complete, verify:
+
+### CSS Implementation
+- [ ] All CSS is scoped to `.block.[block-name]`
+- [ ] All styling uses CSS custom properties from `styles/styles.css`
+- [ ] No hardcoded color, font, or size values
+- [ ] Mobile-first responsive design implemented
+- [ ] Accessibility features included (focus states, ARIA labels)
+
+### JavaScript Implementation
+- [ ] Uses `const` for variables that don't change
+- [ ] Follows defensive coding practices
+- [ ] Uses `await` instead of `.then()` for async operations
+- [ ] Code is thoroughly commented
+- [ ] Follows Airbnb style guide
+
+### File Structure
+- [ ] All required EDS files created: `_[block-name].json`, `[block-name].css`, `[block-name].js`, `index.js`
+- [ ] Block classes follow pattern: `(blockname)-container`, `(blockname)-wrapper`, `(blockname)`
+- [ ] No styling applied to container class
+- [ ] Component definitions updated in `component-definition.json`
+- [ ] Models updated in `component-models.json`
+- [ ] Filters updated in `component-filters.json` (if container block)

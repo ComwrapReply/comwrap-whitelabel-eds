@@ -184,6 +184,144 @@
   font-size: var(--heading-font-size-l, 2rem);
 }
 
+/* Element grouping classes - Layout variants */
+.block.facts-figures-card.compact {
+  padding: 1rem;
+}
+
+.block.facts-figures-card.compact .facts-figures-card-title {
+  font-size: var(--heading-font-size-s, 1.25rem);
+  margin-bottom: 0.5rem;
+}
+
+.block.facts-figures-card.compact .facts-figures-card-figure {
+  font-size: var(--heading-font-size-l, 2rem);
+}
+
+.block.facts-figures-card.spacious {
+  padding: 2.5rem;
+}
+
+.block.facts-figures-card.spacious .facts-figures-card-title {
+  font-size: var(--heading-font-size-xl, 2rem);
+  margin-bottom: 1.5rem;
+}
+
+.block.facts-figures-card.spacious .facts-figures-card-figure {
+  font-size: var(--heading-font-size-xxl, 3.5rem);
+}
+
+.block.facts-figures-card.centered {
+  text-align: center;
+}
+
+.block.facts-figures-card.centered .facts-figures-card-figure {
+  justify-content: center;
+}
+
+/* Element grouping classes - Size variants */
+.block.facts-figures-card.small {
+  padding: 1rem;
+  min-height: 120px;
+}
+
+.block.facts-figures-card.small .facts-figures-card-title {
+  font-size: var(--heading-font-size-xs, 1.125rem);
+  margin-bottom: 0.5rem;
+}
+
+.block.facts-figures-card.small .facts-figures-card-figure {
+  font-size: var(--heading-font-size-m, 1.5rem);
+}
+
+.block.facts-figures-card.large {
+  padding: 2.5rem;
+  min-height: 300px;
+}
+
+.block.facts-figures-card.large .facts-figures-card-title {
+  font-size: var(--heading-font-size-xl, 2rem);
+  margin-bottom: 1.5rem;
+}
+
+.block.facts-figures-card.large .facts-figures-card-figure {
+  font-size: var(--heading-font-size-xxl, 4rem);
+}
+
+/* Element grouping classes - Emphasis variants */
+.block.facts-figures-card.subtle {
+  opacity: 0.8;
+  box-shadow: 0 1px 4px rgb(0 0 0 / 5%);
+}
+
+.block.facts-figures-card.bold {
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgb(0 0 0 / 15%);
+}
+
+.block.facts-figures-card.bold .facts-figures-card-title {
+  font-weight: 800;
+}
+
+.block.facts-figures-card.bold .facts-figures-card-figure {
+  font-weight: 900;
+}
+
+.block.facts-figures-card.accent {
+  border-left: 6px solid var(--link-color, #06c);
+  background: linear-gradient(135deg, var(--light-color, #f8f9fa) 0%, var(--background-color, #fff) 100%);
+}
+
+.block.facts-figures-card.accent .facts-figures-card-title {
+  color: var(--link-color, #06c);
+}
+
+.block.facts-figures-card.accent .facts-figures-card-figure {
+  color: var(--link-color, #06c);
+}
+
+/* Element grouping classes - Animation variants */
+.block.facts-figures-card.fade-in {
+  animation: fade-in 0.6s ease-in-out;
+}
+
+.block.facts-figures-card.slide-up {
+  animation: slide-up 0.6s ease-out;
+}
+
+.block.facts-figures-card.scale-in {
+  animation: scale-in 0.4s ease-out;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slide-up {
+  from { 
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  to { 
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scale-in {
+  from { 
+    opacity: 0;
+    transform: scale(0.9);
+  }
+
+  to { 
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
 /* Responsive design */
 @media (width <= 768px) {
   .facts-figures-cards-wrapper {
