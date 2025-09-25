@@ -406,6 +406,20 @@
     "id": "facts-figures-cards",
     "fields": [
       {
+        "component": "text",
+        "valueType": "number",
+        "name": "columns",
+        "value": "",
+        "label": "Columns"
+      },
+      {
+        "component": "text",
+        "valueType": "number",
+        "name": "rows",
+        "value": "",
+        "label": "Rows"
+      },
+      {
         "component": "select",
         "name": "classes",
         "value": "",
@@ -434,18 +448,6 @@
             "value": "minimal"
           }
         ]
-      }
-    ]
-  },
-  {
-    "id": "facts-figures-card",
-    "fields": [
-      {
-        "component": "richtext",
-        "name": "text",
-        "value": "",
-        "label": "Text",
-        "valueType": "string"
       }
     ]
   },
