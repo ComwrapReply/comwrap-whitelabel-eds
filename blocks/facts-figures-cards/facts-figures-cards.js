@@ -54,6 +54,45 @@ function createWrapper(block, columns, rows) {
 }
 
 /**
+ * Applies style classes to the card based on the classes field from the model
+ * @param {HTMLElement} card - Individual card element
+ */
+function applyStyleClasses(card) {
+  // Look for the classes in the text content of the card
+  // The classes field from the model appears as text content
+  const textContent = card.textContent || '';
+
+  // Check if the text contains class information (e.g., "facts-and-figures-card, grey")
+  const classMatch = textContent.match(/(?:facts-and-figures-card|facts-figures-card),\s*(\w+)/);
+
+  if (classMatch) {
+    const className = classMatch[1];
+    if (className && ['blue', 'grey'].includes(className)) {
+      card.classList.add(className);
+    }
+  }
+
+  // Also check for classes in data attributes as fallback
+  const classes = card.getAttribute('data-classes')
+    || card.dataset.classes
+    || card.getAttribute('data-style')
+    || card.dataset.style
+    || '';
+
+  if (classes) {
+    // Split multiple classes if they exist
+    const classList = classes.split(' ').filter((cls) => cls.trim());
+
+    // Apply each class to the card
+    classList.forEach((className) => {
+      if (className.trim()) {
+        card.classList.add(className.trim());
+      }
+    });
+  }
+}
+
+/**
  * Processes individual card content and applies semantic classes
  * Updated to handle richtext content and style classes from the card model
  * @param {HTMLElement} card - Individual card element
@@ -61,6 +100,9 @@ function createWrapper(block, columns, rows) {
  */
 function processCard(card, index) {
   if (!card) return;
+
+  // Apply style classes BEFORE processing content
+  applyStyleClasses(card);
 
   // Find the text content (richtext field from the model)
   const textContent = card.querySelector('div:last-child');
@@ -79,7 +121,7 @@ function processCard(card, index) {
   const allTextElements = textWrapper.querySelectorAll('*');
   allTextElements.forEach((element) => {
     const text = element.textContent?.trim() || '';
-    
+
     // Remove class information that appears as text (e.g., "facts-and-figures-card, grey")
     if (text.match(/^(?:facts-and-figures-card|facts-figures-card),\s*\w+$/)) {
       element.remove();
@@ -134,54 +176,12 @@ function processCard(card, index) {
     textWrapper.appendChild(descriptionWrapper);
   }
 
-  // Apply style classes from the model (classes field)
-  applyStyleClasses(card);
-
   // Set up animation delay based on card index
   card.style.transitionDelay = `${index * CONFIG.animationDelay}ms`;
 
   // Add accessibility attributes
   card.setAttribute('role', 'article');
   card.setAttribute('aria-label', `Fact card ${index + 1}`);
-}
-
-/**
- * Applies style classes to the card based on the classes field from the model
- * @param {HTMLElement} card - Individual card element
- */
-function applyStyleClasses(card) {
-  // Look for the classes in the text content of the card
-  // The classes field from the model appears as text content
-  const textContent = card.textContent || '';
-  
-  // Check if the text contains class information (e.g., "facts-and-figures-card, grey")
-  const classMatch = textContent.match(/(?:facts-and-figures-card|facts-figures-card),\s*(\w+)/);
-  
-  if (classMatch) {
-    const className = classMatch[1];
-    if (className && ['blue', 'grey'].includes(className)) {
-      card.classList.add(className);
-    }
-  }
-  
-  // Also check for classes in data attributes as fallback
-  const classes = card.getAttribute('data-classes') || 
-                 card.dataset.classes || 
-                 card.getAttribute('data-style') || 
-                 card.dataset.style || 
-                 '';
-
-  if (classes) {
-    // Split multiple classes if they exist
-    const classList = classes.split(' ').filter(cls => cls.trim());
-    
-    // Apply each class to the card
-    classList.forEach(className => {
-      if (className.trim()) {
-        card.classList.add(className.trim());
-      }
-    });
-  }
 }
 
 /**
@@ -198,7 +198,7 @@ function setupScrollAnimation(block) {
     });
     return;
   }
-  
+
   const observer = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
@@ -220,9 +220,9 @@ function setupScrollAnimation(block) {
     {
       threshold: CONFIG.intersectionThreshold,
       rootMargin: '0px 0px -10% 0px',
-    }
+    },
   );
-  
+
   observer.observe(block);
 }
 
@@ -232,7 +232,7 @@ function setupScrollAnimation(block) {
  */
 function setupResponsiveHandler(wrapper) {
   let resizeTimeout;
-  
+
   const handleResize = () => {
     clearTimeout(resizeTimeout);
     resizeTimeout = setTimeout(() => {
