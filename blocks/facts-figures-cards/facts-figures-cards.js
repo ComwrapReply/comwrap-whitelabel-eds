@@ -13,7 +13,7 @@ const CONFIG = {
 
 // CSS class constants
 const CLASSES = {
-  container: 'facts-figures-cards-container',
+  container: 'facts-figures-cards-main-container',
   card: 'facts-figures-card',
   title: 'facts-figures-card-title',
   text: 'facts-figures-card-text',
