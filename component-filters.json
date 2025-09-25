@@ -31,6 +31,12 @@
     ]
   },
   {
+    "id": "buttons",
+    "components": [
+      "button-item"
+    ]
+  },
+  {
     "id": "cards",
     "components": [
       "card"
@@ -61,12 +67,6 @@
     "id": "facts-figures-cards",
     "components": [
       "facts-figures-card"
-    ]
-  },
-  {
-    "id": "facts-figures-card",
-    "components": [
-      "text"
     ]
   }
 ]
