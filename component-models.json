@@ -290,68 +290,6 @@
     ]
   },
   {
-    "id": "counter",
-    "fields": [
-      {
-        "component": "text",
-        "name": "number",
-        "label": "Target Number",
-        "valueType": "string",
-        "value": "123"
-      },
-      {
-        "component": "richtext",
-        "name": "description",
-        "label": "Description",
-        "valueType": "string",
-        "value": "units of Fresubin clinical nutrition are consumed every minute worldwide."
-      },
-      {
-        "component": "select",
-        "name": "theme",
-        "label": "Theme",
-        "valueType": "string",
-        "options": [
-          {
-            "name": "Dark",
-            "value": "dark"
-          },
-          {
-            "name": "Light",
-            "value": "light"
-          }
-        ],
-        "value": "dark"
-      },
-      {
-        "component": "multiselect",
-        "name": "classes",
-        "label": "Block Options",
-        "valueType": "string",
-        "options": [
-          {
-            "name": "Layout",
-            "children": [
-              {
-                "name": "Default",
-                "value": ""
-              },
-              {
-                "name": "Centered",
-                "value": "centered"
-              },
-              {
-                "name": "Full Width",
-                "value": "full-width"
-              }
-            ]
-          }
-        ],
-        "value": ""
-      }
-    ]
-  },
-  {
     "id": "custom-button",
     "fields": [
       {
