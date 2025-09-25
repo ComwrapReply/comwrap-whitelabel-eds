@@ -407,11 +407,11 @@
     "fields": [
       {
         "component": "select",
-        "valueType": "string",
         "name": "classes",
         "value": "",
         "label": "Background Style",
         "description": "The background style",
+        "valueType": "string",
         "options": [
           {
             "name": "Default",

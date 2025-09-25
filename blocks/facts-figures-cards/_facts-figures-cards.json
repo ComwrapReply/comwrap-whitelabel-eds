@@ -37,11 +37,11 @@
       "fields": [
         {
           "component": "select",
-          "valueType": "string",
           "name": "classes",
           "value": "",
           "label": "Background Style",
           "description": "The background style",
+          "valueType": "string",
           "options": [
             { "name": "Default", "value": "" },
             { "name": "Blue", "value": "blue" },
@@ -73,7 +73,8 @@
     {
       "id": "facts-figures-card",
       "components": [
-        "text"
+        "text",
+        "title"
       ]
     }
   ]
