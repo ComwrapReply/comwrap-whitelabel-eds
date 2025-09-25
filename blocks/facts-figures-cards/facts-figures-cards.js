@@ -55,7 +55,7 @@ function createWrapper(block, columns, rows) {
 
 /**
  * Processes individual card content and applies semantic classes
- * Updated to handle richtext content from the card model
+ * Updated to handle richtext content and style classes from the card model
  * @param {HTMLElement} card - Individual card element
  * @param {number} index - Card index for animation delay
  */
@@ -123,12 +123,41 @@ function processCard(card, index) {
     textWrapper.appendChild(descriptionWrapper);
   }
 
+  // Apply style classes from the model (classes field)
+  applyStyleClasses(card);
+
   // Set up animation delay based on card index
   card.style.transitionDelay = `${index * CONFIG.animationDelay}ms`;
 
   // Add accessibility attributes
   card.setAttribute('role', 'article');
   card.setAttribute('aria-label', `Fact card ${index + 1}`);
+}
+
+/**
+ * Applies style classes to the card based on the classes field from the model
+ * @param {HTMLElement} card - Individual card element
+ */
+function applyStyleClasses(card) {
+  // Get the classes from the card's data attributes or dataset
+  // The classes field from the model will be available as a data attribute
+  const classes = card.getAttribute('data-classes') || 
+                 card.dataset.classes || 
+                 card.getAttribute('data-style') || 
+                 card.dataset.style || 
+                 '';
+
+  if (classes) {
+    // Split multiple classes if they exist
+    const classList = classes.split(' ').filter(cls => cls.trim());
+    
+    // Apply each class to the card
+    classList.forEach(className => {
+      if (className.trim()) {
+        card.classList.add(className.trim());
+      }
+    });
+  }
 }
 
 /**
