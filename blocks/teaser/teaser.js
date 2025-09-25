@@ -1,7 +1,115 @@
 import { moveClassToTargetedChild } from '../../scripts/utils.js';
 import { renderButton } from '../../components/button/button.js';
 
+/**
+ * Teaser block implementation with element grouping for block options
+ * Supports multiple styling variants through classes_ prefixed fields
+ */
+
+/**
+ * Extract block options from classes_ prefixed fields
+ * @param {HTMLElement} block - The block DOM element
+ * @returns {Object} Object containing all block options
+ */
+function extractBlockOptions(block) {
+  const options = {
+    variant: '',
+    background: 'light',
+    layout: 'image-left',
+    effects: [],
+    fullwidth: false,
+    centered: false
+  };
+
+  // Extract all classes_ prefixed fields from the block
+  const rows = Array.from(block.children);
+  
+  rows.forEach((row, index) => {
+    const textContent = row.textContent?.trim();
+    if (!textContent) return;
+
+    // Map field positions to option names
+    const fieldMapping = {
+      5: 'classes_variant',
+      6: 'classes_background', 
+      7: 'classes_layout',
+      8: 'classes_effects',
+      9: 'classes_fullwidth',
+      10: 'classes_centered'
+    };
+
+    const fieldName = fieldMapping[index];
+    if (!fieldName) return;
+
+    // Process different field types
+    switch (fieldName) {
+      case 'classes_variant':
+      case 'classes_background':
+      case 'classes_layout':
+        options[fieldName.replace('classes_', '')] = textContent;
+        break;
+      case 'classes_effects':
+        // Handle multiselect - split by comma and trim
+        options.effects = textContent ? textContent.split(',').map(e => e.trim()) : [];
+        break;
+      case 'classes_fullwidth':
+      case 'classes_centered':
+        // Handle boolean fields
+        options[fieldName.replace('classes_', '')] = textContent.toLowerCase() === 'true';
+        break;
+    }
+  });
+
+  return options;
+}
+
+/**
+ * Apply block options as CSS classes to the block element
+ * @param {HTMLElement} block - The block DOM element
+ * @param {Object} options - Block options object
+ */
+function applyBlockOptions(block, options) {
+  // Apply variant class
+  if (options.variant) {
+    block.classList.add(options.variant);
+  }
+
+  // Apply background class
+  if (options.background) {
+    block.classList.add(options.background);
+  }
+
+  // Apply layout class
+  if (options.layout) {
+    block.classList.add(options.layout);
+  }
+
+  // Apply effects classes
+  if (options.effects && options.effects.length > 0) {
+    options.effects.forEach(effect => {
+      if (effect) {
+        block.classList.add(effect);
+      }
+    });
+  }
+
+  // Apply boolean classes
+  if (options.fullwidth) {
+    block.classList.add('fullwidth');
+  }
+
+  if (options.centered) {
+    block.classList.add('centered');
+  }
+}
+
 export default function decorate(block) {
+  // Extract block options from classes_ fields
+  const blockOptions = extractBlockOptions(block);
+  
+  // Apply block options as CSS classes
+  applyBlockOptions(block, blockOptions);
+
   const [
     title,
     description,
