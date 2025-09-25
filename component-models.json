@@ -418,28 +418,6 @@
         "value": "",
         "label": "Text",
         "valueType": "string"
-      },
-      {
-        "component": "select",
-        "valueType": "string",
-        "name": "classes",
-        "value": "",
-        "label": "Background Style",
-        "description": "The background style",
-        "options": [
-          {
-            "name": "Default",
-            "value": ""
-          },
-          {
-            "name": "Blue",
-            "value": "blue"
-          },
-          {
-            "name": "Grey",
-            "value": "grey"
-          }
-        ]
       }
     ]
   },
