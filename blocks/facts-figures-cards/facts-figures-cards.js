@@ -75,6 +75,17 @@ function processCard(card, index) {
   card.innerHTML = '';
   card.appendChild(textWrapper);
 
+  // Clean up text content - remove class information that appears as text
+  const allTextElements = textWrapper.querySelectorAll('*');
+  allTextElements.forEach((element) => {
+    const text = element.textContent?.trim() || '';
+    
+    // Remove class information that appears as text (e.g., "facts-and-figures-card, grey")
+    if (text.match(/^(?:facts-and-figures-card|facts-figures-card),\s*\w+$/)) {
+      element.remove();
+    }
+  });
+
   // Process the text content to identify figures and descriptions
   const figureElements = textWrapper.querySelectorAll('h1, h2, h3, h4, h5, h6, p');
   let figureElement = null;
@@ -139,8 +150,21 @@ function processCard(card, index) {
  * @param {HTMLElement} card - Individual card element
  */
 function applyStyleClasses(card) {
-  // Get the classes from the card's data attributes or dataset
-  // The classes field from the model will be available as a data attribute
+  // Look for the classes in the text content of the card
+  // The classes field from the model appears as text content
+  const textContent = card.textContent || '';
+  
+  // Check if the text contains class information (e.g., "facts-and-figures-card, grey")
+  const classMatch = textContent.match(/(?:facts-and-figures-card|facts-figures-card),\s*(\w+)/);
+  
+  if (classMatch) {
+    const className = classMatch[1];
+    if (className && ['blue', 'grey'].includes(className)) {
+      card.classList.add(className);
+    }
+  }
+  
+  // Also check for classes in data attributes as fallback
   const classes = card.getAttribute('data-classes') || 
                  card.dataset.classes || 
                  card.getAttribute('data-style') || 
