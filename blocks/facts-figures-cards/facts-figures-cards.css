@@ -1,0 +1,11 @@
+.facts-figures-cards-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.facts-figures-cards-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
