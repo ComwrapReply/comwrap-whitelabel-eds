@@ -403,7 +403,7 @@
     ]
   },
   {
-    "id": "facts-figures-card",
+    "id": "facts-figures-card1",
     "fields": [
       {
         "component": "richtext",

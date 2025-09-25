@@ -23,8 +23,8 @@
           "page": {
             "resourceType": "core/franklin/components/block/v1/block/item",
             "template": {
-              "name": "Facts and Figures Card",
-              "model": "facts-figures-card"
+              "name": "Facts and Figures Card1",
+              "model": "facts-figures-card1"
             }
           }
         }
@@ -33,7 +33,7 @@
   ],
   "models": [
     {
-      "id": "facts-figures-card",
+      "id": "facts-figures-card1",
       "fields": [
         {
           "component": "richtext",
