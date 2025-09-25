@@ -36,18 +36,17 @@
       "id": "facts-figures-cards",
       "fields": [
         {
-          "component": "text",
-          "valueType": "number",
-          "name": "columns",
+          "component": "select",
+          "valueType": "string",
+          "name": "classes",
           "value": "",
-          "label": "Columns"
-        },
-        {
-          "component": "text",
-          "valueType": "number",
-          "name": "rows",
-          "value": "",
-          "label": "Rows"
+          "label": "Background Style",
+          "description": "The background style",
+          "options": [
+            { "name": "Default", "value": "" },
+            { "name": "Blue", "value": "blue" },
+            { "name": "Grey", "value": "grey" }
+          ]
         }
       ]
     },
@@ -60,19 +59,6 @@
           "value": "",
           "label": "Text",
           "valueType": "string"
-        },
-        {
-          "component": "select",
-          "valueType": "string",
-          "name": "classes",
-          "value": "",
-          "label": "Background Style",
-          "description": "The background style",
-          "options": [
-            { "name": "Default", "value": "" },
-            { "name": "Blue", "value": "blue" },
-            { "name": "Grey", "value": "grey" }
-          ]
         }
       ]
     }
