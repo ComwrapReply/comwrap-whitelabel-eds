@@ -1,105 +1,137 @@
-/* Headline block styling with theme variables and background variants */
+/* Headline block styling matching Figma design */
 
 /* Block container - main wrapper */
 .block.headline {
-  margin: 2rem 0;
-  padding: 3rem 2rem;
-  text-align: center;
+  margin: 0;
+  padding: 104px 0 64px;
   position: relative;
   overflow: hidden;
+  box-sizing: border-box;
 }
 
 /* Block wrapper - content container */
 .headline-wrapper {
-  max-width: 800px;
+  max-width: 1520px;
   margin: 0 auto;
+  padding: 0 24px;
   position: relative;
   z-index: 2;
 }
 
-/* Block content - inner content */
+/* Block content - inner content matching Figma structure */
 .headline {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  align-items: center;
-}
-
-/* Subtitle styling (p element) */
-.block.headline .headline-subtitle {
-  font-size: var(--body-font-size-s);
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  margin: 0;
-  opacity: 0.8;
-}
-
-/* Title styling (h3 element) */
-.block.headline .headline-title {
-  font-size: var(--heading-font-size-xl);
-  font-family: var(--heading-font-family);
+  gap: 16px; /* 4 * 4px = 16px gap as per Figma */
+  align-items: flex-start;
+  justify-content: flex-start;
+  font-family: 'Albert Sans', sans-serif;
   font-weight: 600;
-  line-height: 1.2;
-  margin: 0;
-  max-width: 100%;
+  line-height: 0;
+  font-style: normal;
+  position: relative;
+  width: 100%;
 }
 
-/* Light background variant (default) */
+/* Subtitle styling (p element) - H4 from Figma */
+.block.headline .headline-subtitle {
+  font-size: 32px;
+  font-weight: 600;
+  line-height: 40px;
+  margin: 0;
+  position: relative;
+  width: 100%;
+  flex-shrink: 0;
+}
+
+/* Title styling (h3 element) - H2 from Figma */
+.block.headline .headline-title {
+  font-size: 64px;
+  font-weight: 600;
+  line-height: 72px;
+  margin: 0;
+  position: relative;
+  width: 100%;
+  flex-shrink: 0;
+}
+
+/* Light background variant (default) - matching Figma design */
 .block.headline.light {
-  background: linear-gradient(135deg, var(--background-color) 0%, var(--light-color) 100%);
-  color: var(--text-color);
+  background: var(--background-color);
+  color: #3D95F4; /* Typography/Light Blue from Figma */
 }
 
 .block.headline.light .headline-subtitle {
-  color: var(--link-color);
+  color: #3D95F4; /* Typography/Light Blue from Figma */
 }
 
 .block.headline.light .headline-title {
-  color: var(--text-color);
+  color: #3D95F4; /* Typography/Light Blue from Figma */
 }
 
-/* Dark background variant */
+/* Dark background variant - matching Figma design */
 .block.headline.dark {
-  background: linear-gradient(135deg, var(--dark-color) 0%, var(--text-color) 100%);
-  color: var(--background-color);
+  background: var(--dark-color);
+  color: #FFF; /* Typography/Cold White from Figma */
 }
 
 .block.headline.dark .headline-subtitle {
-  color: var(--link-color);
+  color: #FFF; /* Typography/Cold White from Figma */
 }
 
 .block.headline.dark .headline-title {
-  color: var(--background-color);
+  color: #FFF; /* Typography/Cold White from Figma */
 }
 
-/* Responsive design */
+/* Responsive design - maintaining Figma proportions */
 @media (width <= 768px) {
   .block.headline {
-    padding: 2rem 1rem;
-    margin: 1.5rem 0;
+    padding: 60px 0 40px; /* Reduced but proportional to Figma */
   }
   
   .headline-wrapper {
     max-width: 100%;
+    padding: 0 16px;
   }
   
   .block.headline .headline-title {
-    font-size: var(--heading-font-size-l);
+    font-size: 48px; /* Proportional reduction from 64px */
+    line-height: 56px; /* Proportional reduction from 72px */
   }
   
   .block.headline .headline-subtitle {
-    font-size: var(--body-font-size-xs);
+    font-size: 24px; /* Proportional reduction from 32px */
+    line-height: 32px; /* Proportional reduction from 40px */
+  }
+  
+  .headline {
+    gap: 12px; /* Proportional reduction from 16px */
   }
 }
 
 @media (width >= 769px) and (width <= 1024px) {
   .block.headline {
-    padding: 2.5rem 1.5rem;
+    padding: 80px 0 50px; /* Proportional to Figma */
+  }
+  
+  .headline-wrapper {
+    padding: 0 20px;
   }
   
   .block.headline .headline-title {
-    font-size: var(--heading-font-size-xl);
+    font-size: 56px; /* Slightly reduced from desktop 64px */
+    line-height: 64px;
+  }
+  
+  .block.headline .headline-subtitle {
+    font-size: 28px; /* Slightly reduced from desktop 32px */
+    line-height: 36px;
+  }
+}
+
+@media (width >= 1025px) {
+  .headline-wrapper {
+    padding: 0 24px;
   }
 }
 

@@ -4,7 +4,7 @@
  * Supports two background variants: light and dark
  */
 
-// Configuration object for block settings
+// Configuration object for block settings matching Figma design
 const config = {
   selectors: {
     subtitle: 'p',
@@ -20,12 +20,36 @@ const config = {
   },
   attributes: {
     role: 'banner',
-    ariaLabel: 'Headline section'
+    ariaLabel: 'Section Heading'
+  },
+  // Figma design specifications
+  figma: {
+    fontFamily: 'Albert Sans',
+    fontWeight: 600,
+    gap: 16, // 4 * 4px gap as per Figma
+    padding: {
+      top: 104,
+      bottom: 64
+    },
+    typography: {
+      subtitle: {
+        fontSize: 32,
+        lineHeight: 40
+      },
+      title: {
+        fontSize: 64,
+        lineHeight: 72
+      }
+    },
+    colors: {
+      light: '#3D95F4', // Typography/Light Blue
+      dark: '#FFFFFF'   // Typography/Cold White
+    }
   }
 };
 
 /**
- * Add semantic CSS classes to block elements
+ * Add semantic CSS classes to block elements matching Figma structure
  * @param {HTMLElement} block - The block DOM element
  */
 function addSemanticClasses(block) {
@@ -57,21 +81,27 @@ function addSemanticClasses(block) {
     wrapper.appendChild(content);
   }
 
-  // Add classes to subtitle (p element)
+  // Add classes to subtitle (p element) - H4 from Figma
   const subtitle = content.querySelector(config.selectors.subtitle);
   if (subtitle) {
     subtitle.classList.add(config.classes.subtitle);
+    // Ensure proper Figma styling
+    subtitle.style.fontFamily = config.figma.fontFamily;
+    subtitle.style.fontWeight = config.figma.fontWeight;
   }
 
-  // Add classes to title (h3 element)
+  // Add classes to title (h3 element) - H2 from Figma
   const title = content.querySelector(config.selectors.title);
   if (title) {
     title.classList.add(config.classes.title);
+    // Ensure proper Figma styling
+    title.style.fontFamily = config.figma.fontFamily;
+    title.style.fontWeight = config.figma.fontWeight;
   }
 }
 
 /**
- * Apply background variant class based on content
+ * Apply background variant class based on content matching Figma design
  * @param {HTMLElement} block - The block DOM element
  */
 function applyBackgroundVariant(block) {
@@ -85,25 +115,31 @@ function applyBackgroundVariant(block) {
     // Check for background variant indicators
     if (textContent === 'dark' || textContent.includes('dark')) {
       block.classList.add('dark');
+      // Apply Figma dark variant colors
+      block.style.color = config.figma.colors.dark;
     } else if (textContent === 'light' || textContent.includes('light')) {
       block.classList.add('light');
+      // Apply Figma light variant colors
+      block.style.color = config.figma.colors.light;
     }
   });
 
   // Default to light if no variant is specified
   if (!block.classList.contains('dark') && !block.classList.contains('light')) {
     block.classList.add('light');
+    block.style.color = config.figma.colors.light;
   }
 }
 
 /**
- * Add accessibility features to the block
+ * Add accessibility features to the block matching Figma design
  * @param {HTMLElement} block - The block DOM element
  */
 function addAccessibilityFeatures(block) {
-  // Add ARIA attributes
+  // Add ARIA attributes matching Figma component name
   block.setAttribute('role', config.attributes.role);
   block.setAttribute('aria-label', config.attributes.ariaLabel);
+  block.setAttribute('data-name', 'Section Heading');
 
   // Ensure proper heading hierarchy
   const title = block.querySelector(`.${config.classes.title}`);
@@ -114,7 +150,7 @@ function addAccessibilityFeatures(block) {
         .toLowerCase()
         .replace(/[^a-z0-9]+/g, '-')
         .replace(/^-+|-+$/g, '');
-      title.id = `headline-${id}`;
+      title.id = `section-heading-${id}`;
     }
   }
 
@@ -125,6 +161,12 @@ function addAccessibilityFeatures(block) {
       element.setAttribute('tabindex', '0');
     }
   });
+
+  // Add Figma-style data attributes for consistency
+  const content = block.querySelector(`.${config.classes.content}`);
+  if (content) {
+    content.setAttribute('data-node-id', 'headline-content');
+  }
 }
 
 /**
