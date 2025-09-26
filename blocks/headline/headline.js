@@ -115,11 +115,13 @@ function applyBackgroundVariant(block) {
     // Check for background variant indicators
     if (textContent === 'dark' || textContent.includes('dark')) {
       block.classList.add('dark');
-      // Apply Figma dark variant colors
+      // Apply Figma dark variant with blue gradient background
+      block.style.background = 'linear-gradient(135deg, #3D95F4 0%, #1e40af 100%)';
       block.style.color = config.figma.colors.dark;
     } else if (textContent === 'light' || textContent.includes('light')) {
       block.classList.add('light');
-      // Apply Figma light variant colors
+      // Apply Figma light variant with light gradient background
+      block.style.background = 'linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)';
       block.style.color = config.figma.colors.light;
     }
   });
@@ -127,6 +129,7 @@ function applyBackgroundVariant(block) {
   // Default to light if no variant is specified
   if (!block.classList.contains('dark') && !block.classList.contains('light')) {
     block.classList.add('light');
+    block.style.background = 'linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)';
     block.style.color = config.figma.colors.light;
   }
 }

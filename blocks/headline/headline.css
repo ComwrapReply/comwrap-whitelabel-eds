@@ -7,6 +7,9 @@
   position: relative;
   overflow: hidden;
   box-sizing: border-box;
+  background-attachment: fixed;
+  background-size: cover;
+  background-position: center;
 }
 
 /* Block wrapper - content container */
@@ -57,30 +60,45 @@
 
 /* Light background variant (default) - matching Figma design */
 .block.headline.light {
-  background: var(--background-color);
+  background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
   color: #3D95F4; /* Typography/Light Blue from Figma */
+  box-shadow: 0 4px 20px rgb(61 149 244 / 10%);
 }
 
 .block.headline.light .headline-subtitle {
   color: #3D95F4; /* Typography/Light Blue from Figma */
+  text-shadow: 0 1px 2px rgb(61 149 244 / 10%);
 }
 
 .block.headline.light .headline-title {
   color: #3D95F4; /* Typography/Light Blue from Figma */
+  text-shadow: 0 2px 4px rgb(61 149 244 / 10%);
 }
 
-/* Dark background variant - matching Figma design */
+/* Dark background variant - matching Figma design with blue gradient */
 .block.headline.dark {
-  background: var(--dark-color);
+  background: linear-gradient(135deg, #3D95F4 0%, #1e40af 100%);
   color: #FFF; /* Typography/Cold White from Figma */
+  box-shadow: 0 8px 32px rgb(30 64 175 / 30%);
+  position: relative;
+}
+
+.block.headline.dark::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgb(61 149 244 / 10%) 0%, rgb(30 64 175 / 20%) 100%);
+  pointer-events: none;
 }
 
 .block.headline.dark .headline-subtitle {
   color: #FFF; /* Typography/Cold White from Figma */
+  text-shadow: 0 1px 2px rgb(0 0 0 / 20%);
 }
 
 .block.headline.dark .headline-title {
   color: #FFF; /* Typography/Cold White from Figma */
+  text-shadow: 0 2px 4px rgb(0 0 0 / 30%);
 }
 
 /* Responsive design - maintaining Figma proportions */
