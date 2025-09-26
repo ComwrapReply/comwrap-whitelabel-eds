@@ -18,6 +18,6 @@
     "...": "./_section.json#/models"
   },
   {
-    "...": "./_teaser.json"
+    "...": ".../blocks/*/_*.json#/models"
   }
 ]

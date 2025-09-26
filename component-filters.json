@@ -32,12 +32,6 @@
     ]
   },
   {
-    "id": "buttons",
-    "components": [
-      "button-item"
-    ]
-  },
-  {
     "id": "cards",
     "components": [
       "card"

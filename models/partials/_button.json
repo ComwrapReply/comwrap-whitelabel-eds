@@ -33,7 +33,7 @@
           "maxSize": 2,
           "options": [
             {
-              "...": "./_button-types.json#/options"
+              "...": "../../models/partials/_button-types.json#/options"
             }
           ]
         }
