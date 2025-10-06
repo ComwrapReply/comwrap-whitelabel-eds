@@ -1102,28 +1102,38 @@ blockquote::before {
 }
 
 /* ========================================
-   DARK THEME SUPPORT
+    SECTION CONTAINER
    ======================================== */
 
-.theme-dark {
-    --color-white: #1a1a1a;
-    --color-black: #ffffff;
-    --color-light-grey: #2a2a2a;
-    --color-cloud-grey: #404040;
-    background-color: var(--color-white);
-    color: var(--color-black);
-}
-
-.theme-dark .card {
-    background-color: var(--color-light-grey);
-    border-color: var(--color-cloud-grey);
-}
-
-.theme-dark .form-control {
-    background-color: var(--color-light-grey);
-    border-color: var(--color-cloud-grey);
-    color: var(--color-black);
-}
+   /* sections */
+main > .section {
+    margin: 40px 0;
+  }
+  
+  main > .section > div {
+    max-width: 1200px;
+    margin: auto;
+    padding: 0 24px;
+  }
+  
+  main > .section:first-of-type {
+    margin-top: 0;
+  }
+  
+  @media (width >= 900px) {
+    main > .section > div {
+      padding: 0 32px;
+    }
+  }
+  
+  /* section metadata */
+  main .section.light,
+  main .section.highlight {
+    background-color: var(--light-color);
+    margin: 0;
+    padding: 40px 0;
+  }
+  
 
 /* ========================================
    END OF FOUNDATION STYLES
