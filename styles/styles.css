@@ -96,15 +96,19 @@ select {
     /* ===== COLORS ===== */
     
     /* Main Color Palette */
+    --color-primary: #0073dd;
+    --color-secondary: #0c2863;
+    --color-tertiary: #fff;
+    --color-quaternary: #000;
     --color-blue: #0063be;
     --color-dark-blue: #0c2863;
     --color-light-blue: #3d95f4;
-    --color-white: #ffffff;
+    --color-white: #fff;
     --color-light-grey: #f7f6f5;
     --color-sonic-silver: #777673;
     --color-natural-grey: #8f8d87;
     --color-cloud-grey: #c9c5be;
-    --color-black: #000000;
+    --color-black: #000;
     --color-blue-ocean: #1c82ec;
     
     /* Interaction Colors */
@@ -118,10 +122,10 @@ select {
     --color-info: #e7eaef;
     
     /* Hover & Active States */
-    --color-primary-dark-hover: rgba(255, 255, 255, 0.8);
-    --color-primary-dark-active: rgba(255, 255, 255, 0.5);
-    --color-sec-dark-hover: rgba(255, 255, 255, 0.2);
-    --color-sec-dark-active: rgba(255, 255, 255, 0.4);
+    --color-primary-dark-hover: rgba(255, 255, 255, 80% );
+    --color-primary-dark-active: rgba(255, 255, 255, 50%);
+    --color-sec-dark-hover: rgba(255, 255, 255, 20%);
+    --color-sec-dark-active: rgba(255, 255, 255, 40%);
     --color-primary-transparent: rgba(0, 115, 221, 0.4);
     
     /* Gradients */
