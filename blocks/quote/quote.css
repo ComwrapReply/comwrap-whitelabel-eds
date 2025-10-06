@@ -1,0 +1,76 @@
+/* Base styles for all quote blocks */
+.block.quote {
+    background: rgb(201 232 251 / 30%);
+    display: flex;
+    flex-direction: column;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.block.quote blockquote {
+    margin: 16px;
+    padding: 0;
+    text-indent: 0;
+    font-size: 1.2rem;
+    line-height: 1.6;
+}
+
+.block.quote .quote-author {
+    font-size: small;
+    font-style: italic;
+    margin: 16px;
+    position: relative;
+    text-align: right;
+}
+
+.block.quote .quote-author::before {
+    content: "— ";
+}
+
+/* Block option styles */
+
+/* Highlight theme */
+.block.quote.highlight {
+    background: linear-gradient(135deg, rgb(255 237 74 / 40%), rgb(255 193 7 / 30%));
+    border-left: 4px solid var(--primary-color, #ffc107);
+    box-shadow: 0 4px 12px rgb(255 193 7 / 20%);
+}
+
+.block.quote.highlight blockquote {
+    font-weight: 500;
+    color: var(--dark-color, #333);
+}
+
+/* Dark theme */
+.block.quote.dark {
+    background: linear-gradient(135deg, rgb(33 37 41 / 95%), rgb(52 58 64 / 90%));
+    color: var(--light-color, #f8f9fa);
+    border-left: 4px solid var(--secondary-color, #6c757d);
+    box-shadow: 0 4px 12px rgb(0 0 0 / 30%);
+}
+
+.block.quote.dark blockquote {
+    color: var(--light-color, #f8f9fa);
+}
+
+.block.quote.dark .quote-author {
+    color: var(--light-color, #dee2e6);
+}
+
+/* Light theme */
+.block.quote.light {
+    background: rgb(248 249 250 / 80%);
+    border: 1px solid var(--light-color, #e9ecef);
+    border-left: 4px solid var(--info-color, #0dcaf0);
+    box-shadow: 0 2px 8px rgb(0 0 0 / 10%);
+}
+
+.block.quote.light blockquote {
+    color: var(--text-color, #495057);
+}
+
+.block.quote.light .quote-author {
+    color: var(--secondary-color, #6c757d);
+}

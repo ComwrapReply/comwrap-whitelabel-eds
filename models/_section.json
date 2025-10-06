@@ -58,7 +58,13 @@
         "teaser",
         "facts-figures-cards",
         "buttons",
-        "headline"
+        "headline",
+        "custom-button",
+        "form",
+        "table",
+        "quote",
+        "video",
+        "article-feeds"
       ]
     }
   ]
