@@ -1,0 +1,39 @@
+name: Branch name validation on push
+
+on:
+  push:
+    branches-ignore:
+      - main
+      - master
+      - develop
+
+jobs:
+  validate-branch-name:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate branch name
+        run: |
+          BRANCH="${{ github.ref_name }}"
+          REGEX='^(feat|fix|chore|docs|refactor|test|perf|build|ci|revert)-[A-Z]+-[0-9]+(-[a-z0-9]+)*$'
+
+          echo "Validating branch name: $BRANCH"
+
+          if [[ ! "$BRANCH" =~ $REGEX ]]; then
+            echo "::error title=Invalid branch name::$BRANCH"
+            echo ""
+            echo "❌ Invalid branch name: $BRANCH"
+            echo ""
+            echo "📋 Expected format: <type>-<TICKET>-<number>[-optional-kebab-title]"
+            echo "📋 Valid types: feat, fix, chore, docs, refactor, test, perf, build, ci, revert"
+            echo "📋 Example: feat-EDGE-80-github-setup"
+            echo ""
+            echo "💡 To fix this:"
+            echo "   1. Rename your branch locally: git branch -m $BRANCH <new-valid-name>"
+            echo "   2. Delete the remote branch: git push origin --delete $BRANCH"
+            echo "   3. Push the renamed branch: git push origin <new-valid-name>"
+            echo ""
+            echo "🚫 This branch will be rejected when creating a pull request."
+            exit 1
+          fi
+
+          echo "✅ Branch name is valid!"
