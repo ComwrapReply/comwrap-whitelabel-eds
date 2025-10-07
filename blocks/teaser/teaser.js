@@ -1,10 +1,43 @@
-import { moveClassToTargetedChild } from '../../scripts/utils.js';
-import { renderButton } from '../../components/button/button.js';
+// TODO: Create missing utility functions
+// import { moveClassToTargetedChild } from '../../scripts/utils.js';
+// import { renderButton } from '../../components/button/button.js';
 
 /**
  * Teaser block implementation with element grouping for block options
  * Supports multiple styling variants through classes_ prefixed fields
  */
+
+/**
+ * Simple button renderer (temporary implementation)
+ * @param {Object} options - Button options
+ * @returns {HTMLElement} Button element
+ */
+function renderButton({ link, label, target }) {
+  const button = document.createElement('a');
+  button.href = link || '#';
+  button.textContent = label || 'Click here';
+  button.className = 'button';
+  if (target) {
+    button.target = target;
+  }
+  return button;
+}
+
+/**
+ * Move classes from block to target child (temporary implementation)
+ * @param {HTMLElement} block - Source block element
+ * @param {HTMLElement} target - Target child element
+ */
+function moveClassToTargetedChild(block, target) {
+  if (!target) return;
+  // Simple implementation - could be enhanced
+  const blockClasses = Array.from(block.classList);
+  blockClasses.forEach((className) => {
+    if (className !== 'block' && className !== 'teaser') {
+      target.classList.add(className);
+    }
+  });
+}
 
 /**
  * Extract block options from classes_ prefixed fields
@@ -18,12 +51,11 @@ function extractBlockOptions(block) {
     layout: 'image-left',
     effects: [],
     fullwidth: false,
-    centered: false
+    centered: false,
   };
 
   // Extract all classes_ prefixed fields from the block
   const rows = Array.from(block.children);
-  
   rows.forEach((row, index) => {
     const textContent = row.textContent?.trim();
     if (!textContent) return;
@@ -31,11 +63,11 @@ function extractBlockOptions(block) {
     // Map field positions to option names
     const fieldMapping = {
       5: 'classes_variant',
-      6: 'classes_background', 
+      6: 'classes_background',
       7: 'classes_layout',
       8: 'classes_effects',
       9: 'classes_fullwidth',
-      10: 'classes_centered'
+      10: 'classes_centered',
     };
 
     const fieldName = fieldMapping[index];
@@ -50,12 +82,15 @@ function extractBlockOptions(block) {
         break;
       case 'classes_effects':
         // Handle multiselect - split by comma and trim
-        options.effects = textContent ? textContent.split(',').map(e => e.trim()) : [];
+        options.effects = textContent ? textContent.split(',').map((effect) => effect.trim()) : [];
         break;
       case 'classes_fullwidth':
       case 'classes_centered':
         // Handle boolean fields
         options[fieldName.replace('classes_', '')] = textContent.toLowerCase() === 'true';
+        break;
+      default:
+        // No action needed for unknown field types
         break;
     }
   });
@@ -86,7 +121,7 @@ function applyBlockOptions(block, options) {
 
   // Apply effects classes
   if (options.effects && options.effects.length > 0) {
-    options.effects.forEach(effect => {
+    options.effects.forEach((effect) => {
       if (effect) {
         block.classList.add(effect);
       }
@@ -106,7 +141,6 @@ function applyBlockOptions(block, options) {
 export default function decorate(block) {
   // Extract block options from classes_ fields
   const blockOptions = extractBlockOptions(block);
-  
   // Apply block options as CSS classes
   applyBlockOptions(block, blockOptions);
 
