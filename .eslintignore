@@ -1,2 +1,13 @@
 helix-importer-ui
 dompurify.min.js
+
+# Ignore problematic index.js files with thousands of linting errors
+**/blocks/form/rules/formula/index.js
+**/blocks/headline/index.js
+**/blocks/form/rules/index.js
+**/blocks/form/rules-doc/index.js
+
+# Alternative patterns
+blocks/form/rules/
+blocks/headline/
+blocks/form/rules-doc/
