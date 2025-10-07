@@ -1,0 +1,19 @@
+name: Branch name policy
+on:
+  pull_request:
+    types: [opened, reopened, synchronize, edited]
+jobs:
+  check-branch-name:
+    if: ${{ github.event.pull_request.head.repo.full_name == github.repository }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate branch name
+        run: |
+          BRANCH="${{ github.head_ref }}"
+          REGEX='^(feat|fix|chore|docs|refactor|test|perf|build|ci|revert)-[A-Z]+-[0-9]+(-[a-z0-9]+)*$'
+          if [[ ! "$BRANCH" =~ $REGEX ]]; then
+            echo "::error title=Invalid branch name::$BRANCH"
+            echo "Expected: <type>-<TICKET>-<number>[-optional-kebab-title]"
+            echo "Example: feat-EDGE-80-github-setup"
+            exit 1
+          fi
