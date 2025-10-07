@@ -42,7 +42,7 @@ Branches must follow this pattern:
 ```
 <type>-<JIRAKEY>-<number>[-optional-kebab-title]
 ```
-- Capital lettesr are important
+- Capital letters are important
 - Do not exceed 60 characters in branch name
 - Allowed types: `feat`, `fix`, `chore`, `docs`, `refactor`, `test`, `perf`, `build`, `ci`, `revert`
 - Examples:
