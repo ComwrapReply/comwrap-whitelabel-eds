@@ -10,6 +10,13 @@ jobs:
       - name: Validate branch name
         run: |
           BRANCH="${{ github.head_ref }}"
+
+          # Skip validation for protected branches
+          if [[ "$BRANCH" == "main" || "$BRANCH" == "master" || "$BRANCH" == "develop" || "$BRANCH" == "staging" ]]; then
+            echo "✅ Skipping validation for protected branch: $BRANCH"
+            exit 0
+          fi
+
           REGEX='^(feat|fix|chore|docs|refactor|test|perf|build|ci|revert)-[A-Z]+-[0-9]+(-[a-z0-9]+)*$'
           if [[ ! "$BRANCH" =~ $REGEX ]]; then
             echo "::error title=Invalid branch name::$BRANCH"

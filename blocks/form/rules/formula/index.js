@@ -205,7 +205,7 @@
  * Version: 0.1.50
  */
 
-var dataTypes = {
+const dataTypes = {
   TYPE_NUMBER: 0,
   TYPE_ANY: 1,
   TYPE_STRING: 2,
@@ -220,7 +220,7 @@ var dataTypes = {
   TYPE_ARRAY_ARRAY: 11,
 };
 
-var tokenDefinitions = {
+const tokenDefinitions = {
   TOK_EOF: 'EOF',
   TOK_UNQUOTEDIDENTIFIER: 'UnquotedIdentifier',
   TOK_QUOTEDIDENTIFIER: 'QuotedIdentifier',
@@ -328,7 +328,7 @@ function getTypeNames(inputObj) {
 function matchType(actuals, expectedList, argValue, context, toNumber, toString) {
   const actual = actuals[0];
   if (expectedList.findIndex(
-    type => type === TYPE_ANY$1 || actual === type,
+    (type) => type === TYPE_ANY$1 || actual === type,
   ) !== -1
   ) return argValue;
   let wrongType = false;
@@ -340,7 +340,7 @@ function matchType(actuals, expectedList, argValue, context, toNumber, toString)
   }
   if (expectedList.includes(TYPE_ARRAY_ARRAY)) {
     if (actual === TYPE_ARRAY$1) {
-      argValue.forEach(a => {
+      argValue.forEach((a) => {
         if (!(a instanceof Array)) wrongType = true;
       });
       if (!wrongType) return argValue;
@@ -359,7 +359,7 @@ function matchType(actuals, expectedList, argValue, context, toNumber, toString)
   }
   if (expected === -1 && [TYPE_ARRAY_STRING$1, TYPE_ARRAY_NUMBER, TYPE_ARRAY$1].includes(actual)) {
     expected = expectedList.find(
-      e => [TYPE_ARRAY_STRING$1, TYPE_ARRAY_NUMBER, TYPE_ARRAY$1].includes(e),
+      (e) => [TYPE_ARRAY_STRING$1, TYPE_ARRAY_NUMBER, TYPE_ARRAY$1].includes(e),
     );
   }
   if (expected === -1) [expected] = expectedList;
@@ -424,7 +424,7 @@ function isObject(obj) {
 function getValueOf(a) {
   if (a === null || a === undefined) return a;
   if (isArray(a)) {
-    return a.map(i => getValueOf(i));
+    return a.map((i) => getValueOf(i));
   }
   if (typeof (a.valueOf) !== 'function') return a;
   return a.valueOf();
@@ -521,9 +521,11 @@ class TreeInterpreter {
     this.debug = debug;
     this.language = language;
   }
+
   search(node, value) {
     return this.visit(node, value);
   }
+
   visit(n, v) {
     const visitFunctions = {
       Field: (node, value) => {
@@ -533,7 +535,7 @@ class TreeInterpreter {
           if (field === undefined) {
             try {
               this.debug.push(`Failed to find: '${node.name}'`);
-              const available = Object.keys(value).map(a => `'${a}'`).toString();
+              const available = Object.keys(value).map((a) => `'${a}'`).toString();
               if (available.length) this.debug.push(`Available fields: ${available}`);
             } catch (e) {}
             return null;
@@ -582,7 +584,7 @@ class TreeInterpreter {
       Slice: (node, value) => {
         if (!isArray(value)) return null;
         const sliceParams = node.children.slice(0).map(
-          param => (param != null ? this.toNumber(this.visit(param, value)) : null),
+          (param) => (param != null ? this.toNumber(this.visit(param, value)) : null),
         );
         const computed = this.computeSliceParams(value.length, sliceParams);
         const [start, stop, step] = computed;
@@ -602,7 +604,7 @@ class TreeInterpreter {
         const base = this.visit(node.children[0], value);
         if (!isArray(base)) return null;
         const collected = [];
-        base.forEach(b => {
+        base.forEach((b) => {
           const current = this.visit(node.children[1], b);
           if (current !== null) {
             collected.push(current);
@@ -615,7 +617,7 @@ class TreeInterpreter {
         if (!isObject(getValueOf(projection))) return null;
         const collected = [];
         const values = objValues(projection);
-        values.forEach(val => {
+        values.forEach((val) => {
           const current = this.visit(node.children[1], val);
           if (current !== null) collected.push(current);
         });
@@ -624,12 +626,12 @@ class TreeInterpreter {
       FilterProjection: (node, value) => {
         const base = this.visit(node.children[0], value);
         if (!isArray(base)) return null;
-        const filtered = base.filter(b => {
+        const filtered = base.filter((b) => {
           const matched = this.visit(node.children[2], b);
           return !isFalse(matched);
         });
         const finalResults = [];
-        filtered.forEach(f => {
+        filtered.forEach((f) => {
           const current = this.visit(node.children[1], f);
           if (current !== null) finalResults.push(current);
         });
@@ -650,7 +652,7 @@ class TreeInterpreter {
         const original = this.visit(node.children[0], value);
         if (!isArray(original)) return null;
         const merged = [];
-        original.forEach(current => {
+        original.forEach((current) => {
           if (isArray(current)) {
             merged.push(...current);
           } else {
@@ -662,12 +664,12 @@ class TreeInterpreter {
       Identity: (_node, value) => value,
       MultiSelectList: (node, value) => {
         if (value === null) return null;
-        return node.children.map(child => this.visit(child, value));
+        return node.children.map((child) => this.visit(child, value));
       },
       MultiSelectHash: (node, value) => {
         if (value === null) return null;
         const collected = {};
-        node.children.forEach(child => {
+        node.children.forEach((child) => {
           collected[child.name] = this.visit(child.value, value);
         });
         return collected;
@@ -729,23 +731,23 @@ class TreeInterpreter {
         const first = this.visit(node.children[0], value);
         return first * -1;
       },
-      Literal: node => node.value,
-      Number: node => node.value,
+      Literal: (node) => node.value,
+      Number: (node) => node.value,
       [TOK_PIPE$2]: (node, value) => {
         const left = this.visit(node.children[0], value);
         return this.visit(node.children[1], left);
       },
       [TOK_CURRENT$2]: (_node, value) => value,
-      [TOK_GLOBAL$2]: node => {
+      [TOK_GLOBAL$2]: (node) => {
         const result = this.globals[node.name];
         return result === undefined ? null : result;
       },
       Function: (node, value) => {
         if (node.name === 'if') return this.runtime.callFunction(node.name, node.children, value, this, false);
-        const resolvedArgs = node.children.map(child => this.visit(child, value));
+        const resolvedArgs = node.children.map((child) => this.visit(child, value));
         return this.runtime.callFunction(node.name, resolvedArgs, value, this);
       },
-      ExpressionReference: node => {
+      ExpressionReference: (node) => {
         const [refNode] = node.children;
         refNode.jmespathType = TOK_EXPREF$2;
         return refNode;
@@ -755,6 +757,7 @@ class TreeInterpreter {
     if (!fn) throw new Error(`Unknown/missing node type ${(n && n.type) || ''}`);
     return fn(n, v);
   }
+
   computeSliceParams(arrayLength, sliceParams) {
     function capSliceRange(arrayLen, actual, stp) {
       let actualValue = actual;
@@ -789,6 +792,7 @@ class TreeInterpreter {
     }
     return [start, stop, step];
   }
+
   applyOperator(first, second, operator) {
     if (isArray(first) && isArray(second)) {
       const shorter = first.length < second.length ? first : second;
@@ -801,8 +805,8 @@ class TreeInterpreter {
       }
       return result;
     }
-    if (isArray(first)) return first.map(a => this.applyOperator(a, second, operator));
-    if (isArray(second)) return second.map(a => this.applyOperator(first, a, operator));
+    if (isArray(first)) return first.map((a) => this.applyOperator(a, second, operator));
+    if (isArray(second)) return second.map((a) => this.applyOperator(first, a, operator));
     if (operator === '*') return this.toNumber(first) * this.toNumber(second);
     if (operator === '&') return first + second;
     if (operator === '+') {
@@ -905,6 +909,7 @@ class Lexer {
     this._allowedGlobalNames = allowedGlobalNames;
     this.debug = debug;
   }
+
   tokenize(stream) {
     const tokens = [];
     this._current = 0;
@@ -1032,6 +1037,7 @@ class Lexer {
     }
     return tokens;
   }
+
   _consumeUnquotedIdentifier(stream) {
     const start = this._current;
     this._current += 1;
@@ -1040,6 +1046,7 @@ class Lexer {
     }
     return stream.slice(start, this._current);
   }
+
   _consumeQuotedIdentifier(stream) {
     const start = this._current;
     this._current += 1;
@@ -1066,6 +1073,7 @@ class Lexer {
     } catch (e) {}
     return JSON.parse(val);
   }
+
   _consumeRawStringLiteral(stream) {
     const start = this._current;
     this._current += 1;
@@ -1084,6 +1092,7 @@ class Lexer {
     const literal = stream.slice(start + 1, this._current - 1);
     return literal.replaceAll("\\'", "'");
   }
+
   _consumeNumber(stream) {
     const start = this._current;
     this._current += 1;
@@ -1100,11 +1109,13 @@ class Lexer {
     }
     return { type: TOK_NUMBER$1, value, start };
   }
+
   _consumeUnaryMinus() {
     const start = this._current;
     this._current += 1;
     return { type: TOK_UNARY_MINUS$1, value: '-', start };
   }
+
   _consumeLBracket(stream) {
     const start = this._current;
     this._current += 1;
@@ -1118,6 +1129,7 @@ class Lexer {
     }
     return { type: TOK_LBRACKET$1, value: '[', start };
   }
+
   _isGlobal(prev, stream, pos) {
     if (prev !== null && prev === TOK_DOT$1) return false;
     const ch = stream[pos];
@@ -1127,6 +1139,7 @@ class Lexer {
     const global = stream.slice(pos, i);
     return this._allowedGlobalNames.includes(global);
   }
+
   _consumeGlobal(stream) {
     const start = this._current;
     this._current += 1;
@@ -1134,6 +1147,7 @@ class Lexer {
     const global = stream.slice(start, this._current);
     return { type: TOK_GLOBAL$1, name: global, start };
   }
+
   _consumeOperator(stream) {
     const start = this._current;
     const startingChar = stream[start];
@@ -1165,6 +1179,7 @@ class Lexer {
     }
     return { type: TOK_EQ$1, value: '=', start };
   }
+
   _consumeLiteral(stream) {
     function _looksLikeJSON(str) {
       if (str === '') return false;
@@ -1297,6 +1312,7 @@ class Parser {
   constructor(allowedGlobalNames = []) {
     this._allowedGlobalNames = allowedGlobalNames;
   }
+
   parse(expression, debug) {
     this._loadTokens(expression, debug);
     this.index = 0;
@@ -1311,12 +1327,14 @@ class Parser {
     }
     return ast;
   }
+
   _loadTokens(expression, debug) {
     const lexer = new Lexer(this._allowedGlobalNames, debug);
     const tokens = lexer.tokenize(expression);
     tokens.push({ type: TOK_EOF, value: '', start: expression.length });
     this.tokens = tokens;
   }
+
   expression(rbp) {
     const leftToken = this._lookaheadToken(0);
     this._advance();
@@ -1329,21 +1347,27 @@ class Parser {
     }
     return left;
   }
+
   _lookahead(number) {
     return this.tokens[this.index + number].type;
   }
+
   _lookaheadToken(number) {
     return this.tokens[this.index + number];
   }
+
   _advance() {
     this.index += 1;
   }
+
   _getIndex() {
     return this.index;
   }
+
   _setIndex(index) {
     this.index = index;
   }
+
   nud(token) {
     let left;
     let right;
@@ -1418,6 +1442,7 @@ class Parser {
         this._errorToken(token);
     }
   }
+
   led(tokenName, left) {
     let condition;
     let right;
@@ -1515,6 +1540,7 @@ class Parser {
         this._errorToken(this._lookaheadToken(0));
     }
   }
+
   _match(tokenType) {
     if (this._lookahead(0) === tokenType) {
       this._advance();
@@ -1525,6 +1551,7 @@ class Parser {
       throw error;
     }
   }
+
   _errorToken(token) {
     const error = new Error(`Invalid token (${
       token.type}): "${
@@ -1532,6 +1559,7 @@ class Parser {
     error.name = 'ParserError';
     throw error;
   }
+
   _parseChainedIndexExpression() {
     const oldIndex = this._getIndex();
     if (this._lookahead(0) === TOK_COLON) {
@@ -1549,6 +1577,7 @@ class Parser {
       value: first,
     };
   }
+
   _parseUnchainedIndexExpression() {
     const oldIndex = this._getIndex();
     const firstToken = this._lookahead(0);
@@ -1577,6 +1606,7 @@ class Parser {
     this._setIndex(oldIndex);
     return this._parseMultiselectList();
   }
+
   _projectIfSlice(left, right) {
     const indexExpr = { type: 'IndexExpression', children: [left, right] };
     if (right.type === 'Slice') {
@@ -1587,6 +1617,7 @@ class Parser {
     }
     return indexExpr;
   }
+
   _parseSliceExpression() {
     const parts = [null, null, null];
     let index = 0;
@@ -1613,10 +1644,12 @@ class Parser {
       children: parts,
     };
   }
+
   _parseComparator(left, comparator) {
     const right = this.expression(bindingPower[comparator]);
     return { type: 'Comparator', name: comparator, children: [left, right] };
   }
+
   _parseDotRHS(rbp) {
     const lookahead = this._lookahead(0);
     const exprTokens = [TOK_UNQUOTEDIDENTIFIER, TOK_QUOTEDIDENTIFIER, TOK_STAR];
@@ -1632,6 +1665,7 @@ class Parser {
       return this._parseMultiselectHash();
     }
   }
+
   _parseProjectionRHS(rbp) {
     let right;
     if (bindingPower[this._lookahead(0)] < 10) {
@@ -1652,6 +1686,7 @@ class Parser {
     }
     return right;
   }
+
   _parseMultiselectList() {
     const expressions = [];
     while (this._lookahead(0) !== TOK_RBRACKET) {
@@ -1667,6 +1702,7 @@ class Parser {
     this._match(TOK_RBRACKET);
     return { type: 'MultiSelectList', children: expressions };
   }
+
   _parseMultiselectHash() {
     const pairs = [];
     const identifierTypes = [TOK_UNQUOTEDIDENTIFIER, TOK_QUOTEDIDENTIFIER];
@@ -1729,9 +1765,9 @@ function adjustTimeZone(dateObj, timeZone) {
 function openFormulaFunctions(valueOf, toString, toNumber, debug = []) {
   return {
     and: {
-      _func: resolvedArgs => {
+      _func: (resolvedArgs) => {
         let result = !!valueOf(resolvedArgs[0]);
-        resolvedArgs.slice(1).forEach(arg => {
+        resolvedArgs.slice(1).forEach((arg) => {
           result = result && !!valueOf(arg);
         });
         return result;
@@ -1748,7 +1784,7 @@ function openFormulaFunctions(valueOf, toString, toNumber, debug = []) {
       ],
     },
     datedif: {
-      _func: args => {
+      _func: (args) => {
         const d1 = toNumber(args[0]);
         const d2 = toNumber(args[1]);
         const unit = toString(args[2]).toLowerCase();
@@ -1789,7 +1825,7 @@ function openFormulaFunctions(valueOf, toString, toNumber, debug = []) {
       ],
     },
     datetime: {
-      _func: args => {
+      _func: (args) => {
         const year = toNumber(args[0]);
         const month = toNumber(args[1]);
         const day = toNumber(args[2]);
@@ -1816,7 +1852,7 @@ function openFormulaFunctions(valueOf, toString, toNumber, debug = []) {
       ],
     },
     day: {
-      _func: args => {
+      _func: (args) => {
         const date = toNumber(args[0]);
         const jsDate = new Date(date * MS_IN_DAY);
         return jsDate.getDate();
@@ -1826,7 +1862,7 @@ function openFormulaFunctions(valueOf, toString, toNumber, debug = []) {
       ],
     },
     deepScan: {
-      _func: resolvedArgs => {
+      _func: (resolvedArgs) => {
         const [source, n] = resolvedArgs;
         const name = n.toString();
         const items = [];
@@ -1846,7 +1882,7 @@ function openFormulaFunctions(valueOf, toString, toNumber, debug = []) {
       ],
     },
     entries: {
-      _func: args => {
+      _func: (args) => {
         const obj = valueOf(args[0]);
         return Object.entries(obj);
       },
@@ -1863,7 +1899,7 @@ function openFormulaFunctions(valueOf, toString, toNumber, debug = []) {
       ],
     },
     eomonth: {
-      _func: args => {
+      _func: (args) => {
         const date = toNumber(args[0]);
         const months = toNumber(args[1]);
         const jsDate = new Date(date * MS_IN_DAY);
@@ -1876,7 +1912,7 @@ function openFormulaFunctions(valueOf, toString, toNumber, debug = []) {
       ],
     },
     exp: {
-      _func: args => {
+      _func: (args) => {
         const value = toNumber(args[0]);
         return Math.exp(value);
       },
@@ -1889,7 +1925,7 @@ function openFormulaFunctions(valueOf, toString, toNumber, debug = []) {
       _signature: [],
     },
     find: {
-      _func: args => {
+      _func: (args) => {
         const query = toString(args[0]);
         const text = toString(args[1]);
         const startPos = args.length > 2 ? toNumber(args[2]) : 0;
@@ -1906,7 +1942,7 @@ function openFormulaFunctions(valueOf, toString, toNumber, debug = []) {
       ],
     },
     fromEntries: {
-      _func: args => {
+      _func: (args) => {
         const array = args[0];
         return Object.fromEntries(array);
       },
@@ -1915,7 +1951,7 @@ function openFormulaFunctions(valueOf, toString, toNumber, debug = []) {
       ],
     },
     hour: {
-      _func: args => {
+      _func: (args) => {
         const time = toNumber(args[0]) % 1;
         if (time < 0) {
           return null;
@@ -1944,7 +1980,7 @@ function openFormulaFunctions(valueOf, toString, toNumber, debug = []) {
         { types: [dataTypes.TYPE_ANY] }],
     },
     left: {
-      _func: args => {
+      _func: (args) => {
         const numEntries = args.length > 1 ? toNumber(args[1]) : 1;
         if (numEntries < 0) return null;
         if (args[0] instanceof Array) {
@@ -1959,7 +1995,7 @@ function openFormulaFunctions(valueOf, toString, toNumber, debug = []) {
       ],
     },
     lower: {
-      _func: args => {
+      _func: (args) => {
         const value = toString(args[0]);
         return value.toLowerCase();
       },
@@ -1968,7 +2004,7 @@ function openFormulaFunctions(valueOf, toString, toNumber, debug = []) {
       ],
     },
     mid: {
-      _func: args => {
+      _func: (args) => {
         const startPos = toNumber(args[1]);
         const numEntries = toNumber(args[2]);
         if (startPos < 0) return null;
@@ -1985,7 +2021,7 @@ function openFormulaFunctions(valueOf, toString, toNumber, debug = []) {
       ],
     },
     minute: {
-      _func: args => {
+      _func: (args) => {
         const time = toNumber(args[0]) % 1;
         if (time < 0) {
           return null;
@@ -1998,7 +2034,7 @@ function openFormulaFunctions(valueOf, toString, toNumber, debug = []) {
       ],
     },
     mod: {
-      _func: args => {
+      _func: (args) => {
         const p1 = toNumber(args[0]);
         const p2 = toNumber(args[1]);
         return p1 % p2;
@@ -2009,7 +2045,7 @@ function openFormulaFunctions(valueOf, toString, toNumber, debug = []) {
       ],
     },
     month: {
-      _func: args => {
+      _func: (args) => {
         const date = toNumber(args[0]);
         const jsDate = new Date(date * MS_IN_DAY);
         return jsDate.getMonth() + 1;
@@ -2019,7 +2055,7 @@ function openFormulaFunctions(valueOf, toString, toNumber, debug = []) {
       ],
     },
     not: {
-      _func: resolveArgs => !valueOf(resolveArgs[0]),
+      _func: (resolveArgs) => !valueOf(resolveArgs[0]),
       _signature: [{ types: [dataTypes.TYPE_ANY] }],
     },
     now: {
@@ -2031,9 +2067,9 @@ function openFormulaFunctions(valueOf, toString, toNumber, debug = []) {
       _signature: [],
     },
     or: {
-      _func: resolvedArgs => {
+      _func: (resolvedArgs) => {
         let result = !!valueOf(resolvedArgs[0]);
-        resolvedArgs.slice(1).forEach(arg => {
+        resolvedArgs.slice(1).forEach((arg) => {
           result = result || !!valueOf(arg);
         });
         return result;
@@ -2041,7 +2077,7 @@ function openFormulaFunctions(valueOf, toString, toNumber, debug = []) {
       _signature: [{ types: [dataTypes.TYPE_ANY], variadic: true }],
     },
     power: {
-      _func: args => {
+      _func: (args) => {
         const base = toNumber(args[0]);
         const power = toNumber(args[1]);
         return base ** power;
@@ -2052,10 +2088,10 @@ function openFormulaFunctions(valueOf, toString, toNumber, debug = []) {
       ],
     },
     proper: {
-      _func: args => {
+      _func: (args) => {
         const text = toString(args[0]);
         const words = text.split(' ');
-        const properWords = words.map(word => word.charAt(0).toUpperCase()
+        const properWords = words.map((word) => word.charAt(0).toUpperCase()
             + word.slice(1).toLowerCase());
         return properWords.join(' ');
       },
@@ -2064,7 +2100,7 @@ function openFormulaFunctions(valueOf, toString, toNumber, debug = []) {
       ],
     },
     replace: {
-      _func: args => {
+      _func: (args) => {
         const oldText = toString(args[0]);
         const startNum = toNumber(args[1]);
         const numChars = toNumber(args[2]);
@@ -2084,7 +2120,7 @@ function openFormulaFunctions(valueOf, toString, toNumber, debug = []) {
       ],
     },
     rept: {
-      _func: args => {
+      _func: (args) => {
         const text = toString(args[0]);
         const count = toNumber(args[1]);
         if (count < 0) {
@@ -2098,7 +2134,7 @@ function openFormulaFunctions(valueOf, toString, toNumber, debug = []) {
       ],
     },
     right: {
-      _func: args => {
+      _func: (args) => {
         const numEntries = args.length > 1 ? toNumber(args[1]) : 1;
         if (numEntries < 0) return null;
         if (args[0] instanceof Array) {
@@ -2115,7 +2151,7 @@ function openFormulaFunctions(valueOf, toString, toNumber, debug = []) {
       ],
     },
     round: {
-      _func: args => {
+      _func: (args) => {
         const number = toNumber(args[0]);
         const digits = toNumber(args[1]);
         return round(number, digits);
@@ -2126,14 +2162,14 @@ function openFormulaFunctions(valueOf, toString, toNumber, debug = []) {
       ],
     },
     search: {
-      _func: args => {
+      _func: (args) => {
         const findText = toString(args[0]);
         const withinText = toString(args[1]);
         const startPos = toNumber(args[2]);
         if (findText === null || withinText === null || withinText.length === 0) return [];
         const reString = findText.replace(/([[.\\^$()+{])/g, '\\$1')
-          .replace(/~?\?/g, match => match === '~?' ? '\\?' : '.')
-          .replace(/~?\*/g, match => match === '~*' ? '\\*' : '.*?')
+          .replace(/~?\?/g, (match) => (match === '~?' ? '\\?' : '.'))
+          .replace(/~?\*/g, (match) => (match === '~*' ? '\\*' : '.*?'))
           .replace(/~~/g, '~');
         const re = new RegExp(reString);
         const result = withinText.substring(startPos).match(re);
@@ -2147,7 +2183,7 @@ function openFormulaFunctions(valueOf, toString, toNumber, debug = []) {
       ],
     },
     second: {
-      _func: args => {
+      _func: (args) => {
         const time = toNumber(args[0]) % 1;
         if (time < 0) {
           return null;
@@ -2160,7 +2196,7 @@ function openFormulaFunctions(valueOf, toString, toNumber, debug = []) {
       ],
     },
     split: {
-      _func: args => {
+      _func: (args) => {
         const str = toString(args[0]);
         const separator = toString(args[1]);
         return str.split(separator);
@@ -2171,7 +2207,7 @@ function openFormulaFunctions(valueOf, toString, toNumber, debug = []) {
       ],
     },
     sqrt: {
-      _func: args => {
+      _func: (args) => {
         const result = Math.sqrt(toNumber(args[0]));
         if (Number.isNaN(result)) {
           return null;
@@ -2183,12 +2219,12 @@ function openFormulaFunctions(valueOf, toString, toNumber, debug = []) {
       ],
     },
     stdev: {
-      _func: args => {
+      _func: (args) => {
         const values = args[0] || [];
         if (values.length <= 1) {
           return null;
         }
-        const coercedValues = values.map(value => toNumber(value));
+        const coercedValues = values.map((value) => toNumber(value));
         const mean = coercedValues.reduce((a, b) => a + b, 0) / values.length;
         const sumSquare = coercedValues.reduce((a, b) => a + b * b, 0);
         const result = Math.sqrt((sumSquare - values.length * mean * mean) / (values.length - 1));
@@ -2202,12 +2238,12 @@ function openFormulaFunctions(valueOf, toString, toNumber, debug = []) {
       ],
     },
     stdevp: {
-      _func: args => {
+      _func: (args) => {
         const values = args[0] || [];
         if (values.length === 0) {
           return null;
         }
-        const coercedValues = values.map(value => toNumber(value));
+        const coercedValues = values.map((value) => toNumber(value));
         const mean = coercedValues.reduce((a, b) => a + b, 0) / values.length;
         const meanSumSquare = coercedValues.reduce((a, b) => a + b * b, 0) / values.length;
         const result = Math.sqrt(meanSumSquare - mean * mean);
@@ -2221,7 +2257,7 @@ function openFormulaFunctions(valueOf, toString, toNumber, debug = []) {
       ],
     },
     substitute: {
-      _func: args => {
+      _func: (args) => {
         const src = toString(args[0]);
         const old = toString(args[1]);
         const replacement = toString(args[2]);
@@ -2245,7 +2281,7 @@ function openFormulaFunctions(valueOf, toString, toNumber, debug = []) {
       ],
     },
     time: {
-      _func: args => {
+      _func: (args) => {
         const hours = toNumber(args[0]);
         const minutes = toNumber(args[1]);
         const seconds = toNumber(args[2]);
@@ -2266,9 +2302,9 @@ function openFormulaFunctions(valueOf, toString, toNumber, debug = []) {
       _signature: [],
     },
     trim: {
-      _func: args => {
+      _func: (args) => {
         const text = toString(args[0]);
-        return text.split(' ').filter(x => x).join(' ');
+        return text.split(' ').filter((x) => x).join(' ');
       },
       _signature: [
         { types: [dataTypes.TYPE_STRING] },
@@ -2279,7 +2315,7 @@ function openFormulaFunctions(valueOf, toString, toNumber, debug = []) {
       _signature: [],
     },
     trunc: {
-      _func: args => {
+      _func: (args) => {
         const number = toNumber(args[0]);
         const digits = args.length > 1 ? toNumber(args[1]) : 0;
         const method = number >= 0 ? Math.floor : Math.ceil;
@@ -2291,8 +2327,8 @@ function openFormulaFunctions(valueOf, toString, toNumber, debug = []) {
       ],
     },
     unique: {
-      _func: args => {
-        const valueArray = args[0].map(a => valueOf(a));
+      _func: (args) => {
+        const valueArray = args[0].map((a) => valueOf(a));
         return args[0].filter((v, index) => valueArray.indexOf(valueOf(v)) === index);
       },
       _signature: [
@@ -2300,7 +2336,7 @@ function openFormulaFunctions(valueOf, toString, toNumber, debug = []) {
       ],
     },
     upper: {
-      _func: args => {
+      _func: (args) => {
         const value = toString(args[0]);
         return value.toUpperCase();
       },
@@ -2309,13 +2345,13 @@ function openFormulaFunctions(valueOf, toString, toNumber, debug = []) {
       ],
     },
     value: {
-      _func: args => {
+      _func: (args) => {
         const obj = args[0] || {};
         const index = args[1];
         const result = obj[index];
         if (result === undefined) {
           debug.push(`Failed to find: '${index}'`);
-          const available = Object.keys(obj).map(a => `'${a}'`).toString();
+          const available = Object.keys(obj).map((a) => `'${a}'`).toString();
           if (available.length) debug.push(`Available fields: ${available}`);
           return null;
         }
@@ -2327,7 +2363,7 @@ function openFormulaFunctions(valueOf, toString, toNumber, debug = []) {
       ],
     },
     weekday: {
-      _func: args => {
+      _func: (args) => {
         const date = toNumber(args[0]);
         const type = args.length > 1 ? toNumber(args[1]) : 1;
         const jsDate = new Date(date * MS_IN_DAY);
@@ -2349,7 +2385,7 @@ function openFormulaFunctions(valueOf, toString, toNumber, debug = []) {
       ],
     },
     year: {
-      _func: args => {
+      _func: (args) => {
         const date = toNumber(args[0]);
         const jsDate = new Date(date * MS_IN_DAY);
         return jsDate.getFullYear();
@@ -2359,7 +2395,7 @@ function openFormulaFunctions(valueOf, toString, toNumber, debug = []) {
       ],
     },
     charCode: {
-      _func: args => {
+      _func: (args) => {
         const code = toNumber(args[0]);
         if (!Number.isInteger(code)) {
           return null;
@@ -2371,7 +2407,7 @@ function openFormulaFunctions(valueOf, toString, toNumber, debug = []) {
       ],
     },
     codePoint: {
-      _func: args => {
+      _func: (args) => {
         const text = toString(args[0]);
         if (text.length === 0) {
           return null;
@@ -2383,25 +2419,25 @@ function openFormulaFunctions(valueOf, toString, toNumber, debug = []) {
       ],
     },
     encodeUrlComponent: {
-      _func: args => encodeURIComponent(args[0]),
+      _func: (args) => encodeURIComponent(args[0]),
       _signature: [
         { types: [dataTypes.TYPE_STRING] },
       ],
     },
     encodeUrl: {
-      _func: args => encodeURI(args[0]),
+      _func: (args) => encodeURI(args[0]),
       _signature: [
         { types: [dataTypes.TYPE_STRING] },
       ],
     },
     decodeUrlComponent: {
-      _func: args => decodeURIComponent(args[0]),
+      _func: (args) => decodeURIComponent(args[0]),
       _signature: [
         { types: [dataTypes.TYPE_STRING] },
       ],
     },
     decodeUrl: {
-      _func: args => decodeURI(args[0]),
+      _func: (args) => decodeURI(args[0]),
       _signature: [
         { types: [dataTypes.TYPE_STRING] },
       ],
@@ -2432,7 +2468,7 @@ function functions(
     TYPE_ARRAY_STRING,
   } = dataTypes;
   function createKeyFunction(exprefNode, allowedTypes) {
-    return x => {
+    return (x) => {
       const current = runtime.interpreter.visit(exprefNode, x);
       if (allowedTypes.indexOf(getTypeName(current)) < 0) {
         const msg = `TypeError: expected one of ${allowedTypes
@@ -2444,14 +2480,14 @@ function functions(
   }
   const functionMap = {
     abs: {
-      _func: resolvedArgs => Math.abs(resolvedArgs[0]),
+      _func: (resolvedArgs) => Math.abs(resolvedArgs[0]),
       _signature: [{ types: [TYPE_NUMBER] }],
     },
     avg: {
-      _func: resolvedArgs => {
+      _func: (resolvedArgs) => {
         let sum = 0;
         const inputArray = resolvedArgs[0];
-        inputArray.forEach(a => {
+        inputArray.forEach((a) => {
           sum += a;
         });
         return sum / inputArray.length;
@@ -2459,16 +2495,16 @@ function functions(
       _signature: [{ types: [TYPE_ARRAY_NUMBER] }],
     },
     ceil: {
-      _func: resolvedArgs => Math.ceil(resolvedArgs[0]),
+      _func: (resolvedArgs) => Math.ceil(resolvedArgs[0]),
       _signature: [{ types: [TYPE_NUMBER] }],
     },
     contains: {
-      _func: resolvedArgs => valueOf(resolvedArgs[0]).indexOf(valueOf(resolvedArgs[1])) >= 0,
+      _func: (resolvedArgs) => valueOf(resolvedArgs[0]).indexOf(valueOf(resolvedArgs[1])) >= 0,
       _signature: [{ types: [TYPE_STRING, TYPE_ARRAY] },
         { types: [TYPE_ANY] }],
     },
     endsWith: {
-      _func: resolvedArgs => {
+      _func: (resolvedArgs) => {
         const searchStr = valueOf(resolvedArgs[0]);
         const suffix = valueOf(resolvedArgs[1]);
         return searchStr.indexOf(suffix, searchStr.length - suffix.length) !== -1;
@@ -2476,11 +2512,11 @@ function functions(
       _signature: [{ types: [TYPE_STRING] }, { types: [TYPE_STRING] }],
     },
     floor: {
-      _func: resolvedArgs => Math.floor(resolvedArgs[0]),
+      _func: (resolvedArgs) => Math.floor(resolvedArgs[0]),
       _signature: [{ types: [TYPE_NUMBER] }],
     },
     join: {
-      _func: resolvedArgs => {
+      _func: (resolvedArgs) => {
         const joinChar = resolvedArgs[0];
         const listJoin = resolvedArgs[1];
         return listJoin.join(joinChar);
@@ -2491,14 +2527,14 @@ function functions(
       ],
     },
     keys: {
-      _func: resolvedArgs => {
+      _func: (resolvedArgs) => {
         if (resolvedArgs[0] === null) return [];
         return Object.keys(resolvedArgs[0]);
       },
       _signature: [{ types: [TYPE_ANY] }],
     },
     length: {
-      _func: resolvedArgs => {
+      _func: (resolvedArgs) => {
         const arg = valueOf(resolvedArgs[0]);
         if (isObject(arg)) return Object.keys(arg).length;
         return isArray(arg) ? arg.length : toString(arg).length;
@@ -2506,20 +2542,20 @@ function functions(
       _signature: [{ types: [TYPE_STRING, TYPE_ARRAY, TYPE_OBJECT] }],
     },
     map: {
-      _func: resolvedArgs => {
+      _func: (resolvedArgs) => {
         const exprefNode = resolvedArgs[0];
-        return resolvedArgs[1].map(arg => runtime.interpreter.visit(exprefNode, arg));
+        return resolvedArgs[1].map((arg) => runtime.interpreter.visit(exprefNode, arg));
       },
       _signature: [{ types: [TYPE_EXPREF] }, { types: [TYPE_ARRAY] }],
     },
     max: {
-      _func: args => {
+      _func: (args) => {
         const array = args.reduce((prev, cur) => {
           if (Array.isArray(cur)) prev.push(...cur);
           else prev.push(cur);
           return prev;
         }, []);
-        const first = array.find(r => r !== null);
+        const first = array.find((r) => r !== null);
         if (array.length === 0 || first === undefined) return null;
         const isNumber = getTypeName(first, true) === TYPE_NUMBER;
         const compare = isNumber
@@ -2536,14 +2572,14 @@ function functions(
       _signature: [{ types: [TYPE_ARRAY, TYPE_ARRAY_NUMBER, TYPE_ARRAY_STRING], variadic: true }],
     },
     maxBy: {
-      _func: resolvedArgs => {
+      _func: (resolvedArgs) => {
         const exprefNode = resolvedArgs[1];
         const resolvedArray = resolvedArgs[0];
         const keyFunction = createKeyFunction(exprefNode, [TYPE_NUMBER, TYPE_STRING]);
         let maxNumber = -Infinity;
         let maxRecord;
         let current;
-        resolvedArray.forEach(arg => {
+        resolvedArray.forEach((arg) => {
           current = keyFunction(arg);
           if (current > maxNumber) {
             maxNumber = current;
@@ -2555,9 +2591,9 @@ function functions(
       _signature: [{ types: [TYPE_ARRAY] }, { types: [TYPE_EXPREF] }],
     },
     merge: {
-      _func: resolvedArgs => {
+      _func: (resolvedArgs) => {
         const merged = {};
-        resolvedArgs.forEach(current => {
+        resolvedArgs.forEach((current) => {
           Object.entries(current || {}).forEach(([key, value]) => {
             merged[key] = value;
           });
@@ -2567,13 +2603,13 @@ function functions(
       _signature: [{ types: [TYPE_OBJECT], variadic: true }],
     },
     min: {
-      _func: args => {
+      _func: (args) => {
         const array = args.reduce((prev, cur) => {
           if (Array.isArray(cur)) prev.push(...cur);
           else prev.push(cur);
           return prev;
         }, []);
-        const first = array.find(r => r !== null);
+        const first = array.find((r) => r !== null);
         if (array.length === 0 || first === undefined) return null;
         const isNumber = getTypeName(first, true) === TYPE_NUMBER;
         const compare = isNumber
@@ -2590,14 +2626,14 @@ function functions(
       _signature: [{ types: [TYPE_ARRAY, TYPE_ARRAY_NUMBER, TYPE_ARRAY_STRING], variadic: true }],
     },
     minBy: {
-      _func: resolvedArgs => {
+      _func: (resolvedArgs) => {
         const exprefNode = resolvedArgs[1];
         const resolvedArray = resolvedArgs[0];
         const keyFunction = createKeyFunction(exprefNode, [TYPE_NUMBER, TYPE_STRING]);
         let minNumber = Infinity;
         let minRecord;
         let current;
-        resolvedArray.forEach(arg => {
+        resolvedArray.forEach((arg) => {
           current = keyFunction(arg);
           if (current < minNumber) {
             minNumber = current;
@@ -2609,11 +2645,11 @@ function functions(
       _signature: [{ types: [TYPE_ARRAY] }, { types: [TYPE_EXPREF] }],
     },
     notNull: {
-      _func: resolvedArgs => resolvedArgs.find(arg => getTypeName(arg) !== TYPE_NULL) || null,
+      _func: (resolvedArgs) => resolvedArgs.find((arg) => getTypeName(arg) !== TYPE_NULL) || null,
       _signature: [{ types: [TYPE_ANY], variadic: true }],
     },
     reduce: {
-      _func: resolvedArgs => {
+      _func: (resolvedArgs) => {
         const exprefNode = resolvedArgs[0];
         return resolvedArgs[1].reduce(
           (accumulated, current, index, array) => runtime.interpreter.visit(exprefNode, {
@@ -2629,7 +2665,7 @@ function functions(
       ],
     },
     register: {
-      _func: resolvedArgs => {
+      _func: (resolvedArgs) => {
         const functionName = resolvedArgs[0];
         const exprefNode = resolvedArgs[1];
         if (functionMap[functionName]) {
@@ -2637,7 +2673,7 @@ function functions(
           return {};
         }
         functionMap[functionName] = {
-          _func: args => runtime.interpreter.visit(exprefNode, ...args),
+          _func: (args) => runtime.interpreter.visit(exprefNode, ...args),
           _signature: [{ types: [TYPE_ANY], optional: true }],
         };
         return {};
@@ -2648,7 +2684,7 @@ function functions(
       ],
     },
     reverse: {
-      _func: resolvedArgs => {
+      _func: (resolvedArgs) => {
         const originalStr = valueOf(resolvedArgs[0]);
         const typeName = getTypeName(originalStr);
         if (typeName === TYPE_STRING) {
@@ -2665,7 +2701,7 @@ function functions(
       _signature: [{ types: [TYPE_STRING, TYPE_ARRAY] }],
     },
     sort: {
-      _func: resolvedArgs => {
+      _func: (resolvedArgs) => {
         const sortedArray = resolvedArgs[0].slice(0);
         if (sortedArray.length > 0) {
           const normalize = getTypeName(resolvedArgs[0][0]) === TYPE_NUMBER ? toNumber : toString;
@@ -2682,7 +2718,7 @@ function functions(
       _signature: [{ types: [TYPE_ARRAY, TYPE_ARRAY_STRING, TYPE_ARRAY_NUMBER] }],
     },
     sortBy: {
-      _func: resolvedArgs => {
+      _func: (resolvedArgs) => {
         const sortedArray = resolvedArgs[0].slice(0);
         if (sortedArray.length === 0) {
           return sortedArray;
@@ -2728,13 +2764,13 @@ function functions(
       _signature: [{ types: [TYPE_ARRAY] }, { types: [TYPE_EXPREF] }],
     },
     startsWith: {
-      _func: resolvedArgs => valueOf(resolvedArgs[0]).startsWith(valueOf(resolvedArgs[1])),
+      _func: (resolvedArgs) => valueOf(resolvedArgs[0]).startsWith(valueOf(resolvedArgs[1])),
       _signature: [{ types: [TYPE_STRING] }, { types: [TYPE_STRING] }],
     },
     sum: {
-      _func: resolvedArgs => {
+      _func: (resolvedArgs) => {
         let sum = 0;
-        resolvedArgs[0].forEach(arg => {
+        resolvedArgs[0].forEach((arg) => {
           sum += arg * 1;
         });
         return sum;
@@ -2742,7 +2778,7 @@ function functions(
       _signature: [{ types: [TYPE_ARRAY_NUMBER] }],
     },
     toArray: {
-      _func: resolvedArgs => {
+      _func: (resolvedArgs) => {
         if (getTypeName(resolvedArgs[0]) === TYPE_ARRAY) {
           return resolvedArgs[0];
         }
@@ -2751,7 +2787,7 @@ function functions(
       _signature: [{ types: [TYPE_ANY] }],
     },
     toNumber: {
-      _func: resolvedArgs => {
+      _func: (resolvedArgs) => {
         const typeName = getTypeName(resolvedArgs[0]);
         if (typeName === TYPE_NUMBER) {
           return resolvedArgs[0];
@@ -2764,7 +2800,7 @@ function functions(
       _signature: [{ types: [TYPE_ANY] }],
     },
     toString: {
-      _func: resolvedArgs => {
+      _func: (resolvedArgs) => {
         if (getTypeName(resolvedArgs[0]) === TYPE_STRING) {
           return resolvedArgs[0];
         }
@@ -2773,7 +2809,7 @@ function functions(
       _signature: [{ types: [TYPE_ANY] }],
     },
     type: {
-      _func: resolvedArgs => ({
+      _func: (resolvedArgs) => ({
         [TYPE_NUMBER]: 'number',
         [TYPE_STRING]: 'string',
         [TYPE_ARRAY]: 'array',
@@ -2785,7 +2821,7 @@ function functions(
       _signature: [{ types: [TYPE_ANY] }],
     },
     values: {
-      _func: resolvedArgs => {
+      _func: (resolvedArgs) => {
         const arg = valueOf(resolvedArgs[0]);
         if (arg === null) return [];
         return Object.values(arg);
@@ -2793,12 +2829,12 @@ function functions(
       _signature: [{ types: [TYPE_ANY] }],
     },
     zip: {
-      _func: args => {
+      _func: (args) => {
         const count = args.reduce((min, current) => Math.min(min, current.length), args[0].length);
         const result = new Array(count);
         for (let i = 0; i < count; i += 1) {
           result[i] = [];
-          args.forEach(a => {
+          args.forEach((a) => {
             result[i].push(a[i]);
           });
         }
@@ -2815,7 +2851,7 @@ const {
   TYPE_ANY,
 } = dataTypes;
 function getToNumber(stringToNumber, debug = []) {
-  return value => {
+  return (value) => {
     const n = getValueOf(value);
     if (n === null) return null;
     if (n instanceof Array) {
@@ -2834,7 +2870,7 @@ function toString(a) {
   if (a === null || a === undefined) return '';
   return a.toString();
 }
-const defaultStringToNumber = (str => {
+const defaultStringToNumber = ((str) => {
   const n = +str;
   return Number.isNaN(n) ? 0 : n;
 });
@@ -2869,12 +2905,13 @@ class Runtime {
       this.functionTable[fname] = func;
     });
   }
+
   _validateArgs(argName, args, signature, bResolved) {
     if (signature.length === 0) {
       return;
     }
     let pluralized;
-    const argsNeeded = signature.filter(arg => !arg.optional).length;
+    const argsNeeded = signature.filter((arg) => !arg.optional).length;
     if (signature[signature.length - 1].variadic) {
       if (args.length < signature.length) {
         pluralized = signature.length === 1 ? ' argument' : ' arguments';
@@ -2900,6 +2937,7 @@ class Runtime {
       }
     }
   }
+
   callFunction(name, resolvedArgs, data, interpreter, bResolved = true) {
     if (!Object.prototype.hasOwnProperty.call(this.functionTable, name)) throw new Error(`Unknown function: ${name}()`);
     const functionEntry = this.functionTable[name];
@@ -2913,6 +2951,7 @@ class Formula {
     this.toNumber = getToNumber(stringToNumberFn || defaultStringToNumber, debug);
     this.runtime = new Runtime(debug, this.toNumber, customFunctions);
   }
+
   compile(stream, allowedGlobalNames = []) {
     let ast;
     try {
@@ -2924,6 +2963,7 @@ class Formula {
     }
     return ast;
   }
+
   search(node, data, globals = {}, language = 'en-US') {
     this.runtime.interpreter = new TreeInterpreter(
       this.runtime,
@@ -2953,10 +2993,12 @@ class JsonFormula {
     this.debug = debug;
     this.formula = new Formula(debug, customFunctions, stringToNumber);
   }
+
   search(expression, json, globals = {}, language = 'en-US') {
     const ast = this.compile(expression, Object.keys(globals));
     return this.run(ast, json, language, globals);
   }
+
   run(ast, json, language, globals) {
     return this.formula.search(
       ast,
@@ -2965,6 +3007,7 @@ class JsonFormula {
       language,
     );
   }
+
   compile(expression, allowedGlobalNames = []) {
     this.debug.length = 0;
     return this.formula.compile(expression, allowedGlobalNames);
