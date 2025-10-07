@@ -14,6 +14,6 @@ jobs:
           if [[ ! "$BRANCH" =~ $REGEX ]]; then
             echo "::error title=Invalid branch name::$BRANCH"
             echo "Expected: <type>-<TICKET>-<number>[-optional-kebab-title]"
-            echo "Example: feat-EDGE-80-github"
+            echo "Example: feat-EDGE-80-github-setup"
             exit 1
           fi
