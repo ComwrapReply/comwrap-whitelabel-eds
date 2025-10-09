@@ -1,10 +1,10 @@
 {
   "mappings": [
-    "/content/comwrap-whitelabel-eds/:/",
-    "/content/comwrap-whitelabel-eds/configuration:/.helix/config.json",
-    "/content/comwrap-whitelabel-eds/metadata:/metadata.json"
+    "/content/eds-universal-test/:/",
+    "/content/eds-universal-test/configuration:/.helix/config.json",
+    "/content/eds-universal-test/metadata:/metadata.json"
   ],
   "includes": [
-    "/content/comwrap-whitelabel-eds/"
+    "/content/eds-universal-test/"
   ]
 }
