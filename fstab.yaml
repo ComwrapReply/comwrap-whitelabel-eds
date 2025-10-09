@@ -1,5 +1,5 @@
 mountpoints:
   /:
-    url: "https://author-p24706-e491522.adobeaemcloud.com/bin/franklin.delivery/ComwrapReply/eds-universal-test/main"
+    url: "https://author-p24706-e491522.adobeaemcloud.com/bin/franklin.delivery/eds-universal-test/main"
     type: "markup"
     suffix: ".html"
