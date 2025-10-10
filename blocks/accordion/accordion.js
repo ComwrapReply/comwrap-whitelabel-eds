@@ -14,7 +14,6 @@ export default function decorate(block) {
   // div[6] = Read-only
   // div[7] = Column Span
   // div[8+] = Accordion items
-  
 
   const children = [...block.children];
 
