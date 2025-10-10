@@ -40,23 +40,6 @@ ol[role='list'] {
     list-style: none;
 }
 
-/* Set core root defaults */
-html:focus-within {
-    scroll-behavior: smooth;
-}
-
-/* Set core body defaults */
-body {
-    min-height: 100vh;
-    text-rendering: optimizespeed;
-    line-height: 1.5;
-}
-
-/* A elements that don't have a class get default styles */
-a:not([class]) {
-    text-decoration-skip-ink: auto;
-}
-
 /* Make images easier to work with */
 img,
 picture {
@@ -122,11 +105,11 @@ select {
     --color-info: #e7eaef;
     
     /* Hover & Active States */
-    --color-primary-dark-hover: rgba(255, 255, 255, 80% );
-    --color-primary-dark-active: rgba(255, 255, 255, 50%);
-    --color-sec-dark-hover: rgba(255, 255, 255, 20%);
-    --color-sec-dark-active: rgba(255, 255, 255, 40%);
-    --color-primary-transparent: rgba(0, 115, 221, 0.4);
+    --color-primary-dark-hover: rgb(255 255 255 / 80% );
+    --color-primary-dark-active: rgb(255 255 255 / 50%);
+    --color-sec-dark-hover: rgb(255 255 255 / 20%);
+    --color-sec-dark-active: rgb(255 255 255 / 40%);
+    --color-primary-transparent: rgb(0 115 221 / 40%);
     
     /* Gradients */
     --gradient-blue: linear-gradient(270deg, var(--color-dark-blue), var(--color-primary-blue));
@@ -140,8 +123,8 @@ select {
     /* ===== TYPOGRAPHY ===== */
     
     /* Font Families */
-    --font-family-semibold: 'AlbertSans-SemiBold', Arial, sans-serif;
-    --font-family-regular: 'AlbertSans-Regular', Arial, sans-serif;
+    --font-family-semibold: 'AlbertSans-SemiBold', arial, sans-serif;
+    --font-family-regular: 'AlbertSans-Regular', arial, sans-serif;
     --font-family-base: var(--font-family-semibold);
     --font-family-body: var(--font-family-regular);
     
@@ -254,15 +237,22 @@ select {
 /* Base Typography */
 html {
     font-size: 16px;
-    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
 }
 
 body {
     font-family: var(--font-family-body);
     font-size: var(--font-size-body);
-    line-height: var(--line-height-body);
     color: var(--color-black);
     background-color: var(--color-white);
+    min-height: 100vh;
+    text-rendering: optimizespeed;
+    line-height: 1.5;
+}
+
+/* Set core root defaults */
+html:focus-within {
+    scroll-behavior: smooth;
 }
 
 /* Headings */
@@ -353,6 +343,11 @@ a {
     transition: var(--transition-base);
 }
 
+/* A elements that don't have a class get default styles */
+a:not([class]) {
+    text-decoration-skip-ink: auto;
+}
+
 a:hover,
 a:focus {
     color: var(--color-dark-blue);
@@ -438,7 +433,7 @@ blockquote::before {
    RESPONSIVE TYPOGRAPHY
    ======================================== */
 
-@media screen and (max-width: 1024px) {
+@media screen and (width <= 1024px) {
     .hero,
     .heading-hero {
         font-size: var(--font-size-mob-hero);
@@ -509,7 +504,7 @@ blockquote::before {
     padding: 0 var(--gutter-padding);
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (width <= 768px) {
     .container {
         padding: 0 var(--space-16);
     }
@@ -528,13 +523,13 @@ blockquote::before {
 .grid-cols-6 { grid-template-columns: repeat(6, 1fr); }
 .grid-cols-12 { grid-template-columns: repeat(12, 1fr); }
 
-@media screen and (max-width: 1024px) {
+@media screen and (width <= 1024px) {
     .grid-cols-4 { grid-template-columns: repeat(2, 1fr); }
     .grid-cols-6 { grid-template-columns: repeat(3, 1fr); }
     .grid-cols-12 { grid-template-columns: repeat(6, 1fr); }
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (width <= 768px) {
     .grid-cols-2,
     .grid-cols-3,
     .grid-cols-4,
@@ -737,13 +732,13 @@ blockquote::before {
 .card {
     background-color: var(--color-white);
     border-radius: var(--space-8);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 8px rgb(0 0 0 / 10%);
     overflow: hidden;
     transition: var(--transition-base);
 }
 
 .card:hover {
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 4px 16px rgb(0 0 0 / 15%);
     transform: translateY(-2px);
 }
 
@@ -792,7 +787,7 @@ blockquote::before {
 .form-control:focus {
     outline: none;
     border-color: var(--color-primary-blue);
-    box-shadow: 0 0 0 3px rgba(0, 115, 221, 0.1);
+    box-shadow: 0 0 0 3px rgb(0 115 221 / 10%);
 }
 
 .form-control:invalid {
@@ -958,13 +953,13 @@ blockquote::before {
    ======================================== */
 
 /* Mobile First Responsive Classes */
-@media screen and (max-width: 360px) {
+@media screen and (width <= 360px) {
     .xs-hidden { display: none; }
     .xs-block { display: block; }
     .xs-text-center { text-align: center; }
 }
 
-@media screen and (max-width: 576px) {
+@media screen and (width <= 576px) {
     .sm-hidden { display: none; }
     .sm-block { display: block; }
     .sm-text-center { text-align: center; }
@@ -972,7 +967,7 @@ blockquote::before {
     .sm-p-16 { padding: var(--space-16); }
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (width <= 768px) {
     .md-hidden { display: none; }
     .md-block { display: block; }
     .md-text-center { text-align: center; }
@@ -980,17 +975,17 @@ blockquote::before {
     .md-p-16 { padding: var(--space-16); }
 }
 
-@media screen and (max-width: 1024px) {
+@media screen and (width <= 1024px) {
     .lg-hidden { display: none; }
     .lg-block { display: block; }
     .lg-text-center { text-align: center; }
 }
 
-@media screen and (min-width: 1025px) {
+@media screen and (width >= 1025px) {
     .lg-show { display: block; }
 }
 
-@media screen and (min-width: 1920px) {
+@media screen and (width >= 1920px) {
     .xxl-show { display: block; }
 }
 
@@ -1063,7 +1058,7 @@ blockquote::before {
    ======================================== */
 
 /* Fade In Animation */
-@keyframes fadeIn {
+@keyframes fadein {
     from { opacity: 0; }
     to { opacity: 1; }
 }
@@ -1073,11 +1068,12 @@ blockquote::before {
 }
 
 /* Slide Up Animation */
-@keyframes slideUp {
+@keyframes slideup {
     from {
         opacity: 0;
         transform: translateY(20px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
