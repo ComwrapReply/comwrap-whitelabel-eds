@@ -92,7 +92,7 @@
                 "template": {
                   "name": "Accordion",
                   "filter": "accordion",
-                  "hideColumnSpan": true
+                  "model": "accordion"
                 }
               }
             }

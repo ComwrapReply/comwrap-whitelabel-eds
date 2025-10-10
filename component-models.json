@@ -142,6 +142,24 @@
     ]
   },
   {
+    "id": "accordion",
+    "fields": [
+      {
+        "component": "text",
+        "name": "title",
+        "label": "Title",
+        "valueType": "string",
+        "value": ""
+      },
+      {
+        "component": "boolean",
+        "name": "hideTitle",
+        "label": "Hide Title",
+        "value": false
+      }
+    ]
+  },
+  {
     "id": "accordionitem",
     "fields": [
       {
@@ -164,17 +182,6 @@
         "label": "Image",
         "valueType": "string",
         "multi": false
-      }
-    ]
-  },
-  {
-    "id": "section",
-    "fields": [
-      {
-        "component": "text",
-        "name": "name",
-        "label": "Section Name",
-        "description": "The label shown for this section in the Content Tree"
       }
     ]
   },
