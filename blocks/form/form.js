@@ -489,7 +489,7 @@ function addRequestContextToForm(formDef) {
         formDef.properties.queryParams[key?.toLowerCase()] = value;
       });
     } catch (e) {
-      console.warn('Error reading URL parameters:', e);
+      // Error reading URL parameters
     }
 
     // Add cookies
@@ -503,7 +503,7 @@ function addRequestContextToForm(formDef) {
         }
       });
     } catch (e) {
-      console.warn('Error reading cookies:', e);
+      // Error reading cookies
     }
   }
 }
