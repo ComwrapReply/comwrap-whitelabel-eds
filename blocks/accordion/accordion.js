@@ -11,7 +11,16 @@ export default function decorate(block) {
   const singleOpenDiv = block.querySelector(':scope > div:first-child');
   const singleOpen = singleOpenDiv && singleOpenDiv.textContent.trim() === 'true';
 
-  [...block.children].slice(1).forEach((row) => {
+  // Filter out any divs that contain only boolean values or numbers
+  const validChildren = [...block.children].filter((child) => {
+    const text = child.textContent.trim();
+    // Skip divs that contain only boolean values, numbers, or empty content
+    const isValid = text && !['true', 'false'].includes(text) && !/^\d+$/.test(text);
+    return isValid;
+  });
+
+  // Process valid accordion items
+  validChildren.forEach((row) => {
     const li = document.createElement('li');
     moveInstrumentation(row, li);
     li.setAttribute('role', 'listitem');
@@ -62,6 +71,7 @@ export default function decorate(block) {
       contentDiv.innerHTML = answerDiv.innerHTML;
     }
 
+    // Get image from third div if it exists
     const imageDiv = row.querySelector(':scope > div:nth-child(3) picture');
     if (imageDiv) {
       const img = imageDiv.querySelector('img');

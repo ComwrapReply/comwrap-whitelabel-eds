@@ -134,28 +134,10 @@
         "label": "Style",
         "options": [
           {
-            "name": "Default",
-            "value": "Default"
-          },
-          {
             "name": "Highlight",
             "value": "highlight"
-          },
-          {
-            "name": "Gradient",
-            "value": "gradient"
           }
         ]
-      }
-    ]
-  },
-  {
-    "id": "accordion",
-    "fields": [
-      {
-        "component": "boolean",
-        "name": "accordion-single-open",
-        "label": "Allow Only One Item Open at a Time"
       }
     ]
   },
@@ -182,11 +164,17 @@
         "label": "Image",
         "valueType": "string",
         "multi": false
-      },
+      }
+    ]
+  },
+  {
+    "id": "section",
+    "fields": [
       {
-        "component": "boolean",
-        "name": "accordion-item-open",
-        "label": "Initially Open"
+        "component": "text",
+        "name": "name",
+        "label": "Section Name",
+        "description": "The label shown for this section in the Content Tree"
       }
     ]
   },
