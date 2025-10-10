@@ -86,6 +86,8 @@ Branches must follow this pattern:
 <type>-<JIRAKEY>-<number>[-optional-kebab-title]
 ```
 
+
+
 - Allowed types: `feat`, `fix`, `chore`, `docs`, `refactor`, `test`, `perf`, `build`, `ci`, `revert`
 - Examples:
   - `feat-EDGE-80-github-setup`
