@@ -4,13 +4,6 @@ import { moveInstrumentation } from '../../scripts/scripts.js';
 const generateUniqueId = () => `accordion-${Math.random().toString(36).substr(2, 9)}`;
 
 export default function decorate(block) {
-  // Debug: Log all children to see what we're working with
-  console.log('Accordion block children:', [...block.children].map(child => ({
-    tagName: child.tagName,
-    textContent: child.textContent.trim(),
-    innerHTML: child.innerHTML.substring(0, 100) + '...'
-  })));
-
   // Universal Editor creates this structure:
   // div[0] = Name (required field)
   // div[1] = Title (our custom field)
@@ -23,20 +16,16 @@ export default function decorate(block) {
   // div[8+] = Accordion items
 
   const children = [...block.children];
-  
+
   // Get title from the second div (index 1)
   const title = children[1] ? children[1].textContent.trim() : '';
-  
+
   // Get hideTitle from the third div (index 2)
   const shouldHideTitle = children[2] && children[2].textContent.trim() === 'true';
 
-  console.log('Title from div[1]:', title);
-  console.log('Hide title from div[2]:', shouldHideTitle);
-
-  // Skip the first 8 divs (Universal Editor metadata) and process accordion items from div[8] onwards
+  // Skip the first 8 divs (Universal Editor metadata) and process accordion items
+  // from div[8] onwards
   const accordionItemDivs = children.slice(8);
-
-  console.log('Accordion item divs:', accordionItemDivs.length);
 
   // Create accordion wrapper
   const accordionWrapper = document.createElement('div');
