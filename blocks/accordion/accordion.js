@@ -4,20 +4,39 @@ import { moveInstrumentation } from '../../scripts/scripts.js';
 const generateUniqueId = () => `accordion-${Math.random().toString(36).substr(2, 9)}`;
 
 export default function decorate(block) {
-  // Get title and hide title from the first two divs
-  const titleElement = block.querySelector(':scope > div:first-child');
-  const hideTitleElement = block.querySelector(':scope > div:nth-child(2)');
+  // Debug: Log all children to see what we're working with
+  console.log('Accordion block children:', [...block.children].map(child => ({
+    tagName: child.tagName,
+    textContent: child.textContent.trim(),
+    innerHTML: child.innerHTML.substring(0, 100) + '...'
+  })));
 
-  const title = titleElement ? titleElement.textContent.trim() : '';
-  const shouldHideTitle = hideTitleElement && hideTitleElement.textContent.trim() === 'true';
+  // Universal Editor creates this structure:
+  // div[0] = Name (required field)
+  // div[1] = Title (our custom field)
+  // div[2] = Hide title (our custom field)
+  // div[3] = Mark as Unbound Form Element
+  // div[4] = Show Component
+  // div[5] = Enable Component
+  // div[6] = Read-only
+  // div[7] = Column Span
+  // div[8+] = Accordion items
 
-  // Filter out the title and hideTitle divs, and any other non-accordion-item divs
-  const validChildren = [...block.children].slice(2).filter((child) => {
-    const text = child.textContent.trim();
-    // Skip divs that contain only boolean values, numbers, or empty content
-    const isValid = text && !['true', 'false'].includes(text) && !/^\d+$/.test(text);
-    return isValid;
-  });
+  const children = [...block.children];
+  
+  // Get title from the second div (index 1)
+  const title = children[1] ? children[1].textContent.trim() : '';
+  
+  // Get hideTitle from the third div (index 2)
+  const shouldHideTitle = children[2] && children[2].textContent.trim() === 'true';
+
+  console.log('Title from div[1]:', title);
+  console.log('Hide title from div[2]:', shouldHideTitle);
+
+  // Skip the first 8 divs (Universal Editor metadata) and process accordion items from div[8] onwards
+  const accordionItemDivs = children.slice(8);
+
+  console.log('Accordion item divs:', accordionItemDivs.length);
 
   // Create accordion wrapper
   const accordionWrapper = document.createElement('div');
@@ -35,8 +54,8 @@ export default function decorate(block) {
   ul.className = 'accordion';
   ul.setAttribute('role', 'list');
 
-  // Process valid accordion items
-  validChildren.forEach((row) => {
+  // Process accordion items
+  accordionItemDivs.forEach((row) => {
     const li = document.createElement('li');
     moveInstrumentation(row, li);
     li.setAttribute('role', 'listitem');
