@@ -117,8 +117,17 @@ feat: EDGE-80 Add branch name policy workflow
 
 Workflow: `.github/workflows/jira-comment.yml`
 
+**Setup Required**: Repository secrets must be configured by an admin:
+- `JIRA_BASE_URL`: Your Jira instance URL (e.g., `https://company.atlassian.net`)
+- `JIRA_EMAIL`: Email associated with Jira account
+- `JIRA_API_TOKEN`: API token from [Atlassian Account Settings](https://id.atlassian.com/manage-profile/security/api-tokens)
+
+**For Developers**: No additional setup needed once secrets are configured. Jira keys are automatically detected from:
+- Branch names (e.g., `feat-EDGE-39-feature-name`)
+- Commit messages (e.g., `feat: EDGE-39 Add new feature`)
+
 What it does:
-- Detects Jira keys in pushed commits
+- Detects Jira keys from branch names AND commit messages
 - Posts a single Jira comment per issue with:
   - the commit message (auto-converts any URLs into clickable links)
   - a link to the GitHub commit
