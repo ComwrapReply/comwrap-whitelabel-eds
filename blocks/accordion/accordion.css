@@ -1,18 +1,6 @@
-.accordion-wrapper {
-  margin: 2rem 0;
-}
-
-.accordion-main-title {
-  font-size: var(--heading-font-size-l);
-  font-family: var(--heading-font-family);
-  color: var(--heading-text-color);
-  margin: 0 0 1.5rem;
-  padding: 0;
-}
-
 .accordion {
   list-style: none;
-  padding: 0;
+  padding-top: 10rem; /* TODO: Remove this */
   margin: 0;
 }
 

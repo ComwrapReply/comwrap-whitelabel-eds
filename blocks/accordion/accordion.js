@@ -6,38 +6,18 @@ const generateUniqueId = () => `accordion-${Math.random().toString(36).substr(2,
 export default function decorate(block) {
   // Universal Editor creates this structure:
   // div[0] = Name (required field)
-  // div[1] = Title (our custom field)
-  // div[2] = Hide title (our custom field)
-  // div[3] = Mark as Unbound Form Element
-  // div[4] = Show Component
-  // div[5] = Enable Component
-  // div[6] = Read-only
-  // div[7] = Column Span
-  // div[8+] = Accordion items
+  // div[1] = Mark as Unbound Form Element
+  // div[2] = Show Component
+  // div[3] = Enable Component
+  // div[4] = Read-only
+  // div[5] = Column Span
+  // div[6+] = Accordion items
 
   const children = [...block.children];
 
-  // Get title from the second div (index 1)
-  const title = children[1] ? children[1].textContent.trim() : '';
-
-  // Get hideTitle from the third div (index 2)
-  const shouldHideTitle = children[2] && children[2].textContent.trim() === 'true';
-
-  // Skip the first 8 divs (Universal Editor metadata) and process accordion items
-  // from div[8] onwards
-  const accordionItemDivs = children.slice(8);
-
-  // Create accordion wrapper
-  const accordionWrapper = document.createElement('div');
-  accordionWrapper.className = 'accordion-wrapper';
-
-  // Add main title if it exists and shouldn't be hidden
-  if (title && !shouldHideTitle) {
-    const mainTitle = document.createElement('h2');
-    mainTitle.className = 'accordion-main-title';
-    mainTitle.textContent = title;
-    accordionWrapper.appendChild(mainTitle);
-  }
+  // Skip the first 6 divs (Universal Editor metadata) and process accordion items
+  // from div[6] onwards
+  const accordionItemDivs = children.slice(9);
 
   const ul = document.createElement('ul');
   ul.className = 'accordion';
@@ -120,9 +100,6 @@ export default function decorate(block) {
     ul.appendChild(li);
   });
 
-  // Append accordion to wrapper
-  accordionWrapper.appendChild(ul);
-
   block.textContent = '';
-  block.appendChild(accordionWrapper);
+  block.appendChild(ul);
 }
