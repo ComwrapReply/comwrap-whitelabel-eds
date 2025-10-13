@@ -20,4 +20,3 @@ export function renderButton({
 }
 
 export default renderButton;
-

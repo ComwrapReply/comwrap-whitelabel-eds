@@ -40,11 +40,11 @@
             },
             {
               "name": "primary",
-              "value": "primary"
+              "value": "button--primary"
             },
             {
               "name": "secondary",
-              "value": "secondary"
+              "value": "button--secondary"
             }
           ]
         }
