@@ -94,11 +94,6 @@
         "label": "Text"
       },
       {
-        "component": "text",
-        "name": "linkTitle",
-        "label": "Title"
-      },
-      {
         "component": "select",
         "name": "linkType",
         "label": "Type",
@@ -134,16 +129,8 @@
         "label": "Style",
         "options": [
           {
-            "name": "Default",
-            "value": "Default"
-          },
-          {
             "name": "Highlight",
             "value": "highlight"
-          },
-          {
-            "name": "Gradient",
-            "value": "gradient"
           }
         ]
       }
