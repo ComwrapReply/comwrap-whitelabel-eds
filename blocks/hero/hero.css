@@ -30,6 +30,111 @@
   height: 100%;
 }
 
+/* Hero content area */
+.hero .hero-content {
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Hero title */
+.hero .hero-title {
+  color: var(--background-color);
+  margin-bottom: 1rem;
+}
+
+/* Hero description */
+.hero .hero-description {
+  color: var(--background-color);
+  font-size: var(--body-font-size-m);
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+/* CTA button container */
+.hero .button-container {
+  margin-top: 2rem;
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+/* CTA buttons */
+.hero .button-container .button {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  text-decoration: none;
+  border-radius: 4px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border: 2px solid transparent;
+}
+
+/* Primary button style */
+.hero .button-container .button.primary {
+  background-color: var(--link-color);
+  color: var(--background-color);
+  border-color: var(--link-color);
+}
+
+.hero .button-container .button.primary:hover {
+  background-color: var(--link-hover-color);
+  border-color: var(--link-hover-color);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Secondary button style */
+.hero .button-container .button.secondary {
+  background-color: transparent;
+  color: var(--background-color);
+  border-color: var(--background-color);
+}
+
+.hero .button-container .button.secondary:hover {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Tertiary button style */
+.hero .button-container .button.tertiary {
+  background-color: var(--background-color);
+  color: var(--link-color);
+  border-color: var(--background-color);
+}
+
+.hero .button-container .button.tertiary:hover {
+  background-color: var(--link-color);
+  color: var(--background-color);
+  border-color: var(--link-color);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Text button style */
+.hero .button-container .button.text {
+  background-color: transparent;
+  color: var(--background-color);
+  border-color: transparent;
+  text-decoration: underline;
+  padding: 0.5rem 1rem;
+}
+
+.hero .button-container .button.text:hover {
+  color: var(--link-hover-color);
+  text-decoration: none;
+}
+
+/* Focus styles for accessibility */
+.hero .button-container .button:focus {
+  outline: 2px solid var(--background-color);
+  outline-offset: 2px;
+}
+
 @media (width >= 900px) {
   .hero {
     padding: 40px 32px;
