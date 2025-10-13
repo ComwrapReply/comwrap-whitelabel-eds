@@ -1,2 +1,2 @@
 
-node .husky/pre-push.mjs
+/Users/h.cott/.nvm/versions/node/v22.19.0/bin/node .husky/pre-push.mjs
