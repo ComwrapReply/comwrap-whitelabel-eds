@@ -1,1 +1,1 @@
-node .husky/pre-commit.mjs
+/Users/h.cott/.nvm/versions/node/v22.19.0/bin/node .husky/pre-commit.mjs
