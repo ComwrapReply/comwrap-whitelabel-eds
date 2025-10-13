@@ -12,10 +12,6 @@
           "value": "secondary"
         },
         {
-          "name": "Tertiary",
-          "value": "tertiary"
-        },
-        {
           "name": "Text",
           "value": "text"
         }
