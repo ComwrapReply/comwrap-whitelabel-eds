@@ -50,17 +50,18 @@ function processImageReference(block) {
 function processCtaButtons(block) {
   // Find all remaining links (after image has been processed) - these are CTAs
   const allLinks = [...block.querySelectorAll('a:not(.hero-image-wrapper a)')];
-
   // Separate valid CTA links from URL-only links
   const validCtaLinks = [];
   const urlOnlyLinks = [];
   allLinks.forEach((link) => {
-    const text = link.parentElement.nextElementSibling.textContent.trim();
+    const CTAtext = link.parentElement.nextElementSibling;
+    const target = CTAtext.nextElementSibling || null;
     const { href } = link;
-    link.textContent = text;
+    link.textContent = CTAtext.textContent.trim();
+    link.setAttribute('target', target ? target.textContent.trim() : '_self');
 
     // If the link text is a URL or path, it's probably a raw field value
-    if (text.startsWith('http') || text.startsWith('/content/') || text === href) {
+    if (CTAtext.textContent.trim().startsWith('http') || CTAtext.textContent.trim().startsWith('/content/') || CTAtext.textContent.trim() === href) {
       urlOnlyLinks.push(link);
     } else {
       // This is a proper button with label text
