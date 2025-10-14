@@ -4,25 +4,106 @@
  */
 
 /**
- * Add semantic CSS classes and enhance CTA buttons
+ * Process image reference and convert to actual image element
  * @param {HTMLElement} block - The hero block DOM element
  */
-function enhanceCtaButtons(block) {
-  // Find all CTA links in the block
-  const ctaLinks = block.querySelectorAll('p > a');
-  
-  ctaLinks.forEach((link) => {
-    // Add button class if not already present
-    if (!link.classList.contains('button')) {
-      link.classList.add('button');
+function processImageReference(block) {
+  // Find the first link that points to an image (this is how AEM renders image references)
+  const imageLinks = [...block.querySelectorAll('a')].filter((link) => {
+    const href = link.href || '';
+    return href.match(/\.(jpg|jpeg|png|gif|webp|svg)$/i)
+           || href.includes('/adobe/assets/')
+           || href.includes('adobeaemcloud.com');
+  });
+
+  if (imageLinks.length > 0) {
+    const imageLink = imageLinks[0];
+    const imageUrl = imageLink.href;
+    const imageAlt = imageLink.title || imageLink.textContent || '';
+
+    // Create picture element
+    const picture = document.createElement('picture');
+    picture.classList.add('hero-image-wrapper');
+
+    // Create img element
+    const img = document.createElement('img');
+    img.src = imageUrl;
+    img.alt = imageAlt;
+    img.classList.add('hero-image');
+    img.loading = 'eager'; // Hero images should load immediately
+
+    picture.appendChild(img);
+
+    // Replace the link with the picture element
+    const linkParent = imageLink.closest('div');
+    if (linkParent) {
+      linkParent.innerHTML = '';
+      linkParent.appendChild(picture);
     }
-    
-    // Ensure parent paragraph has button-container class
-    const parent = link.parentElement;
-    if (parent && parent.tagName === 'P' && !parent.classList.contains('button-container')) {
-      parent.classList.add('button-container');
+  }
+}
+
+/**
+ * Process CTA buttons and clean up structure
+ * @param {HTMLElement} block - The hero block DOM element
+ */
+function processCtaButtons(block) {
+  // Find all remaining links (after image has been processed) - these are CTAs
+  const allLinks = [...block.querySelectorAll('a:not(.hero-image-wrapper a)')];
+  //   console.log(allLinks[1].parentElement.parentElement);
+  // Separate valid CTA links from URL-only links
+  const validCtaLinks = [];
+  const urlOnlyLinks = [];
+  allLinks.forEach((link) => {
+    console.log(link.parentElement.nextElementSibling.textContent.trim());
+    const text = link.parentElement.nextElementSibling.textContent.trim();
+    const { href } = link;
+
+    // If the link text is a URL or path, it's probably a raw field value
+    if (text.startsWith('http') || text.startsWith('/content/') || text === href) {
+      urlOnlyLinks.push(link);
+    } else {
+      // This is a proper button with label text
+      validCtaLinks.push(link);
     }
   });
+
+  // Remove URL-only links and their containers
+  allLinks.forEach((link) => {
+    const parent = link.closest('div').parentElement;
+    if (parent) {
+      parent.remove();
+    }
+  });
+
+  console.log(validCtaLinks);
+  
+  // Create a container for CTA buttons if we have valid ones
+  if (validCtaLinks.length > 0) {
+    const ctaContainer = document.createElement('div');
+    ctaContainer.classList.add('button-container');
+
+
+    validCtaLinks.forEach((link) => {
+      // Ensure button class is applied
+      const button = document.createElement('button');
+      button.appendChild(link.cloneNode(true));
+
+      console.log(button);
+    
+      // Move link to the CTA container
+      ctaContainer.appendChild(button);
+    });
+    // console.log(ctaContainer);
+    // Add the CTA container to the content area
+    const contentDiv = block.querySelector('.hero-content');
+    if (contentDiv) {
+      contentDiv.appendChild(ctaContainer);
+    }
+  }
+
+  // Clean up any empty paragraphs left behind
+  block.querySelectorAll('p:empty').forEach((p) => p.remove());
 }
 
 /**
@@ -30,38 +111,49 @@ function enhanceCtaButtons(block) {
  * @param {HTMLElement} block - The hero block DOM element
  */
 function addSemanticClasses(block) {
-  // Add class to image wrapper
-  const picture = block.querySelector('picture');
-  if (picture) {
-    picture.classList.add('hero-image-wrapper');
-  }
+  // Mark content area - find the div with text content
+  const contentDivs = [...block.querySelectorAll(':scope > div > div')];
 
-  // Add class to image element
-  const image = block.querySelector('.hero-image-wrapper img');
-  if (image) {
-    image.classList.add('hero-image');
-  }
+  contentDivs.forEach((div) => {
+    // If it has heading or paragraph (not just links), it's content
+    if (div.querySelector('h1, h2, h3, h4, h5, h6, p')) {
+      div.classList.add('hero-content');
+    }
+  });
 
-  // Mark content area - typically the last div containing text and buttons
-  const contentDivs = block.querySelectorAll(':scope > div');
-  if (contentDivs.length > 0) {
-    const lastDiv = contentDivs[contentDivs.length - 1];
-    const innerDiv = lastDiv.querySelector(':scope > div');
-    if (innerDiv) {
-      innerDiv.classList.add('hero-content');
+  // Process title - find the first non-empty text content in content area
+  const contentArea = block.querySelector('.hero-content');
+  if (contentArea) {
+    // Find first div with text content that's not a link or button
+    const titleElements = [...contentArea.children].filter((child) => {
+      const hasText = child.textContent.trim().length > 0;
+      const isNotLink = !child.querySelector('a');
+      const isNotEmpty = child.children.length > 0 || child.textContent.trim().length > 0;
+      return hasText && isNotLink && isNotEmpty;
+    });
+
+    if (titleElements.length > 0) {
+      const titleElement = titleElements[0];
+      const titleText = titleElement.textContent.trim();
+
+      // Create h1 with the title text
+      const h1 = document.createElement('h1');
+      h1.textContent = titleText;
+      h1.classList.add('hero-title');
+
+      // Replace the original element
+      titleElement.replaceWith(h1);
     }
   }
 
-  // Mark title element
-  const title = block.querySelector('h1, h2, h3, h4, h5, h6');
-  if (title) {
-    title.classList.add('hero-title');
-  }
-
-  // Mark description paragraphs (paragraphs that are not button containers)
+//   console.log(block);
+  // Mark description paragraphs (paragraphs that are not button containers or titles)
   const paragraphs = block.querySelectorAll('p');
   paragraphs.forEach((p) => {
-    if (!p.querySelector('a') && !p.classList.contains('button-container')) {
+    const isButton = p.querySelector('a') || p.classList.contains('button-container');
+    const isEmpty = p.textContent.trim().length === 0;
+
+    if (!isButton && !isEmpty) {
       p.classList.add('hero-description');
     }
   });
@@ -73,11 +165,13 @@ function addSemanticClasses(block) {
  * @param {HTMLElement} block - The block's DOM element/tree
  */
 export default function decorate(block) {
-    console.log(block);
-  // Add semantic CSS classes for better maintainability
-  addSemanticClasses(block);
-  
-  // Enhance CTA buttons
-  enhanceCtaButtons(block);
-}
+  // Process image reference first
+  processImageReference(block);
+//   console.log(block.querySelector('a:not(.hero-image-wrapper a)'));
 
+  // Add semantic CSS classes
+  addSemanticClasses(block);
+
+  // Process and clean up CTA buttons
+  processCtaButtons(block);
+}
