@@ -7,6 +7,12 @@
   grid-gap: 24px;
 }
 
+@media screen and (width <= 1024px) {
+  .cards > ul {
+    grid-template-columns: repeat(auto-fill, minmax(min(25pc, 100%), 1fr));
+  }
+}
+
 .cards > ul > li {
   background-color: var(--background-color);
 }
