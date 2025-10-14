@@ -48,17 +48,17 @@ function processImageReference(block) {
  * @param {HTMLElement} block - The hero block DOM element
  */
 function processButtons(block) {
-  // Find all button container paragraphs (buttons added as components)
-  const buttonContainers = block.querySelectorAll('.button-container');
+  // Find all button components (both button and custom-button)
+  const buttonComponents = block.querySelectorAll('[data-block-name="button"], [data-block-name="custom-button"]');
 
-  if (buttonContainers.length > 0) {
+  if (buttonComponents.length > 0) {
     // Create a wrapper for all buttons
     const ctaWrapper = document.createElement('div');
     ctaWrapper.classList.add('hero-buttons');
 
-    // Move all buttons into the wrapper
-    buttonContainers.forEach((container) => {
-      ctaWrapper.appendChild(container);
+    // Move all button components into the wrapper
+    buttonComponents.forEach((buttonComponent) => {
+      ctaWrapper.appendChild(buttonComponent);
     });
 
     // Add the button wrapper to the content area
@@ -116,9 +116,10 @@ function addSemanticClasses(block) {
   const paragraphs = block.querySelectorAll('p');
   paragraphs.forEach((p) => {
     const isButton = p.querySelector('a') || p.classList.contains('button-container');
+    const isButtonComponent = p.closest('[data-block-name="button"]') || p.closest('[data-block-name="custom-button"]');
     const isEmpty = p.textContent.trim().length === 0;
 
-    if (!isButton && !isEmpty) {
+    if (!isButton && !isButtonComponent && !isEmpty) {
       p.classList.add('hero-description');
     }
   });
