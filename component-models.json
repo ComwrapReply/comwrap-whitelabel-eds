@@ -104,11 +104,11 @@
           },
           {
             "name": "primary",
-            "value": "primary"
+            "value": "primary-btn"
           },
           {
             "name": "secondary",
-            "value": "secondary"
+            "value": "secondary-btn"
           }
         ]
       }
