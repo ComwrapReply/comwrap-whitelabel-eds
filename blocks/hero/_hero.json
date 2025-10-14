@@ -49,7 +49,7 @@
     {
       "id": "hero",
       "components": [
-        "button"
+        "custom-button"
       ]
     }
   ]
