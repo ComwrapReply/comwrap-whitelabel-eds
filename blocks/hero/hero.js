@@ -73,6 +73,30 @@ function processButtons(block) {
 }
 
 /**
+ * Process classes field and apply to block
+ * @param {HTMLElement} block - The hero block DOM element
+ */
+function processClasses(block) {
+  // Find the classes field value in the block content
+  // Look for a div that contains "classes" as text and get the value from the next div
+  const allDivs = [...block.querySelectorAll('div')];
+  const classesDiv = allDivs.find((div) => {
+    const hasClassesText = div.textContent.trim() === 'classes';
+    const hasNextSibling = div.nextElementSibling;
+    const nextSiblingIsDiv = div.nextElementSibling && div.nextElementSibling.tagName === 'DIV';
+    return hasClassesText && hasNextSibling && nextSiblingIsDiv;
+  });
+
+  if (classesDiv && classesDiv.nextElementSibling) {
+    const classesValue = classesDiv.nextElementSibling.textContent.trim();
+    if (classesValue && classesValue !== 'classes') {
+      // Apply the class to the block
+      block.classList.add(classesValue);
+    }
+  }
+}
+
+/**
  * Add semantic classes to hero elements
  * @param {HTMLElement} block - The hero block DOM element
  */
@@ -106,7 +130,10 @@ function addSemanticClasses(block) {
  * @param {HTMLElement} block - The block's DOM element/tree
  */
 export default function decorate(block) {
-  // Process image reference first
+  // Process classes field first (before other processing)
+  processClasses(block);
+
+  // Process image reference
   processImageReference(block);
 
   // Add semantic CSS classes

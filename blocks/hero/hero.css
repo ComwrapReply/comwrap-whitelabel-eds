@@ -66,6 +66,19 @@
   align-items: center;
 }
 
+/* Hero style variants */
+.hero.white h1,
+.hero.white .hero-title,
+.hero.white .hero-description {
+  color: white;
+}
+
+.hero.black h1,
+.hero.black .hero-title,
+.hero.black .hero-description {
+  color: black;
+}
+
 @media (width >= 900px) {
   .hero {
     padding: 10rem 3rem;
