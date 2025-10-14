@@ -1,4 +1,5 @@
 .custom-button {
+  position: relative;
   display: inline-block;
   margin: var(--spacing-m) 0;
 }
@@ -25,13 +26,7 @@
 
 /* Primary Button */
 .custom-button button.primary {
-  background-color: rgb(var(--button-primary));
-  color: rgb(var(--on-button-primary));
-}
-
-.custom-button button.primary:hover,
-.custom-button a.primary:hover {
-  background-color: rgb(var(--button-primary-hover));
+  background-color: var(--color-primary);
   color: rgb(var(--on-button-primary));
 }
 
@@ -42,22 +37,20 @@
   color: rgb(var(--on-button-secondary));
 }
 
-.custom-button button.secondary:hover,
-.custom-button a.secondary:hover {
-  background-color: rgb(var(--button-secondary-hover));
-  color: rgb(var(--on-button-secondary));
-}
-
 /* Text Button */
 .custom-button button.text {
   background: none;
-  color: rgb(var(--button-primary));
+  color: var(--color-primary);
   padding: var(--spacing-s) var(--spacing-m);
 }
 
 .custom-button button.text:hover,
 .custom-button a.text:hover {
-  color: rgb(var(--button-primary-hover));
+  color: rgb(var(--color-primary-hover));
+}
+
+.custom-button .button:hover::after {
+  background-color: var(--color-dark-blue);
 }
 
 /* Button Label */
@@ -77,58 +70,53 @@
 .custom-button a[download]::after,
 .custom-button button[download]::after {
   content: '';
+  position: absolute;
+  right: -1.75rem;
   display: inline-block;
   width: 1em;
   height: 1em;
   margin-left: var(--spacing-xs);
-  background-color: rgb(var(--color-pure-white));
+  background-color: var(--color-primary);
   mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4'%3E%3C/path%3E%3Cpolyline points='7 10 12 15 17 10'%3E%3C/polyline%3E%3Cline x1='12' y1='15' x2='12' y2='3'%3E%3C/line%3E%3C/svg%3E");
   mask-size: contain;
   mask-repeat: no-repeat;
   mask-position: center;
   vertical-align: middle;
-  position: static;
   transition: background-color 0.3s, transform 0.3s;
+}
+
+.custom-button .button.download,
+.custom-button .button.email,
+.custom-button .button.telephone {
+  padding: var(--space-12) 0;
 }
 
 /* Text Button Arrow */
 .custom-button .button.text {
   background-color: unset;
-  color: rgb(var(--button-primary));
+  color: var(--color-primary);
+  padding: var(--space-12) 0;
 }
 
 .custom-button a.text::after,
 .custom-button button.text::after {
   content: '';
+  position: absolute;
+  right: -1.75rem;
   display: inline-block;
   width: 1em;
   height: 1em;
   margin-left: var(--spacing-xs);
-  background-color: rgb(var(--button-primary));
+  background-color: var(--color-primary);
   mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='5' y1='12' x2='19' y2='12'%3E%3C/line%3E%3Cpolyline points='12 5 19 12 12 19'%3E%3C/polyline%3E%3C/svg%3E");
   mask-size: contain;
   mask-repeat: no-repeat;
   mask-position: center;
   vertical-align: middle;
-  position: static;
   transition: background-color 0.3s, transform 0.3s;
 }
 
 .custom-button a.text:hover::after,
 .custom-button button.text:hover::after {
-  background-color: rgb(var(--button-primary-hover));
   transform: translateX(4px);
-}
-
-/* External Link Indicator */
-.custom-button [target='_blank']::after {
-  content: '';
-  display: inline-block;
-  width: 12px;
-  height: 12px;
-  margin-left: var(--spacing-xs);
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6'%3E%3C/path%3E%3Cpolyline points='15 3 21 3 21 9'%3E%3C/polyline%3E%3Cline x1='10' y1='14' x2='21' y2='3'%3E%3C/line%3E%3C/svg%3E");
-  background-size: contain;
-  background-repeat: no-repeat;
-  vertical-align: middle;
 }
