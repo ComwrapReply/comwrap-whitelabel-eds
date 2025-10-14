@@ -339,15 +339,15 @@
             "children": [
               {
                 "name": "Primary",
-                "value": "primary"
+                "value": "button-primary"
               },
               {
                 "name": "Secondary",
-                "value": "secondary"
+                "value": "button-secondary"
               },
               {
                 "name": "Text",
-                "value": "text"
+                "value": "button-text"
               }
             ]
           },
@@ -355,20 +355,16 @@
             "name": "Type",
             "children": [
               {
-                "name": "Link",
-                "value": "link"
-              },
-              {
                 "name": "Download",
-                "value": "download"
+                "value": "button-download"
               },
               {
                 "name": "Email",
-                "value": "email"
+                "value": "button-email"
               },
               {
                 "name": "Telephone",
-                "value": "telephone"
+                "value": "button-telephone"
               }
             ]
           }
@@ -5818,15 +5814,15 @@
             "children": [
               {
                 "name": "Primary",
-                "value": "primary"
+                "value": "button-primary"
               },
               {
                 "name": "Secondary",
-                "value": "secondary"
+                "value": "button-secondary"
               },
               {
                 "name": "Text",
-                "value": "text"
+                "value": "button-text"
               }
             ]
           },
@@ -5834,20 +5830,16 @@
             "name": "Type",
             "children": [
               {
-                "name": "Link",
-                "value": "link"
-              },
-              {
                 "name": "Download",
-                "value": "download"
+                "value": "button-download"
               },
               {
                 "name": "Email",
-                "value": "email"
+                "value": "button-email"
               },
               {
                 "name": "Telephone",
-                "value": "telephone"
+                "value": "button-telephone"
               }
             ]
           }

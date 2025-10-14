@@ -9,9 +9,9 @@ export function renderButton({
 
   let href = link;
   block.classList.forEach((className) => {
-    if (className === 'telephone') href = `tel:${link}`;
-    if (className === 'email') href = `mailto:${link}`;
-    if (className === 'download') button.download = '';
+    if (className === 'button-telephone') href = `tel:${link}`;
+    if (className === 'button-email') href = `mailto:${link}`;
+    if (className === 'button-download') button.download = '';
   });
 
   button.href = href;
