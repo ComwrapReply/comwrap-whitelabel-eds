@@ -50,14 +50,14 @@ function processImageReference(block) {
 function processCtaButtons(block) {
   // Find all remaining links (after image has been processed) - these are CTAs
   const allLinks = [...block.querySelectorAll('a:not(.hero-image-wrapper a)')];
-  //   console.log(allLinks[1].parentElement.parentElement);
+
   // Separate valid CTA links from URL-only links
   const validCtaLinks = [];
   const urlOnlyLinks = [];
   allLinks.forEach((link) => {
-    console.log(link.parentElement.nextElementSibling.textContent.trim());
     const text = link.parentElement.nextElementSibling.textContent.trim();
     const { href } = link;
+    link.textContent = text;
 
     // If the link text is a URL or path, it's probably a raw field value
     if (text.startsWith('http') || text.startsWith('/content/') || text === href) {
@@ -76,25 +76,20 @@ function processCtaButtons(block) {
     }
   });
 
-  console.log(validCtaLinks);
-  
   // Create a container for CTA buttons if we have valid ones
   if (validCtaLinks.length > 0) {
     const ctaContainer = document.createElement('div');
     ctaContainer.classList.add('button-container');
-
 
     validCtaLinks.forEach((link) => {
       // Ensure button class is applied
       const button = document.createElement('button');
       button.appendChild(link.cloneNode(true));
 
-      console.log(button);
-    
       // Move link to the CTA container
       ctaContainer.appendChild(button);
     });
-    // console.log(ctaContainer);
+
     // Add the CTA container to the content area
     const contentDiv = block.querySelector('.hero-content');
     if (contentDiv) {
@@ -146,7 +141,6 @@ function addSemanticClasses(block) {
     }
   }
 
-//   console.log(block);
   // Mark description paragraphs (paragraphs that are not button containers or titles)
   const paragraphs = block.querySelectorAll('p');
   paragraphs.forEach((p) => {
@@ -167,7 +161,6 @@ function addSemanticClasses(block) {
 export default function decorate(block) {
   // Process image reference first
   processImageReference(block);
-//   console.log(block.querySelector('a:not(.hero-image-wrapper a)'));
 
   // Add semantic CSS classes
   addSemanticClasses(block);
