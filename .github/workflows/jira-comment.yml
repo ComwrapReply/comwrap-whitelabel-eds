@@ -110,11 +110,29 @@ jobs:
                       
                       return result
 
+                  # Extract Jira keys from branch name
+                  branch_name = os.environ.get('GITHUB_REF_NAME', '')
+                  branch_keys = set(key_re.findall(branch_name))
+                  
+                  print(f"Branch name: '{branch_name}'")
+                  if branch_keys:
+                      print(f"Found Jira keys in branch: {list(branch_keys)}")
+                  else:
+                      print("No Jira keys found in branch name")
+
                   for c in commits:
                       msg = f"{c['message']}".strip()
                       commit_url = c.get('url') or f"{os.environ['GITHUB_SERVER_URL']}/{os.environ['GITHUB_REPOSITORY']}/commit/{c['id']}"
-                      found = set(key_re.findall(msg))
-                      if not found: 
+                      
+                      # Get Jira keys from both commit message and branch name
+                      commit_keys = set(key_re.findall(msg))
+                      all_keys = branch_keys.union(commit_keys)
+                      
+                      print(f"Commit: '{msg[:50]}...' - Found keys: {list(commit_keys)}")
+                      print(f"All keys for this commit: {list(all_keys)}")
+                      
+                      if not all_keys: 
+                          print("No Jira keys found, skipping commit")
                           continue
                       
                       # Create ADF content with proper hyperlinks
@@ -164,7 +182,7 @@ jobs:
                           "content": content
                       }
                       
-                      for key in found:
+                      for key in all_keys:
                           by_issue.setdefault(key, []).append(line_content)
 
                   # Create proper ADF payloads
@@ -176,6 +194,11 @@ jobs:
                           "content": v  # v is already a list of ADF paragraph objects
                       }
                       payloads.append({"key": k, "comment": adf_comment})
+                  
+                  print(f"Final payloads count: {len(payloads)}")
+                  for p in payloads:
+                      print(f"Will comment on issue: {p['key']}")
+                  
                   with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
                       f.write(f"payloads={json.dumps(payloads)}\n")
                   PY
