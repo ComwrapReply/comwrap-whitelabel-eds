@@ -44,7 +44,7 @@
         },
         {
           "component": "select",
-          "name": "heroStyle",
+          "name": "classes",
           "label": "Style",
           "options": [
             {
