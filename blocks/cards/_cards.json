@@ -48,9 +48,6 @@
           "value": "",
           "label": "Text",
           "valueType": "string"
-        },
-        {
-          "...": "../../models/partials/_button.json#/fields"
         }
       ]
     }
