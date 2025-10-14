@@ -49,7 +49,7 @@ function processImageReference(block) {
  */
 function processButtons(block) {
   // Find all button components (both button and custom-button)
-  const buttonComponents = block.querySelectorAll('[data-block-name="button"], [data-block-name="custom-button"]');
+  const buttonComponents = block.querySelectorAll('.button-container');
 
   if (buttonComponents.length > 0) {
     // Create a wrapper for all buttons
@@ -131,6 +131,7 @@ function addSemanticClasses(block) {
  * @param {HTMLElement} block - The block's DOM element/tree
  */
 export default function decorate(block) {
+
   // Process image reference first
   processImageReference(block);
 
