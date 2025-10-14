@@ -24,43 +24,44 @@
 }
 
 /* Primary Button */
-.custom-button button.button-primary {
+.custom-button button.primary {
   background-color: rgb(var(--button-primary));
   color: rgb(var(--on-button-primary));
 }
 
-.custom-button button.button-primary:hover,
-.custom-button a.button-primary:hover {
+.custom-button button.primary:hover,
+.custom-button a.primary:hover {
   background-color: rgb(var(--button-primary-hover));
   color: rgb(var(--on-button-primary));
 }
 
 /* Secondary Button */
-.custom-button button.button-secondary {
+.custom-button button.secondary {
+  font-style: normal;
   background-color: rgb(var(--button-secondary));
   color: rgb(var(--on-button-secondary));
 }
 
-.custom-button button.button-secondary:hover,
-.custom-button a.button-secondary:hover {
+.custom-button button.secondary:hover,
+.custom-button a.secondary:hover {
   background-color: rgb(var(--button-secondary-hover));
   color: rgb(var(--on-button-secondary));
 }
 
 /* Text Button */
-.custom-button button.button-text {
+.custom-button button.text {
   background: none;
   color: rgb(var(--button-primary));
   padding: var(--spacing-s) var(--spacing-m);
 }
 
-.custom-button button.button-text:hover,
-.custom-button a.button-text:hover {
+.custom-button button.text:hover,
+.custom-button a.text:hover {
   color: rgb(var(--button-primary-hover));
 }
 
 /* Button Label */
-.custom-button button .button-label {
+.custom-button button .label {
   display: block;
   font-size: var(--body-size-xs);
   font-weight: var(--font-regular);
@@ -68,7 +69,7 @@
 }
 
 /* Button Text */
-.custom-button button .button-text {
+.custom-button button .text {
   display: inline-block;
 }
 
@@ -91,13 +92,13 @@
 }
 
 /* Text Button Arrow */
-.custom-button .button.button-text {
+.custom-button .button.text {
   background-color: unset;
   color: rgb(var(--button-primary));
 }
 
-.custom-button a.button-text::after,
-.custom-button button.button-text::after {
+.custom-button a.text::after,
+.custom-button button.text::after {
   content: '';
   display: inline-block;
   width: 1em;
@@ -113,8 +114,8 @@
   transition: background-color 0.3s, transform 0.3s;
 }
 
-.custom-button a.button-text:hover::after,
-.custom-button button.button-text:hover::after {
+.custom-button a.text:hover::after,
+.custom-button button.text:hover::after {
   background-color: rgb(var(--button-primary-hover));
   transform: translateX(4px);
 }
