@@ -87,31 +87,6 @@ function addSemanticClasses(block) {
     }
   });
 
-  // Process title - find the first non-empty text content in content area
-  const contentArea = block.querySelector('.hero-content');
-  if (contentArea) {
-    // Find first div with text content that's not a link or button
-    const titleElements = [...contentArea.children].filter((child) => {
-      const hasText = child.textContent.trim().length > 0;
-      const isNotLink = !child.querySelector('a');
-      const isNotEmpty = child.children.length > 0 || child.textContent.trim().length > 0;
-      return hasText && isNotLink && isNotEmpty;
-    });
-
-    if (titleElements.length > 0) {
-      const titleElement = titleElements[0];
-      const titleText = titleElement.textContent.trim();
-
-      // Create h1 with the title text
-      const h1 = document.createElement('h1');
-      h1.textContent = titleText;
-      h1.classList.add('hero-title');
-
-      // Replace the original element
-      titleElement.replaceWith(h1);
-    }
-  }
-
   // Mark description paragraphs (paragraphs that are not button containers or titles)
   const paragraphs = block.querySelectorAll('p');
   paragraphs.forEach((p) => {
@@ -131,7 +106,6 @@ function addSemanticClasses(block) {
  * @param {HTMLElement} block - The block's DOM element/tree
  */
 export default function decorate(block) {
-
   // Process image reference first
   processImageReference(block);
 
