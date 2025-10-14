@@ -47,18 +47,6 @@
   color: rgb(var(--on-button-secondary));
 }
 
-/* Tertiary Button */
-.custom-button button.tertiary {
-  background-color: rgb(var(--button-secondary-option));
-  color: rgb(var(--on-button-secondary-option));
-}
-
-.custom-button button.tertiary:hover,
-.custom-button a.tertiary:hover {
-  background-color: rgb(var(--button-secondary-option-hover));
-  color: rgb(var(--on-button-secondary-option));
-}
-
 /* Text Button */
 .custom-button button.text {
   background: none;
