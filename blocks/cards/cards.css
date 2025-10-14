@@ -1,6 +1,6 @@
 .cards > ul {
   list-style: none;
-  margin: 0;
+  margin: var(--space-24) 0;
   padding: 0;
   display: grid;
   grid-template-columns: repeat(auto-fit,minmax(min(100%,(100% - 7rem)/8),1fr));
@@ -8,12 +8,11 @@
 }
 
 .cards > ul > li {
-  border: 1px solid #dadada;
   background-color: var(--background-color);
 }
 
 .cards .cards-card-body {
-  margin: 16px;
+  margin: 16px 0;
 }
 
 .cards .cards-card-image {
@@ -22,6 +21,6 @@
 
 .cards > ul > li img {
   width: 100%;
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 3 / 4;
   object-fit: cover;
 }
