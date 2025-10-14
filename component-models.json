@@ -234,19 +234,24 @@
         "valueType": "string"
       },
       {
+        "component": "button",
+        "name": "button",
+        "label": "Button"
+      },
+      {
         "component": "aem-content",
-        "name": "custom-button-link",
+        "name": "button-link",
         "label": "Button Link"
       },
       {
         "component": "text",
-        "name": "custom-button-label",
+        "name": "button-label",
         "label": "Button Label"
       },
       {
         "component": "select",
-        "name": "custom-button-target",
-        "label": "Link Target",
+        "name": "button-target",
+        "label": "Button Target",
         "options": [
           {
             "name": "Same Window",
@@ -256,58 +261,8 @@
             "name": "New Tab",
             "value": "_blank"
           }
-        ]
-      },
-      {
-        "component": "multiselect",
-        "name": "classes",
-        "label": "Style",
-        "valueType": "string",
-        "maxSize": 2,
-        "options": [
-          {
-            "name": "Style",
-            "children": [
-              {
-                "name": "Primary",
-                "value": "primary"
-              },
-              {
-                "name": "Secondary",
-                "value": "secondary"
-              },
-              {
-                "name": "Tertiary",
-                "value": "tertiary"
-              },
-              {
-                "name": "Text",
-                "value": "text"
-              }
-            ]
-          },
-          {
-            "name": "Type",
-            "children": [
-              {
-                "name": "Link",
-                "value": "link"
-              },
-              {
-                "name": "Download",
-                "value": "download"
-              },
-              {
-                "name": "Email",
-                "value": "email"
-              },
-              {
-                "name": "Telephone",
-                "value": "telephone"
-              }
-            ]
-          }
-        ]
+        ],
+        "value": ""
       }
     ]
   },

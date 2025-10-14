@@ -50,7 +50,35 @@
           "valueType": "string"
         },
         {
-          "...": "../../models/partials/_button.json#/fields"
+          "component": "button",
+          "name": "button",
+          "label": "Button"
+        },
+        {
+          "component": "aem-content",
+          "name": "button-link",
+          "label": "Button Link"
+        },
+        {
+          "component": "text",
+          "name": "button-label",
+          "label": "Button Label"
+        },
+        {
+          "component": "select",
+          "name": "button-target",
+          "label": "Button Target",
+          "options": [
+            {
+              "name": "Same Window",
+              "value": ""
+            },
+            {
+              "name": "New Tab",
+              "value": "_blank"
+            }
+          ],
+          "value": ""
         }
       ]
     }
