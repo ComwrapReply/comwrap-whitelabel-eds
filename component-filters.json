@@ -104,7 +104,7 @@
   {
     "id": "hero",
     "components": [
-      "custom-button"
+      "button"
     ]
   },
   {
