@@ -124,5 +124,14 @@
     "components": [
       "table-col-4"
     ]
+  },
+  {
+    "id": "hero",
+    "components": [
+      "text",
+      "image",
+      "button",
+      "title"
+    ]
   }
 ]
