@@ -57,13 +57,18 @@
   margin-bottom: 1.5rem;
 }
 
-/* CTA button container */
-.hero .button-container {
+/* Hero buttons wrapper */
+.hero .hero-buttons {
   margin-top: 2rem;
   display: flex;
   gap: 1rem;
   flex-wrap: wrap;
   align-items: center;
+}
+
+/* Individual button containers */
+.hero .hero-buttons .button-container {
+  margin: 0;
 }
 
 /* CTA buttons */

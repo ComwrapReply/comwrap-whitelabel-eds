@@ -6,8 +6,7 @@ The Hero block displays a full-width hero section with a background image, text 
 
 - **Background Image**: Full-width background image with alt text support
 - **Rich Text Content**: Supports headings and formatted text
-- **Primary CTA Button**: Configurable call-to-action button with multiple style options
-- **Secondary CTA Button**: Optional secondary call-to-action button
+- **Button Components**: Add any number of button components as children
 - **Responsive Design**: Adapts to different screen sizes
 - **Accessibility**: Includes proper focus states and semantic HTML
 
@@ -20,34 +19,32 @@ The Hero block displays a full-width hero section with a background image, text 
 ### Text Content
 - **Text** (required): Rich text content including headings and paragraphs
 
-### Primary CTA Button
-- **Primary CTA Link**: URL for the primary button (internal or external)
-- **Primary CTA Label**: Text displayed on the primary button
-- **Primary CTA Target**: Choose to open link in same window or new tab
-- **Primary CTA Style**: Choose from button style options:
-  - **Primary**: Solid background with link color
-  - **Secondary**: Outlined button with transparent background
-  - **Tertiary**: Solid white background with colored text
-  - **Text**: Text-only button with underline
-
-### Secondary CTA Button (Optional)
-- **Secondary CTA Link**: URL for the secondary button
-- **Secondary CTA Label**: Text displayed on the secondary button
-- **Secondary CTA Target**: Choose to open link in same window or new tab
-- **Secondary CTA Style**: Choose from same style options as primary button
+### Buttons
+Instead of configuring buttons in the hero dialog, you can add Button components as children to the hero block. This provides more flexibility:
+- Add any number of buttons
+- Each button can be configured independently with its own style
+- Button component fields:
+  - **Link**: URL for the button (internal or external)
+  - **Text**: Button label text
+  - **Title**: Optional title attribute for accessibility
+  - **Type**: Button style (default, primary, secondary)
 
 ## Usage
 
 1. Add a Hero block to your page
-2. Upload a background image
-3. Add your hero text content (heading and description)
-4. Configure the primary CTA button:
-   - Add a link URL
-   - Add button label text
-   - Choose link target (same window or new tab)
-   - Select a button style (Primary, Secondary, Tertiary, or Text)
-5. Optionally add a secondary CTA button following the same steps
-6. Preview and publish your changes
+2. Configure the hero block:
+   - Upload a background image and provide alt text
+   - Add your hero text content (heading and description) using the rich text editor
+3. Add Button components as children to the hero:
+   - Click the "+" button in the content tree under the hero block
+   - Select "Button" from the component list
+   - Configure each button:
+     - Add a link URL
+     - Add button text
+     - Optional: Add a title for accessibility
+     - Select button type/style (default, primary, or secondary)
+4. Add as many buttons as needed (typically 1-2 for best UX)
+5. Preview and publish your changes
 
 ## Styling
 
@@ -61,10 +58,10 @@ The hero block uses CSS custom properties from the theme system for consistent s
 
 ### Button Styles
 
+The button component supports these styles:
+- **Default**: Standard button styling
 - **Primary**: Solid colored button (recommended for main action)
 - **Secondary**: Outlined button (good for secondary actions)
-- **Tertiary**: White background button (alternative to primary)
-- **Text**: Minimal text-only button (for less prominent actions)
 
 ## Accessibility
 
@@ -88,28 +85,38 @@ The hero block includes:
 
 **Use Case: Product Launch Hero**
 
+### Hero Block Configuration:
 - **Image**: High-quality product image
+- **Alt**: `New innovative product showcase`
 - **Text**: 
-  ```
+  ```html
   <h1>Introducing Our Latest Innovation</h1>
   <p>Experience the future of technology with our groundbreaking new product.</p>
   ```
-- **Primary CTA**:
-  - Link: `/products/new-launch`
-  - Label: `Learn More`
-  - Target: Same Window
-  - Style: Primary
-- **Secondary CTA**:
-  - Link: `/contact`
-  - Label: `Contact Sales`
-  - Target: Same Window
-  - Style: Secondary
+
+### Button Components (added as children):
+
+**Button 1 (Primary CTA):**
+- Link: `/products/new-launch`
+- Text: `Learn More`
+- Title: `Learn more about our new product`
+- Type: `primary`
+
+**Button 2 (Secondary CTA):**
+- Link: `/contact`
+- Text: `Contact Sales`
+- Title: `Contact our sales team`
+- Type: `secondary`
 
 ## Technical Implementation
 
 The hero block uses:
-- **Field Grouping**: CTA fields are grouped using underscore notation (`primaryCta_`, `secondaryCta_`)
-- **Type Inference**: Links are automatically rendered with proper semantic HTML
-- **CSS Classes**: Buttons receive appropriate classes based on selected styles
-- **JavaScript Enhancement**: Semantic classes are added for improved styling and accessibility
+- **Container Pattern**: Hero accepts button components as children through a filter
+- **Component Composition**: Buttons are added as separate components, making them reusable
+- **Type Inference**: Images are automatically converted from references to proper `<picture>` elements
+- **CSS Classes**: Semantic classes are added for improved styling and accessibility
+- **JavaScript Enhancement**: 
+  - Converts image links to proper image elements
+  - Groups button components into a flex container
+  - Adds semantic HTML structure for titles and descriptions
 

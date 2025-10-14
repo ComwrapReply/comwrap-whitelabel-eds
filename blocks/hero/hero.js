@@ -44,57 +44,27 @@ function processImageReference(block) {
 }
 
 /**
- * Process CTA buttons and clean up structure
+ * Process button components added to the hero
  * @param {HTMLElement} block - The hero block DOM element
  */
-function processCtaButtons(block) {
-  // Find all remaining links (after image has been processed) - these are CTAs
-  const allLinks = [...block.querySelectorAll('a:not(.hero-image-wrapper a)')];
-  // Separate valid CTA links from URL-only links
-  const validCtaLinks = [];
-  const urlOnlyLinks = [];
-  allLinks.forEach((link) => {
-    const CTAtext = link.parentElement.nextElementSibling;
-    const target = CTAtext.nextElementSibling || null;
-    const { href } = link;
-    link.textContent = CTAtext.textContent.trim();
-    link.setAttribute('target', target ? target.textContent.trim() : '_self');
+function processButtons(block) {
+  // Find all button container paragraphs (buttons added as components)
+  const buttonContainers = block.querySelectorAll('.button-container');
 
-    // If the link text is a URL or path, it's probably a raw field value
-    if (CTAtext.textContent.trim().startsWith('http') || CTAtext.textContent.trim().startsWith('/content/') || CTAtext.textContent.trim() === href) {
-      urlOnlyLinks.push(link);
-    } else {
-      // This is a proper button with label text
-      validCtaLinks.push(link);
-    }
-  });
+  if (buttonContainers.length > 0) {
+    // Create a wrapper for all buttons
+    const ctaWrapper = document.createElement('div');
+    ctaWrapper.classList.add('hero-buttons');
 
-  // Remove URL-only links and their containers
-  allLinks.forEach((link) => {
-    const parent = link.closest('div').parentElement;
-    if (parent) {
-      parent.remove();
-    }
-  });
-
-  // Create a container for CTA buttons if we have valid ones
-  if (validCtaLinks.length > 0) {
-    const ctaContainer = document.createElement('div');
-    ctaContainer.classList.add('button-container');
-
-    validCtaLinks.forEach((link) => {
-      // Ensure button class is applied
-      const button = document.createElement('button');
-      button.appendChild(link.cloneNode(true));
-
-      // Move link to the CTA container
-      ctaContainer.appendChild(button);
+    // Move all buttons into the wrapper
+    buttonContainers.forEach((container) => {
+      ctaWrapper.appendChild(container);
     });
 
-    // Add the CTA container to the content area
+    // Add the button wrapper to the content area
     const contentDiv = block.querySelector('.hero-content');
     if (contentDiv) {
-      contentDiv.appendChild(ctaContainer);
+      contentDiv.appendChild(ctaWrapper);
     }
   }
 
@@ -166,6 +136,6 @@ export default function decorate(block) {
   // Add semantic CSS classes
   addSemanticClasses(block);
 
-  // Process and clean up CTA buttons
-  processCtaButtons(block);
+  // Process button components
+  processButtons(block);
 }
