@@ -12,13 +12,9 @@
 .custom-button button {
   display: inline-flex;
   align-items: center;
-  gap: var(--spacing-s);
-  padding: var(--btn-padding);
   border: none;
   border-radius: 4px;
   font-family: var(--body-font-family);
-  font-size: var(--button-text);
-  font-weight: var(--font-bold);
   cursor: pointer;
   text-decoration: none;
   position: relative;
@@ -27,21 +23,17 @@
 /* Primary Button */
 .custom-button button.primary {
   background-color: var(--color-primary);
-  color: rgb(var(--on-button-primary));
 }
 
 /* Secondary Button */
 .custom-button button.secondary {
   font-style: normal;
-  background-color: rgb(var(--button-secondary));
-  color: rgb(var(--on-button-secondary));
 }
 
 /* Text Button */
 .custom-button button.text {
   background: none;
   color: var(--color-primary);
-  padding: var(--spacing-s) var(--spacing-m);
 }
 
 .custom-button button.text:hover,
@@ -56,9 +48,6 @@
 /* Button Label */
 .custom-button button .label {
   display: block;
-  font-size: var(--body-size-xs);
-  font-weight: var(--font-regular);
-  margin-bottom: var(--spacing-xs);
 }
 
 /* Button Text */
@@ -75,7 +64,6 @@
   display: inline-block;
   width: 1em;
   height: 1em;
-  margin-left: var(--spacing-xs);
   background-color: var(--color-primary);
   mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4'%3E%3C/path%3E%3Cpolyline points='7 10 12 15 17 10'%3E%3C/polyline%3E%3Cline x1='12' y1='15' x2='12' y2='3'%3E%3C/line%3E%3C/svg%3E");
   mask-size: contain;
@@ -106,7 +94,6 @@
   display: inline-block;
   width: 1em;
   height: 1em;
-  margin-left: var(--spacing-xs);
   background-color: var(--color-primary);
   mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='5' y1='12' x2='19' y2='12'%3E%3C/line%3E%3Cpolyline points='12 5 19 12 12 19'%3E%3C/polyline%3E%3C/svg%3E");
   mask-size: contain;
