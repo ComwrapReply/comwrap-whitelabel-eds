@@ -44,6 +44,7 @@ ol[role='list'] {
 img,
 picture {
     max-width: 100%;
+    height: auto;
     display: block;
 }
 
@@ -281,6 +282,7 @@ h2,
     font-size: var(--font-size-h2);
     line-height: var(--line-height-h2);
     font-weight: 600;
+    margin-bottom: var(--space-24);
 }
 
 h3,
@@ -289,6 +291,7 @@ h3,
     font-size: var(--font-size-h3);
     line-height: var(--line-height-h3);
     font-weight: 600;
+    margin-bottom: var(--space-16);
 }
 
 h4,
@@ -297,6 +300,7 @@ h4,
     font-size: var(--font-size-h4);
     line-height: var(--line-height-h4);
     font-weight: 600;
+    margin-bottom: var(--space-16);
 }
 
 h5,
@@ -305,13 +309,14 @@ h5,
     font-size: var(--font-size-h5);
     line-height: var(--line-height-h5);
     font-weight: 600;
+    margin-bottom: var(--space-12);
 }
 
 h6,
 .h6 {
     font-family: var(--font-family-base);
     font-size: var(--font-size-h6);
-    line-height: var(--line-height-h6);
+    line-height: var(--line-height-12);
     font-weight: 600;
 }
 
@@ -1075,9 +1080,10 @@ blockquote::before {
    ======================================== */
 
    /* sections */
-main > .section {
-    margin: 40px 0;
-  }
+
+   main .section {
+    padding: var(--space-48) 0;
+   }
   
   main > .section > div {
     max-width: 1400px;
@@ -1096,11 +1102,42 @@ main > .section {
   }
   
   /* section metadata */
-  main .section.light,
-  main .section.highlight {
-    background-color: var(--light-color);
+  main .section.gradient {
+    background: var(--gradient-blue);
     margin: 0;
-    padding: 40px 0;
+    padding: var(--space-48) 0;
+
+    h2, h3, h4, h5, h6 {
+      color: var(--color-white);
+    }
+
+    p,
+    li {
+      color: var(--color-white);
+    }
+
+    a {
+      color: var(--color-white);
+    }
+    
+    .button {
+      color: var(--color-primary-blue);
+      background-color: var(--color-white);
+      border-color: var(--color-white);
+    }
+    
+    
+    .button:hover {
+      color: var(--color-primary-blue);
+      background-color: var(--color-white);
+      border-color: var(--color-white);
+    }
+  }
+
+  main .section.highlight {
+    background-color: var(--color-light-grey);
+    margin: 0;
+    padding: var(--space-48) 0;
   }
   
 
