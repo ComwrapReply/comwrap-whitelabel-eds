@@ -21,10 +21,6 @@
       "name": "Type",
       "children": [
         {
-          "name": "Link",
-          "value": "link"
-        },
-        {
           "name": "Download",
           "value": "download"
         },
