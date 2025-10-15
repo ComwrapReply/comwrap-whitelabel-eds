@@ -94,11 +94,6 @@
         "label": "Text"
       },
       {
-        "component": "text",
-        "name": "linkTitle",
-        "label": "Title"
-      },
-      {
         "component": "select",
         "name": "linkType",
         "label": "Type",
@@ -359,10 +354,6 @@
                 "value": "secondary"
               },
               {
-                "name": "Tertiary",
-                "value": "tertiary"
-              },
-              {
                 "name": "Text",
                 "value": "text"
               }
@@ -371,10 +362,6 @@
           {
             "name": "Type",
             "children": [
-              {
-                "name": "Link",
-                "value": "link"
-              },
               {
                 "name": "Download",
                 "value": "download"
@@ -5858,10 +5845,6 @@
                 "value": "secondary"
               },
               {
-                "name": "Tertiary",
-                "value": "tertiary"
-              },
-              {
                 "name": "Text",
                 "value": "text"
               }
@@ -5870,10 +5853,6 @@
           {
             "name": "Type",
             "children": [
-              {
-                "name": "Link",
-                "value": "link"
-              },
               {
                 "name": "Download",
                 "value": "download"

@@ -359,7 +359,6 @@ a:not([class]) {
 a:hover,
 a:focus {
     color: var(--color-dark-blue);
-    text-decoration: underline;
 }
 
 a:active {
@@ -711,6 +710,7 @@ blockquote::before {
 /* Secondary Button */
 .btn-secondary,
 .button.secondary {
+    font-style: normal;
     color: var(--color-primary-blue);
     background-color: transparent;
     border-color: var(--color-primary-blue);
