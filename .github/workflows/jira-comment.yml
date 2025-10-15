@@ -48,7 +48,7 @@ jobs:
                   by_issue = {}
 
                   def create_adf_hyperlink(text, url):
-                      """Create ADF hyperlink structure"""
+                      # Create ADF hyperlink structure
                       return {
                           "type": "text",
                           "text": text,
@@ -63,14 +63,14 @@ jobs:
                       }
 
                   def create_adf_text(text):
-                      """Create plain ADF text"""
+                      # Create plain ADF text
                       return {
                           "type": "text",
                           "text": text
                       }
 
                   def convert_urls_in_text(text):
-                      """Convert any URLs in text to ADF hyperlink format"""
+                      # Convert any URLs in text to ADF hyperlink format
                       import re
                       url_pattern = r'https?://[^\s<>"{}|\\^`\[\]]+[^\s<>"{}|\\^`\[\].,;:!?\'")\]]'
                       
