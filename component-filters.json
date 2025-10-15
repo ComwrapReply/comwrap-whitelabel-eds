@@ -104,10 +104,7 @@
   {
     "id": "hero",
     "components": [
-      "text",
-      "image",
-      "button",
-      "title"
+      "button"
     ]
   },
   {

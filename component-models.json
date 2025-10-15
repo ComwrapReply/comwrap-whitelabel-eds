@@ -5549,10 +5549,26 @@
       },
       {
         "component": "richtext",
-        "name": "text",
+        "name": "heroText",
         "value": "",
         "label": "Text",
         "valueType": "string"
+      },
+      {
+        "component": "select",
+        "name": "classes",
+        "label": "Style",
+        "options": [
+          {
+            "name": "White",
+            "value": "white"
+          },
+          {
+            "name": "Black",
+            "value": "black"
+          }
+        ],
+        "value": "white"
       }
     ]
   },

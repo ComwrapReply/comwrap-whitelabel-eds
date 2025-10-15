@@ -110,11 +110,22 @@ jobs:
                       
                       return result
 
+                  # Extract Jira keys from branch name
+                  branch_name = os.environ.get('GITHUB_REF_NAME', '')
+                  branch_keys = set(key_re.findall(branch_name))
+
+                  if branch_keys:
+                      print(f"Found Jira keys in branch '{branch_name}': {list(branch_keys)}")
+
                   for c in commits:
                       msg = f"{c['message']}".strip()
                       commit_url = c.get('url') or f"{os.environ['GITHUB_SERVER_URL']}/{os.environ['GITHUB_REPOSITORY']}/commit/{c['id']}"
-                      found = set(key_re.findall(msg))
-                      if not found: 
+                      
+                      # Get Jira keys from both commit message and branch name
+                      commit_keys = set(key_re.findall(msg))
+                      all_keys = branch_keys.union(commit_keys)
+                      
+                      if not all_keys: 
                           continue
                       
                       # Create ADF content with proper hyperlinks
@@ -164,7 +175,7 @@ jobs:
                           "content": content
                       }
                       
-                      for key in found:
+                      for key in all_keys:
                           by_issue.setdefault(key, []).append(line_content)
 
                   # Create proper ADF payloads
