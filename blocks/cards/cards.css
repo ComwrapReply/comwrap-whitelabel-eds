@@ -13,8 +13,14 @@
   }
 }
 
+@media screen and (width <= 768px) {
+  .cards > ul {
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 1fr), 1fr));
+  }
+}
+
 .cards > ul > li {
-  background-color: var(--background-color);
+  background-color: transparent;
 }
 
 .cards .cards-card-body {
