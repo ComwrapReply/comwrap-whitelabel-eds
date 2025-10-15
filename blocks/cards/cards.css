@@ -1,19 +1,30 @@
 .cards > ul {
   list-style: none;
-  margin: 0;
+  margin: var(--space-24) 0;
   padding: 0;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(257px, 1fr));
+  grid-template-columns: repeat(auto-fit,minmax(min(100%,(100% - 7rem)/8),1fr));
   grid-gap: 24px;
 }
 
+@media screen and (width <= 1024px) {
+  .cards > ul {
+    grid-template-columns: repeat(auto-fill, minmax(min(21.5rem, 100%), 1fr));
+  }
+}
+
+@media screen and (width <= 768px) {
+  .cards > ul {
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 1fr), 1fr));
+  }
+}
+
 .cards > ul > li {
-  border: 1px solid #dadada;
-  background-color: var(--background-color);
+  background-color: transparent;
 }
 
 .cards .cards-card-body {
-  margin: 16px;
+  margin: 16px 0;
 }
 
 .cards .cards-card-image {
@@ -22,6 +33,6 @@
 
 .cards > ul > li img {
   width: 100%;
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 3 / 4;
   object-fit: cover;
 }
