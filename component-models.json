@@ -146,32 +146,6 @@
     "fields": []
   },
   {
-    "id": "accordionitem",
-    "fields": [
-      {
-        "component": "text",
-        "name": "accordion-item-title",
-        "label": "Accordion Item Title",
-        "valueType": "string",
-        "value": ""
-      },
-      {
-        "component": "richtext",
-        "name": "accordion-item-content",
-        "label": "Accordion Item Content",
-        "valueType": "string",
-        "value": ""
-      },
-      {
-        "component": "reference",
-        "name": "image",
-        "label": "Image",
-        "valueType": "string",
-        "multi": false
-      }
-    ]
-  },
-  {
     "id": "articlefeed",
     "fields": [
       {
