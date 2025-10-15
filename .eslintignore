@@ -11,3 +11,8 @@ dompurify.min.js
 blocks/form/rules/
 blocks/headline/
 blocks/form/rules-doc/
+blocks/form/rules/formula/*
+blocks/form/rules/model/*
+blocks/form/rules/functions.js
+scripts/editor-support.js
+scripts/editor-support-rte.js
