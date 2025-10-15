@@ -9,7 +9,7 @@
 
 @media screen and (width <= 1024px) {
   .cards > ul {
-    grid-template-columns: repeat(auto-fill, minmax(min(25pc, 100%), 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(min(21.5rem, 100%), 1fr));
   }
 }
 
