@@ -39,6 +39,16 @@
     ]
   },
   {
+    "id": "accordionitem",
+    "components": [
+      "text",
+      "image",
+      "button",
+      "title",
+      "columns"
+    ]
+  },
+  {
     "id": "cards",
     "components": [
       "card"
