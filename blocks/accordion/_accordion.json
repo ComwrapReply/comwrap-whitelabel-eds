@@ -24,7 +24,7 @@
       "plugins": {
         "xwalk": {
           "page": {
-            "resourceType": "core/franklin/components/block/v1/block/item",
+            "resourceType": "core/franklin/components/section/v1/section",
             "template": {
               "name": "Accordion Item",
               "filter": "accordionitem",
@@ -49,7 +49,6 @@
     },
     {
       "id": "accordionitem",
-      "container": true,
       "fields": [
         {
           "component": "text",
