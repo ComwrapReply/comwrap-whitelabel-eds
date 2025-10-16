@@ -109,6 +109,7 @@
                 "template": {
                   "name": "Accordion Item",
                   "filter": "accordionitem",
+                  "model": "accordionitem",
                   "accordion-item-open": false
                 }
               }

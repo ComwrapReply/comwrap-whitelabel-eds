@@ -152,6 +152,18 @@
     ]
   },
   {
+    "id": "accordionitem",
+    "fields": [
+      {
+        "component": "text",
+        "name": "accordion-item-title",
+        "label": "Accordion Item Title",
+        "valueType": "string",
+        "value": ""
+      }
+    ]
+  },
+  {
     "id": "articlefeed",
     "fields": [
       {

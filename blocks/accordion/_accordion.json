@@ -28,6 +28,7 @@
             "template": {
               "name": "Accordion Item",
               "filter": "accordionitem",
+              "model": "accordionitem",
               "accordion-item-open": false
             }
           }
@@ -43,6 +44,18 @@
           "component": "boolean",
           "name": "accordion-single-open",
           "label": "Allow Only One Item Open at a Time"
+        }
+      ]
+    },
+    {
+      "id": "accordionitem",
+      "fields": [
+        {
+          "component": "text",
+          "name": "accordion-item-title",
+          "label": "Accordion Item Title",
+          "valueType": "string",
+          "value": ""
         }
       ]
     }
