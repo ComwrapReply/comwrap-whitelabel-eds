@@ -108,7 +108,6 @@
                 "resourceType": "core/franklin/components/block/v1/block/item",
                 "template": {
                   "name": "Accordion Item",
-                  "model": "accordionitem",
                   "filter": "accordionitem",
                   "accordion-item-open": false
                 }
