@@ -1,4 +1,3 @@
-
 {
   "definitions": [
     {
@@ -11,8 +10,7 @@
             "template": {
               "name": "Accordion",
               "filter": "accordion",
-              "model": "accordion",
-              "accordion-single-open": false
+              "model": "accordion"
             }
           }
         }
@@ -28,8 +26,7 @@
             "template": {
               "name": "Accordion Item",
               "filter": "accordionitem",
-              "model": "accordionitem",
-              "accordion-item-open": false
+              "model": "accordionitem"
             }
           }
         }
@@ -43,7 +40,7 @@
         {
           "component": "boolean",
           "name": "accordion-single-open",
-          "label": "Allow Only One Item Open at a Time"
+          "label": "Allow only one item open at a time"
         }
       ]
     },
@@ -54,8 +51,7 @@
           "component": "text",
           "name": "accordion-item-title",
           "label": "Accordion Item Title",
-          "valueType": "string",
-          "value": ""
+          "valueType": "string"
         }
       ]
     }
