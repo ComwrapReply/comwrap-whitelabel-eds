@@ -154,16 +154,6 @@
     ]
   },
   {
-    "id": "accordion",
-    "fields": [
-      {
-        "component": "boolean",
-        "name": "accordion-single-open",
-        "label": "Allow Only One Item Open at a Time"
-      }
-    ]
-  },
-  {
     "id": "articlefeed",
     "fields": [
       {
