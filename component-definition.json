@@ -105,11 +105,11 @@
           "plugins": {
             "xwalk": {
               "page": {
-                "resourceType": "core/franklin/components/section/v1/section",
+                "resourceType": "core/franklin/components/columns/v1/columns",
                 "template": {
                   "name": "Accordion",
                   "filter": "accordion",
-                  "model": "section",
+                  "model": "accordion",
                   "accordion-single-open": false
                 }
               }
