@@ -25,7 +25,7 @@
         {
           "component": "text",
           "name": "accordion-item-title",
-          "label": "Accordion Item Title Hi",
+          "label": "Accordion Item Title",
           "valueType": "string",
           "value": ""
         }
@@ -39,8 +39,7 @@
         "text",
         "image",
         "button",
-        "title",
-        "columns"
+        "title"
       ]
     }
   ]
