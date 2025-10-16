@@ -10,7 +10,7 @@
             "template": {
               "name": "Accordion",
               "filter": "accordion",
-              "model": "accordion",
+              "model": "section",
               "accordion-single-open": false
             }
           }
