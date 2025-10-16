@@ -5581,6 +5581,73 @@
     ]
   },
   {
+    "id": "profile-card",
+    "fields": [
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "image",
+        "label": "Profile Image",
+        "multi": false
+      },
+      {
+        "component": "text",
+        "name": "imageAlt",
+        "label": "Image Alt Text",
+        "value": ""
+      },
+      {
+        "component": "text",
+        "name": "name",
+        "label": "Full Name",
+        "value": ""
+      },
+      {
+        "component": "text",
+        "name": "title",
+        "label": "Job Title",
+        "value": ""
+      },
+      {
+        "component": "text",
+        "name": "phone",
+        "label": "Phone Number",
+        "value": ""
+      },
+      {
+        "component": "text",
+        "name": "email",
+        "label": "Email Address",
+        "value": ""
+      },
+      {
+        "component": "select",
+        "name": "classes",
+        "label": "Style Variant",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "Default",
+            "value": ""
+          },
+          {
+            "name": "Compact",
+            "value": "compact"
+          },
+          {
+            "name": "Centered",
+            "value": "centered"
+          },
+          {
+            "name": "Card Style",
+            "value": "card"
+          }
+        ],
+        "value": ""
+      }
+    ]
+  },
+  {
     "id": "quote",
     "fields": [
       {
