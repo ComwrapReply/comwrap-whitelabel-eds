@@ -153,6 +153,7 @@
   },
   {
     "id": "accordionitem",
+    "container": true,
     "fields": [
       {
         "component": "text",
