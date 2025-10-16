@@ -142,16 +142,6 @@
     ]
   },
   {
-    "id": "accordion",
-    "fields": [
-      {
-        "component": "boolean",
-        "name": "accordion-single-open",
-        "label": "Allow Only One Item Open at a Time"
-      }
-    ]
-  },
-  {
     "id": "accordionitem",
     "fields": [
       {
@@ -160,6 +150,16 @@
         "label": "Accordion Item Title",
         "valueType": "string",
         "value": ""
+      }
+    ]
+  },
+  {
+    "id": "accordion",
+    "fields": [
+      {
+        "component": "boolean",
+        "name": "accordion-single-open",
+        "label": "Allow Only One Item Open at a Time"
       }
     ]
   },

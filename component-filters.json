@@ -33,12 +33,6 @@
     ]
   },
   {
-    "id": "accordion",
-    "components": [
-      "accordionitem"
-    ]
-  },
-  {
     "id": "accordionitem",
     "components": [
       "text",
@@ -46,6 +40,12 @@
       "button",
       "title",
       "columns"
+    ]
+  },
+  {
+    "id": "accordion",
+    "components": [
+      "accordionitem"
     ]
   },
   {
