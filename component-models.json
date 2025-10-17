@@ -146,6 +146,23 @@
     "fields": [
       {
         "component": "text",
+        "name": "name",
+        "label": "Section Name",
+        "description": "The label shown for this section in the Content Tree"
+      },
+      {
+        "component": "multiselect",
+        "name": "style",
+        "label": "Style",
+        "options": [
+          {
+            "name": "Highlight",
+            "value": "highlight"
+          }
+        ]
+      },
+      {
+        "component": "text",
         "name": "accordion-item-title",
         "label": "Accordion Item Title",
         "valueType": "string",
