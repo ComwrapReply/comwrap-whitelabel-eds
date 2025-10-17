@@ -21,6 +21,14 @@
       "id": "accordion-image",
       "fields": [
         {
+          "component": "text",
+          "name": "component-type",
+          "label": "Component Type",
+          "valueType": "string",
+          "value": "accordion-image",
+          "hidden": true
+        },
+        {
           "component": "reference",
           "name": "image",
           "label": "Image",

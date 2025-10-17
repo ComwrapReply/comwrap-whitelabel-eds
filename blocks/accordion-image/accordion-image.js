@@ -5,7 +5,7 @@ import { createOptimizedPicture } from '../../scripts/aem.js';
  * Image component for accordion items
  */
 
-export default function decorate(block) {
+export default function decorateAccordionImage(block) {
   // Add semantic class for styling
   block.classList.add('accordion-image-content');
 
