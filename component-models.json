@@ -173,10 +173,10 @@
       {
         "component": "text",
         "name": "component-type",
-        "label": "Component Type",
+        "label": "Component Type (Do Not Modify)",
+        "description": "System field - do not change this value",
         "valueType": "string",
-        "value": "accordion-image",
-        "hidden": true
+        "value": "accordion-image"
       },
       {
         "component": "reference",
