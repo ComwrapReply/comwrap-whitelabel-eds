@@ -50,7 +50,9 @@
         "text",
         "image",
         "button",
-        "title"
+        "title",
+        "accordion",
+        "custom-button"
       ]
     }
   ]
