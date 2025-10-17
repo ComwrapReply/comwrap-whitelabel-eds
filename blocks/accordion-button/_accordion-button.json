@@ -1,0 +1,48 @@
+{
+  "definitions": [
+    {
+      "title": "Accordion Button",
+      "id": "accordion-button",
+      "plugins": {
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/block/v1/block/item",
+            "template": {
+              "name": "Accordion Button",
+              "model": "accordion-button"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "models": [
+    {
+      "id": "accordion-button",
+      "fields": [
+        {
+          "component": "text",
+          "name": "buttonText",
+          "label": "Button Text",
+          "valueType": "string",
+          "value": ""
+        },
+        {
+          "component": "text",
+          "name": "buttonUrl",
+          "label": "Button URL",
+          "valueType": "string",
+          "value": ""
+        },
+        {
+          "component": "text",
+          "name": "buttonTitle",
+          "label": "Button Title",
+          "valueType": "string",
+          "value": ""
+        }
+      ]
+    }
+  ],
+  "filters": []
+}

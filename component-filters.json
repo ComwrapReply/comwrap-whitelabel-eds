@@ -36,11 +36,10 @@
   {
     "id": "accordionitem",
     "components": [
-      "text",
-      "image",
-      "button",
-      "title",
-      "columns"
+      "accordion-text",
+      "accordion-image",
+      "accordion-button",
+      "accordion-title"
     ]
   },
   {

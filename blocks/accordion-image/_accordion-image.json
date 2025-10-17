@@ -1,0 +1,41 @@
+{
+  "definitions": [
+    {
+      "title": "Accordion Image",
+      "id": "accordion-image",
+      "plugins": {
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/block/v1/block/item",
+            "template": {
+              "name": "Accordion Image",
+              "model": "accordion-image"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "models": [
+    {
+      "id": "accordion-image",
+      "fields": [
+        {
+          "component": "reference",
+          "name": "image",
+          "label": "Image",
+          "valueType": "string",
+          "multi": false
+        },
+        {
+          "component": "text",
+          "name": "imageAlt",
+          "label": "Alt Text",
+          "valueType": "string",
+          "value": ""
+        }
+      ]
+    }
+  ],
+  "filters": []
+}

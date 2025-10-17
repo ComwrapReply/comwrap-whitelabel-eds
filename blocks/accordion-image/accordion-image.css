@@ -1,0 +1,22 @@
+/* Accordion Image Component Styles */
+.block.accordion-image {
+  margin: 0;
+  padding: 0;
+}
+
+.block.accordion-image .accordion-image-content {
+  margin: 0;
+  padding: 0;
+}
+
+.block.accordion-image .accordion-image {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 4px;
+  margin: 0 0 1rem;
+}
+
+.block.accordion-image .accordion-image:last-child {
+  margin-bottom: 0;
+}

@@ -1,0 +1,67 @@
+{
+  "definitions": [
+    {
+      "title": "Accordion Title",
+      "id": "accordion-title",
+      "plugins": {
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/block/v1/block/item",
+            "template": {
+              "name": "Accordion Title",
+              "model": "accordion-title"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "models": [
+    {
+      "id": "accordion-title",
+      "fields": [
+        {
+          "component": "text",
+          "name": "title",
+          "label": "Title Text",
+          "valueType": "string",
+          "value": ""
+        },
+        {
+          "component": "select",
+          "name": "titleType",
+          "label": "Title Type",
+          "valueType": "string",
+          "value": "h3",
+          "options": [
+            {
+              "name": "H1",
+              "value": "h1"
+            },
+            {
+              "name": "H2", 
+              "value": "h2"
+            },
+            {
+              "name": "H3",
+              "value": "h3"
+            },
+            {
+              "name": "H4",
+              "value": "h4"
+            },
+            {
+              "name": "H5",
+              "value": "h5"
+            },
+            {
+              "name": "H6",
+              "value": "h6"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "filters": []
+}

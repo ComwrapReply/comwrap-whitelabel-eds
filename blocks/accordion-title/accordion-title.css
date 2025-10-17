@@ -1,0 +1,22 @@
+/* Accordion Title Component Styles */
+.block.accordion-title {
+  margin: 0;
+  padding: 0;
+}
+
+.block.accordion-title .accordion-title-content {
+  margin: 0;
+  padding: 0;
+}
+
+.block.accordion-title .accordion-title {
+  color: var(--heading-text-color);
+  font-family: var(--heading-font-family);
+  font-size: var(--heading-font-size-m);
+  margin: 0 0 1rem;
+  line-height: 1.2;
+}
+
+.block.accordion-title .accordion-title:last-child {
+  margin-bottom: 0;
+}

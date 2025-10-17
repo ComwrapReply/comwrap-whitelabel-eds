@@ -142,6 +142,51 @@
     ]
   },
   {
+    "id": "accordion-button",
+    "fields": [
+      {
+        "component": "text",
+        "name": "buttonText",
+        "label": "Button Text",
+        "valueType": "string",
+        "value": ""
+      },
+      {
+        "component": "text",
+        "name": "buttonUrl",
+        "label": "Button URL",
+        "valueType": "string",
+        "value": ""
+      },
+      {
+        "component": "text",
+        "name": "buttonTitle",
+        "label": "Button Title",
+        "valueType": "string",
+        "value": ""
+      }
+    ]
+  },
+  {
+    "id": "accordion-image",
+    "fields": [
+      {
+        "component": "reference",
+        "name": "image",
+        "label": "Image",
+        "valueType": "string",
+        "multi": false
+      },
+      {
+        "component": "text",
+        "name": "imageAlt",
+        "label": "Alt Text",
+        "valueType": "string",
+        "value": ""
+      }
+    ]
+  },
+  {
     "id": "accordionitem",
     "fields": [
       {
@@ -150,6 +195,63 @@
         "label": "Accordion Item Title",
         "valueType": "string",
         "value": ""
+      }
+    ]
+  },
+  {
+    "id": "accordion-text",
+    "fields": [
+      {
+        "component": "richtext",
+        "name": "text",
+        "label": "Text Content",
+        "valueType": "string",
+        "value": ""
+      }
+    ]
+  },
+  {
+    "id": "accordion-title",
+    "fields": [
+      {
+        "component": "text",
+        "name": "title",
+        "label": "Title Text",
+        "valueType": "string",
+        "value": ""
+      },
+      {
+        "component": "select",
+        "name": "titleType",
+        "label": "Title Type",
+        "valueType": "string",
+        "value": "h3",
+        "options": [
+          {
+            "name": "H1",
+            "value": "h1"
+          },
+          {
+            "name": "H2",
+            "value": "h2"
+          },
+          {
+            "name": "H3",
+            "value": "h3"
+          },
+          {
+            "name": "H4",
+            "value": "h4"
+          },
+          {
+            "name": "H5",
+            "value": "h5"
+          },
+          {
+            "name": "H6",
+            "value": "h6"
+          }
+        ]
       }
     ]
   },

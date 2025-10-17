@@ -1,0 +1,20 @@
+/* Accordion Text Component Styles */
+.block.accordion-text {
+  margin: 0;
+  padding: 0;
+}
+
+.block.accordion-text .accordion-text-content {
+  margin: 0;
+  padding: 0;
+}
+
+.block.accordion-text .accordion-text {
+  font-size: var(--body-font-size-s);
+  line-height: 1.6;
+  margin: 0 0 1rem;
+}
+
+.block.accordion-text .accordion-text:last-child {
+  margin-bottom: 0;
+}

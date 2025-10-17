@@ -73,10 +73,14 @@ function groupAccordionItems() {
       iconSpan.setAttribute('aria-hidden', 'true');
 
       // Get title from accordion item title field
-      const titleField = section.querySelector('[data-field="accordion-item-title"]');
-      if (titleField) {
-        titleSpan.textContent = titleField.textContent.trim();
-      }
+      let titleText = 'Accordion Item';
+      const allDivs = section.querySelectorAll('div');
+      allDivs.forEach((div) => {
+        if (div.textContent.includes('accordion-item-title')) {
+          titleText = div.textContent.replace('accordion-item-title', '').trim() || 'Accordion Item';
+        }
+      });
+      titleSpan.textContent = titleText;
 
       button.appendChild(titleSpan);
       button.appendChild(iconSpan);
@@ -96,7 +100,7 @@ function groupAccordionItems() {
       const contentDiv = document.createElement('div');
       contentDiv.className = 'accordion-content';
 
-      // Get all content from the section (excluding the first div which contains the title field)
+      // Get all content from the accordion item (excluding the first div which contains the title)
       const contentElements = section.querySelectorAll(':scope > div:not(:first-child)');
       contentElements.forEach((element) => {
         contentDiv.appendChild(element.cloneNode(true));
