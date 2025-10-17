@@ -96,25 +96,9 @@ function groupAccordionItems() {
       const contentDiv = document.createElement('div');
       contentDiv.className = 'accordion-content';
 
-      // Get all content from the section (excluding section metadata)
-      // Skip the first few divs which contain section metadata and accordion fields
-      const allDivs = section.querySelectorAll(':scope > div');
-      let skipCount = 0;
-      
-      // Count how many metadata/field divs to skip
-      allDivs.forEach((div, index) => {
-        const text = div.textContent.toLowerCase();
-        if (text.includes('section name') || 
-            text.includes('style') || 
-            text.includes('accordion-item-title') ||
-            text.includes('accordion-item-open')) {
-          skipCount = index + 1;
-        }
-      });
-      
-      // Get content divs (skip the metadata divs)
-      const actualContentElements = section.querySelectorAll(`:scope > div:nth-child(n+${skipCount + 1})`);
-      actualContentElements.forEach((element) => {
+      // Get all content from the section (excluding the first div which contains the title field)
+      const contentElements = section.querySelectorAll(':scope > div:not(:first-child)');
+      contentElements.forEach((element) => {
         contentDiv.appendChild(element.cloneNode(true));
       });
 
