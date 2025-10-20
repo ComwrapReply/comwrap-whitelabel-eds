@@ -413,6 +413,64 @@
     ]
   },
   {
+    "id": "embed",
+    "fields": [
+      {
+        "component": "text",
+        "name": "embedUrl",
+        "label": "Embed URL",
+        "description": "Enter the iframe source URL",
+        "valueType": "string",
+        "value": ""
+      },
+      {
+        "component": "select",
+        "name": "aspectRatio",
+        "label": "Aspect Ratio",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "16:9 (Widescreen)",
+            "value": "16-9"
+          },
+          {
+            "name": "4:3 (Standard)",
+            "value": "4-3"
+          },
+          {
+            "name": "1:1 (Square)",
+            "value": "1-1"
+          },
+          {
+            "name": "21:9 (Ultrawide)",
+            "value": "21-9"
+          },
+          {
+            "name": "Custom",
+            "value": "custom"
+          }
+        ],
+        "value": "16-9"
+      },
+      {
+        "component": "text",
+        "name": "customWidth",
+        "label": "Width (px)",
+        "description": "Custom width in pixels (when using Custom aspect ratio)",
+        "valueType": "number",
+        "value": "800"
+      },
+      {
+        "component": "text",
+        "name": "customHeight",
+        "label": "Height (px)",
+        "description": "Custom height in pixels (when using Custom aspect ratio)",
+        "valueType": "number",
+        "value": "450"
+      }
+    ]
+  },
+  {
     "id": "facts-figures-cards",
     "fields": [
       {
