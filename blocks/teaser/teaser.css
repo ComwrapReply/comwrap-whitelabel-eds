@@ -41,18 +41,6 @@
   display: block;
 }
 
-/* Blue overlay on left side of image (Figma design) */
-.teaser-image-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 190px;
-  height: 100%;
-  background-color: #0073dd;
-  opacity: 0.4;
-  pointer-events: none;
-}
-
 /* Content container */
 .teaser-content {
   display: flex;
@@ -79,25 +67,6 @@
   margin: 0;
 }
 
-/* Arrow animation (matching Figma design) */
-.teaser-arrow {
-  width: 96px;
-  height: 48px;
-  color: #0073dd;
-  display: flex;
-  align-items: center;
-}
-
-.teaser-arrow svg {
-  width: 100%;
-  height: 100%;
-}
-
-/* Description wrapper with indentation */
-.teaser-description-wrapper {
-  padding-left: 48px;
-}
-
 .teaser-description {
   font-family: var(--body-font-family);
   font-size: 20px;
@@ -119,7 +88,6 @@
 .teaser-buttons {
   display: flex;
   gap: 1rem;
-  padding-left: 48px;
   flex-wrap: wrap;
 }
 
@@ -364,11 +332,6 @@
   .teaser-heading {
     font-size: var(--heading-font-size-m);
     line-height: 1.3;
-  }
-
-  .teaser-arrow {
-    width: 72px;
-    height: 36px;
   }
 
   .teaser-description-wrapper,

@@ -39,37 +39,25 @@ const createTeaserStructure = (block, data) => {
   // Create image container
   const imageDiv = document.createElement('div');
   imageDiv.className = 'teaser-image';
-  
+
   if (data.image) {
     imageDiv.appendChild(data.image);
-    
-    // Add blue overlay for image-left variant (matching Figma design)
-    if (block.classList.contains('image-left')) {
-      const overlay = document.createElement('div');
-      overlay.className = 'teaser-image-overlay';
-      imageDiv.appendChild(overlay);
-    }
   }
 
   // Create content container
   const contentDiv = document.createElement('div');
   contentDiv.className = 'teaser-content';
 
-  // Create heading with arrow (matching Figma design)
+  // Create heading
   if (data.heading) {
     const headingWrapper = document.createElement('div');
     headingWrapper.className = 'teaser-heading-wrapper';
-    
+
     const heading = document.createElement('h2');
     heading.className = 'teaser-heading';
     heading.textContent = data.heading;
-    
-    const arrow = document.createElement('div');
-    arrow.className = 'teaser-arrow';
-    arrow.innerHTML = '<svg width="96" height="48" viewBox="0 0 96 48" fill="none"><line x1="0" y1="24" x2="90" y2="24" stroke="currentColor" stroke-width="5"/><path d="M72 8L96 24L72 40" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-    
+
     headingWrapper.appendChild(heading);
-    headingWrapper.appendChild(arrow);
     contentDiv.appendChild(headingWrapper);
   }
 
@@ -77,11 +65,11 @@ const createTeaserStructure = (block, data) => {
   if (data.description) {
     const descriptionWrapper = document.createElement('div');
     descriptionWrapper.className = 'teaser-description-wrapper';
-    
+
     const description = document.createElement('div');
     description.className = 'teaser-description';
     description.innerHTML = data.description;
-    
+
     descriptionWrapper.appendChild(description);
     contentDiv.appendChild(descriptionWrapper);
   }
@@ -113,13 +101,13 @@ const createTeaserStructure = (block, data) => {
     blockLink.href = data.fullBlockLink;
     blockLink.className = 'teaser-block-link';
     blockLink.setAttribute('aria-label', data.heading || 'Teaser link');
-    
+
     // Add external link attributes if needed
     if (data.fullBlockLink.startsWith('http') && !data.fullBlockLink.includes(window.location.hostname)) {
       blockLink.target = '_blank';
       blockLink.rel = 'noopener noreferrer';
     }
-    
+
     blockLink.appendChild(wrapper);
     block.textContent = '';
     block.appendChild(blockLink);
@@ -147,37 +135,68 @@ const extractData = (block) => {
   };
 
   const rows = Array.from(block.children);
-  
-  // Extract image (row 0)
-  const imageRow = rows[0];
-  if (imageRow) {
-    const picture = imageRow.querySelector('picture');
-    if (picture) {
-      data.image = picture;
-    }
-  }
 
   // Extract fields based on position
+  // Note: The order matches the JSON field definition order
   rows.forEach((row, index) => {
     const text = row.textContent?.trim();
-    
+
     switch (index) {
-      case 1: // imageAlt
-        data.imageAlt = text;
+      case 0: // image (with alt text)
+        {
+          const picture = row.querySelector('picture');
+          if (picture) {
+            data.image = picture;
+            const img = picture.querySelector('img');
+            if (img && img.alt) {
+              data.imageAlt = img.alt;
+            }
+          }
+        }
         break;
-      case 2: // heading
+      case 1: // heading
         data.heading = text;
         break;
-      case 3: // description
-        data.description = row.innerHTML?.trim();
+      case 2: // description (richtext)
+        {
+          // For richtext, get the inner HTML content
+          const descDiv = row.querySelector('div');
+          const content = descDiv?.innerHTML?.trim() || row.innerHTML?.trim();
+          data.description = content;
+        }
         break;
-      case 4: // fullBlockLink
+      case 3: // fullBlockLink
         data.fullBlockLink = text;
         break;
-      case 5: // primaryButton (element grouped - will be <a> tag)
+      case 4: // primaryButton (element grouped)
         {
           const button = row.querySelector('a');
           if (button && button.href) {
+            // Element grouping creates: P0=button, P1=label, P2=style classes
+            const allParagraphs = Array.from(row.querySelectorAll('p'));
+
+            // Get label from second paragraph
+            if (allParagraphs[1]) {
+              const label = allParagraphs[1].textContent?.trim();
+              if (label) {
+                button.textContent = label;
+              }
+            }
+
+            // Get style classes from third paragraph and apply to button
+            if (allParagraphs[2]) {
+              const styleClasses = allParagraphs[2].textContent?.trim();
+              if (styleClasses) {
+                // Add each class (could be comma-separated for multiselect)
+                styleClasses.split(',').forEach((cls) => {
+                  const trimmedClass = cls.trim();
+                  if (trimmedClass) {
+                    button.classList.add(trimmedClass);
+                  }
+                });
+              }
+            }
+
             data.primaryButton = button;
             // Ensure button has proper class
             if (!button.classList.contains('button')) {
@@ -186,10 +205,35 @@ const extractData = (block) => {
           }
         }
         break;
-      case 6: // secondaryButton (element grouped - will be <a> tag)
+      case 5: // secondaryButton (element grouped)
         {
           const button = row.querySelector('a');
           if (button && button.href) {
+            // Element grouping creates: P0=button, P1=label, P2=style classes
+            const allParagraphs = Array.from(row.querySelectorAll('p'));
+
+            // Get label from second paragraph
+            if (allParagraphs[1]) {
+              const label = allParagraphs[1].textContent?.trim();
+              if (label) {
+                button.textContent = label;
+              }
+            }
+
+            // Get style classes from third paragraph and apply to button
+            if (allParagraphs[2]) {
+              const styleClasses = allParagraphs[2].textContent?.trim();
+              if (styleClasses) {
+                // Add each class (could be comma-separated for multiselect)
+                styleClasses.split(',').forEach((cls) => {
+                  const trimmedClass = cls.trim();
+                  if (trimmedClass) {
+                    button.classList.add(trimmedClass);
+                  }
+                });
+              }
+            }
+
             data.secondaryButton = button;
             // Ensure button has proper class
             if (!button.classList.contains('button')) {
@@ -202,14 +246,6 @@ const extractData = (block) => {
         break;
     }
   });
-
-  // Set image alt text
-  if (data.image && data.imageAlt) {
-    const img = data.image.querySelector('img');
-    if (img) {
-      img.alt = data.imageAlt;
-    }
-  }
 
   return data;
 };
