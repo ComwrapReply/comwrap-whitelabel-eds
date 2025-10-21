@@ -2,31 +2,8 @@
  * Teaser block implementation
  * Based on Figma design with image, heading, description, and up to 2 CTA buttons
  * Supports full block linking and multiple layout variants
+ * Uses element grouping for buttons (primaryButton_, secondaryButton_)
  */
-
-/**
- * Create a button element with proper styling
- * @param {string} link - Button URL
- * @param {string} text - Button text
- * @param {string} type - Button type (primary or secondary)
- * @returns {HTMLElement} Button element
- */
-const createButton = (link, text, type = 'primary') => {
-  if (!link || !text) return null;
-
-  const button = document.createElement('a');
-  button.href = link;
-  button.textContent = text;
-  button.className = `button ${type}`;
-  
-  // Add external link attributes if needed
-  if (link.startsWith('http') && !link.includes(window.location.hostname)) {
-    button.target = '_blank';
-    button.rel = 'noopener noreferrer';
-  }
-  
-  return button;
-};
 
 /**
  * Add semantic CSS classes to block elements
@@ -110,27 +87,17 @@ const createTeaserStructure = (block, data) => {
   }
 
   // Create buttons container
-  const hasButtons = data.primaryLink || data.secondaryLink;
+  const hasButtons = data.primaryButton || data.secondaryButton;
   if (hasButtons) {
     const buttonsDiv = document.createElement('div');
     buttonsDiv.className = 'teaser-buttons';
 
-    const primaryButton = createButton(
-      data.primaryLink, 
-      data.primaryLinkText, 
-      data.primaryLinkType || 'primary'
-    );
-    if (primaryButton) {
-      buttonsDiv.appendChild(primaryButton);
+    if (data.primaryButton) {
+      buttonsDiv.appendChild(data.primaryButton);
     }
 
-    const secondaryButton = createButton(
-      data.secondaryLink, 
-      data.secondaryLinkText, 
-      data.secondaryLinkType || 'secondary'
-    );
-    if (secondaryButton) {
-      buttonsDiv.appendChild(secondaryButton);
+    if (data.secondaryButton) {
+      buttonsDiv.appendChild(data.secondaryButton);
     }
 
     contentDiv.appendChild(buttonsDiv);
@@ -164,6 +131,7 @@ const createTeaserStructure = (block, data) => {
 
 /**
  * Extract data from block children
+ * With element grouping, buttons are already rendered as <a> tags
  * @param {HTMLElement} block - The block DOM element
  * @returns {Object} Extracted data
  */
@@ -174,17 +142,13 @@ const extractData = (block) => {
     heading: '',
     description: '',
     fullBlockLink: '',
-    primaryLink: '',
-    primaryLinkText: '',
-    primaryLinkType: 'primary',
-    secondaryLink: '',
-    secondaryLinkText: '',
-    secondaryLinkType: 'secondary',
+    primaryButton: null,
+    secondaryButton: null,
   };
 
   const rows = Array.from(block.children);
   
-  // Extract image
+  // Extract image (row 0)
   const imageRow = rows[0];
   if (imageRow) {
     const picture = imageRow.querySelector('picture');
@@ -193,7 +157,7 @@ const extractData = (block) => {
     }
   }
 
-  // Extract text fields
+  // Extract fields based on position
   rows.forEach((row, index) => {
     const text = row.textContent?.trim();
     
@@ -210,23 +174,29 @@ const extractData = (block) => {
       case 4: // fullBlockLink
         data.fullBlockLink = text;
         break;
-      case 5: // primaryLink
-        data.primaryLink = text;
+      case 5: // primaryButton (element grouped - will be <a> tag)
+        {
+          const button = row.querySelector('a');
+          if (button && button.href) {
+            data.primaryButton = button;
+            // Ensure button has proper class
+            if (!button.classList.contains('button')) {
+              button.classList.add('button');
+            }
+          }
+        }
         break;
-      case 6: // primaryLinkText
-        data.primaryLinkText = text;
-        break;
-      case 7: // primaryLinkType
-        data.primaryLinkType = text || 'primary';
-        break;
-      case 8: // secondaryLink
-        data.secondaryLink = text;
-        break;
-      case 9: // secondaryLinkText
-        data.secondaryLinkText = text;
-        break;
-      case 10: // secondaryLinkType
-        data.secondaryLinkType = text || 'secondary';
+      case 6: // secondaryButton (element grouped - will be <a> tag)
+        {
+          const button = row.querySelector('a');
+          if (button && button.href) {
+            data.secondaryButton = button;
+            // Ensure button has proper class
+            if (!button.classList.contains('button')) {
+              button.classList.add('button');
+            }
+          }
+        }
         break;
       default:
         break;
@@ -249,21 +219,27 @@ const extractData = (block) => {
  * @param {HTMLElement} block - The block DOM element
  */
 const addAnalytics = (block) => {
-  const buttons = block.querySelectorAll('.button');
-  buttons.forEach((button, index) => {
-    button.addEventListener('click', () => {
-      if (window.dataLayer) {
-        window.dataLayer.push({
-          event: 'teaser_cta_click',
-          block_type: 'teaser',
-          button_position: index === 0 ? 'primary' : 'secondary',
-          button_text: button.textContent,
-          button_url: button.href,
-        });
-      }
+  // Track button clicks
+  const buttonsContainer = block.querySelector('.teaser-buttons');
+  if (buttonsContainer) {
+    const buttons = buttonsContainer.querySelectorAll('a');
+    buttons.forEach((button, index) => {
+      button.addEventListener('click', () => {
+        if (window.dataLayer) {
+          window.dataLayer.push({
+            event: 'teaser_cta_click',
+            block_type: 'teaser',
+            button_position: index === 0 ? 'primary' : 'secondary',
+            button_text: button.textContent?.trim(),
+            button_url: button.href,
+            button_style: button.className,
+          });
+        }
+      });
     });
-  });
+  }
 
+  // Track full block link clicks
   const blockLink = block.querySelector('.teaser-block-link');
   if (blockLink) {
     blockLink.addEventListener('click', () => {

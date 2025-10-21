@@ -1,5 +1,7 @@
 /* Teaser block styles - Based on Figma design */
+
 /* Design system colors: Primary #0073DD, Black #000000 */
+
 /* Typography: Heading 44px/56px, Body 20px/32px */
 
 .block.teaser {
@@ -106,7 +108,7 @@
 }
 
 .teaser-description p {
-  margin: 0 0 1rem 0;
+  margin: 0 0 1rem;
 }
 
 .teaser-description p:last-child {
@@ -121,7 +123,8 @@
   flex-wrap: wrap;
 }
 
-.teaser-buttons .button {
+.teaser-buttons .button,
+.teaser-buttons a {
   display: inline-block;
   padding: 0.75rem 1.5rem;
   font-family: var(--body-font-family);
@@ -131,28 +134,52 @@
   border-radius: 4px;
   transition: all 0.3s ease;
   cursor: pointer;
+  text-align: center;
 }
 
-.teaser-buttons .button.primary {
+/* Primary button style */
+.teaser-buttons .button.primary,
+.teaser-buttons a.primary {
   background-color: #0073dd;
   color: var(--background-color);
   border: 2px solid #0073dd;
 }
 
-.teaser-buttons .button.primary:hover {
+.teaser-buttons .button.primary:hover,
+.teaser-buttons a.primary:hover {
   background-color: #005bb5;
   border-color: #005bb5;
 }
 
-.teaser-buttons .button.secondary {
+/* Secondary button style */
+.teaser-buttons .button.secondary,
+.teaser-buttons a.secondary {
   background-color: transparent;
   color: #0073dd;
   border: 2px solid #0073dd;
 }
 
-.teaser-buttons .button.secondary:hover {
+.teaser-buttons .button.secondary:hover,
+.teaser-buttons a.secondary:hover {
   background-color: #0073dd;
   color: var(--background-color);
+}
+
+/* Text button style */
+.teaser-buttons .button.text,
+.teaser-buttons a.text {
+  background-color: transparent;
+  color: #0073dd;
+  border: none;
+  padding: 0.5rem 1rem;
+  text-decoration: underline;
+}
+
+.teaser-buttons .button.text:hover,
+.teaser-buttons a.text:hover {
+  background-color: transparent;
+  color: #005bb5;
+  text-decoration: none;
 }
 
 /* Full block link */
@@ -168,7 +195,7 @@
 }
 
 .teaser-block-link:hover .teaser-wrapper {
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 8px 24px rgb(0 0 0 / 15%);
 }
 
 /* Layout variants */
@@ -270,7 +297,7 @@
   content: '';
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgb(0 0 0 / 50%);
 }
 
 .block.teaser.image-background .teaser-image-overlay {
@@ -281,7 +308,7 @@
   width: 100%;
   max-width: 800px;
   padding: 2rem;
-  background: rgba(255, 255, 255, 0.95);
+  background: rgb(255 255 255 / 95%);
   border-radius: 8px;
   backdrop-filter: blur(10px);
 }
@@ -293,7 +320,7 @@
 /* Responsive Design */
 
 /* Tablet */
-@media (max-width: 1024px) {
+@media (width <= 1024px) {
   .teaser-image {
     width: 50%;
     height: auto;
@@ -316,7 +343,7 @@
 }
 
 /* Mobile */
-@media (max-width: 768px) {
+@media (width <= 768px) {
   .teaser-wrapper {
     flex-direction: column !important;
     gap: 1.5rem;
@@ -380,7 +407,8 @@
   outline-offset: 4px;
 }
 
-.teaser-buttons .button:focus-visible {
+.teaser-buttons .button:focus-visible,
+.teaser-buttons a:focus-visible {
   outline: 2px solid #0073dd;
   outline-offset: 2px;
 }

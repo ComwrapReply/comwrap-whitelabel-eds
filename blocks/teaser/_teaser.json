@@ -55,63 +55,109 @@
           "value": ""
         },
         {
-          "component": "text",
-          "name": "primaryLink",
-          "label": "Primary Button Link",
-          "valueType": "string",
-          "value": ""
+          "component": "aem-content",
+          "name": "primaryButton_link",
+          "label": "Primary Button Link"
         },
         {
           "component": "text",
-          "name": "primaryLinkText",
-          "label": "Primary Button Text",
-          "valueType": "string",
+          "name": "primaryButton_label",
+          "label": "Primary Button Label",
           "value": ""
         },
         {
           "component": "select",
-          "name": "primaryLinkType",
-          "label": "Primary Button Type",
-          "valueType": "string",
+          "name": "primaryButton_target",
+          "label": "Primary Button Target",
           "options": [
             {
-              "name": "Primary",
-              "value": "primary"
+              "name": "Same Window",
+              "value": ""
             },
             {
-              "name": "Secondary",
-              "value": "secondary"
+              "name": "New Tab",
+              "value": "_blank"
+            }
+          ],
+          "value": ""
+        },
+        {
+          "component": "multiselect",
+          "name": "primaryButton_classes",
+          "label": "Primary Button Style",
+          "valueType": "string",
+          "maxSize": 2,
+          "options": [
+            {
+              "name": "Style",
+              "children": [
+                {
+                  "name": "Primary",
+                  "value": "primary"
+                },
+                {
+                  "name": "Secondary",
+                  "value": "secondary"
+                },
+                {
+                  "name": "Text",
+                  "value": "text"
+                }
+              ]
             }
           ],
           "value": "primary"
         },
         {
-          "component": "text",
-          "name": "secondaryLink",
-          "label": "Secondary Button Link (optional)",
-          "valueType": "string",
-          "value": ""
+          "component": "aem-content",
+          "name": "secondaryButton_link",
+          "label": "Secondary Button Link (optional)"
         },
         {
           "component": "text",
-          "name": "secondaryLinkText",
-          "label": "Secondary Button Text",
-          "valueType": "string",
+          "name": "secondaryButton_label",
+          "label": "Secondary Button Label",
           "value": ""
         },
         {
           "component": "select",
-          "name": "secondaryLinkType",
-          "label": "Secondary Button Type",
-          "valueType": "string",
+          "name": "secondaryButton_target",
+          "label": "Secondary Button Target",
           "options": [
             {
-              "name": "Primary",
-              "value": "primary"
+              "name": "Same Window",
+              "value": ""
             },
             {
-              "name": "Secondary",
-              "value": "secondary"
+              "name": "New Tab",
+              "value": "_blank"
+            }
+          ],
+          "value": ""
+        },
+        {
+          "component": "multiselect",
+          "name": "secondaryButton_classes",
+          "label": "Secondary Button Style",
+          "valueType": "string",
+          "maxSize": 2,
+          "options": [
+            {
+              "name": "Style",
+              "children": [
+                {
+                  "name": "Primary",
+                  "value": "primary"
+                },
+                {
+                  "name": "Secondary",
+                  "value": "secondary"
+                },
+                {
+                  "name": "Text",
+                  "value": "text"
+                }
+              ]
             }
           ],
           "value": "secondary"

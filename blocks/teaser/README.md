@@ -24,12 +24,16 @@ A flexible teaser component designed to showcase content with an image, heading,
 | Heading | Text | Yes | Main heading text (displays in brand blue) |
 | Description | Rich Text | No | Supporting description text |
 | Full Block Link | Text | No | URL to make entire teaser clickable (only works when no buttons are present) |
-| Primary Button Link | Text | No | URL for primary CTA button |
-| Primary Button Text | Text | No | Text for primary CTA button |
-| Primary Button Type | Select | No | Style: Primary or Secondary |
-| Secondary Button Link | Text | No | URL for secondary CTA button |
-| Secondary Button Text | Text | No | Text for secondary CTA button |
-| Secondary Button Type | Select | No | Style: Primary or Secondary |
+| **Primary Button** | **Button Group** | **No** | **Primary CTA button (element grouped)** |
+| ↳ Primary Button Link | AEM Content | No | URL for primary CTA button |
+| ↳ Primary Button Label | Text | No | Text for primary CTA button |
+| ↳ Primary Button Target | Select | No | Same Window or New Tab |
+| ↳ Primary Button Style | Multi-select | No | Style: Primary, Secondary, or Text |
+| **Secondary Button** | **Button Group** | **No** | **Secondary CTA button (element grouped)** |
+| ↳ Secondary Button Link | AEM Content | No | URL for secondary CTA button |
+| ↳ Secondary Button Label | Text | No | Text for secondary CTA button |
+| ↳ Secondary Button Target | Select | No | Same Window or New Tab |
+| ↳ Secondary Button Style | Multi-select | No | Style: Primary, Secondary, or Text |
 | Layout Style | Select | Yes | Layout variant (see below) |
 
 ### Layout Variants
@@ -73,10 +77,14 @@ Single image, heading, description, and one CTA button.
 - Image Alt Text: "Team collaboration"
 - Heading: "Check out our career opportunities"
 - Description: "Join our team and make an impact..."
-- Primary Button Link: "/careers"
-- Primary Button Text: "View Jobs"
-- Primary Button Type: Primary
+- **Primary Button:**
+  - Link: "/careers"
+  - Label: "View Jobs"
+  - Target: Same Window
+  - Style: Primary
 - Layout Style: Image Left
+
+> **Note**: The button fields use element grouping (with `primaryButton_` prefix). All fields are combined into a single semantic button element automatically.
 
 ### Teaser with Two Buttons
 
@@ -86,12 +94,16 @@ Include both primary and secondary CTAs.
 - Image: Upload your image
 - Heading: "Discover Our Services"
 - Description: "We offer comprehensive solutions..."
-- Primary Button Link: "/services"
-- Primary Button Text: "Learn More"
-- Primary Button Type: Primary
-- Secondary Button Link: "/contact"
-- Secondary Button Text: "Contact Us"
-- Secondary Button Type: Secondary
+- **Primary Button:**
+  - Link: "/services"
+  - Label: "Learn More"
+  - Target: Same Window
+  - Style: Primary
+- **Secondary Button:**
+  - Link: "/contact"
+  - Label: "Contact Us"
+  - Target: Same Window
+  - Style: Secondary
 - Layout Style: Image Right
 
 ### Clickable Block (Card Style)
@@ -114,9 +126,36 @@ Use as a hero banner with background image.
 - Image: Upload hero image
 - Heading: "Welcome to Our Platform"
 - Description: "Transform your business with..."
-- Primary Button Link: "/get-started"
-- Primary Button Text: "Get Started"
+- **Primary Button:**
+  - Link: "/get-started"
+  - Label: "Get Started"
+  - Target: Same Window
+  - Style: Primary
 - Layout Style: Image Background
+
+## Button Styles
+
+The teaser block supports three button style options:
+
+### Primary Button Style
+- Filled background (#0073DD)
+- White text
+- Solid border
+- Best for: Main call-to-action
+
+### Secondary Button Style
+- Transparent background
+- Blue text (#0073DD)
+- Blue border
+- Best for: Alternative actions
+
+### Text Button Style
+- No background
+- Blue text with underline
+- Minimal styling
+- Best for: Tertiary actions or links
+
+**Element Grouping**: Button fields use the element grouping naming convention (`primaryButton_link`, `primaryButton_label`, etc.). This automatically combines all button-related fields into a single semantic `<a>` element with the appropriate classes applied.
 
 ## Design Specifications
 
