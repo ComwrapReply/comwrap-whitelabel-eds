@@ -4,11 +4,11 @@ const { defineConfig } = require('@playwright/test');
 module.exports = defineConfig({
   testDir: './test',
   use: {
-    baseURL: 'http://localhost:3000', // or your local dev URL
+    baseURL: 'http://localhost:3000',
     headless: true,
   },
   webServer: {
-    command: 'npx @adobe/helix-cli up --no-proxy',
+    command: 'npx aem up --no-open',
     url: 'http://localhost:3000',
     reuseExistingServer: !process.env.CI,
     timeout: 120000,
