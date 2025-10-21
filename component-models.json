@@ -5778,96 +5778,129 @@
     "id": "teaser",
     "fields": [
       {
-        "component": "text",
-        "name": "teaser-title",
-        "value": "",
-        "label": "Title"
-      },
-      {
-        "component": "richtext",
-        "name": "teaser-description",
-        "value": "",
-        "label": "Description"
-      },
-      {
         "component": "reference",
-        "name": "teaser-image",
+        "name": "image",
         "label": "Image",
         "valueType": "string",
         "multi": false
       },
       {
-        "name": "teaser-imageAlt",
         "component": "text",
-        "title": "Image Alt Text"
-      },
-      {
-        "component": "aem-content",
-        "name": "custom-button-link",
-        "label": "Button Link"
+        "name": "imageAlt",
+        "label": "Image Alt Text",
+        "value": ""
       },
       {
         "component": "text",
-        "name": "custom-button-label",
-        "label": "Button Label"
+        "name": "heading",
+        "label": "Heading",
+        "valueType": "string",
+        "value": ""
+      },
+      {
+        "component": "richtext",
+        "name": "description",
+        "label": "Description",
+        "valueType": "string",
+        "value": ""
+      },
+      {
+        "component": "text",
+        "name": "fullBlockLink",
+        "label": "Full Block Link (optional)",
+        "valueType": "string",
+        "value": ""
+      },
+      {
+        "component": "text",
+        "name": "primaryLink",
+        "label": "Primary Button Link",
+        "valueType": "string",
+        "value": ""
+      },
+      {
+        "component": "text",
+        "name": "primaryLinkText",
+        "label": "Primary Button Text",
+        "valueType": "string",
+        "value": ""
       },
       {
         "component": "select",
-        "name": "custom-button-target",
-        "label": "Link Target",
+        "name": "primaryLinkType",
+        "label": "Primary Button Type",
+        "valueType": "string",
         "options": [
           {
-            "name": "Same Window",
-            "value": ""
+            "name": "Primary",
+            "value": "primary"
           },
           {
-            "name": "New Tab",
-            "value": "_blank"
+            "name": "Secondary",
+            "value": "secondary"
           }
-        ]
+        ],
+        "value": "primary"
       },
       {
-        "component": "multiselect",
-        "name": "classes",
-        "label": "Style",
+        "component": "text",
+        "name": "secondaryLink",
+        "label": "Secondary Button Link (optional)",
         "valueType": "string",
-        "maxSize": 2,
+        "value": ""
+      },
+      {
+        "component": "text",
+        "name": "secondaryLinkText",
+        "label": "Secondary Button Text",
+        "valueType": "string",
+        "value": ""
+      },
+      {
+        "component": "select",
+        "name": "secondaryLinkType",
+        "label": "Secondary Button Type",
+        "valueType": "string",
         "options": [
           {
-            "name": "Style",
-            "children": [
-              {
-                "name": "Primary",
-                "value": "primary"
-              },
-              {
-                "name": "Secondary",
-                "value": "secondary"
-              },
-              {
-                "name": "Text",
-                "value": "text"
-              }
-            ]
+            "name": "Primary",
+            "value": "primary"
           },
           {
-            "name": "Type",
-            "children": [
-              {
-                "name": "Download",
-                "value": "download"
-              },
-              {
-                "name": "Email",
-                "value": "email"
-              },
-              {
-                "name": "Telephone",
-                "value": "telephone"
-              }
-            ]
+            "name": "Secondary",
+            "value": "secondary"
           }
-        ]
+        ],
+        "value": "secondary"
+      },
+      {
+        "component": "select",
+        "name": "classes",
+        "label": "Layout Style",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "Image Left",
+            "value": "image-left"
+          },
+          {
+            "name": "Image Right",
+            "value": "image-right"
+          },
+          {
+            "name": "Image Top",
+            "value": "image-top"
+          },
+          {
+            "name": "Image Bottom",
+            "value": "image-bottom"
+          },
+          {
+            "name": "Image Background",
+            "value": "image-background"
+          }
+        ],
+        "value": "image-left"
       }
     ]
   },

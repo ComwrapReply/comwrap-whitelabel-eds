@@ -30,7 +30,8 @@
       "table",
       "quote",
       "video",
-      "article-feeds"
+      "article-feeds",
+      "teaser"
     ]
   },
   {
@@ -64,7 +65,7 @@
       "image",
       "button",
       "title",
-      "card"
+      "teaser"
     ]
   },
   {
