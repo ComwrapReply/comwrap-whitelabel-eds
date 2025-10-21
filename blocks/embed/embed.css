@@ -5,6 +5,7 @@
   margin: 2rem 0;
   width: 100%;
   max-width: 1200px;
+
 }
 
 /* Embed wrapper - handles aspect ratio */
@@ -12,8 +13,9 @@
   position: relative;
   width: 100%;
   overflow: hidden;
-  background-color: var(--color-light-grey, #f7f6f5);
-  border-radius: 8px;
+  display: flex;
+  justify-content: center; /* DO THIS TOMORROW MORNING */
+  align-items: center;
 }
 
 /* Aspect ratio classes using padding-bottom technique */
