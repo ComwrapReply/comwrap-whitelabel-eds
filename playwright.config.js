@@ -8,7 +8,7 @@ module.exports = defineConfig({
     headless: true,
   },
   webServer: {
-    command: 'npx aem up', // or `npx @adobe/helix-cli up`
+    command: 'npx @adobe/helix-cli up',
     url: 'http://localhost:3000',
     reuseExistingServer: !process.env.CI,
     timeout: 120000,
