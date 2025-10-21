@@ -123,14 +123,17 @@ async function fetchExperienceFragment() {
   const customXfPath = getMetadata('header-xf-path');
   const xfPath = customXfPath || AEM_XF_CONFIG.xfPath;
   
-  // Construct the XF URL with .html extension
-  const xfUrl = `${AEM_XF_CONFIG.publishUrl}${xfPath}.html`;
+  // Use Author for dev, Publish for production
+  const baseUrl = AEM_XF_CONFIG.useDev ? AEM_XF_CONFIG.authorUrl : AEM_XF_CONFIG.publishUrl;
   
-  console.log(`Loading header from AEM XF: ${xfUrl}`);
+  // Construct the XF URL with .html extension
+  const xfUrl = `${baseUrl}${xfPath}.html`;
+  
+  console.log(`Loading header from AEM XF (${AEM_XF_CONFIG.useDev ? 'AUTHOR/DEV' : 'PUBLISH/PROD'}): ${xfUrl}`);
   
   try {
     const response = await fetch(xfUrl, {
-      credentials: 'omit', // Changed from 'include' to avoid CORS credentials issue
+      credentials: 'include', // Include credentials for Author access
       headers: {
         'Accept': 'text/html'
       }
@@ -144,19 +147,26 @@ async function fetchExperienceFragment() {
     const parser = new DOMParser();
     const doc = parser.parseFromString(html, 'text/html');
     
+    console.log('XF HTML received, length:', html.length);
+    
     // Extract the XF content - try multiple selectors
     let xfContent = doc.querySelector('.xf-content-height, .experiencefragment, .cmp-experiencefragment');
     
     if (!xfContent) {
+      console.log('Primary selectors not found, trying body content...');
       // Fallback: try to get the main content area
       xfContent = doc.querySelector('main, .root, body > div');
     }
     
     if (!xfContent) {
       console.error('Could not find XF content in response');
+      console.log('Available classes in body:', Array.from(doc.body.querySelectorAll('[class]')).map(el => el.className).slice(0, 10));
+      console.log('Body structure:', doc.body.innerHTML.substring(0, 500));
       return null;
     }
     
+    console.log('XF content found with selector:', xfContent.className || xfContent.tagName);
+    console.log('XF content children:', xfContent.children.length);
     console.log('Experience Fragment loaded successfully');
     return xfContent;
     
@@ -174,15 +184,18 @@ async function fetchExperienceFragment() {
 function processXfContent(xfContent) {
   const content = xfContent.cloneNode(true);
   
+  // Determine base URL for fixing paths
+  const baseUrl = AEM_XF_CONFIG.useDev ? AEM_XF_CONFIG.authorUrl : AEM_XF_CONFIG.publishUrl;
+  
   // Fix image paths - convert AEM DAM paths to full URLs
   content.querySelectorAll('img[src^="/content/dam"]').forEach(img => {
-    img.src = `${AEM_XF_CONFIG.publishUrl}${img.src}`;
+    img.src = `${baseUrl}${img.src}`;
   });
   
   // Fix relative image paths
   content.querySelectorAll('img[src^="/"]').forEach(img => {
     if (!img.src.startsWith('http')) {
-      img.src = `${AEM_XF_CONFIG.publishUrl}${img.src}`;
+      img.src = `${baseUrl}${img.src}`;
     }
   });
   
