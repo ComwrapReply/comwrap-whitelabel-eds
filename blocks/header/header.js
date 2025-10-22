@@ -233,40 +233,61 @@ function processXfContent(xfContent) {
   });
   
   // Fix navigation links - convert relative paths to full AEM URLs
-  content.querySelectorAll('a[href]').forEach(link => {
+  const allLinks = content.querySelectorAll('a');
+  console.log('Total links in content:', allLinks.length);
+  
+  allLinks.forEach((link, index) => {
     const href = link.getAttribute('href');
+    console.log(`Link ${index + 1}: href="${href}"`);
     
-    // Skip if no href, or already absolute URL, or anchor, or mailto
-    if (!href || href.startsWith('http') || href.startsWith('#') || href.startsWith('mailto:') || href.startsWith('//')) {
+    // Skip if no href
+    if (!href) {
+      console.log('  → Skipping: no href');
+      return;
+    }
+    
+    // Skip external, anchor, mailto links
+    if (href.startsWith('http') || href.startsWith('#') || href.startsWith('mailto:') || href.startsWith('//')) {
+      console.log('  → Skipping: external/anchor/mailto');
       return;
     }
     
     // Handle /content/ paths - just add base URL
     if (href.startsWith('/content/')) {
-      link.setAttribute('href', `${baseUrl}${href}`);
+      const newHref = `${baseUrl}${href}`;
+      link.setAttribute('href', newHref);
+      console.log(`  → Converted: ${newHref}`);
       return;
     }
     
     // Handle relative paths like /magazine, /about-us, /faqs
     if (href.startsWith('/')) {
-      // Build full AEM URL: baseUrl + /content/wknd/language-masters/en + /magazine + .html
-      const xfPath = AEM_XF_CONFIG.xfPath;
-      
-      // Extract language from XF path (default to 'en')
-      let lang = 'en';
-      const langMatch = xfPath.match(/\/language-masters\/([a-z]{2})\//);
-      if (langMatch) {
-        lang = langMatch[1];
+      try {
+        // Build full AEM URL
+        const xfPath = AEM_XF_CONFIG.xfPath;
+        
+        // Extract language from XF path (default to 'en')
+        let lang = 'en';
+        const langMatch = xfPath.match(/\/language-masters\/([a-z]{2})\//);
+        if (langMatch) {
+          lang = langMatch[1];
+        }
+        
+        // Build the full URL
+        const contentPath = `/content/wknd/language-masters/${lang}`;
+        const fullUrl = `${baseUrl}${contentPath}${href}.html`;
+        
+        link.setAttribute('href', fullUrl);
+        console.log(`  → Converted: ${fullUrl}`);
+      } catch (error) {
+        console.error('  → Error converting link:', error);
       }
-      
-      // Build the full URL
-      const contentPath = `/content/wknd/language-masters/${lang}`;
-      const fullUrl = `${baseUrl}${contentPath}${href}.html`;
-      
-      link.setAttribute('href', fullUrl);
+    } else {
+      console.log('  → Keeping as-is:', href);
     }
   });
   
+  console.log('Link processing complete. Links after processing:', content.querySelectorAll('a').length);
   console.log('XF content processed');
   return content;
 }
