@@ -204,11 +204,27 @@ async function fetchExperienceFragment() {
  * @returns {Element} Processed content
  */
 function processXfContent(xfContent) {
-  const content = xfContent.cloneNode(true);
+  let content = xfContent.cloneNode(true);
   
   console.log('Processing XF content...');
   console.log('Content HTML length:', content.innerHTML.length);
-  console.log('Content structure:', content.children.length, 'children');
+  console.log('Content structure:', content.children.length, 'direct children');
+  console.log('Content classes:', content.className);
+  
+  // If we got a container with only one child, unwrap it
+  if (content.children.length === 1 && content.classList.contains('container')) {
+    console.log('Unwrapping single container child');
+    content = content.firstElementChild.cloneNode(true);
+    console.log('After unwrap:', content.children.length, 'children');
+  }
+  
+  // Look for the actual navigation content inside nested containers
+  const innerContainer = content.querySelector('.cmp-container, .aem-Grid, .responsivegrid');
+  if (innerContainer && innerContainer !== content) {
+    console.log('Found inner container, using that instead');
+    content = innerContainer.cloneNode(true);
+    console.log('Inner container has', content.children.length, 'children');
+  }
   
   // Determine base URL for fixing paths
   const baseUrl = AEM_XF_CONFIG.useDev ? AEM_XF_CONFIG.authorUrl : AEM_XF_CONFIG.publishUrl;
@@ -228,23 +244,48 @@ function processXfContent(xfContent) {
   });
   
   // Fix link paths - convert AEM content paths to EDS paths
-  content.querySelectorAll('a[href^="/content/"]').forEach(link => {
+  content.querySelectorAll('a[href]').forEach(link => {
     const href = link.getAttribute('href');
     
-    // For WKND links
-    if (href.startsWith('/content/wknd/')) {
-      const edsPath = href
-        .replace('/content/wknd/us/en', '')
-        .replace('/content/wknd/language-masters/en', '')
-        .replace('.html', '');
-      link.setAttribute('href', edsPath || '/');
-      console.log('Fixed WKND link:', href, '→', edsPath);
-    } else {
-      // For other content paths
-      const edsPath = href.replace('/content/ue-multitenant-root', '').replace('.html', '');
-      link.setAttribute('href', edsPath || '/');
-      console.log('Fixed link:', href, '→', edsPath);
+    // Skip external links and anchors
+    if (!href || href.startsWith('http') || href.startsWith('#') || href.startsWith('mailto:')) {
+      return;
     }
+    
+    let newHref = href;
+    
+    // Handle WKND paths
+    if (href.includes('/content/wknd/')) {
+      // Remove /content/wknd/language-masters/{language}
+      newHref = href
+        .replace(/\/content\/wknd\/language-masters\/[a-z]{2}/, '')
+        .replace(/\/content\/wknd\/[a-z]{2}\/[a-z]{2}/, '')
+        .replace(/\/content\/wknd/, '')
+        .replace('.html', '');
+      
+      // If we end up with empty string, make it home
+      if (!newHref || newHref === '/') {
+        newHref = '/';
+      }
+      
+      console.log('Fixed WKND link:', href, '→', newHref);
+    }
+    // Handle other AEM content paths
+    else if (href.startsWith('/content/')) {
+      // Generic content path handling
+      newHref = href
+        .replace(/\/content\/[^\/]+\//, '/')  // Remove /content/{site}/
+        .replace('.html', '');
+      
+      console.log('Fixed content link:', href, '→', newHref);
+    }
+    // Handle relative paths that need the base URL
+    else if (href.startsWith('/') && !href.startsWith('//')) {
+      // Keep as-is for now, might be a valid absolute path
+      console.log('Keeping absolute path:', href);
+    }
+    
+    link.setAttribute('href', newHref);
   });
   
   console.log('XF content processed');
