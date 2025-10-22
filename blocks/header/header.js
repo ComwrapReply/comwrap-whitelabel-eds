@@ -210,13 +210,8 @@ function processXfContent(xfContent) {
   console.log('Content structure:', content.children.length, 'direct children');
   console.log('Content classes:', content.className);
   
-  // WKND has deeply nested structure
-  const responsiveGrid = content.querySelector('.responsivegrid.container');
-  if (responsiveGrid && responsiveGrid !== content) {
-    console.log('Found WKND responsivegrid container, using that');
-    content = responsiveGrid.cloneNode(true);
-    console.log('After unwrap:', content.children.length, 'children');
-  }
+  // DON'T unwrap - keep the full container with all navigation components
+  // The original content has all the navigation we need
   
   // Determine base URL for fixing paths
   const baseUrl = AEM_XF_CONFIG.useDev ? AEM_XF_CONFIG.authorUrl : AEM_XF_CONFIG.publishUrl;
