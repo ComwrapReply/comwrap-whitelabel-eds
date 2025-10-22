@@ -149,27 +149,26 @@ async function fetchExperienceFragment() {
     
     console.log('XF HTML received, length:', html.length);
     
-    // Extract the XF content - try multiple selectors in priority order
-    let xfContent = doc.querySelector('.xf-content-height');
+    // Extract the XF content - WKND specific structure
+    let xfContent = doc.querySelector('.cmp-container .aem-Grid .responsivegrid.container');
     
     if (!xfContent) {
-      console.log('.xf-content-height not found, trying .cmp-experiencefragment__fragment');
-      xfContent = doc.querySelector('.cmp-experiencefragment__fragment');
+      console.log('WKND structure not found, trying .cmp-container .aem-Grid');
+      xfContent = doc.querySelector('.cmp-container .aem-Grid');
     }
     
     if (!xfContent) {
-      console.log('.cmp-experiencefragment__fragment not found, trying .experiencefragment .cmp-container');
-      xfContent = doc.querySelector('.experiencefragment .cmp-container');
-    }
-    
-    if (!xfContent) {
-      console.log('Container selectors not found, trying .cmp-container');
+      console.log('.aem-Grid not found, trying .cmp-container');
       xfContent = doc.querySelector('.cmp-container');
     }
     
     if (!xfContent) {
+      console.log('.cmp-container not found, trying .aem-Grid');
+      xfContent = doc.querySelector('.aem-Grid');
+    }
+    
+    if (!xfContent) {
       console.log('Primary selectors not found, trying body > div');
-      // Get the first div inside body that has actual content
       const bodyDivs = doc.body.querySelectorAll(':scope > div');
       for (const div of bodyDivs) {
         if (div.children.length > 0) {
@@ -211,81 +210,61 @@ function processXfContent(xfContent) {
   console.log('Content structure:', content.children.length, 'direct children');
   console.log('Content classes:', content.className);
   
-  // If we got a container with only one child, unwrap it
-  if (content.children.length === 1 && content.classList.contains('container')) {
-    console.log('Unwrapping single container child');
-    content = content.firstElementChild.cloneNode(true);
+  // WKND has deeply nested structure
+  const responsiveGrid = content.querySelector('.responsivegrid.container');
+  if (responsiveGrid && responsiveGrid !== content) {
+    console.log('Found WKND responsivegrid container, using that');
+    content = responsiveGrid.cloneNode(true);
     console.log('After unwrap:', content.children.length, 'children');
-  }
-  
-  // Look for the actual navigation content inside nested containers
-  const innerContainer = content.querySelector('.cmp-container, .aem-Grid, .responsivegrid');
-  if (innerContainer && innerContainer !== content) {
-    console.log('Found inner container, using that instead');
-    content = innerContainer.cloneNode(true);
-    console.log('Inner container has', content.children.length, 'children');
   }
   
   // Determine base URL for fixing paths
   const baseUrl = AEM_XF_CONFIG.useDev ? AEM_XF_CONFIG.authorUrl : AEM_XF_CONFIG.publishUrl;
   
-  // Fix image paths - convert AEM DAM paths to full URLs
+  // Fix image paths
   content.querySelectorAll('img[src^="/content/dam"]').forEach(img => {
-    console.log('Fixing image:', img.src);
     img.src = `${baseUrl}${img.src}`;
   });
   
-  // Fix relative image paths
   content.querySelectorAll('img[src^="/"]').forEach(img => {
     if (!img.src.startsWith('http')) {
-      console.log('Fixing relative image:', img.src);
       img.src = `${baseUrl}${img.src}`;
     }
   });
   
-  // Fix link paths - convert AEM content paths to EDS paths
+  // Fix navigation links - convert relative paths to full AEM URLs
   content.querySelectorAll('a[href]').forEach(link => {
     const href = link.getAttribute('href');
     
-    // Skip external links and anchors
-    if (!href || href.startsWith('http') || href.startsWith('#') || href.startsWith('mailto:')) {
+    // Skip if no href, or already absolute URL, or anchor, or mailto
+    if (!href || href.startsWith('http') || href.startsWith('#') || href.startsWith('mailto:') || href.startsWith('//')) {
       return;
     }
     
-    let newHref = href;
+    // Handle /content/ paths - just add base URL
+    if (href.startsWith('/content/')) {
+      link.setAttribute('href', `${baseUrl}${href}`);
+      return;
+    }
     
-    // Handle WKND paths
-    if (href.includes('/content/wknd/')) {
-      // Remove /content/wknd/language-masters/{language}
-      newHref = href
-        .replace(/\/content\/wknd\/language-masters\/[a-z]{2}/, '')
-        .replace(/\/content\/wknd\/[a-z]{2}\/[a-z]{2}/, '')
-        .replace(/\/content\/wknd/, '')
-        .replace('.html', '');
+    // Handle relative paths like /magazine, /about-us, /faqs
+    if (href.startsWith('/')) {
+      // Build full AEM URL: baseUrl + /content/wknd/language-masters/en + /magazine + .html
+      const xfPath = AEM_XF_CONFIG.xfPath;
       
-      // If we end up with empty string, make it home
-      if (!newHref || newHref === '/') {
-        newHref = '/';
+      // Extract language from XF path (default to 'en')
+      let lang = 'en';
+      const langMatch = xfPath.match(/\/language-masters\/([a-z]{2})\//);
+      if (langMatch) {
+        lang = langMatch[1];
       }
       
-      console.log('Fixed WKND link:', href, '→', newHref);
-    }
-    // Handle other AEM content paths
-    else if (href.startsWith('/content/')) {
-      // Generic content path handling
-      newHref = href
-        .replace(/\/content\/[^\/]+\//, '/')  // Remove /content/{site}/
-        .replace('.html', '');
+      // Build the full URL
+      const contentPath = `/content/wknd/language-masters/${lang}`;
+      const fullUrl = `${baseUrl}${contentPath}${href}.html`;
       
-      console.log('Fixed content link:', href, '→', newHref);
+      link.setAttribute('href', fullUrl);
     }
-    // Handle relative paths that need the base URL
-    else if (href.startsWith('/') && !href.startsWith('//')) {
-      // Keep as-is for now, might be a valid absolute path
-      console.log('Keeping absolute path:', href);
-    }
-    
-    link.setAttribute('href', newHref);
   });
   
   console.log('XF content processed');
@@ -297,20 +276,31 @@ function processXfContent(xfContent) {
  * @param {Element} nav The nav element
  */
 function decorateNavSections(nav) {
-  const navSections = nav.querySelector('.nav-sections, nav ul, .cmp-navigation__group');
+  let navSections = nav.querySelector('.cmp-navigation, .navigation');
+  
+  if (!navSections) {
+    navSections = nav.querySelector('.nav-sections, nav ul');
+  }
   
   if (!navSections) {
     console.warn('No nav sections found');
     return;
   }
   
-  // Ensure it has the right class
+  console.log('Found navigation element:', navSections.className || navSections.tagName);
+  
   if (!navSections.classList.contains('nav-sections')) {
-    navSections.classList.add('nav-sections');
+    const wrapper = document.createElement('div');
+    wrapper.classList.add('nav-sections');
+    navSections.parentNode.insertBefore(wrapper, navSections);
+    wrapper.appendChild(navSections);
+    navSections = wrapper;
+    console.log('Wrapped navigation in nav-sections');
   }
   
-  // Look for list items that might be dropdowns
   const listItems = navSections.querySelectorAll('li');
+  console.log('Found', listItems.length, 'list items');
+  
   listItems.forEach((navSection) => {
     if (navSection.querySelector('ul')) {
       navSection.classList.add('nav-drop');
