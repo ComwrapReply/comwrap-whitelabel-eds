@@ -149,23 +149,22 @@ async function fetchExperienceFragment() {
     
     console.log('XF HTML received, length:', html.length);
     
-    // Extract the XF content - WKND specific structure
-    // Based on inspector: .cmp-container > .aem-Grid > .container.responsivegrid
-    let xfContent = doc.querySelector('.cmp-container .aem-Grid .responsivegrid.container');
+    // Extract the XF content - try multiple selectors in priority order
+    let xfContent = doc.querySelector('.xf-content-height');
     
     if (!xfContent) {
-      console.log('WKND structure not found, trying .cmp-container .aem-Grid');
-      xfContent = doc.querySelector('.cmp-container .aem-Grid');
+      console.log('.xf-content-height not found, trying .cmp-experiencefragment__fragment');
+      xfContent = doc.querySelector('.cmp-experiencefragment__fragment');
     }
     
     if (!xfContent) {
-      console.log('.aem-Grid not found, trying .cmp-container');
+      console.log('.cmp-experiencefragment__fragment not found, trying .experiencefragment .cmp-container');
+      xfContent = doc.querySelector('.experiencefragment .cmp-container');
+    }
+    
+    if (!xfContent) {
+      console.log('Container selectors not found, trying .cmp-container');
       xfContent = doc.querySelector('.cmp-container');
-    }
-    
-    if (!xfContent) {
-      console.log('.cmp-container not found, trying .aem-Grid');
-      xfContent = doc.querySelector('.aem-Grid');
     }
     
     if (!xfContent) {
