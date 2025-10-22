@@ -212,19 +212,17 @@ function processXfContent(xfContent) {
   console.log('Content structure:', content.children.length, 'direct children');
   console.log('Content classes:', content.className);
   
-  // WKND has deeply nested structure: .responsivegrid.container has the actual components
-  // Look for the responsivegrid that contains the header components
-  const responsiveGrid = content.querySelector('.responsivegrid.container');
-  if (responsiveGrid && responsiveGrid !== content) {
-    console.log('Found WKND responsivegrid container, using that');
-    content = responsiveGrid.cloneNode(true);
+  // If we got a container with only one child, unwrap it
+  if (content.children.length === 1 && content.classList.contains('container')) {
+    console.log('Unwrapping single container child');
+    content = content.firstElementChild.cloneNode(true);
     console.log('After unwrap:', content.children.length, 'children');
   }
   
-  // If we still have nested containers, try to get the actual content
-  const innerContainer = content.querySelector('.cmp-container');
-  if (innerContainer && innerContainer !== content && innerContainer.children.length > 0) {
-    console.log('Found inner cmp-container, extracting its content');
+  // Look for the actual navigation content inside nested containers
+  const innerContainer = content.querySelector('.cmp-container, .aem-Grid, .responsivegrid');
+  if (innerContainer && innerContainer !== content) {
+    console.log('Found inner container, using that instead');
     content = innerContainer.cloneNode(true);
     console.log('Inner container has', content.children.length, 'children');
   }
@@ -300,35 +298,20 @@ function processXfContent(xfContent) {
  * @param {Element} nav The nav element
  */
 function decorateNavSections(nav) {
-  // WKND has .cmp-navigation component, look for that first
-  let navSections = nav.querySelector('.cmp-navigation, .navigation');
-  
-  if (!navSections) {
-    navSections = nav.querySelector('.nav-sections, nav ul');
-  }
+  const navSections = nav.querySelector('.nav-sections, nav ul, .cmp-navigation__group');
   
   if (!navSections) {
     console.warn('No nav sections found');
     return;
   }
   
-  console.log('Found navigation element:', navSections.className || navSections.tagName);
-  
-  // Ensure it has the right class for EDS
+  // Ensure it has the right class
   if (!navSections.classList.contains('nav-sections')) {
-    // Wrap WKND navigation in nav-sections div
-    const wrapper = document.createElement('div');
-    wrapper.classList.add('nav-sections');
-    navSections.parentNode.insertBefore(wrapper, navSections);
-    wrapper.appendChild(navSections);
-    navSections = wrapper;
-    console.log('Wrapped navigation in nav-sections');
+    navSections.classList.add('nav-sections');
   }
   
   // Look for list items that might be dropdowns
   const listItems = navSections.querySelectorAll('li');
-  console.log('Found', listItems.length, 'list items');
-  
   listItems.forEach((navSection) => {
     if (navSection.querySelector('ul')) {
       navSection.classList.add('nav-drop');
