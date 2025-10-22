@@ -923,21 +923,6 @@
           }
         },
         {
-          "title": "Teaser Info",
-          "id": "teaser-info",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/franklin/components/block/v1/block",
-                "template": {
-                  "name": "Teaser Info",
-                  "model": "teaser-info"
-                }
-              }
-            }
-          }
-        },
-        {
           "title": "Teaser",
           "id": "teaser",
           "plugins": {
