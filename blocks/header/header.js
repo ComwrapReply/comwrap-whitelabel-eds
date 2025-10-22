@@ -232,6 +232,10 @@ function processXfContent(xfContent) {
   // Determine base URL for fixing paths
   const baseUrl = AEM_XF_CONFIG.useDev ? AEM_XF_CONFIG.authorUrl : AEM_XF_CONFIG.publishUrl;
   
+  // Count links before processing
+  const allLinks = content.querySelectorAll('a[href]');
+  console.log('Total links found:', allLinks.length);
+  
   // Fix image paths - convert AEM DAM paths to full URLs
   content.querySelectorAll('img[src^="/content/dam"]').forEach(img => {
     console.log('Fixing image:', img.src);
@@ -247,46 +251,72 @@ function processXfContent(xfContent) {
   });
   
   // Fix link paths - convert to full AEM URLs
-  content.querySelectorAll('a[href]').forEach(link => {
+  allLinks.forEach((link, index) => {
     const href = link.getAttribute('href');
+    console.log(`Processing link ${index + 1}/${allLinks.length}:`, href);
     
     // Skip external links, anchors, and already absolute URLs
-    if (!href || href.startsWith('http') || href.startsWith('#') || href.startsWith('mailto:')) {
+    if (!href) {
+      console.log('  → Skipping: no href');
+      return;
+    }
+    
+    if (href.startsWith('http')) {
+      console.log('  → Skipping: already absolute URL');
+      return;
+    }
+    
+    if (href.startsWith('#')) {
+      console.log('  → Skipping: anchor link');
+      return;
+    }
+    
+    if (href.startsWith('mailto:')) {
+      console.log('  → Skipping: mailto link');
       return;
     }
     
     let newHref = href;
     
-    // Handle full AEM content paths
-    if (href.startsWith('/content/')) {
-      // Make it a full URL pointing to AEM Author or Publish
-      newHref = `${baseUrl}${href}`;
-      console.log('Converted to full AEM URL:', href, '→', newHref);
-    }
-    // Handle relative paths like /magazine, /about-us (WKND uses these)
-    else if (href.startsWith('/') && !href.startsWith('//')) {
-      // These need to be converted to full AEM content paths
-      // WKND pattern: /magazine → /content/wknd/language-masters/en/magazine.html
-      
-      // Get the language from the XF path
-      const xfPath = AEM_XF_CONFIG.xfPath;
-      let langPath = '/content/wknd/language-masters/en';
-      
-      // Extract language path from XF (e.g., /content/experience-fragments/wknd/language-masters/en/...)
-      const langMatch = xfPath.match(/\/wknd\/language-masters\/([a-z]{2})/);
-      if (langMatch) {
-        langPath = `/content/wknd/language-masters/${langMatch[1]}`;
+    try {
+      // Handle full AEM content paths
+      if (href.startsWith('/content/')) {
+        // Make it a full URL pointing to AEM Author or Publish
+        newHref = `${baseUrl}${href}`;
+        console.log('  → Converted to full AEM URL:', newHref);
+      }
+      // Handle relative paths like /magazine, /about-us (WKND uses these)
+      else if (href.startsWith('/') && !href.startsWith('//')) {
+        // These need to be converted to full AEM content paths
+        // WKND pattern: /magazine → /content/wknd/language-masters/en/magazine.html
+        
+        // Get the language from the XF path
+        const xfPath = AEM_XF_CONFIG.xfPath;
+        let langPath = '/content/wknd/language-masters/en';
+        
+        // Extract language path from XF (e.g., /content/experience-fragments/wknd/language-masters/en/...)
+        const langMatch = xfPath.match(/\/wknd\/language-masters\/([a-z]{2})/);
+        if (langMatch) {
+          langPath = `/content/wknd/language-masters/${langMatch[1]}`;
+        }
+        
+        // Convert /magazine → https://author-.../content/wknd/language-masters/en/magazine.html
+        const pagePath = href === '/' ? '' : href;
+        newHref = `${baseUrl}${langPath}${pagePath}.html`;
+        
+        console.log('  → Converted relative path to AEM URL:', newHref);
+      } else {
+        console.log('  → Keeping as-is:', href);
       }
       
-      // Convert /magazine → https://author-.../content/wknd/language-masters/en/magazine.html
-      const pagePath = href === '/' ? '' : href;
-      newHref = `${baseUrl}${langPath}${pagePath}.html`;
-      
-      console.log('Converted relative path to AEM URL:', href, '→', newHref);
+      link.setAttribute('href', newHref);
+    } catch (error) {
+      console.error('  → Error processing link:', error);
+      console.log('  → Keeping original href:', href);
     }
-    
-    link.setAttribute('href', newHref);
   });
+  
+  console.log('Link processing complete. Total links processed:', allLinks.length);
   
   console.log('XF content processed');
   return content;
