@@ -65,19 +65,3 @@
 .table.block.bordered table td {
   border: 1px solid;
 }
-
-
-main .section.gradient {
-    .table.block table thead tr,
-    .table.block table tbody tr,
-    .table.block table th,
-    .table.block table td {
-      border-color: var(--color-white);
-    }
-
-    .table.block table tbody tr,
-    .table.block table th,
-    .table.block table td {
-        border-color: var(--color-white);
-    }
-}
