@@ -150,7 +150,6 @@ async function fetchExperienceFragment() {
     console.log('XF HTML received, length:', html.length);
     
     // Extract the XF content - WKND specific structure
-    // Based on inspector: .cmp-container > .aem-Grid > .container.responsivegrid
     let xfContent = doc.querySelector('.cmp-container .aem-Grid .responsivegrid.container');
     
     if (!xfContent) {
@@ -170,7 +169,6 @@ async function fetchExperienceFragment() {
     
     if (!xfContent) {
       console.log('Primary selectors not found, trying body > div');
-      // Get the first div inside body that has actual content
       const bodyDivs = doc.body.querySelectorAll(':scope > div');
       for (const div of bodyDivs) {
         if (div.children.length > 0) {
@@ -212,8 +210,7 @@ function processXfContent(xfContent) {
   console.log('Content structure:', content.children.length, 'direct children');
   console.log('Content classes:', content.className);
   
-  // WKND has deeply nested structure: .responsivegrid.container has the actual components
-  // Look for the responsivegrid that contains the header components
+  // WKND has deeply nested structure
   const responsiveGrid = content.querySelector('.responsivegrid.container');
   if (responsiveGrid && responsiveGrid !== content) {
     console.log('Found WKND responsivegrid container, using that');
@@ -221,102 +218,19 @@ function processXfContent(xfContent) {
     console.log('After unwrap:', content.children.length, 'children');
   }
   
-  // If we still have nested containers, try to get the actual content
-  const innerContainer = content.querySelector('.cmp-container');
-  if (innerContainer && innerContainer !== content && innerContainer.children.length > 0) {
-    console.log('Found inner cmp-container, extracting its content');
-    content = innerContainer.cloneNode(true);
-    console.log('Inner container has', content.children.length, 'children');
-  }
-  
   // Determine base URL for fixing paths
   const baseUrl = AEM_XF_CONFIG.useDev ? AEM_XF_CONFIG.authorUrl : AEM_XF_CONFIG.publishUrl;
   
-  // Count links before processing
-  const allLinks = content.querySelectorAll('a[href]');
-  console.log('Total links found:', allLinks.length);
-  
-  // Fix image paths - convert AEM DAM paths to full URLs
+  // Fix image paths
   content.querySelectorAll('img[src^="/content/dam"]').forEach(img => {
-    console.log('Fixing image:', img.src);
     img.src = `${baseUrl}${img.src}`;
   });
   
-  // Fix relative image paths
   content.querySelectorAll('img[src^="/"]').forEach(img => {
     if (!img.src.startsWith('http')) {
-      console.log('Fixing relative image:', img.src);
       img.src = `${baseUrl}${img.src}`;
     }
   });
-  
-  // Fix link paths - convert to full AEM URLs
-  allLinks.forEach((link, index) => {
-    const href = link.getAttribute('href');
-    console.log(`Processing link ${index + 1}/${allLinks.length}:`, href);
-    
-    // Skip external links, anchors, and already absolute URLs
-    if (!href) {
-      console.log('  → Skipping: no href');
-      return;
-    }
-    
-    if (href.startsWith('http')) {
-      console.log('  → Skipping: already absolute URL');
-      return;
-    }
-    
-    if (href.startsWith('#')) {
-      console.log('  → Skipping: anchor link');
-      return;
-    }
-    
-    if (href.startsWith('mailto:')) {
-      console.log('  → Skipping: mailto link');
-      return;
-    }
-    
-    let newHref = href;
-    
-    try {
-      // Handle full AEM content paths
-      if (href.startsWith('/content/')) {
-        // Make it a full URL pointing to AEM Author or Publish
-        newHref = `${baseUrl}${href}`;
-        console.log('  → Converted to full AEM URL:', newHref);
-      }
-      // Handle relative paths like /magazine, /about-us (WKND uses these)
-      else if (href.startsWith('/') && !href.startsWith('//')) {
-        // These need to be converted to full AEM content paths
-        // WKND pattern: /magazine → /content/wknd/language-masters/en/magazine.html
-        
-        // Get the language from the XF path
-        const xfPath = AEM_XF_CONFIG.xfPath;
-        let langPath = '/content/wknd/language-masters/en';
-        
-        // Extract language path from XF (e.g., /content/experience-fragments/wknd/language-masters/en/...)
-        const langMatch = xfPath.match(/\/wknd\/language-masters\/([a-z]{2})/);
-        if (langMatch) {
-          langPath = `/content/wknd/language-masters/${langMatch[1]}`;
-        }
-        
-        // Convert /magazine → https://author-.../content/wknd/language-masters/en/magazine.html
-        const pagePath = href === '/' ? '' : href;
-        newHref = `${baseUrl}${langPath}${pagePath}.html`;
-        
-        console.log('  → Converted relative path to AEM URL:', newHref);
-      } else {
-        console.log('  → Keeping as-is:', href);
-      }
-      
-      link.setAttribute('href', newHref);
-    } catch (error) {
-      console.error('  → Error processing link:', error);
-      console.log('  → Keeping original href:', href);
-    }
-  });
-  
-  console.log('Link processing complete. Total links processed:', allLinks.length);
   
   console.log('XF content processed');
   return content;
@@ -327,7 +241,6 @@ function processXfContent(xfContent) {
  * @param {Element} nav The nav element
  */
 function decorateNavSections(nav) {
-  // WKND has .cmp-navigation component, look for that first
   let navSections = nav.querySelector('.cmp-navigation, .navigation');
   
   if (!navSections) {
@@ -341,9 +254,7 @@ function decorateNavSections(nav) {
   
   console.log('Found navigation element:', navSections.className || navSections.tagName);
   
-  // Ensure it has the right class for EDS
   if (!navSections.classList.contains('nav-sections')) {
-    // Wrap WKND navigation in nav-sections div
     const wrapper = document.createElement('div');
     wrapper.classList.add('nav-sections');
     navSections.parentNode.insertBefore(wrapper, navSections);
@@ -352,7 +263,6 @@ function decorateNavSections(nav) {
     console.log('Wrapped navigation in nav-sections');
   }
   
-  // Look for list items that might be dropdowns
   const listItems = navSections.querySelectorAll('li');
   console.log('Found', listItems.length, 'list items');
   
