@@ -149,13 +149,35 @@ async function fetchExperienceFragment() {
     
     console.log('XF HTML received, length:', html.length);
     
-    // Extract the XF content - try multiple selectors
-    let xfContent = doc.querySelector('.xf-content-height, .experiencefragment, .cmp-experiencefragment');
+    // Extract the XF content - try multiple selectors in priority order
+    let xfContent = doc.querySelector('.xf-content-height');
     
     if (!xfContent) {
-      console.log('Primary selectors not found, trying body content...');
-      // Fallback: try to get the main content area
-      xfContent = doc.querySelector('main, .root, body > div');
+      console.log('.xf-content-height not found, trying .cmp-experiencefragment__fragment');
+      xfContent = doc.querySelector('.cmp-experiencefragment__fragment');
+    }
+    
+    if (!xfContent) {
+      console.log('.cmp-experiencefragment__fragment not found, trying .experiencefragment .cmp-container');
+      xfContent = doc.querySelector('.experiencefragment .cmp-container');
+    }
+    
+    if (!xfContent) {
+      console.log('Container selectors not found, trying .cmp-container');
+      xfContent = doc.querySelector('.cmp-container');
+    }
+    
+    if (!xfContent) {
+      console.log('Primary selectors not found, trying body > div');
+      // Get the first div inside body that has actual content
+      const bodyDivs = doc.body.querySelectorAll(':scope > div');
+      for (const div of bodyDivs) {
+        if (div.children.length > 0) {
+          xfContent = div;
+          console.log('Found div with', div.children.length, 'children');
+          break;
+        }
+      }
     }
     
     if (!xfContent) {
@@ -184,17 +206,23 @@ async function fetchExperienceFragment() {
 function processXfContent(xfContent) {
   const content = xfContent.cloneNode(true);
   
+  console.log('Processing XF content...');
+  console.log('Content HTML length:', content.innerHTML.length);
+  console.log('Content structure:', content.children.length, 'children');
+  
   // Determine base URL for fixing paths
   const baseUrl = AEM_XF_CONFIG.useDev ? AEM_XF_CONFIG.authorUrl : AEM_XF_CONFIG.publishUrl;
   
   // Fix image paths - convert AEM DAM paths to full URLs
   content.querySelectorAll('img[src^="/content/dam"]').forEach(img => {
+    console.log('Fixing image:', img.src);
     img.src = `${baseUrl}${img.src}`;
   });
   
   // Fix relative image paths
   content.querySelectorAll('img[src^="/"]').forEach(img => {
     if (!img.src.startsWith('http')) {
+      console.log('Fixing relative image:', img.src);
       img.src = `${baseUrl}${img.src}`;
     }
   });
@@ -210,13 +238,16 @@ function processXfContent(xfContent) {
         .replace('/content/wknd/language-masters/en', '')
         .replace('.html', '');
       link.setAttribute('href', edsPath || '/');
+      console.log('Fixed WKND link:', href, '→', edsPath);
     } else {
       // For other content paths
       const edsPath = href.replace('/content/ue-multitenant-root', '').replace('.html', '');
       link.setAttribute('href', edsPath || '/');
+      console.log('Fixed link:', href, '→', edsPath);
     }
   });
   
+  console.log('XF content processed');
   return content;
 }
 
@@ -294,13 +325,26 @@ export default async function decorate(block) {
   nav.id = 'nav';
   
   if (fragment) {
-    while (fragment.firstElementChild) nav.append(fragment.firstElementChild);
+    console.log('Appending fragment to nav. Fragment children:', fragment.children.length);
+    while (fragment.firstElementChild) {
+      console.log('Appending child:', fragment.firstElementChild.tagName, fragment.firstElementChild.className);
+      nav.append(fragment.firstElementChild);
+    }
+  } else {
+    console.warn('No fragment to append!');
   }
+  
+  console.log('Nav after appending, children:', nav.children.length);
 
   const classes = ['brand', 'sections', 'tools'];
   classes.forEach((c, i) => {
     const section = nav.children[i];
-    if (section) section.classList.add(`nav-${c}`);
+    if (section) {
+      section.classList.add(`nav-${c}`);
+      console.log(`Added class nav-${c} to child ${i}`);
+    } else {
+      console.warn(`No child at index ${i} for class nav-${c}`);
+    }
   });
 
   const navBrand = nav.querySelector('.nav-brand');
