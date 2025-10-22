@@ -106,6 +106,12 @@
     ]
   },
   {
+    "id": "hero",
+    "components": [
+      "button"
+    ]
+  },
+  {
     "id": "table",
     "components": [
       "table-row"

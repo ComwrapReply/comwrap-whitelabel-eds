@@ -94,11 +94,6 @@
         "label": "Text"
       },
       {
-        "component": "text",
-        "name": "linkTitle",
-        "label": "Title"
-      },
-      {
         "component": "select",
         "name": "linkType",
         "label": "Type",
@@ -432,10 +427,6 @@
                 "value": "secondary"
               },
               {
-                "name": "Tertiary",
-                "value": "tertiary"
-              },
-              {
                 "name": "Text",
                 "value": "text"
               }
@@ -444,10 +435,6 @@
           {
             "name": "Type",
             "children": [
-              {
-                "name": "Link",
-                "value": "link"
-              },
               {
                 "name": "Download",
                 "value": "download"
@@ -5643,10 +5630,26 @@
       },
       {
         "component": "richtext",
-        "name": "text",
+        "name": "heroText",
         "value": "",
         "label": "Text",
         "valueType": "string"
+      },
+      {
+        "component": "select",
+        "name": "classes",
+        "label": "Style",
+        "options": [
+          {
+            "name": "White",
+            "value": "white"
+          },
+          {
+            "name": "Black",
+            "value": "black"
+          }
+        ],
+        "value": "white"
       }
     ]
   },
@@ -5915,10 +5918,6 @@
                 "value": "secondary"
               },
               {
-                "name": "Tertiary",
-                "value": "tertiary"
-              },
-              {
                 "name": "Text",
                 "value": "text"
               }
@@ -5927,10 +5926,6 @@
           {
             "name": "Type",
             "children": [
-              {
-                "name": "Link",
-                "value": "link"
-              },
               {
                 "name": "Download",
                 "value": "download"

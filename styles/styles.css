@@ -351,7 +351,6 @@ a:not([class]) {
 a:hover,
 a:focus {
     color: var(--color-dark-blue);
-    text-decoration: underline;
 }
 
 a:active {
@@ -697,7 +696,9 @@ blockquote::before {
 }
 
 /* Secondary Button */
-.btn-secondary {
+.btn-secondary,
+.button.secondary {
+    font-style: normal;
     color: var(--color-primary-blue);
     background-color: transparent;
     border-color: var(--color-primary-blue);
@@ -1127,14 +1128,45 @@ main > .section {
   }
   
   /* section metadata */
-  main .section.light,
+  main .section.gradient {
+    background: var(--gradient-blue);
+    margin: 0;
+    padding: var(--space-48) 0;
+
+    h1, h2, h3, h4, h5, h6 {
+      color: var(--color-white);
+    }
+
+    p,
+    li {
+      color: var(--color-white);
+    }
+
+    a {
+      color: var(--color-white);
+    }
+    
+    .button {
+      color: var(--color-primary-blue);
+      background-color: var(--color-white);
+      border-color: var(--color-white);
+    }
+    
+    
+    .button:hover {
+      color: var(--color-primary-blue);
+      background-color: var(--color-white);
+      border-color: var(--color-white);
+    }
+  }
+
   main .section.highlight {
     background-color: var(--light-color);
     margin: 0;
     padding: 40px 0;
   }
   
-
-/* ========================================
+  
+/* =======================================
    END OF FOUNDATION STYLES
    ======================================== */
