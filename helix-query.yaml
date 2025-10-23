@@ -15,11 +15,11 @@ indices:
         select: head > meta[name="robots"]
         value: attribute(el, "content")
       title:
-        select: head > meta[property="og:title"]
+        select: head > meta[name="title"]
         value: attribute(el, "content")
       description:
-        select: head > meta[property="og:description"]
+        select: head > meta[name="description"]
         value: attribute(el, "content")
       keywords:
-        select: head > meta[property="og:keywords"]
+        select: head > meta[name="keywords"]
         value: attribute(el, "content")
