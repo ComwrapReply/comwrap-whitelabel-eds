@@ -11,6 +11,7 @@ indices:
       title:
         select: main h1, head > meta[name="title"]
         value: text(el)
+        debug: true
       description:
         select: main p, meta[name="description"]
         value: text(el)
