@@ -65,7 +65,9 @@
       "image",
       "button",
       "title",
-      "teaser"
+      "teaser",
+      "accordion",
+      "custom-button"
     ]
   },
   {
