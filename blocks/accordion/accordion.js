@@ -88,6 +88,28 @@ export default function decorate(block) {
       }
     }
 
+    // Process button fields (divs 4-6)
+    const buttonLinkDiv = row.querySelector(':scope > div:nth-child(4)');
+    const buttonTextDiv = row.querySelector(':scope > div:nth-child(5)');
+    const buttonStyleDiv = row.querySelector(':scope > div:nth-child(6)');
+
+    if (buttonLinkDiv && buttonTextDiv) {
+      const link = buttonLinkDiv.querySelector('a')?.href || buttonLinkDiv.textContent?.trim();
+      const text = buttonTextDiv.textContent?.trim();
+      const style = buttonStyleDiv?.textContent?.trim() || 'primary';
+
+      console.log('style', style);
+
+      if (link && text) {
+        const buttonElement = document.createElement('a');
+        buttonElement.href = link;
+        buttonElement.textContent = text;
+        buttonElement.className = `button ${style}`;
+
+        contentDiv.appendChild(buttonElement);
+      }
+    }
+
     panel.appendChild(contentDiv);
     li.appendChild(panel);
 
