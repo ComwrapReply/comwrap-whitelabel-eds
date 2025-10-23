@@ -5807,7 +5807,7 @@
       {
         "component": "text",
         "name": "fullBlockLink",
-        "label": "Full Block Link (optional)",
+        "label": "Teaser Link",
         "valueType": "string",
         "value": ""
       },
@@ -5862,8 +5862,7 @@
               }
             ]
           }
-        ],
-        "value": "primary"
+        ]
       },
       {
         "component": "aem-content",
@@ -5916,8 +5915,7 @@
               }
             ]
           }
-        ],
-        "value": "secondary"
+        ]
       },
       {
         "component": "select",
@@ -5945,8 +5943,7 @@
             "name": "Image Background",
             "value": "image-background"
           }
-        ],
-        "value": "image-left"
+        ]
       }
     ]
   },
