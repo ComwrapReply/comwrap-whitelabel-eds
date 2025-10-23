@@ -9,7 +9,7 @@ indices:
     target: /query-index.json
     properties:
       title:
-        select: main h1, head > title
+        select: main h1, head > meta[name="title"]
         value: text(el)
       description:
         select: main p, meta[name="description"]
