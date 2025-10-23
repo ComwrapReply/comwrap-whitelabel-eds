@@ -251,7 +251,8 @@ import {
   }
   
   export default async function decorate(block) {
-    const placeholders = await fetchPlaceholders();
+    // const placeholders = await fetchPlaceholders();
+    const placeholders = "testPlaceholders";
     const source = block.querySelector('a[href]') ? block.querySelector('a[href]').href : '/query-index.json';
     block.innerHTML = '';
     block.append(
