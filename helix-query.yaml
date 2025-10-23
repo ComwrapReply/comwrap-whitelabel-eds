@@ -22,54 +22,10 @@ indices:
         select: head > meta[name="description"]
         value: attribute(el, "content")
       
-      canonical:
-        select: head > meta[name="canonical"]
-        value: attribute(el, "content")
-      
       keywords:
         select: head > meta[name="keywords"]
         value: attribute(el, "content")
-      
-      topics:
-        select: head > meta[name="topics"]
-        value: attribute(el, "content")
-      
+
       template:
         select: head > meta[name="template"]
-        value: attribute(el, "content")
-      
-      author:
-        select: head > meta[name="author"]
-        value: attribute(el, "content")
-      
-      position:
-        select: head > meta[name="position"]
-        value: attribute(el, "content")
-      
-      email:
-        select: head > meta[name="e-mail"]
-        value: attribute(el, "content")
-      
-      brand:
-        select: head > meta[name="brand"]
-        value: attribute(el, "content")
-      
-      readingTime:
-        select: head > meta[name="readingtime"]
-        value: attribute(el, "content")
-      
-      publishDate:
-        select: head > meta[name="publishdate"]
-        value: attribute(el, "content")
-      
-      language:
-        select: head > meta[name="language"]
-        value: attribute(el, "content")
-      
-      primaryLanguageUrl:
-        select: head > meta[name="primary-language-url"]
-        value: attribute(el, "content")
-      
-      image:
-        select: head > meta[property="og:image"]
         value: attribute(el, "content")
