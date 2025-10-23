@@ -696,7 +696,6 @@ export {
   decorateBlocks,
   decorateButtons,
   decorateIcons,
-  fetchPlaceholders,
   decorateSections,
   decorateTemplateAndTheme,
   getMetadata,
