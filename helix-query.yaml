@@ -9,12 +9,21 @@ indices:
     target: /query-index.json
     properties:
       title:
-        select: main h1, head > meta[name="title"]
-        value: text(el)
+        select: main h1, head > title, head > meta[name="title"]
+        value: |
+          if (el.tagName === 'META') {
+            return el.getAttribute('content')
+          }
+          return text(el)
         debug: true
       description:
-        select: main p, meta[name="description"]
-        value: text(el)
+        select: main p, head > meta[name="description"]
+        value: |
+          if (el.tagName === 'META') {
+            return el.getAttribute('content')
+          }
+          return text(el)
+        debug: true
       lastModified:
         select: none
         value: parseTimestamp(headers["last-modified"], "ddd, DD MMM YYYY hh:mm:ss GMT")
