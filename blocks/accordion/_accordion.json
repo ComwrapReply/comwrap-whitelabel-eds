@@ -63,79 +63,33 @@
         },
         {
           "component": "aem-content",
-          "name": "custom-button-link",
+          "name": "button-link",
           "label": "Button Link"
         },
         {
           "component": "text",
-          "name": "custom-button-label",
-          "label": "Button Label"
+          "name": "button-text",
+          "label": "Button Text"
         },
         {
           "component": "select",
-          "name": "custom-button-target",
-          "label": "Link Target",
-          "options": [
-            {
-              "name": "Same Window",
-              "value": ""
-            },
-            {
-              "name": "New Tab",
-              "value": "_blank"
-            }
-          ]
-        },
-        {
-          "component": "multiselect",
-          "name": "classes",
+          "name": "button-style",
           "label": "Button Style",
-          "valueType": "string",
-          "maxSize": 2,
           "options": [
             {
-              "name": "Style",
-              "children": [
-                {
-                  "name": "Primary",
-                  "value": "primary"
-                },
-                {
-                  "name": "Secondary",
-                  "value": "secondary"
-                },
-                {
-                  "name": "Tertiary",
-                  "value": "tertiary"
-                },
-                {
-                  "name": "Text",
-                  "value": "text"
-                }
-              ]
+              "name": "Primary",
+              "value": "primary"
             },
             {
-              "name": "Type",
-              "children": [
-                {
-                  "name": "Link",
-                  "value": "link"
-                },
-                {
-                  "name": "Download",
-                  "value": "download"
-                },
-                {
-                  "name": "Email",
-                  "value": "email"
-                },
-                {
-                  "name": "Telephone",
-                  "value": "telephone"
-                }
-              ]
+              "name": "Secondary",
+              "value": "secondary"
+            },
+            {
+              "name": "Tertiary",
+              "value": "tertiary"
             }
-          ]
+          ],
+          "value": "primary"
         }
       ]
     }
