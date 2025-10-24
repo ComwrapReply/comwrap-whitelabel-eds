@@ -3,7 +3,7 @@ import { moveInstrumentation } from '../../scripts/scripts.js';
 
 const CAROUSEL_CONFIG = {
   SLIDE_TRANSITION_DURATION: 300,
-  AUTO_PLAY_INTERVAL: 7000,
+  DEFAULT_AUTO_PLAY_INTERVAL: 5000, // 5 seconds default
   TOUCH_THRESHOLD: 50,
   BREAKPOINTS: {
     MOBILE: 600,
@@ -30,6 +30,7 @@ function initializeCarousel(block, track, slideCount, options) {
     dotsContainer,
     playPauseButton,
     hasAutoPlay,
+    autoPlayInterval,
   } = options;
   let isPlaying = hasAutoPlay;
 
@@ -69,7 +70,7 @@ function initializeCarousel(block, track, slideCount, options) {
     autoPlayTimer = setInterval(() => {
       const nextIndex = currentSlide < slideCount - 1 ? currentSlide + 1 : 0;
       updateCarousel(nextIndex);
-    }, CAROUSEL_CONFIG.AUTO_PLAY_INTERVAL);
+    }, autoPlayInterval);
   }
 
   function updatePlayPauseButton() {
@@ -245,13 +246,54 @@ function initializeCarousel(block, track, slideCount, options) {
   observer.observe(block);
 }
 
+/**
+ * Get autoplay settings from block data
+ * @param {HTMLElement} block - The carousel block element
+ * @returns {Object} Autoplay configuration
+ */
+function getAutoplayConfig(block) {
+  // Try to get autoplay setting from block dataset or data attributes
+  let hasAutoPlay = false;
+  let autoPlayDelay = 5; // Default 5 seconds
+
+  // Check block dataset first
+  if (block.dataset.autoplay !== undefined) {
+    hasAutoPlay = block.dataset.autoplay === 'true';
+  }
+
+  if (block.dataset.autoplayDelay !== undefined) {
+    autoPlayDelay = parseInt(block.dataset.autoplayDelay, 10) || 5;
+  }
+
+  // Fallback: check for data attributes in child elements
+  const autoplayElement = block.querySelector('[data-autoplay]');
+  if (autoplayElement) {
+    hasAutoPlay = autoplayElement.dataset.autoplay === 'true';
+  }
+
+  const delayElement = block.querySelector('[data-autoplay-delay]');
+  if (delayElement) {
+    autoPlayDelay = parseInt(delayElement.dataset.autoplayDelay, 10) || 5;
+  }
+
+  // Convert seconds to milliseconds
+  const autoPlayInterval = autoPlayDelay * 1000;
+
+  return {
+    hasAutoPlay,
+    autoPlayInterval,
+  };
+}
+
 export default function decorate(block) {
   const slides = [...block.children];
 
   if (slides.length === 0) return;
 
-  // Check for variations - autoplay is default behavior
-  const hasAutoPlay = !block.classList.contains('no-auto-play');
+  // Get autoplay configuration from block data
+  const { hasAutoPlay, autoPlayInterval } = getAutoplayConfig(block);
+
+  // Check for other variations
   const showDots = !block.classList.contains('no-dots');
   const showArrows = !block.classList.contains('no-arrows');
 
@@ -391,5 +433,6 @@ export default function decorate(block) {
     dotsContainer,
     playPauseButton,
     hasAutoPlay,
+    autoPlayInterval,
   });
 }

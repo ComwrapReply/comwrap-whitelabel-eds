@@ -38,7 +38,15 @@
         {
           "component": "boolean",
           "name": "autoplay",
-          "label": "Allow Autoplay"
+          "label": "Enable Autoplay",
+          "value": false
+        },
+        {
+          "component": "number",
+          "name": "autoplayDelay",
+          "label": "Autoplay Delay (seconds)",
+          "value": 5,
+          "valueType": "number"
         }
       ]
     },
