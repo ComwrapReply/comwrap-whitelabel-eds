@@ -239,21 +239,6 @@
         "label": "Enable Autoplay",
         "value": false,
         "valueType": "boolean"
-      },
-      {
-        "component": "number",
-        "name": "autoplayDelay",
-        "label": "Autoplay Delay (seconds)",
-        "value": 5000,
-        "valueType": "number"
-      },
-      {
-        "component": "boolean",
-        "name": "pauseOnHover",
-        "label": "Pause on Hover",
-        "description": "Pause autoplay when user hovers over the carousel",
-        "valueType": "boolean",
-        "value": true
       }
     ]
   },
