@@ -31,6 +31,7 @@ function initializeCarousel(block, track, slideCount, options) {
     playPauseButton,
     hasAutoPlay,
     autoPlayInterval,
+    pauseOnHover,
   } = options;
   let isPlaying = hasAutoPlay;
 
@@ -209,6 +210,27 @@ function initializeCarousel(block, track, slideCount, options) {
     }
   });
 
+  // Pause on hover functionality
+  if (hasAutoPlay && pauseOnHover && slideCount > 1) {
+    block.addEventListener('mouseenter', () => {
+      if (isPlaying) {
+        stopAutoPlay();
+        // Store that we paused due to hover
+        block.dataset.pausedByHover = 'true';
+      }
+    });
+
+    block.addEventListener('mouseleave', () => {
+      // Only resume if we paused due to hover and autoplay was enabled
+      if (block.dataset.pausedByHover === 'true' && hasAutoPlay) {
+        delete block.dataset.pausedByHover;
+        isPlaying = true;
+        startAutoPlay();
+        updatePlayPauseButton();
+      }
+    });
+  }
+
   // Initialize
   updateCarousel(0);
   updatePlayPauseButton();
@@ -252,36 +274,50 @@ function initializeCarousel(block, track, slideCount, options) {
  * @returns {Object} Autoplay configuration
  */
 function getAutoplayConfig(block) {
-  // Try to get autoplay setting from block dataset or data attributes
+  // Default values
   let hasAutoPlay = false;
-  let autoPlayDelay = 5; // Default 5 seconds
+  let autoPlayDelay = CAROUSEL_CONFIG.DEFAULT_AUTO_PLAY_INTERVAL;
+  let pauseOnHover = true; // Default to true
 
-  // Check block dataset first
+  // Primary: Check block dataset (from Universal Editor component model)
   if (block.dataset.autoplay !== undefined) {
-    hasAutoPlay = block.dataset.autoplay === 'true';
+    hasAutoPlay = block.dataset.autoplay === 'true' || block.dataset.autoplay === true;
   }
 
   if (block.dataset.autoplayDelay !== undefined) {
-    autoPlayDelay = parseInt(block.dataset.autoplayDelay, 10) || 5;
+    const delay = parseInt(block.dataset.autoplayDelay, 10);
+    // Validate the delay is a reasonable number (between 1-30 seconds)
+    if (!isNaN(delay) && delay >= 1000 && delay <= 30000) {
+      autoPlayDelay = delay;
+    }
   }
 
-  // Fallback: check for data attributes in child elements
-  const autoplayElement = block.querySelector('[data-autoplay]');
-  if (autoplayElement) {
-    hasAutoPlay = autoplayElement.dataset.autoplay === 'true';
+  if (block.dataset.pauseOnHover !== undefined) {
+    pauseOnHover = block.dataset.pauseOnHover === 'true' || block.dataset.pauseOnHover === true;
   }
 
-  const delayElement = block.querySelector('[data-autoplay-delay]');
-  if (delayElement) {
-    autoPlayDelay = parseInt(delayElement.dataset.autoplayDelay, 10) || 5;
+  // Fallback: Check for data attributes in child elements (for backwards compatibility)
+  if (!hasAutoPlay) {
+    const autoplayElement = block.querySelector('[data-autoplay]');
+    if (autoplayElement) {
+      hasAutoPlay = autoplayElement.dataset.autoplay === 'true' || autoplayElement.dataset.autoplay === true;
+    }
   }
 
-  // Convert seconds to milliseconds
-  const autoPlayInterval = autoPlayDelay * 1000;
+  if (autoPlayDelay === CAROUSEL_CONFIG.DEFAULT_AUTO_PLAY_INTERVAL) {
+    const delayElement = block.querySelector('[data-autoplay-delay]');
+    if (delayElement) {
+      const delay = parseInt(delayElement.dataset.autoplayDelay, 10);
+      if (!isNaN(delay) && delay >= 1000 && delay <= 30000) {
+        autoPlayDelay = delay;
+      }
+    }
+  }
 
   return {
     hasAutoPlay,
-    autoPlayInterval,
+    autoPlayInterval: autoPlayDelay,
+    pauseOnHover,
   };
 }
 
@@ -291,7 +327,7 @@ export default function decorate(block) {
   if (slides.length === 0) return;
 
   // Get autoplay configuration from block data
-  const { hasAutoPlay, autoPlayInterval } = getAutoplayConfig(block);
+  const { hasAutoPlay, autoPlayInterval, pauseOnHover } = getAutoplayConfig(block);
 
   // Check for other variations
   const showDots = !block.classList.contains('no-dots');
@@ -434,5 +470,6 @@ export default function decorate(block) {
     playPauseButton,
     hasAutoPlay,
     autoPlayInterval,
+    pauseOnHover,
   });
 }
