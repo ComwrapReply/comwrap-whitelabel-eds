@@ -260,6 +260,13 @@
         "value": "",
         "label": "Description",
         "valueType": "string"
+      },
+      {
+        "component": "autoplay",
+        "name": "autoplay",
+        "label": "Autoplay",
+        "valueType": "boolean",
+        "value": false
       }
     ]
   },
