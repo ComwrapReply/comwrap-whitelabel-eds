@@ -74,6 +74,7 @@ export default function decorate(block) {
     if (answerDiv) {
       contentDiv.innerHTML = answerDiv.innerHTML;
     }
+    contentDiv.firstChild.classList.add('accordion-text');
 
     // Get image from third div if it exists
     const imageDiv = row.querySelector(':scope > div:nth-child(3) picture');
@@ -83,6 +84,7 @@ export default function decorate(block) {
         const optimizedPic = createOptimizedPicture(img.src, img.alt, false, [
           { width: '750' },
         ]);
+        optimizedPic.classList.add('accordion-image');
         moveInstrumentation(img, optimizedPic.querySelector('img'));
         contentDiv.insertBefore(optimizedPic, contentDiv.firstChild);
       }
@@ -98,13 +100,11 @@ export default function decorate(block) {
       const text = buttonTextDiv.textContent?.trim();
       const style = buttonStyleDiv?.textContent?.trim() || 'primary';
 
-      console.log('style', style);
-
       if (link && text) {
         const buttonElement = document.createElement('a');
         buttonElement.href = link;
         buttonElement.textContent = text;
-        buttonElement.className = `button ${style}`;
+        buttonElement.className = `button ${style} accordion-button`;
 
         contentDiv.appendChild(buttonElement);
       }
@@ -120,6 +120,9 @@ export default function decorate(block) {
     });
 
     ul.appendChild(li);
+
+    const layout = row.querySelector(':scope > div:nth-child(7)');
+    contentDiv.classList.add(layout.firstChild.innerHTML);
   });
 
   block.textContent = '';
