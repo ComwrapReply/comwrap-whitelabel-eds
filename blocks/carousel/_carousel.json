@@ -33,6 +33,16 @@
   ],
   "models": [
     {
+      "id": "carousel",
+      "fields": [
+        {
+          "component": "boolean",
+          "name": "autoplay",
+          "label": "Allow Autoplay"
+        }
+      ]
+    },
+    {
       "id": "carousel-slide",
       "fields": [
         {
@@ -62,13 +72,6 @@
           "value": "",
           "label": "Description",
           "valueType": "string"
-        },
-        {
-          "component": "autoplay",
-          "name": "autoplay",
-          "label": "Autoplay",
-          "valueType": "boolean",
-          "value": false
         }
       ]
     }

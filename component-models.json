@@ -231,6 +231,16 @@
     ]
   },
   {
+    "id": "carousel",
+    "fields": [
+      {
+        "component": "boolean",
+        "name": "autoplay",
+        "label": "Allow Autoplay"
+      }
+    ]
+  },
+  {
     "id": "carousel-slide",
     "fields": [
       {
