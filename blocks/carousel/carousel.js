@@ -261,7 +261,7 @@ function initializeCarousel(block, track, slideCount, options) {
 
 export default function decorate(block) {
   const slides = [...block.children];
-  
+
   if (slides.length === 0) return;
 
   // Check for variations
@@ -271,22 +271,22 @@ export default function decorate(block) {
   // Create carousel container structure
   const carouselContainer = document.createElement('div');
   carouselContainer.className = 'carousel-container';
-  
+
   const carouselTrack = document.createElement('div');
   carouselTrack.className = 'carousel-track';
-  
+
   // Process slides
   slides.forEach((row, index) => {
     const slide = document.createElement('div');
     slide.className = 'carousel-slide';
     slide.dataset.slideIndex = index;
-    
+
     moveInstrumentation(row, slide);
-    
+
     // Create content container
     const contentContainer = document.createElement('div');
     contentContainer.className = 'carousel-slide-content';
-    
+
     // Process each element in the row
     const elements = [...row.children];
     elements.forEach((element) => {
@@ -298,7 +298,7 @@ export default function decorate(block) {
         // Determine if it's title or text based on content or position
         const isTitle = element.querySelector('h1, h2, h3, h4, h5, h6')
                        || elements.indexOf(element) === elements.findIndex((el) => !el.querySelector('picture'));
-        
+
         if (isTitle) {
           const titleDiv = document.createElement('div');
           titleDiv.className = 'carousel-slide-content-title';
@@ -314,21 +314,21 @@ export default function decorate(block) {
         }
       }
     });
-    
+
     // Only append content container if it has children
     if (contentContainer.children.length > 0) {
       slide.append(contentContainer);
     }
-    
+
     carouselTrack.append(slide);
   });
 
   // Optimize images
   carouselTrack.querySelectorAll('picture > img').forEach((img) => {
     const optimizedPic = createOptimizedPicture(
-      img.src, 
-      img.alt, 
-      false, 
+      img.src,
+      img.alt,
+      false,
       [{ width: '750' }, { width: '1200' }],
     );
     moveInstrumentation(img, optimizedPic.querySelector('img'));
@@ -341,17 +341,17 @@ export default function decorate(block) {
   if (showArrows) {
     const arrowsContainer = document.createElement('div');
     arrowsContainer.className = 'carousel-arrows';
-    
+
     prevButton = document.createElement('button');
     prevButton.className = 'carousel-arrow carousel-prev';
     prevButton.setAttribute('aria-label', 'Previous slide');
     prevButton.innerHTML = '<span class="carousel-arrow-icon"></span>';
-    
+
     nextButton = document.createElement('button');
     nextButton.className = 'carousel-arrow carousel-next';
     nextButton.setAttribute('aria-label', 'Next slide');
     nextButton.innerHTML = '<span class="carousel-arrow-icon"></span>';
-    
+
     arrowsContainer.append(prevButton, nextButton);
     carouselContainer.append(arrowsContainer);
   }
@@ -363,19 +363,19 @@ export default function decorate(block) {
   if (showDots && slides.length > 1) {
     controlsContainer = document.createElement('div');
     controlsContainer.className = 'carousel-controls';
-    
+
     // Play/Pause button
     playPauseButton = document.createElement('button');
     playPauseButton.className = 'carousel-play-pause';
     playPauseButton.setAttribute('aria-label', 'Pause carousel'); // Default state is playing
     playPauseButton.innerHTML = '<span class="carousel-play-pause-icon"></span>';
-    
+
     // Dots container
     dotsContainer = document.createElement('div');
     dotsContainer.className = 'carousel-dots';
-    
+
     // Progress bar disabled - not creating progress bar elements
-    
+
     // Dots
     slides.forEach((_, index) => {
       const dot = document.createElement('button');
@@ -385,14 +385,14 @@ export default function decorate(block) {
       if (index === 0) dot.classList.add('active');
       dotsContainer.append(dot);
     });
-    
+
     controlsContainer.append(playPauseButton, dotsContainer);
   }
 
   // Assemble carousel
   carouselContainer.append(carouselTrack);
   if (controlsContainer) carouselContainer.append(controlsContainer);
-  
+
   // Replace block content
   block.textContent = '';
   block.append(carouselContainer);
