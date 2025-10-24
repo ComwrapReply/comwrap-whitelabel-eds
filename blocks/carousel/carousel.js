@@ -2,8 +2,8 @@ import { createOptimizedPicture } from '../../scripts/aem.js';
 import { moveInstrumentation } from '../../scripts/scripts.js';
 
 const CAROUSEL_CONFIG = {
-  SLIDE_TRANSITION_DURATION: 300,
-  DEFAULT_AUTO_PLAY_INTERVAL: 5000, // 5 seconds default
+  SLIDE_TRANSITION_DURATION: 500, // Smooth shifting animation
+  AUTO_PLAY_INTERVAL: 6000, // 6 seconds when play button is pressed
   TOUCH_THRESHOLD: 50,
   BREAKPOINTS: {
     MOBILE: 600,
@@ -29,18 +29,21 @@ function initializeCarousel(block, track, slideCount, options) {
     nextButton,
     dotsContainer,
     playPauseButton,
-    hasAutoPlay,
-    autoPlayInterval,
   } = options;
-  let isPlaying = hasAutoPlay;
+  let isPlaying = false; // Default: no autoplay
 
-  // Update carousel position
-  function updateCarousel(slideIndex) {
-    currentSlide = Math.max(0, Math.min(slideIndex, slideCount - 1));
+  // Update carousel position with smooth animation
+  function updateCarousel(slideIndex, animate = true) {
+    currentSlide = slideIndex;
     const translateX = -currentSlide * 100;
 
-    // Animation disabled - no transition
-    track.style.transition = 'none';
+    // Add smooth shifting animation
+    if (animate) {
+      track.style.transition = `transform ${CAROUSEL_CONFIG.SLIDE_TRANSITION_DURATION}ms ease-in-out`;
+    } else {
+      track.style.transition = 'none';
+    }
+
     track.style.transform = `translateX(${translateX}%)`;
 
     // Update active states
@@ -54,23 +57,20 @@ function initializeCarousel(block, track, slideCount, options) {
       });
     }
 
-    // Update arrow states
-    if (prevButton) prevButton.disabled = currentSlide === 0;
-    if (nextButton) nextButton.disabled = currentSlide === slideCount - 1;
-
-    // Progress bar disabled - no progress updates
+    // Update arrow states - no longer disable at ends for auto-loop
+    if (prevButton) prevButton.disabled = false;
+    if (nextButton) nextButton.disabled = false;
   }
 
-  // Auto-play functionality
+  // Auto-play functionality with auto-loop
   function startAutoPlay() {
-    if (!hasAutoPlay || slideCount <= 1) return;
-
-    // Progress bar disabled - no progress tracking
+    if (slideCount <= 1) return;
 
     autoPlayTimer = setInterval(() => {
-      const nextIndex = currentSlide < slideCount - 1 ? currentSlide + 1 : 0;
+      // Auto-loop: go to next slide, or back to first if at the end
+      const nextIndex = (currentSlide + 1) % slideCount;
       updateCarousel(nextIndex);
-    }, autoPlayInterval);
+    }, CAROUSEL_CONFIG.AUTO_PLAY_INTERVAL);
   }
 
   function updatePlayPauseButton() {
@@ -87,7 +87,6 @@ function initializeCarousel(block, track, slideCount, options) {
       clearInterval(autoPlayTimer);
       autoPlayTimer = null;
     }
-    // Progress timer disabled - no progress tracking
     isPlaying = false;
     updatePlayPauseButton();
   }
@@ -103,14 +102,18 @@ function initializeCarousel(block, track, slideCount, options) {
     const swipeDistance = touchStartX - touchEndX;
 
     if (Math.abs(swipeDistance) > CAROUSEL_CONFIG.TOUCH_THRESHOLD) {
-      if (swipeDistance > 0 && currentSlide < slideCount - 1) {
-        updateCarousel(currentSlide + 1);
-      } else if (swipeDistance < 0 && currentSlide > 0) {
-        updateCarousel(currentSlide - 1);
+      if (swipeDistance > 0) {
+        // Swipe left - next slide with auto-loop
+        const nextIndex = (currentSlide + 1) % slideCount;
+        updateCarousel(nextIndex);
+      } else if (swipeDistance < 0) {
+        // Swipe right - previous slide with auto-loop
+        const prevIndex = currentSlide === 0 ? slideCount - 1 : currentSlide - 1;
+        updateCarousel(prevIndex);
       }
     }
 
-    if (hasAutoPlay && isPlaying) {
+    if (isPlaying) {
       setTimeout(() => {
         startAutoPlay();
         isPlaying = true;
@@ -119,12 +122,14 @@ function initializeCarousel(block, track, slideCount, options) {
     }
   }
 
-  // Event listeners
+  // Event listeners with auto-loop support
   if (prevButton) {
     prevButton.addEventListener('click', () => {
       stopAutoPlay();
-      updateCarousel(currentSlide - 1);
-      if (hasAutoPlay && isPlaying) {
+      // Previous slide with auto-loop
+      const prevIndex = currentSlide === 0 ? slideCount - 1 : currentSlide - 1;
+      updateCarousel(prevIndex);
+      if (isPlaying) {
         setTimeout(() => {
           startAutoPlay();
           isPlaying = true;
@@ -137,8 +142,10 @@ function initializeCarousel(block, track, slideCount, options) {
   if (nextButton) {
     nextButton.addEventListener('click', () => {
       stopAutoPlay();
-      updateCarousel(currentSlide + 1);
-      if (hasAutoPlay && isPlaying) {
+      // Next slide with auto-loop
+      const nextIndex = (currentSlide + 1) % slideCount;
+      updateCarousel(nextIndex);
+      if (isPlaying) {
         setTimeout(() => {
           startAutoPlay();
           isPlaying = true;
@@ -167,7 +174,7 @@ function initializeCarousel(block, track, slideCount, options) {
         stopAutoPlay();
         const slideIndex = parseInt(e.target.dataset.slideIndex, 10);
         updateCarousel(slideIndex);
-        if (hasAutoPlay && isPlaying) {
+        if (isPlaying) {
           setTimeout(() => {
             startAutoPlay();
             isPlaying = true;
@@ -182,24 +189,28 @@ function initializeCarousel(block, track, slideCount, options) {
   track.addEventListener('touchstart', handleTouchStart, { passive: true });
   track.addEventListener('touchend', handleTouchEnd, { passive: true });
 
-  // Keyboard navigation
+  // Keyboard navigation with auto-loop
   block.addEventListener('keydown', (e) => {
-    if (e.key === 'ArrowLeft' && currentSlide > 0) {
+    if (e.key === 'ArrowLeft') {
       e.preventDefault();
       stopAutoPlay();
-      updateCarousel(currentSlide - 1);
-      if (hasAutoPlay && isPlaying) {
+      // Previous slide with auto-loop
+      const prevIndex = currentSlide === 0 ? slideCount - 1 : currentSlide - 1;
+      updateCarousel(prevIndex);
+      if (isPlaying) {
         setTimeout(() => {
           startAutoPlay();
           isPlaying = true;
           updatePlayPauseButton();
         }, 3000);
       }
-    } else if (e.key === 'ArrowRight' && currentSlide < slideCount - 1) {
+    } else if (e.key === 'ArrowRight') {
       e.preventDefault();
       stopAutoPlay();
-      updateCarousel(currentSlide + 1);
-      if (hasAutoPlay && isPlaying) {
+      // Next slide with auto-loop
+      const nextIndex = (currentSlide + 1) % slideCount;
+      updateCarousel(nextIndex);
+      if (isPlaying) {
         setTimeout(() => {
           startAutoPlay();
           isPlaying = true;
@@ -210,20 +221,15 @@ function initializeCarousel(block, track, slideCount, options) {
   });
 
   // Initialize
-  updateCarousel(0);
+  updateCarousel(0, false); // No animation on initial load
   updatePlayPauseButton();
 
-  // Start autoplay immediately if enabled and multiple slides
-  if (hasAutoPlay && slideCount > 1) {
-    isPlaying = true;
-    startAutoPlay();
-    updatePlayPauseButton();
-  }
+  // No autoplay by default - user must press play button
 
   // Handle window resize
   const handleResize = () => {
-    // Animation disabled - no transition needed
-    updateCarousel(currentSlide);
+    // Maintain current position without animation during resize
+    updateCarousel(currentSlide, false);
   };
 
   window.addEventListener('resize', handleResize);
@@ -231,13 +237,8 @@ function initializeCarousel(block, track, slideCount, options) {
   // Intersection Observer for performance
   const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        if (hasAutoPlay && slideCount > 1 && !isPlaying) {
-          isPlaying = true;
-          startAutoPlay();
-          updatePlayPauseButton();
-        }
-      } else if (isPlaying) {
+      if (!entry.isIntersecting && isPlaying) {
+        // Pause when carousel is not visible
         stopAutoPlay();
       }
     });
@@ -246,54 +247,12 @@ function initializeCarousel(block, track, slideCount, options) {
   observer.observe(block);
 }
 
-/**
- * Get autoplay settings from block data
- * @param {HTMLElement} block - The carousel block element
- * @returns {Object} Autoplay configuration
- */
-function getAutoplayConfig(block) {
-  // Try to get autoplay setting from block dataset or data attributes
-  let hasAutoPlay = false;
-  let autoPlayDelay = 5; // Default 5 seconds
-
-  // Check block dataset first
-  if (block.dataset.autoplay !== undefined) {
-    hasAutoPlay = block.dataset.autoplay === 'true';
-  }
-
-  if (block.dataset.autoplayDelay !== undefined) {
-    autoPlayDelay = parseInt(block.dataset.autoplayDelay, 10) || 5;
-  }
-
-  // Fallback: check for data attributes in child elements
-  const autoplayElement = block.querySelector('[data-autoplay]');
-  if (autoplayElement) {
-    hasAutoPlay = autoplayElement.dataset.autoplay === 'true';
-  }
-
-  const delayElement = block.querySelector('[data-autoplay-delay]');
-  if (delayElement) {
-    autoPlayDelay = parseInt(delayElement.dataset.autoplayDelay, 10) || 5;
-  }
-
-  // Convert seconds to milliseconds
-  const autoPlayInterval = autoPlayDelay * 1000;
-
-  return {
-    hasAutoPlay,
-    autoPlayInterval,
-  };
-}
-
 export default function decorate(block) {
   const slides = [...block.children];
 
   if (slides.length === 0) return;
 
-  // Get autoplay configuration from block data
-  const { hasAutoPlay, autoPlayInterval } = getAutoplayConfig(block);
-
-  // Check for other variations
+  // Check for variations
   const showDots = !block.classList.contains('no-dots');
   const showArrows = !block.classList.contains('no-arrows');
 
@@ -396,7 +355,7 @@ export default function decorate(block) {
     // Play/Pause button
     playPauseButton = document.createElement('button');
     playPauseButton.className = 'carousel-play-pause';
-    playPauseButton.setAttribute('aria-label', hasAutoPlay ? 'Pause carousel' : 'Play carousel');
+    playPauseButton.setAttribute('aria-label', 'Play carousel');
     playPauseButton.innerHTML = '<span class="carousel-play-pause-icon"></span>';
 
     // Dots container
@@ -432,7 +391,5 @@ export default function decorate(block) {
     nextButton,
     dotsContainer,
     playPauseButton,
-    hasAutoPlay,
-    autoPlayInterval,
   });
 }
