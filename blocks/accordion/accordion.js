@@ -122,7 +122,7 @@ export default function decorate(block) {
     ul.appendChild(li);
 
     const layout = row.querySelector(':scope > div:nth-child(7)');
-    if (layout && layout.firstChild.innerHTML != "default") {
+    if (layout && layout.firstChild.innerHTML !== 'default') {
       contentDiv.classList.add(layout.firstChild.innerHTML);
     }
   });

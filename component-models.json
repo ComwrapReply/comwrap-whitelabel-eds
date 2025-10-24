@@ -220,10 +220,6 @@
         "label": "Accordion Layout",
         "options": [
           {
-            "name": "Default",
-            "value": "default"
-          },
-          {
             "name": "Text, Button | Image",
             "value": "textbutton-image"
           },
@@ -231,7 +227,8 @@
             "name": "Text | Image, Button",
             "value": "text-imagebutton"
           }
-        ]
+        ],
+        "value": "textbutton-image"
       },
       {
         "component": "boolean",
