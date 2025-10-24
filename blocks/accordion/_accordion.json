@@ -121,11 +121,6 @@
             }
           ],
           "value": "textbutton-image"
-        },
-        {
-          "component": "boolean",
-          "name": "accordion-item-open",
-          "label": "Initially Open"
         }
       ]
     }
