@@ -67,11 +67,6 @@
           "multi": false
         },
         {
-          "component": "tab",
-          "label": "Button",
-          "name": "button"
-        },
-        {
           "component": "aem-content",
           "name": "button-link",
           "label": "Button Link"
