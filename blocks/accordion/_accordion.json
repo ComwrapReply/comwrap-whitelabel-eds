@@ -90,6 +90,25 @@
             }
           ],
           "value": "primary"
+        },
+        {
+          "component": "select",
+          "name": "layout",
+          "label": "Accordion Layout",
+          "options": [
+            {
+              "name": "Default",
+              "value": ""
+            },
+            {
+              "name": "Text, Button | Image",
+              "value": "textbutton-image"
+            },
+            {
+              "name": "Text | Image, Button",
+              "value": "text-imagebutton"
+            }
+          ]
         }
       ]
     }
