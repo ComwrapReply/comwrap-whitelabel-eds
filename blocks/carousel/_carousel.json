@@ -33,18 +33,6 @@
   ],
   "models": [
     {
-      "id": "carousel",
-      "fields": [
-        {
-          "component": "boolean",
-          "name": "autoplay",
-          "label": "Enable Autoplay",
-          "value": false,
-          "valueType": "boolean"
-        }
-      ]
-    },
-    {
       "id": "carousel-slide",
       "fields": [
         {

@@ -249,26 +249,40 @@ function initializeCarousel(block, track, slideCount, options) {
 /**
  * Get autoplay settings from block data
  * @param {HTMLElement} block - The carousel block element
- * @returns {boolean} Whether autoplay is enabled
+ * @returns {Object} Autoplay configuration
  */
 function getAutoplayConfig(block) {
-  // Default value
+  // Try to get autoplay setting from block dataset or data attributes
   let hasAutoPlay = false;
+  let autoPlayDelay = 5; // Default 5 seconds
 
-  // Primary: Check block dataset (from Universal Editor component model)
+  // Check block dataset first
   if (block.dataset.autoplay !== undefined) {
-    hasAutoPlay = block.dataset.autoplay === 'true' || block.dataset.autoplay === true;
+    hasAutoPlay = block.dataset.autoplay === 'true';
   }
 
-  // Fallback: Check for data attributes in child elements (for backwards compatibility)
-  if (!hasAutoPlay) {
-    const autoplayElement = block.querySelector('[data-autoplay]');
-    if (autoplayElement) {
-      hasAutoPlay = autoplayElement.dataset.autoplay === 'true' || autoplayElement.dataset.autoplay === true;
-    }
+  if (block.dataset.autoplayDelay !== undefined) {
+    autoPlayDelay = parseInt(block.dataset.autoplayDelay, 10) || 5;
   }
 
-  return hasAutoPlay;
+  // Fallback: check for data attributes in child elements
+  const autoplayElement = block.querySelector('[data-autoplay]');
+  if (autoplayElement) {
+    hasAutoPlay = autoplayElement.dataset.autoplay === 'true';
+  }
+
+  const delayElement = block.querySelector('[data-autoplay-delay]');
+  if (delayElement) {
+    autoPlayDelay = parseInt(delayElement.dataset.autoplayDelay, 10) || 5;
+  }
+
+  // Convert seconds to milliseconds
+  const autoPlayInterval = autoPlayDelay * 1000;
+
+  return {
+    hasAutoPlay,
+    autoPlayInterval,
+  };
 }
 
 export default function decorate(block) {
@@ -277,8 +291,7 @@ export default function decorate(block) {
   if (slides.length === 0) return;
 
   // Get autoplay configuration from block data
-  const hasAutoPlay = getAutoplayConfig(block);
-  const autoPlayInterval = CAROUSEL_CONFIG.DEFAULT_AUTO_PLAY_INTERVAL;
+  const { hasAutoPlay, autoPlayInterval } = getAutoplayConfig(block);
 
   // Check for other variations
   const showDots = !block.classList.contains('no-dots');
