@@ -122,7 +122,9 @@ export default function decorate(block) {
     ul.appendChild(li);
 
     const layout = row.querySelector(':scope > div:nth-child(7)');
-    contentDiv.classList.add(layout.firstChild.innerHTML);
+    if (layout && layout.firstChild.innerHTML != "default") {
+      contentDiv.classList.add(layout.firstChild.innerHTML);
+    }
   });
 
   block.textContent = '';

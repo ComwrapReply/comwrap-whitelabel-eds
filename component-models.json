@@ -175,6 +175,11 @@
         "multi": false
       },
       {
+        "component": "tab",
+        "label": "Button",
+        "name": "button"
+      },
+      {
         "component": "aem-content",
         "name": "button-link",
         "label": "Button Link"
@@ -216,7 +221,7 @@
         "options": [
           {
             "name": "Default",
-            "value": ""
+            "value": "default"
           },
           {
             "name": "Text, Button | Image",
