@@ -236,21 +236,16 @@
       {
         "component": "boolean",
         "name": "autoplay",
-        "label": "Autoplay",
-        "description": "Automatically cycle through slides",
-        "valueType": "boolean",
-        "value": false
+        "label": "Enable Autoplay",
+        "value": false,
+        "valueType": "boolean"
       },
       {
         "component": "number",
-        "name": "autoplayInterval",
-        "label": "Autoplay Interval (ms)",
-        "description": "Time between slides in milliseconds",
-        "valueType": "number",
+        "name": "autoplayDelay",
+        "label": "Autoplay Delay (seconds)",
         "value": 5000,
-        "condition": {
-          "===": [{"var": "autoplay"}, true]
-        }
+        "valueType": "number"
       }
     ]
   },
