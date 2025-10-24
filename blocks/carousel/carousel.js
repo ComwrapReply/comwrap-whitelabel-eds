@@ -1,270 +1,441 @@
 import { createOptimizedPicture } from '../../scripts/aem.js';
 import { moveInstrumentation } from '../../scripts/scripts.js';
 
-function updateActiveSlide(slide) {
-  const block = slide.closest('.carousel');
-  const slideIndex = parseInt(slide.dataset.slideIndex, 10);
-  block.dataset.activeSlide = slideIndex;
-
-  const slides = block.querySelectorAll('.carousel-slide');
-  slides.forEach((aSlide, idx) => {
-    aSlide.setAttribute('aria-hidden', idx !== slideIndex);
-    aSlide.querySelectorAll('a').forEach((link) => {
-      if (idx !== slideIndex) {
-        link.setAttribute('tabindex', '-1');
-      } else {
-        link.removeAttribute('tabindex');
-      }
-    });
-  });
-
-  const indicators = block.querySelectorAll('.carousel-slide-indicator');
-  indicators.forEach((indicator, idx) => {
-    if (idx !== slideIndex) {
-      indicator.querySelector('button').removeAttribute('disabled');
-    } else {
-      indicator.querySelector('button').setAttribute('disabled', 'true');
-    }
-  });
-}
-
-function showSlide(block, slideIndex = 0) {
-  const slides = block.querySelectorAll('.carousel-slide');
-  let realSlideIndex = slideIndex < 0 ? slides.length - 1 : slideIndex;
-  if (slideIndex >= slides.length) realSlideIndex = 0;
-  const activeSlide = slides[realSlideIndex];
-
-  activeSlide.querySelectorAll('a').forEach((link) => link.removeAttribute('tabindex'));
-  block.querySelector('.carousel-slides').scrollTo({
-    top: 0,
-    left: activeSlide.offsetLeft,
-    behavior: 'smooth',
-  });
-}
-
-function bindEvents(block) {
-  const slideIndicators = block.querySelector('.carousel-slide-indicators');
-  if (!slideIndicators) return;
-
-  slideIndicators.querySelectorAll('button').forEach((button) => {
-    button.addEventListener('click', (e) => {
-      const slideIndicator = e.currentTarget.parentElement;
-      showSlide(block, parseInt(slideIndicator.dataset.targetSlide, 10));
-    });
-  });
-
-  block.querySelector('.slide-prev').addEventListener('click', () => {
-    showSlide(block, parseInt(block.dataset.activeSlide, 10) - 1);
-  });
-  block.querySelector('.slide-next').addEventListener('click', () => {
-    showSlide(block, parseInt(block.dataset.activeSlide, 10) + 1);
-  });
-
-  const slideObserver = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) updateActiveSlide(entry.target);
-    });
-  }, { threshold: 0.5 });
-  block.querySelectorAll('.carousel-slide').forEach((slide) => {
-    slideObserver.observe(slide);
-  });
-}
-
-function createSlide(row, slideIndex, carouselId) {
-  // Check if there's an image in the row
-  const hasImage = row.querySelector('picture') !== null;
-  if (!hasImage) {
-    // If no image, just return the content directly
-    const content = document.createElement('div');
-    content.classList.add('carousel-content');
-    moveInstrumentation(row, content);
-
-    [...row.children].forEach((div) => {
-      const divClone = div.cloneNode(true);
-      content.append(divClone);
-    });
-
-    // Handle carit items
-    const caritItems = row.querySelectorAll('.carit');
-    caritItems.forEach((carit) => {
-      const caritClone = carit.cloneNode(true);
-      content.append(caritClone);
-    });
-
-    // Handle card items
-    const cardItems = row.querySelectorAll('.card');
-    cardItems.forEach((card) => {
-      const cardClone = card.cloneNode(true);
-      content.append(cardClone);
-    });
-
-    return content;
+const CAROUSEL_CONFIG = {
+  SLIDE_TRANSITION_DURATION: 300,
+  AUTO_PLAY_INTERVAL: 7000,
+  TOUCH_THRESHOLD: 50,
+  BREAKPOINTS: {
+    MOBILE: 600,
+    DESKTOP: 900
   }
+};
 
-  // If there is an image, create a carousel slide
-  const slide = document.createElement('li');
-  slide.dataset.slideIndex = slideIndex;
-  slide.setAttribute('id', `carousel-${carouselId}-slide-${slideIndex}`);
-  slide.classList.add('carousel-slide');
+export default function decorate(block) {
+  const slides = [...block.children];
+  
+  if (slides.length === 0) return;
 
-  // Move instrumentation before processing
-  moveInstrumentation(row, slide);
+  // Check for variations - autoplay is default behavior
+  const hasAutoPlay = !block.classList.contains('no-auto-play');
+  const showDots = !block.classList.contains('no-dots');
+  const showArrows = !block.classList.contains('no-arrows');
 
-  let slideLink = null;
-  const firstLink = row.querySelector('a');
-  if (firstLink) {
-    slideLink = document.createElement('a');
-    slideLink.href = firstLink.href;
-  }
-
-  // Process each div in the row
-  [...row.children].forEach((div) => {
-    const divClone = div.cloneNode(true);
-    if (divClone.children.length === 1 && divClone.querySelector('picture')) {
-      divClone.className = 'carousel-slide-image';
-    } else {
-      divClone.className = 'carousel-slide-content';
-      // Add buttons if they exist
-      const primaryButtonText = row.querySelector('.primary_button_text');
-      const primaryButtonLink = row.querySelector('.primary_button_link');
-      const secondaryButtonText = row.querySelector('.secondary_button_text');
-      const secondaryButtonLink = row.querySelector('.secondary_button_link');
-
-      if ((primaryButtonText && primaryButtonLink)
-        || (secondaryButtonText && secondaryButtonLink)) {
-        const buttonsContainer = document.createElement('div');
-        buttonsContainer.className = 'carousel-buttons';
-
-        if (primaryButtonText && primaryButtonLink) {
-          const primaryButton = document.createElement('a');
-          primaryButton.href = primaryButtonLink.textContent;
-          primaryButton.textContent = primaryButtonText.textContent;
-          primaryButton.className = 'button primary';
-          buttonsContainer.appendChild(primaryButton);
+  // Create carousel container structure
+  const carouselContainer = document.createElement('div');
+  carouselContainer.className = 'carousel-container';
+  
+  const carouselTrack = document.createElement('div');
+  carouselTrack.className = 'carousel-track';
+  
+  // Process slides
+  slides.forEach((row, index) => {
+    const slide = document.createElement('div');
+    slide.className = 'carousel-slide';
+    slide.dataset.slideIndex = index;
+    
+    moveInstrumentation(row, slide);
+    
+    // Create content container
+    const contentContainer = document.createElement('div');
+    contentContainer.className = 'carousel-slide-content';
+    
+    // Process each element in the row
+    const elements = [...row.children];
+    elements.forEach((element) => {
+      // Handle images
+      if (element.querySelector('picture')) {
+        element.className = 'carousel-slide-image';
+        slide.append(element);
+      } else if (element.textContent.trim()) {
+        // Determine if it's title or text based on content or position
+        const isTitle = element.querySelector('h1, h2, h3, h4, h5, h6') || 
+                       elements.indexOf(element) === elements.findIndex(el => !el.querySelector('picture'));
+        
+        if (isTitle) {
+          const titleDiv = document.createElement('div');
+          titleDiv.className = 'carousel-slide-content-title';
+          titleDiv.innerHTML = element.innerHTML;
+          moveInstrumentation(element, titleDiv);
+          contentContainer.append(titleDiv);
+        } else {
+          const textDiv = document.createElement('div');
+          textDiv.className = 'carousel-slide-content-text';
+          textDiv.innerHTML = element.innerHTML;
+          moveInstrumentation(element, textDiv);
+          contentContainer.append(textDiv);
         }
-
-        if (secondaryButtonText && secondaryButtonLink) {
-          const secondaryButton = document.createElement('a');
-          secondaryButton.href = secondaryButtonLink.textContent;
-          secondaryButton.textContent = secondaryButtonText.textContent;
-          secondaryButton.className = 'button secondary';
-          buttonsContainer.appendChild(secondaryButton);
-        }
-
-        divClone.appendChild(buttonsContainer);
       }
-
-      const hasTextContent = divClone.textContent.trim() !== '';
-      const hasButtons = divClone.querySelector('.carousel-buttons') !== null;
-
-      if (!hasTextContent && !hasButtons) {
-        return;
-      }
+    });
+    
+    // Only append content container if it has children
+    if (contentContainer.children.length > 0) {
+      slide.append(contentContainer);
     }
-    if (divClone.querySelector('a')) {
-      const link = divClone.querySelector('a');
-      link.remove();
-    }
-    slide.append(divClone);
-  });
-
-  // Handle carit items
-  const caritItems = row.querySelectorAll('.carit');
-  caritItems.forEach((carit) => {
-    const caritClone = carit.cloneNode(true);
-    slide.append(caritClone);
-  });
-
-  // Handle card items
-  const cardItems = row.querySelectorAll('.card');
-  cardItems.forEach((card) => {
-    const cardClone = card.cloneNode(true);
-    slide.append(cardClone);
-  });
-
-  if (slideLink) {
-    slideLink.append(slide);
-    return slideLink;
-  }
-  return slide;
-}
-
-let carouselId = 0;
-export default async function decorate(block) {
-  carouselId += 1;
-  block.setAttribute('id', `carousel-${carouselId}`);
-  const rows = block.querySelectorAll(':scope > div');
-  // Count slides with images
-  const slidesWithImages = [...rows].filter((row) => row.querySelector('picture'));
-  const isSingleSlide = slidesWithImages.length < 2;
-
-  // TODO: Implement fetchPlaceholders function
-  // const placeholders = await fetchPlaceholders();
-
-  block.setAttribute('role', 'region');
-  block.setAttribute('aria-roledescription', 'Carousel');
-
-  const container = document.createElement('div');
-  container.classList.add('carousel-slides-container');
-
-  const slidesWrapper = document.createElement('ul');
-  slidesWrapper.classList.add('carousel-slides');
-  block.prepend(slidesWrapper);
-
-  let slideIndicators;
-  let slideIndex = 0;
-  if (!isSingleSlide) {
-    const slideIndicatorsNav = document.createElement('nav');
-    slideIndicatorsNav.setAttribute('aria-label', 'Carousel Slide Controls');
-    slideIndicators = document.createElement('ol');
-    slideIndicators.classList.add('carousel-slide-indicators');
-    slideIndicatorsNav.append(slideIndicators);
-    block.append(slideIndicatorsNav);
-
-    const slideNavButtons = document.createElement('div');
-    slideNavButtons.classList.add('carousel-navigation-buttons');
-    slideNavButtons.innerHTML = `
-      <button type="button" class="slide-prev" aria-label="Previous Slide"></button>
-      <button type="button" class="slide-next" aria-label="Next Slide"></button>
-    `;
-
-    container.append(slideNavButtons);
-  }
-
-  // Process each row
-  rows.forEach((row) => {
-    const element = createSlide(row, slideIndex, carouselId);
-    if (element.classList.contains('carousel-slide')) {
-      // If it's a slide, add it to the slides wrapper
-      slidesWrapper.append(element);
-      if (slideIndicators) {
-        const indicator = document.createElement('li');
-        indicator.classList.add('carousel-slide-indicator');
-        indicator.dataset.targetSlide = slideIndex;
-        indicator.innerHTML = `<button type="button" aria-label="Show Slide ${slideIndex + 1} of ${slidesWithImages.length}"></button>`;
-        slideIndicators.append(indicator);
-      }
-      slideIndex += 1;
-    } else {
-      // If it's not a slide, add it directly to the block
-      block.append(element);
-    }
+    
+    carouselTrack.append(slide);
   });
 
   // Optimize images
-  block.querySelectorAll('picture > img').forEach((img) => {
-    const optimizedPic = createOptimizedPicture(img.src, img.alt, false, [{ width: '750' }]);
+  carouselTrack.querySelectorAll('picture > img').forEach((img) => {
+    const optimizedPic = createOptimizedPicture(
+      img.src, 
+      img.alt, 
+      false, 
+      [{ width: '750' }, { width: '1200' }]
+    );
     moveInstrumentation(img, optimizedPic.querySelector('img'));
     img.closest('picture').replaceWith(optimizedPic);
   });
 
-  // Clean up original rows
-  rows.forEach((row) => row.remove());
-
-  container.append(slidesWrapper);
-  block.prepend(container);
-
-  if (!isSingleSlide) {
-    bindEvents(block);
+  // Create navigation arrows
+  let prevButton, nextButton;
+  if (showArrows) {
+    const arrowsContainer = document.createElement('div');
+    arrowsContainer.className = 'carousel-arrows';
+    
+    prevButton = document.createElement('button');
+    prevButton.className = 'carousel-arrow carousel-prev';
+    prevButton.setAttribute('aria-label', 'Previous slide');
+    prevButton.innerHTML = '<span class="carousel-arrow-icon"></span>';
+    
+    nextButton = document.createElement('button');
+    nextButton.className = 'carousel-arrow carousel-next';
+    nextButton.setAttribute('aria-label', 'Next slide');
+    nextButton.innerHTML = '<span class="carousel-arrow-icon"></span>';
+    
+    arrowsContainer.append(prevButton, nextButton);
+    carouselContainer.append(arrowsContainer);
   }
+
+  // Create carousel controls (play/pause + dots)
+  let controlsContainer, playPauseButton, dotsContainer, progressBar;
+  if (showDots && slides.length > 1) {
+    controlsContainer = document.createElement('div');
+    controlsContainer.className = 'carousel-controls';
+    
+    // Play/Pause button
+    playPauseButton = document.createElement('button');
+    playPauseButton.className = 'carousel-play-pause';
+    playPauseButton.setAttribute('aria-label', hasAutoPlay ? 'Pause carousel' : 'Play carousel');
+    playPauseButton.innerHTML = '<span class="carousel-play-pause-icon"></span>';
+    
+    // Dots container
+    dotsContainer = document.createElement('div');
+    dotsContainer.className = 'carousel-dots';
+    
+    // Progress bar (first element)
+    progressBar = document.createElement('div');
+    progressBar.className = 'carousel-progress-bar';
+    const progressFill = document.createElement('div');
+    progressFill.className = 'carousel-progress-fill';
+    progressBar.append(progressFill);
+    dotsContainer.append(progressBar);
+    
+    // Dots
+    slides.forEach((_, index) => {
+      const dot = document.createElement('button');
+      dot.className = 'carousel-dot';
+      dot.dataset.slideIndex = index;
+      dot.setAttribute('aria-label', `Go to slide ${index + 1}`);
+      if (index === 0) dot.classList.add('active');
+      dotsContainer.append(dot);
+    });
+    
+    controlsContainer.append(playPauseButton, dotsContainer);
+  }
+
+  // Assemble carousel
+  carouselContainer.append(carouselTrack);
+  if (controlsContainer) carouselContainer.append(controlsContainer);
+  
+  // Replace block content
+  block.textContent = '';
+  block.append(carouselContainer);
+
+  // Initialize carousel functionality
+  initializeCarousel(block, carouselTrack, slides.length, {
+    prevButton,
+    nextButton,
+    dotsContainer,
+    playPauseButton,
+    progressBar,
+    hasAutoPlay
+  });
 }
+
+function initializeCarousel(block, track, slideCount, options) {
+  let currentSlide = 0;
+  let autoPlayTimer;
+  let progressTimer;
+  let touchStartX = 0;
+  let touchEndX = 0;
+  let isTransitioning = false;
+  let progressStartTime = 0;
+
+  const { prevButton, nextButton, dotsContainer, playPauseButton, progressBar, hasAutoPlay } = options;
+  let isPlaying = hasAutoPlay;
+
+  // Update carousel position
+  function updateCarousel(slideIndex, animate = true) {
+    if (isTransitioning) return;
+    
+    currentSlide = Math.max(0, Math.min(slideIndex, slideCount - 1));
+    const translateX = -currentSlide * 100;
+    
+    if (animate) {
+      isTransitioning = true;
+      track.style.transition = `transform ${CAROUSEL_CONFIG.SLIDE_TRANSITION_DURATION}ms ease-in-out`;
+      setTimeout(() => {
+        isTransitioning = false;
+      }, CAROUSEL_CONFIG.SLIDE_TRANSITION_DURATION);
+    }
+    
+    track.style.transform = `translateX(${translateX}%)`;
+    
+    // Update active states
+    track.querySelectorAll('.carousel-slide').forEach((slide, index) => {
+      slide.classList.toggle('active', index === currentSlide);
+    });
+    
+    if (dotsContainer) {
+      dotsContainer.querySelectorAll('.carousel-dot').forEach((dot, index) => {
+        dot.classList.toggle('active', index === currentSlide);
+      });
+    }
+
+    // Update arrow states
+    if (prevButton) prevButton.disabled = currentSlide === 0;
+    if (nextButton) nextButton.disabled = currentSlide === slideCount - 1;
+    
+    // Reset progress bar for new slide
+    if (progressBar && hasAutoPlay && isPlaying) {
+      progressStartTime = Date.now();
+      updateProgressBar();
+    }
+  }
+
+  // Auto-play functionality
+  function startAutoPlay() {
+    if (!hasAutoPlay || slideCount <= 1) return;
+    
+    progressStartTime = Date.now();
+    updateProgressBar();
+    
+    autoPlayTimer = setInterval(() => {
+      const nextIndex = currentSlide < slideCount - 1 ? currentSlide + 1 : 0;
+      updateCarousel(nextIndex);
+      progressStartTime = Date.now(); // Reset progress timer
+    }, CAROUSEL_CONFIG.AUTO_PLAY_INTERVAL);
+  }
+
+  function stopAutoPlay() {
+    if (autoPlayTimer) {
+      clearInterval(autoPlayTimer);
+      autoPlayTimer = null;
+    }
+    if (progressTimer) {
+      clearInterval(progressTimer);
+      progressTimer = null;
+    }
+    isPlaying = false;
+    updatePlayPauseButton();
+  }
+  
+  function updatePlayPauseButton() {
+    if (playPauseButton) {
+      playPauseButton.setAttribute('aria-label', isPlaying ? 'Pause carousel' : 'Play carousel');
+      playPauseButton.innerHTML = isPlaying ? 
+        '<span class="carousel-pause-icon">⏸</span>' : 
+        '<span class="carousel-play-icon">▶</span>';
+    }
+  }
+
+  // Update progress bar to show actual autoscroll progress
+  function updateProgressBar() {
+    if (!progressBar || !hasAutoPlay || !isPlaying) return;
+    
+    // Clear any existing progress timer
+    if (progressTimer) {
+      clearInterval(progressTimer);
+    }
+    
+    // Reset progress bar
+    const progressFill = progressBar.querySelector('.carousel-progress-fill');
+    if (progressFill) {
+      progressFill.style.width = '0%';
+    }
+    
+    progressTimer = setInterval(() => {
+      const elapsed = Date.now() - progressStartTime;
+      const progress = Math.min((elapsed / CAROUSEL_CONFIG.AUTO_PLAY_INTERVAL) * 100, 100);
+      
+      if (progressFill && isPlaying) {
+        progressFill.style.width = `${progress}%`;
+      }
+      
+      if (progress >= 100 || !isPlaying) {
+        clearInterval(progressTimer);
+        progressTimer = null;
+      }
+    }, 50); // Update every 50ms for smooth animation
+  }
+
+  // Touch/swipe support
+  function handleTouchStart(e) {
+    touchStartX = e.touches[0].clientX;
+    stopAutoPlay();
+  }
+
+  function handleTouchEnd(e) {
+    touchEndX = e.changedTouches[0].clientX;
+    const swipeDistance = touchStartX - touchEndX;
+    
+    if (Math.abs(swipeDistance) > CAROUSEL_CONFIG.TOUCH_THRESHOLD) {
+      if (swipeDistance > 0 && currentSlide < slideCount - 1) {
+        updateCarousel(currentSlide + 1);
+      } else if (swipeDistance < 0 && currentSlide > 0) {
+        updateCarousel(currentSlide - 1);
+      }
+    }
+    
+    if (hasAutoPlay && isPlaying) {
+      setTimeout(() => {
+        startAutoPlay();
+        isPlaying = true;
+        updatePlayPauseButton();
+      }, 1000); // Restart auto-play after 1 second
+    }
+  }
+
+  // Event listeners
+  if (prevButton) {
+    prevButton.addEventListener('click', () => {
+      stopAutoPlay();
+      updateCarousel(currentSlide - 1);
+      if (hasAutoPlay && isPlaying) {
+        setTimeout(() => {
+          startAutoPlay();
+          isPlaying = true;
+          updatePlayPauseButton();
+        }, 3000);
+      }
+    });
+  }
+
+  if (nextButton) {
+    nextButton.addEventListener('click', () => {
+      stopAutoPlay();
+      updateCarousel(currentSlide + 1);
+      if (hasAutoPlay && isPlaying) {
+        setTimeout(() => {
+          startAutoPlay();
+          isPlaying = true;
+          updatePlayPauseButton();
+        }, 3000);
+      }
+    });
+  }
+  
+  // Play/Pause button event listener
+  if (playPauseButton) {
+    playPauseButton.addEventListener('click', () => {
+      if (isPlaying) {
+        stopAutoPlay();
+      } else {
+        isPlaying = true;
+        updatePlayPauseButton();
+        startAutoPlay();
+      }
+    });
+  }
+
+  if (dotsContainer) {
+    dotsContainer.addEventListener('click', (e) => {
+      if (e.target.classList.contains('carousel-dot')) {
+        stopAutoPlay();
+        const slideIndex = parseInt(e.target.dataset.slideIndex, 10);
+        updateCarousel(slideIndex);
+        if (hasAutoPlay && isPlaying) {
+          setTimeout(() => {
+            startAutoPlay();
+            isPlaying = true;
+            updatePlayPauseButton();
+          }, 3000);
+        }
+      }
+    });
+  }
+
+  // Touch events
+  track.addEventListener('touchstart', handleTouchStart, { passive: true });
+  track.addEventListener('touchend', handleTouchEnd, { passive: true });
+
+  // Keyboard navigation
+  block.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowLeft' && currentSlide > 0) {
+      e.preventDefault();
+      stopAutoPlay();
+      updateCarousel(currentSlide - 1);
+      if (hasAutoPlay && isPlaying) {
+        setTimeout(() => {
+          startAutoPlay();
+          isPlaying = true;
+          updatePlayPauseButton();
+        }, 3000);
+      }
+    } else if (e.key === 'ArrowRight' && currentSlide < slideCount - 1) {
+      e.preventDefault();
+      stopAutoPlay();
+      updateCarousel(currentSlide + 1);
+      if (hasAutoPlay && isPlaying) {
+        setTimeout(() => {
+          startAutoPlay();
+          isPlaying = true;
+          updatePlayPauseButton();
+        }, 3000);
+      }
+    }
+  });
+
+  // Initialize
+  updateCarousel(0, false);
+  updatePlayPauseButton();
+  
+  // Start autoplay immediately if enabled and multiple slides
+  if (hasAutoPlay && slideCount > 1) {
+    isPlaying = true;
+    startAutoPlay();
+    updatePlayPauseButton();
+  }
+
+  // Handle window resize
+  const handleResize = () => {
+    track.style.transition = 'none';
+    updateCarousel(currentSlide, false);
+    setTimeout(() => {
+      track.style.transition = '';
+    }, 50);
+  };
+
+  window.addEventListener('resize', handleResize);
+
+  // Intersection Observer for performance
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        if (hasAutoPlay && slideCount > 1 && !isPlaying) {
+          isPlaying = true;
+          startAutoPlay();
+          updatePlayPauseButton();
+        }
+      } else {
+        if (isPlaying) {
+          stopAutoPlay();
+        }
+      }
+    });
+  }, { threshold: 0.5 });
+
+  observer.observe(block);
+} 
