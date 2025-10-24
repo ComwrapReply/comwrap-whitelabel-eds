@@ -149,6 +149,11 @@
     "id": "accordionitem",
     "fields": [
       {
+        "component": "tab",
+        "label": "Content",
+        "name": "content"
+      },
+      {
         "component": "text",
         "name": "accordion-item-title",
         "label": "Accordion Item Title",
@@ -198,6 +203,11 @@
           }
         ],
         "value": "primary"
+      },
+      {
+        "component": "tab",
+        "label": "Layout",
+        "name": "layout"
       },
       {
         "component": "select",
