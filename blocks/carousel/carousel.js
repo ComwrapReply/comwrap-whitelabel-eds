@@ -5,11 +5,31 @@ const CAROUSEL_CONFIG = {
   SLIDE_TRANSITION_DURATION: 500, // Smooth shifting animation
   AUTO_PLAY_INTERVAL: 6000, // 6 seconds when play button is pressed
   TOUCH_THRESHOLD: 50,
+  RESIZE_DEBOUNCE_DELAY: 150, // Debounce resize events
+  INTERACTION_RESTART_DELAY: 3000, // Restart autoplay after user interaction
   BREAKPOINTS: {
     MOBILE: 600,
     DESKTOP: 900,
   },
 };
+
+/**
+ * Debounce function to limit function execution rate
+ * @param {Function} func - Function to debounce
+ * @param {number} wait - Wait time in milliseconds
+ * @returns {Function} Debounced function
+ */
+function debounce(func, wait) {
+  let timeout;
+  return function executedFunction(...args) {
+    const later = () => {
+      clearTimeout(timeout);
+      func(...args);
+    };
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
+}
 
 /**
  * Initialize carousel functionality
@@ -23,6 +43,7 @@ function initializeCarousel(block, track, slideCount, options) {
   let autoPlayTimer;
   let touchStartX = 0;
   let touchEndX = 0;
+  let interactionTimeout;
 
   const {
     prevButton,
@@ -32,30 +53,56 @@ function initializeCarousel(block, track, slideCount, options) {
   } = options;
   let isPlaying = true; // Default: autoplay enabled
 
+  // Cache DOM queries for better performance
+  const slides = track.querySelectorAll('.carousel-slide');
+  const dots = dotsContainer ? dotsContainer.querySelectorAll('.carousel-dot') : [];
+
   // Update carousel position with smooth animation
   function updateCarousel(slideIndex, animate = true) {
     currentSlide = slideIndex;
     const translateX = -currentSlide * 100;
 
+    // Use will-change CSS property for better performance
+    track.style.willChange = 'transform';
+
     // Add smooth shifting animation
-    if (animate) {
-      track.style.transition = `transform ${CAROUSEL_CONFIG.SLIDE_TRANSITION_DURATION}ms ease-in-out`;
-    } else {
-      track.style.transition = 'none';
-    }
+    track.style.transition = animate
+      ? `transform ${CAROUSEL_CONFIG.SLIDE_TRANSITION_DURATION}ms ease-in-out`
+      : 'none';
 
-    track.style.transform = `translateX(${translateX}%)`;
+    // Use requestAnimationFrame for smoother animation
+    requestAnimationFrame(() => {
+      track.style.transform = `translateX(${translateX}%)`;
 
-    // Update active states
-    track.querySelectorAll('.carousel-slide').forEach((slide, index) => {
-      slide.classList.toggle('active', index === currentSlide);
-    });
-
-    if (dotsContainer) {
-      dotsContainer.querySelectorAll('.carousel-dot').forEach((dot, index) => {
-        dot.classList.toggle('active', index === currentSlide);
+      // Update active states using cached DOM elements
+      slides.forEach((slide, index) => {
+        if (index === currentSlide) {
+          slide.classList.add('active');
+        } else {
+          slide.classList.remove('active');
+        }
       });
-    }
+
+      // Update dots using cached elements
+      if (dots.length > 0) {
+        dots.forEach((dot, index) => {
+          if (index === currentSlide) {
+            dot.classList.add('active');
+          } else {
+            dot.classList.remove('active');
+          }
+        });
+      }
+
+      // Remove will-change after animation completes
+      if (animate) {
+        setTimeout(() => {
+          track.style.willChange = 'auto';
+        }, CAROUSEL_CONFIG.SLIDE_TRANSITION_DURATION);
+      } else {
+        track.style.willChange = 'auto';
+      }
+    });
 
     // Update arrow states - no longer disable at ends for auto-loop
     if (prevButton) prevButton.disabled = false;
@@ -93,10 +140,29 @@ function initializeCarousel(block, track, slideCount, options) {
     }
   }
 
-  // Touch/swipe support
+  /**
+   * Handle user interaction - pause and schedule restart
+   */
+  function handleInteraction() {
+    stopAutoPlay(false);
+
+    // Clear any existing restart timeout
+    if (interactionTimeout) {
+      clearTimeout(interactionTimeout);
+    }
+
+    // Schedule autoplay restart if it was playing
+    if (isPlaying) {
+      interactionTimeout = setTimeout(() => {
+        startAutoPlay();
+      }, CAROUSEL_CONFIG.INTERACTION_RESTART_DELAY);
+    }
+  }
+
+  // Touch/swipe support - optimized
   function handleTouchStart(e) {
     touchStartX = e.touches[0].clientX;
-    stopAutoPlay();
+    handleInteraction();
   }
 
   function handleTouchEnd(e) {
@@ -108,52 +174,28 @@ function initializeCarousel(block, track, slideCount, options) {
         // Swipe left - next slide with auto-loop
         const nextIndex = (currentSlide + 1) % slideCount;
         updateCarousel(nextIndex);
-      } else if (swipeDistance < 0) {
+      } else {
         // Swipe right - previous slide with auto-loop
         const prevIndex = currentSlide === 0 ? slideCount - 1 : currentSlide - 1;
         updateCarousel(prevIndex);
       }
     }
-
-    if (isPlaying) {
-      setTimeout(() => {
-        startAutoPlay();
-        isPlaying = true;
-        updatePlayPauseButton();
-      }, 1000); // Restart auto-play after 1 second
-    }
   }
 
-  // Event listeners with auto-loop support
+  // Event listeners with auto-loop support - optimized
   if (prevButton) {
     prevButton.addEventListener('click', () => {
-      stopAutoPlay();
-      // Previous slide with auto-loop
+      handleInteraction();
       const prevIndex = currentSlide === 0 ? slideCount - 1 : currentSlide - 1;
       updateCarousel(prevIndex);
-      if (isPlaying) {
-        setTimeout(() => {
-          startAutoPlay();
-          isPlaying = true;
-          updatePlayPauseButton();
-        }, 3000);
-      }
     });
   }
 
   if (nextButton) {
     nextButton.addEventListener('click', () => {
-      stopAutoPlay();
-      // Next slide with auto-loop
+      handleInteraction();
       const nextIndex = (currentSlide + 1) % slideCount;
       updateCarousel(nextIndex);
-      if (isPlaying) {
-        setTimeout(() => {
-          startAutoPlay();
-          isPlaying = true;
-          updatePlayPauseButton();
-        }, 3000);
-      }
     });
   }
 
@@ -170,19 +212,13 @@ function initializeCarousel(block, track, slideCount, options) {
     });
   }
 
+  // Use event delegation for dots - more efficient
   if (dotsContainer) {
     dotsContainer.addEventListener('click', (e) => {
       if (e.target.classList.contains('carousel-dot')) {
-        stopAutoPlay();
+        handleInteraction();
         const slideIndex = parseInt(e.target.dataset.slideIndex, 10);
         updateCarousel(slideIndex);
-        if (isPlaying) {
-          setTimeout(() => {
-            startAutoPlay();
-            isPlaying = true;
-            updatePlayPauseButton();
-          }, 3000);
-        }
       }
     });
   }
@@ -191,34 +227,18 @@ function initializeCarousel(block, track, slideCount, options) {
   track.addEventListener('touchstart', handleTouchStart, { passive: true });
   track.addEventListener('touchend', handleTouchEnd, { passive: true });
 
-  // Keyboard navigation with auto-loop
+  // Keyboard navigation with auto-loop - optimized
   block.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowLeft') {
       e.preventDefault();
-      stopAutoPlay();
-      // Previous slide with auto-loop
+      handleInteraction();
       const prevIndex = currentSlide === 0 ? slideCount - 1 : currentSlide - 1;
       updateCarousel(prevIndex);
-      if (isPlaying) {
-        setTimeout(() => {
-          startAutoPlay();
-          isPlaying = true;
-          updatePlayPauseButton();
-        }, 3000);
-      }
     } else if (e.key === 'ArrowRight') {
       e.preventDefault();
-      stopAutoPlay();
-      // Next slide with auto-loop
+      handleInteraction();
       const nextIndex = (currentSlide + 1) % slideCount;
       updateCarousel(nextIndex);
-      if (isPlaying) {
-        setTimeout(() => {
-          startAutoPlay();
-          isPlaying = true;
-          updatePlayPauseButton();
-        }, 3000);
-      }
     }
   });
 
@@ -233,15 +253,15 @@ function initializeCarousel(block, track, slideCount, options) {
     updatePlayPauseButton();
   }
 
-  // Handle window resize
-  const handleResize = () => {
+  // Handle window resize with debouncing for better performance
+  const handleResize = debounce(() => {
     // Maintain current position without animation during resize
     updateCarousel(currentSlide, false);
-  };
+  }, CAROUSEL_CONFIG.RESIZE_DEBOUNCE_DELAY);
 
-  window.addEventListener('resize', handleResize);
+  window.addEventListener('resize', handleResize, { passive: true });
 
-  // Intersection Observer for performance
+  // Intersection Observer for performance - pause when not visible
   const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
@@ -254,9 +274,30 @@ function initializeCarousel(block, track, slideCount, options) {
         stopAutoPlay(false);
       }
     });
-  }, { threshold: 0.5 });
+  }, {
+    threshold: 0.5,
+    rootMargin: '50px', // Start observing slightly before element enters viewport
+  });
 
   observer.observe(block);
+
+  // Cleanup function for memory management
+  const cleanup = () => {
+    if (autoPlayTimer) {
+      clearInterval(autoPlayTimer);
+    }
+    if (interactionTimeout) {
+      clearTimeout(interactionTimeout);
+    }
+    window.removeEventListener('resize', handleResize);
+    observer.disconnect();
+  };
+
+  // Store cleanup function for potential future use
+  block.dataset.carouselCleanup = 'initialized';
+
+  // Return cleanup function for manual cleanup if needed
+  return cleanup;
 }
 
 export default function decorate(block) {
@@ -323,8 +364,9 @@ export default function decorate(block) {
     carouselTrack.append(slide);
   });
 
-  // Optimize images
-  carouselTrack.querySelectorAll('picture > img').forEach((img) => {
+  // Optimize images - batch process for better performance
+  const imagesToOptimize = carouselTrack.querySelectorAll('picture > img');
+  imagesToOptimize.forEach((img) => {
     const optimizedPic = createOptimizedPicture(
       img.src,
       img.alt,
