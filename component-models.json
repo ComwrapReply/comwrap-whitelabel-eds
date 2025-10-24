@@ -237,7 +237,7 @@
         "component": "boolean",
         "name": "autoplay",
         "label": "Enable Autoplay",
-        "value": ""
+        "value": false
       },
       {
         "component": "number",
