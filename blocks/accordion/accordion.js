@@ -12,9 +12,9 @@ export default function decorate(block) {
 
   // Process accordion items
   children.forEach((row) => {
-    if (!row.children[0].firstChild) {
-      return;
-    }
+    // if (!row.children[0].firstChild) {
+    //   return;
+    // }
     const li = document.createElement('li');
     moveInstrumentation(row, li);
     li.setAttribute('role', 'listitem');
