@@ -15,9 +15,8 @@ export default function decorate(block) {
 
   const children = [...block.children];
 
-  // Skip the first 6 divs (Universal Editor metadata) and process accordion items
-  // from div[6] onwards
-  const accordionItemDivs = children.slice(9);
+  // Ignore all non-last divs as they are placeholders for Universal Editor metadata
+  const accordionItemDivs = children.slice(children.length - 1);
 
   const ul = document.createElement('ul');
   ul.className = 'accordion';

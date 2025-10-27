@@ -197,8 +197,8 @@
 .accordion-content .accordion-text,
 .accordion-content .accordion-image,
 .accordion-content .accordion-button {
+  place-self: center;
   align-self: center;
-  justify-self: center;
   text-align: center;
 }
 
