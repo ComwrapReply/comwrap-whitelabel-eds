@@ -16,7 +16,7 @@ export default function decorate(block) {
   const children = [...block.children];
 
   // Ignore all non-last divs as they are placeholders for Universal Editor metadata
-  const accordionItemDivs = children.slice(children.length - 1);
+  const accordionItemDivs = children.slice(0, -1);
 
   const ul = document.createElement('ul');
   ul.className = 'accordion';
@@ -24,6 +24,7 @@ export default function decorate(block) {
 
   // Process accordion items
   accordionItemDivs.forEach((row) => {
+    console.log('row', row);
     const li = document.createElement('li');
     moveInstrumentation(row, li);
     li.setAttribute('role', 'listitem');
