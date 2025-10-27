@@ -6,8 +6,7 @@
   overflow: hidden;
   box-shadow: 0 0 0 100vmax #0C2863;
   clip-path: inset(0 -100vmax);
-  background-color: #0C2863; /* Brand/Fresenius Kabi Dark Blue */
-  font-family: 'Albert Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: var(--color-secondary);
 }
 
 .carousel-container {
@@ -23,10 +22,6 @@
   display: flex;
   width: 100%;
   transition: transform 300ms ease-in-out;
-
-  /* min-height: 60vh; */
-
-  /* max-height: 90vh; */
   height: auto;
 }
 
@@ -50,12 +45,6 @@
   .carousel {
     width: 100vw;
     margin-left: calc(-50vw + 50%);
-  }
-
-  .carousel-track {
-    /* min-height: 70vh; */
-
-    /* max-height: 95vh; */
   }
 
   .carousel-slide {
@@ -110,7 +99,7 @@
     font-size: 18px;
     padding: 8px 24px;
     background-color: #FFF;
-    color: #3D95F4; /* Light Blue from Figma */
+    color: var(--color-light-blue);
   }
 
   .carousel-slide-image img {
@@ -120,7 +109,7 @@
   }
 
   .carousel-controls {
-    bottom: 64px; /* Position from Figma */
+    bottom: 40px;
     gap: 12px;
   }
 
@@ -163,8 +152,6 @@
   order: 2;
   max-width: 50vw;
   min-width: 300px;
-
-  /* max-height: 60vh; */
 }
 
 .carousel-slide-image img {
@@ -184,8 +171,7 @@
 .carousel-slide-content h6 {
   margin-top: 0;
   margin-bottom: clamp(1rem, 3vw, 2rem);
-  color: #3D95F4;
-  font-family: 'Albert Sans', sans-serif;
+  color: var(--color-primary);
   font-weight: 600;
   font-size: clamp(2rem, 5vw, 4rem);
   line-height: 1.1;
@@ -194,8 +180,7 @@
 
 .carousel-slide-content p {
   margin: 0 0 clamp(1rem, 2vw, 2rem) clamp(1rem, 3vw, 3rem);
-  color: #FFF;
-  font-family: 'Albert Sans', sans-serif;
+  color: var(--color-white);
   font-weight: 400;
   font-size: clamp(1rem, 2.5vw, 1.25rem);
   line-height: 1.6;
@@ -204,12 +189,11 @@
 
 .carousel-slide-content .carousel-button {
   margin-left: clamp(1rem, 3vw, 3rem);
-  background-color: #FFF;
-  color: #0073DD;
+  background-color: var(--color-white);
+  color: var(--color-primary);
   border: none;
   border-radius: 24px;
   padding: clamp(0.5rem, 1vw, 0.75rem) clamp(1rem, 2vw, 1.5rem);
-  font-family: 'Albert Sans', sans-serif;
   font-weight: 600;
   font-size: clamp(0.875rem, 2vw, 1.25rem);
   line-height: 1.4;
@@ -224,8 +208,8 @@
 }
 
 .carousel-slide-content .carousel-button:hover {
-  background-color: #0C2863; /* Interaction/Primary Hover Light */
-  color: #FFF;
+  background-color: var(--color-secondary);
+  color: var(--color-white);
 }
 
 /* Navigation Arrows - Hidden by default, will be shown via variations */
@@ -236,7 +220,7 @@
 /* Carousel Controls Container */
 .carousel-controls {
   position: absolute;
-  bottom: 35px; /* Distance from bottom in Figma */
+  bottom: 35px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
@@ -249,7 +233,7 @@
 .carousel-play-pause {
   width: 48px;
   height: 48px;
-  background-color: #CED4E0; /* Interaction/Primary Press Light */
+  background-color: var(--color-primary-grey);
   border: none;
   border-radius: 24px;
   cursor: pointer;
@@ -267,7 +251,7 @@
 .carousel-play-icon,
 .carousel-pause-icon {
   font-size: 16px;
-  color: #0C2863;
+  color: var(--color-secondary);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -279,7 +263,7 @@
   align-items: center;
   gap: 12px;
   padding: 12px 16px;
-  background-color: #CED4E0; /* Interaction/Primary Press Light */
+  background-color: var(--color-primary-grey);
   border-radius: 24px;
   height: 48px;
   min-height: 48px;
@@ -289,7 +273,7 @@
 .carousel-progress-bar {
   width: 40px;
   height: 8px;
-  background-color: rgb(12 40 99 / 50%);
+  background-color: var(--color-secondary);
   border-radius: 25px;
   position: relative;
   overflow: hidden;
@@ -300,7 +284,7 @@
   left: 0;
   top: 0;
   height: 100%;
-  background-color: #0C2863; /* Brand/Fresenius Kabi Dark Blue */
+  background-color: var(--color-secondary);
   border-radius: 25px;
   transition: width 0.3s ease;
   width: 0%;
@@ -313,7 +297,7 @@
   padding: 0;
   border-radius: 50%;
   opacity: 0.5;
-  background-color: #0C2863; /* Brand/Fresenius Kabi Dark Blue */
+  background-color: var(--color-secondary);
   cursor: pointer;
   transition: all 0.2s ease;
   border: none;
@@ -326,7 +310,7 @@
 
 .carousel-dot.active {
   opacity: 1;
-  background-color: #0C2863;
+  background-color: var(--color-secondary);
   transform: scale(1.1);
 }
 
@@ -344,7 +328,6 @@
 
 /* Full height variation */
 .carousel.full-height .carousel-track {
-  /* min-height: 70vh; */
   max-height: 95vh;
 }
 
@@ -355,7 +338,7 @@
   left: 0;
   right: 0;
   background: linear-gradient(transparent, rgb(0 0 0 / 70%));
-  color: white;
+  color: var(--color-white);
   padding: 24px 16px;
 }
 
@@ -365,11 +348,11 @@
 .carousel.overlay .carousel-slide-content h4,
 .carousel.overlay .carousel-slide-content h5,
 .carousel.overlay .carousel-slide-content h6 {
-  color: white;
+  color: var(--color-white);
 }
 
 .carousel.overlay .carousel-slide-content p {
-  color: rgb(255 255 255 / 90%);
+  color: var(--color-white);
 }
 
 /* Compact variation */
@@ -390,7 +373,6 @@
 /* Tablet Styles */
 @media (width >= 600px) {
   .carousel-track {
-    /* min-height: 60vh; */
     max-height: 85vh;
   }
 
@@ -432,15 +414,22 @@
   .carousel-slide-content p {
     font-size: clamp(1rem, 2.2vw, 1.125rem);
     line-height: 1.55;
-    margin: 0 0 clamp(1.25rem, 2.5vw, 1.75rem) clamp(1.5rem, 3vw, 2.5rem);
+    margin: 0 0 clamp(1.25rem, 2.5vw, 1.75rem);
     text-align: left;
   }
 
-  .carousel-slide-content .carousel-button {
-    margin-left: 40px; /* Adjusted margin */
-    font-size: 18px;
-    min-width: 200px;
-    height: 44px;
+  .carousel-slide-content .button-container a {
+    border: 2px solid var(--color-white);
+    border-radius: var(--button-radius);
+    color: var(--color-white);
+    font-size: var(--button-font-size);
+    min-width: var(--button-min-width);
+    height: var(--button-height);
+  }
+
+  .carousel-slide-content .button-container a:hover {
+    background-color: var(--color-white);
+    color: var(--color-primary-blue);
   }
 
   .carousel-slide-image img {
@@ -452,7 +441,6 @@
 /* Desktop Styles */
 @media (width >= 900px) {
   .carousel-track {
-    /* min-height: 55vh; */
     max-height: 80vh;
   }
 
@@ -486,24 +474,16 @@
   .carousel-slide-content h4,
   .carousel-slide-content h5,
   .carousel-slide-content h6 {
-    font-size: 64px; /* Desktop/H2 from Figma */
-    line-height: 72px;
-    margin-bottom: 48px; /* Gap from Figma */
+    font-size: clamp(2.5rem, 5vw, 3.5rem);
+    line-height: 1.15;
+    margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
   }
 
   .carousel-slide-content p {
-    font-size: 20px; /* Desktop/Body from Figma */
-    line-height: 32px;
-    margin: 0 0 32px 48px; /* Left margin from Figma */
+    font-size: clamp(1rem, 2.2vw, 1.125rem);
+    line-height: 1.55;
+    margin: 0 0 clamp(1.25rem, 2.5vw, 1.75rem);
     text-align: left;
-    max-width: 600px; /* Max width for text */
-  }
-
-  .carousel-slide-content .carousel-button {
-    margin-left: 48px; /* Left margin from Figma */
-    font-size: 20px; /* Desktop/H6 from Figma */
-    min-width: 220px;
-    height: 48px;
   }
 
   .carousel-slide-image img {
@@ -512,14 +492,13 @@
   }
 
   .carousel-controls {
-    bottom: 35px; /* Position from Figma */
+    bottom: 35px;
   }
 }
 
 /* Large Desktop Styles */
 @media (width >= 1200px) {
   .carousel-track {
-    /* min-height: 50vh; */
     max-height: 75vh;
   }
 
@@ -528,12 +507,10 @@
   }
 
   .carousel.full-height .carousel-track {
-    /* min-height: 70vh; */
     max-height: 90vh;
   }
 
   .carousel.compact .carousel-track {
-    /* min-height: 40vh; */ 
     max-height: 60vh;
   }
 }
@@ -553,13 +530,13 @@
 /* Focus styles for accessibility */
 .carousel-arrow:focus,
 .carousel-dot:focus {
-  outline: 2px solid var(--focus-color, #005ce6);
+  outline: 2px solid var(--color-primary);
   outline-offset: 2px;
 }
 
 /* Loading state */
 .carousel[data-carousel-loading="true"] .carousel-slide {
-  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background: linear-gradient(90deg, var(--color-light-grey) 25%, var(--color-cloud-grey) 50%, var(--color-light-grey) 75%);
   background-size: 200% 100%;
   animation: loading 1.5s infinite;
 }

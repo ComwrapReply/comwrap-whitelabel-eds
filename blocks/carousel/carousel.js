@@ -140,6 +140,17 @@ function initializeCarousel(block, track, slideCount, options) {
     }
   }
 
+  // Listen for editor mode events
+  block.addEventListener('carousel-pause', () => {
+    stopAutoPlay(true);
+  });
+
+  block.addEventListener('carousel-resume', () => {
+    if (isPlaying && slideCount > 1) {
+      startAutoPlay();
+    }
+  });
+
   /**
    * Handle user interaction - pause and schedule restart
    */
@@ -300,6 +311,63 @@ function initializeCarousel(block, track, slideCount, options) {
   return cleanup;
 }
 
+/**
+ * Check if carousel is in editor mode and disable autoplay
+ * @param {HTMLElement} block - The carousel block element
+ */
+function checkEditorMode(block) {
+  // Check if we're inside the editor-app container
+  const isEditorMode = document.getElementById('editor-app') !== null;
+
+  if (isEditorMode) {
+    // Find the play/pause button in this specific carousel instance
+    const playPauseButton = block.querySelector('.carousel-play-pause');
+
+    if (playPauseButton) {
+      // Disable the play/pause button visually
+      playPauseButton.style.opacity = '0.5';
+      playPauseButton.style.cursor = 'not-allowed';
+      playPauseButton.setAttribute('aria-disabled', 'true');
+      playPauseButton.setAttribute('title', 'Autoplay disabled in editor mode');
+
+      // Pause any autoplay by dispatching custom event
+      const pauseEvent = new CustomEvent('carousel-pause');
+      block.dispatchEvent(pauseEvent);
+    }
+
+    // Observe for editor mode changes
+    const observer = new MutationObserver(() => {
+      // Re-check if still in editor mode
+      const stillInEditor = document.getElementById('editor-app') !== null;
+
+      if (!stillInEditor) {
+        // Restore button functionality when exiting editor mode
+        if (playPauseButton) {
+          playPauseButton.style.opacity = '';
+          playPauseButton.style.cursor = '';
+          playPauseButton.removeAttribute('aria-disabled');
+          playPauseButton.removeAttribute('title');
+
+          // Dispatch custom event to resume autoplay
+          const resumeEvent = new CustomEvent('carousel-resume');
+          block.dispatchEvent(resumeEvent);
+        }
+
+        observer.disconnect();
+      }
+    });
+
+    // Observe the document body for editor-app changes
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true,
+    });
+
+    // Store cleanup for potential future use
+    block.dataset.editorCheckCleanup = 'initialized';
+  }
+}
+
 export default function decorate(block) {
   const slides = [...block.children];
 
@@ -446,4 +514,7 @@ export default function decorate(block) {
     dotsContainer,
     playPauseButton,
   });
+
+  // Disable autoplay in editor mode
+  checkEditorMode(block);
 }
