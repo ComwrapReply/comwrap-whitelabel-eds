@@ -302,7 +302,7 @@ function initializeCarousel(block, track, slideCount, options) {
   observer.observe(block);
 
   // Observe editor mode changes and pause/resume accordingly
-  const editorModeObserver = observeEditorMode((inEditor) => {
+  const editorModeObserverCleanup = observeEditorMode((inEditor) => {
     if (inEditor) {
       // Entered editor mode - pause autoplay
       if (isPlaying && autoPlayTimer) {
@@ -326,7 +326,7 @@ function initializeCarousel(block, track, slideCount, options) {
     }
     window.removeEventListener('resize', handleResize);
     observer.disconnect();
-    editorModeObserver.disconnect();
+    editorModeObserverCleanup();
   };
 
   // Store cleanup function for potential future use
