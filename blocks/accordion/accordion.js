@@ -4,26 +4,19 @@ import { moveInstrumentation } from '../../scripts/scripts.js';
 const generateUniqueId = () => `accordion-${Math.random().toString(36).substr(2, 9)}`;
 
 export default function decorate(block) {
-  // Universal Editor creates this structure:
-  // div[0] = Name (required field)
-  // div[1] = Mark as Unbound Form Element
-  // div[2] = Show Component
-  // div[3] = Enable Component
-  // div[4] = Read-only
-  // div[5] = Column Span
-  // div[6+] = Accordion items
-
   const children = [...block.children];
 
   // Ignore all non-last divs as they are placeholders for Universal Editor metadata
-  const accordionItemDivs = children.slice(0, -1);
+  const accordionItemDivs = children.slice(1);
+
+  console.log('accordionItemDivs', accordionItemDivs[0]);
 
   const ul = document.createElement('ul');
   ul.className = 'accordion';
   ul.setAttribute('role', 'list');
 
   // Process accordion items
-  accordionItemDivs.forEach((row) => {
+  children.forEach((row) => {
     console.log('row', row);
     const li = document.createElement('li');
     moveInstrumentation(row, li);
@@ -71,6 +64,7 @@ export default function decorate(block) {
     contentDiv.className = 'accordion-content';
 
     const answerDiv = row.querySelector(':scope > div:nth-child(2)');
+
     if (answerDiv) {
       contentDiv.innerHTML = answerDiv.innerHTML;
     }
@@ -122,9 +116,16 @@ export default function decorate(block) {
     ul.appendChild(li);
 
     const layout = row.querySelector(':scope > div:nth-child(7)');
-    if (layout && layout.firstChild.innerHTML !== 'default') {
+    console.log('layout', layout);
+    if (layout.firstChild) {
       contentDiv.classList.add(layout.firstChild.innerHTML);
     }
+
+    [...row.children].forEach((child) => {
+      if (!child.firstChild) {
+        child.remove();
+      }
+    });
   });
 
   block.textContent = '';
