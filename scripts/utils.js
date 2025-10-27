@@ -68,7 +68,7 @@ export const moveClassToTargetedChild = (block, target, removeBlockClass = false
  * Editor mode is detected by the presence of the 'editor-app' element
  * @returns {boolean} True if in editor mode, false otherwise
  */
-export const isEditorMode = () => document.getElementById('editor-app') !== null;
+export const isEditorMode = () => document.getElementById('appContainer') !== null;
 
 /**
  * Observe changes to editor mode state
