@@ -146,7 +146,9 @@ function initializeCarousel(block, track, slideCount, options) {
   });
 
   block.addEventListener('carousel-resume', () => {
-    if (isPlaying && slideCount > 1) {
+    // Only resume if not in editor mode
+    const isCurrentlyInEditor = document.getElementById('editor-app') !== null;
+    if (isPlaying && slideCount > 1 && !isCurrentlyInEditor) {
       startAutoPlay();
     }
   });
@@ -162,8 +164,11 @@ function initializeCarousel(block, track, slideCount, options) {
       clearTimeout(interactionTimeout);
     }
 
-    // Schedule autoplay restart if it was playing
-    if (isPlaying) {
+    // Check if we're in editor mode
+    const isCurrentlyInEditor = document.getElementById('editor-app') !== null;
+
+    // Schedule autoplay restart if it was playing and not in editor mode
+    if (isPlaying && !isCurrentlyInEditor) {
       interactionTimeout = setTimeout(() => {
         startAutoPlay();
       }, CAROUSEL_CONFIG.INTERACTION_RESTART_DELAY);
@@ -257,10 +262,17 @@ function initializeCarousel(block, track, slideCount, options) {
   updateCarousel(0, false); // No animation on initial load
   updatePlayPauseButton();
 
-  // Start autoplay by default if multiple slides
-  if (slideCount > 1) {
+  // Check if we're in editor mode - if so, don't start autoplay
+  const isEditorMode = document.getElementById('editor-app') !== null;
+
+  // Start autoplay by default if multiple slides AND not in editor mode
+  if (slideCount > 1 && !isEditorMode) {
     isPlaying = true;
     startAutoPlay();
+    updatePlayPauseButton();
+  } else if (isEditorMode) {
+    // In editor mode, explicitly disable autoplay
+    isPlaying = false;
     updatePlayPauseButton();
   }
 
@@ -275,9 +287,12 @@ function initializeCarousel(block, track, slideCount, options) {
   // Intersection Observer for performance - pause when not visible
   const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
+      // Check if we're in editor mode
+      const isCurrentlyInEditor = document.getElementById('editor-app') !== null;
+
       if (entry.isIntersecting) {
-        // Resume autoplay when carousel becomes visible (if it was playing)
-        if (isPlaying && !autoPlayTimer && slideCount > 1) {
+        // Resume autoplay when carousel becomes visible (if it was playing and not in editor mode)
+        if (isPlaying && !autoPlayTimer && slideCount > 1 && !isCurrentlyInEditor) {
           startAutoPlay();
         }
       } else if (isPlaying) {
@@ -370,7 +385,7 @@ function checkEditorMode(block) {
 
 export default function decorate(block) {
   const slides = [...block.children];
-
+  
   if (slides.length === 0) return;
 
   // Check for variations
@@ -380,22 +395,22 @@ export default function decorate(block) {
   // Create carousel container structure
   const carouselContainer = document.createElement('div');
   carouselContainer.className = 'carousel-container';
-
+  
   const carouselTrack = document.createElement('div');
   carouselTrack.className = 'carousel-track';
-
+  
   // Process slides
   slides.forEach((row, index) => {
     const slide = document.createElement('div');
     slide.className = 'carousel-slide';
     slide.dataset.slideIndex = index;
-
+    
     moveInstrumentation(row, slide);
-
+    
     // Create content container
     const contentContainer = document.createElement('div');
     contentContainer.className = 'carousel-slide-content';
-
+    
     // Process each element in the row
     const elements = [...row.children];
     elements.forEach((element) => {
