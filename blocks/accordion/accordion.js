@@ -13,7 +13,6 @@ export default function decorate(block) {
   // Process accordion items
   children.forEach((row) => {
     if (!row.children[0].firstChild) {
-      row.remove();
       return;
     }
     const li = document.createElement('li');
