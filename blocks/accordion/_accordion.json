@@ -68,8 +68,8 @@
         },
         {
           "component": "tab",
-          "label": "Button",
-          "name": "button"
+          "label": "CTA",
+          "name": "accordion-cta"
         },
         {
           "component": "aem-content",
