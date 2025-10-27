@@ -1,5 +1,6 @@
 import { createOptimizedPicture } from '../../scripts/aem.js';
 import { moveInstrumentation } from '../../scripts/scripts.js';
+import { isEditorMode as checkEditorMode } from '../../scripts/utils.js';
 
 const CAROUSEL_CONFIG = {
   SLIDE_TRANSITION_DURATION: 500, // Smooth shifting animation
@@ -147,8 +148,7 @@ function initializeCarousel(block, track, slideCount, options) {
 
   block.addEventListener('carousel-resume', () => {
     // Only resume if not in editor mode
-    const isCurrentlyInEditor = document.getElementById('editor-app') !== null;
-    if (isPlaying && slideCount > 1 && !isCurrentlyInEditor) {
+    if (isPlaying && slideCount > 1 && !checkEditorMode()) {
       startAutoPlay();
     }
   });
@@ -164,11 +164,8 @@ function initializeCarousel(block, track, slideCount, options) {
       clearTimeout(interactionTimeout);
     }
 
-    // Check if we're in editor mode
-    const isCurrentlyInEditor = document.getElementById('editor-app') !== null;
-
     // Schedule autoplay restart if it was playing and not in editor mode
-    if (isPlaying && !isCurrentlyInEditor) {
+    if (isPlaying && !checkEditorMode()) {
       interactionTimeout = setTimeout(() => {
         startAutoPlay();
       }, CAROUSEL_CONFIG.INTERACTION_RESTART_DELAY);
@@ -263,14 +260,14 @@ function initializeCarousel(block, track, slideCount, options) {
   updatePlayPauseButton();
 
   // Check if we're in editor mode - if so, don't start autoplay
-  const isEditorMode = document.getElementById('editor-app') !== null;
+  const inEditorMode = checkEditorMode();
 
   // Start autoplay by default if multiple slides AND not in editor mode
-  if (slideCount > 1 && !isEditorMode) {
+  if (slideCount > 1 && !inEditorMode) {
     isPlaying = true;
     startAutoPlay();
     updatePlayPauseButton();
-  } else if (isEditorMode) {
+  } else if (inEditorMode) {
     // In editor mode, explicitly disable autoplay
     isPlaying = false;
     updatePlayPauseButton();
@@ -287,12 +284,9 @@ function initializeCarousel(block, track, slideCount, options) {
   // Intersection Observer for performance - pause when not visible
   const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
-      // Check if we're in editor mode
-      const isCurrentlyInEditor = document.getElementById('editor-app') !== null;
-
       if (entry.isIntersecting) {
         // Resume autoplay when carousel becomes visible (if it was playing and not in editor mode)
-        if (isPlaying && !autoPlayTimer && slideCount > 1 && !isCurrentlyInEditor) {
+        if (isPlaying && !autoPlayTimer && slideCount > 1 && !checkEditorMode()) {
           startAutoPlay();
         }
       } else if (isPlaying) {
@@ -326,66 +320,9 @@ function initializeCarousel(block, track, slideCount, options) {
   return cleanup;
 }
 
-/**
- * Check if carousel is in editor mode and disable autoplay
- * @param {HTMLElement} block - The carousel block element
- */
-function checkEditorMode(block) {
-  // Check if we're inside the editor-app container
-  const isEditorMode = document.getElementById('editor-app') !== null;
-
-  if (isEditorMode) {
-    // Find the play/pause button in this specific carousel instance
-    const playPauseButton = block.querySelector('.carousel-play-pause');
-
-    if (playPauseButton) {
-      // Disable the play/pause button visually
-      playPauseButton.style.opacity = '0.5';
-      playPauseButton.style.cursor = 'not-allowed';
-      playPauseButton.setAttribute('aria-disabled', 'true');
-      playPauseButton.setAttribute('title', 'Autoplay disabled in editor mode');
-
-      // Pause any autoplay by dispatching custom event
-      const pauseEvent = new CustomEvent('carousel-pause');
-      block.dispatchEvent(pauseEvent);
-    }
-
-    // Observe for editor mode changes
-    const observer = new MutationObserver(() => {
-      // Re-check if still in editor mode
-      const stillInEditor = document.getElementById('editor-app') !== null;
-
-      if (!stillInEditor) {
-        // Restore button functionality when exiting editor mode
-        if (playPauseButton) {
-          playPauseButton.style.opacity = '';
-          playPauseButton.style.cursor = '';
-          playPauseButton.removeAttribute('aria-disabled');
-          playPauseButton.removeAttribute('title');
-
-          // Dispatch custom event to resume autoplay
-          const resumeEvent = new CustomEvent('carousel-resume');
-          block.dispatchEvent(resumeEvent);
-        }
-
-        observer.disconnect();
-      }
-    });
-
-    // Observe the document body for editor-app changes
-    observer.observe(document.body, {
-      childList: true,
-      subtree: true,
-    });
-
-    // Store cleanup for potential future use
-    block.dataset.editorCheckCleanup = 'initialized';
-  }
-}
-
 export default function decorate(block) {
   const slides = [...block.children];
-  
+
   if (slides.length === 0) return;
 
   // Check for variations
@@ -395,22 +332,22 @@ export default function decorate(block) {
   // Create carousel container structure
   const carouselContainer = document.createElement('div');
   carouselContainer.className = 'carousel-container';
-  
+
   const carouselTrack = document.createElement('div');
   carouselTrack.className = 'carousel-track';
-  
+
   // Process slides
   slides.forEach((row, index) => {
     const slide = document.createElement('div');
     slide.className = 'carousel-slide';
     slide.dataset.slideIndex = index;
-    
+
     moveInstrumentation(row, slide);
-    
+
     // Create content container
     const contentContainer = document.createElement('div');
     contentContainer.className = 'carousel-slide-content';
-    
+
     // Process each element in the row
     const elements = [...row.children];
     elements.forEach((element) => {
@@ -522,14 +459,11 @@ export default function decorate(block) {
   block.textContent = '';
   block.append(carouselContainer);
 
-  // Initialize carousel functionality
+  // Initialize carousel functionality (editor mode is checked inside)
   initializeCarousel(block, carouselTrack, slides.length, {
     prevButton,
     nextButton,
     dotsContainer,
     playPauseButton,
   });
-
-  // Disable autoplay in editor mode
-  checkEditorMode(block);
 }

@@ -62,3 +62,35 @@ export const moveClassToTargetedChild = (block, target, removeBlockClass = false
     });
   }
 };
+
+/**
+ * Check if the page is currently in editor mode
+ * Editor mode is detected by the presence of the 'editor-app' element
+ * @returns {boolean} True if in editor mode, false otherwise
+ */
+export const isEditorMode = () => document.getElementById('editor-app') !== null;
+
+/**
+ * Observe changes to editor mode state
+ * @param {Function} callback - Function to call when editor mode changes
+ * @param {boolean} initialCall - Whether to call callback immediately (default: true)
+ * @returns {MutationObserver} The observer instance for manual disconnect
+ */
+export const observeEditorMode = (callback, initialCall = true) => {
+  // Initial check
+  if (initialCall) {
+    callback(isEditorMode());
+  }
+
+  // Observe document body for editor-app changes
+  const observer = new MutationObserver(() => {
+    callback(isEditorMode());
+  });
+
+  observer.observe(document.body, {
+    childList: true,
+    subtree: true,
+  });
+
+  return observer;
+};
