@@ -16,7 +16,7 @@ export default function decorate(block) {
   ul.setAttribute('role', 'list');
 
   // Process accordion items
-  accordionItemDivs.forEach((row) => {
+  children.forEach((row) => {
     console.log('row', row);
     const li = document.createElement('li');
     moveInstrumentation(row, li);
