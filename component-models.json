@@ -142,7 +142,8 @@
     ]
   },
   {
-    "id": "accordion"
+    "id": "accordion-container",
+    "fields": []
   },
   {
     "id": "accordionitem",

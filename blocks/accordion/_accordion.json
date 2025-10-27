@@ -10,7 +10,7 @@
             "template": {
               "name": "Accordion",
               "filter": "accordion",
-              "model": "accordion"
+              "model": "accordion-container"
             }
           }
         }
@@ -34,7 +34,8 @@
   ],
   "models": [
     {
-      "id": "accordion"
+      "id": "accordion-container",
+      "fields": []
     },
     {
       "id": "accordionitem",
