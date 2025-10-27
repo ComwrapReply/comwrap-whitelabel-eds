@@ -124,8 +124,7 @@
         {
           "component": "boolean",
           "name": "accordion-item-open",
-          "label": "Initially Open",
-          "value": true
+          "label": "Initially Open"
         }
       ]
     }
