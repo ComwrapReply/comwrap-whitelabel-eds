@@ -6,18 +6,12 @@ const generateUniqueId = () => `accordion-${Math.random().toString(36).substr(2,
 export default function decorate(block) {
   const children = [...block.children];
 
-  // Ignore all non-last divs as they are placeholders for Universal Editor metadata
-  const accordionItemDivs = children.slice(1);
-
-  console.log('accordionItemDivs', accordionItemDivs[0]);
-
   const ul = document.createElement('ul');
   ul.className = 'accordion';
   ul.setAttribute('role', 'list');
 
   // Process accordion items
   children.forEach((row) => {
-    console.log('row', row);
     const li = document.createElement('li');
     moveInstrumentation(row, li);
     li.setAttribute('role', 'listitem');
@@ -65,10 +59,10 @@ export default function decorate(block) {
 
     const answerDiv = row.querySelector(':scope > div:nth-child(2)');
 
-    if (answerDiv) {
+    if (answerDiv && answerDiv.firstChild) {
       contentDiv.innerHTML = answerDiv.innerHTML;
+      contentDiv.firstChild.classList.add('accordion-text');
     }
-    contentDiv.firstChild.classList.add('accordion-text');
 
     // Get image from third div if it exists
     const imageDiv = row.querySelector(':scope > div:nth-child(3) picture');
@@ -116,8 +110,7 @@ export default function decorate(block) {
     ul.appendChild(li);
 
     const layout = row.querySelector(':scope > div:nth-child(7)');
-    console.log('layout', layout);
-    if (layout.firstChild) {
+    if (layout && layout.firstChild) {
       contentDiv.classList.add(layout.firstChild.innerHTML);
     }
 
