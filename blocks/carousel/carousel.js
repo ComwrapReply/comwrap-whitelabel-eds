@@ -1,6 +1,6 @@
 import { createOptimizedPicture } from '../../scripts/aem.js';
 import { moveInstrumentation } from '../../scripts/scripts.js';
-import { isEditorMode as checkEditorMode } from '../../scripts/utils.js';
+import { isEditorMode as checkEditorMode, observeEditorMode } from '../../scripts/utils.js';
 
 const CAROUSEL_CONFIG = {
   SLIDE_TRANSITION_DURATION: 500, // Smooth shifting animation
@@ -301,6 +301,21 @@ function initializeCarousel(block, track, slideCount, options) {
 
   observer.observe(block);
 
+  // Observe editor mode changes and pause/resume accordingly
+  const editorModeObserver = observeEditorMode((inEditor) => {
+    if (inEditor) {
+      // Entered editor mode - pause autoplay
+      if (isPlaying && autoPlayTimer) {
+        stopAutoPlay(false); // Don't update button state
+      }
+      return;
+    }
+    // Exited editor mode - resume autoplay if it was playing
+    if (isPlaying && !autoPlayTimer && slideCount > 1) {
+      startAutoPlay();
+    }
+  }, false); // Don't call on initial load, we already handle that below
+
   // Cleanup function for memory management
   const cleanup = () => {
     if (autoPlayTimer) {
@@ -311,6 +326,7 @@ function initializeCarousel(block, track, slideCount, options) {
     }
     window.removeEventListener('resize', handleResize);
     observer.disconnect();
+    editorModeObserver.disconnect();
   };
 
   // Store cleanup function for potential future use
