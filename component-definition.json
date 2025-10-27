@@ -92,7 +92,7 @@
                 "template": {
                   "name": "Accordion",
                   "filter": "accordion",
-                  "model": "accordion-container"
+                  "model": "accordion"
                 }
               }
             }
