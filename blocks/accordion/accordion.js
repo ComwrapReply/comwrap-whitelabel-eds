@@ -27,22 +27,20 @@ export default function decorate(block) {
     const uniqueId = generateUniqueId();
     button.setAttribute('aria-controls', uniqueId);
     button.id = `trigger-${uniqueId}`;
-
-    const titleSpan = document.createElement('span');
-    titleSpan.className = 'accordion-title';
-    const iconSpan = document.createElement('span');
-    iconSpan.className = 'accordion-icon';
-    iconSpan.setAttribute('aria-hidden', 'true');
-
     const questionDiv = row.querySelector(':scope > div:first-child');
-    if (questionDiv) {
-      titleSpan.textContent = questionDiv.textContent.trim();
-    }
 
-    button.appendChild(titleSpan);
-    button.appendChild(iconSpan);
-    heading.appendChild(button);
-    li.appendChild(heading);
+    if (questionDiv && questionDiv.firstChild) {
+      const titleSpan = document.createElement('span');
+      titleSpan.className = 'accordion-title';
+      const iconSpan = document.createElement('span');
+      iconSpan.className = 'accordion-icon';
+      iconSpan.setAttribute('aria-hidden', 'true');
+      titleSpan.textContent = questionDiv.textContent.trim();
+      button.appendChild(titleSpan);
+      button.appendChild(iconSpan);
+      heading.appendChild(button);
+      li.appendChild(heading);
+    }
 
     const panel = document.createElement('div');
     panel.className = 'accordion-panel';
