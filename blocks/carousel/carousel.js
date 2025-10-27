@@ -40,23 +40,36 @@ function debounce(func, wait) {
  * @param {Object} options - Configuration options
  */
 function initializeCarousel(block, track, slideCount, options) {
+  // State management
   let currentSlide = 0;
-  let autoPlayTimer;
+  let autoPlayTimer = null;
   let touchStartX = 0;
   let touchEndX = 0;
-  let interactionTimeout;
-
-  const {
-    prevButton,
-    nextButton,
-    dotsContainer,
-    playPauseButton,
-  } = options;
+  let interactionTimeout = null;
   let isPlaying = true; // Default: autoplay enabled
+
+  // Destructure options with defensive checks
+  const {
+    prevButton = null,
+    nextButton = null,
+    dotsContainer = null,
+    playPauseButton = null,
+  } = options;
 
   // Cache DOM queries for better performance
   const slides = track.querySelectorAll('.carousel-slide');
   const dots = dotsContainer ? dotsContainer.querySelectorAll('.carousel-dot') : [];
+
+  // Const selectors and patterns
+  const selectors = {
+    slide: '.carousel-slide',
+    dot: '.carousel-dot',
+  };
+
+  const patterns = {
+    nextSlide: () => (currentSlide + 1) % slideCount,
+    prevSlide: () => (currentSlide === 0 ? slideCount - 1 : currentSlide - 1),
+  };
 
   // Update carousel position with smooth animation
   function updateCarousel(slideIndex, animate = true) {
@@ -110,14 +123,19 @@ function initializeCarousel(block, track, slideCount, options) {
     if (nextButton) nextButton.disabled = false;
   }
 
+  /**
+   * Check if currently in editor mode (cached for performance)
+   * @returns {boolean} True if in editor mode
+   */
+  const inEditorMode = () => checkEditorMode();
+
   // Auto-play functionality with auto-loop
   function startAutoPlay() {
-    if (slideCount <= 1) return;
+    if (slideCount <= 1 || inEditorMode()) return;
 
     autoPlayTimer = setInterval(() => {
       // Auto-loop: go to next slide, or back to first if at the end
-      const nextIndex = (currentSlide + 1) % slideCount;
-      updateCarousel(nextIndex);
+      updateCarousel(patterns.nextSlide());
     }, CAROUSEL_CONFIG.AUTO_PLAY_INTERVAL);
   }
 
@@ -148,7 +166,7 @@ function initializeCarousel(block, track, slideCount, options) {
 
   block.addEventListener('carousel-resume', () => {
     // Only resume if not in editor mode
-    if (isPlaying && slideCount > 1 && !checkEditorMode()) {
+    if (isPlaying && slideCount > 1 && !inEditorMode()) {
       startAutoPlay();
     }
   });
@@ -162,10 +180,11 @@ function initializeCarousel(block, track, slideCount, options) {
     // Clear any existing restart timeout
     if (interactionTimeout) {
       clearTimeout(interactionTimeout);
+      interactionTimeout = null;
     }
 
     // Schedule autoplay restart if it was playing and not in editor mode
-    if (isPlaying && !checkEditorMode()) {
+    if (isPlaying && !inEditorMode()) {
       interactionTimeout = setTimeout(() => {
         startAutoPlay();
       }, CAROUSEL_CONFIG.INTERACTION_RESTART_DELAY);
@@ -174,23 +193,23 @@ function initializeCarousel(block, track, slideCount, options) {
 
   // Touch/swipe support - optimized
   function handleTouchStart(e) {
+    if (!e.touches || e.touches.length === 0) return;
     touchStartX = e.touches[0].clientX;
     handleInteraction();
   }
 
   function handleTouchEnd(e) {
+    if (!e.changedTouches || e.changedTouches.length === 0) return;
     touchEndX = e.changedTouches[0].clientX;
     const swipeDistance = touchStartX - touchEndX;
 
     if (Math.abs(swipeDistance) > CAROUSEL_CONFIG.TOUCH_THRESHOLD) {
       if (swipeDistance > 0) {
         // Swipe left - next slide with auto-loop
-        const nextIndex = (currentSlide + 1) % slideCount;
-        updateCarousel(nextIndex);
+        updateCarousel(patterns.nextSlide());
       } else {
         // Swipe right - previous slide with auto-loop
-        const prevIndex = currentSlide === 0 ? slideCount - 1 : currentSlide - 1;
-        updateCarousel(prevIndex);
+        updateCarousel(patterns.prevSlide());
       }
     }
   }
@@ -199,16 +218,14 @@ function initializeCarousel(block, track, slideCount, options) {
   if (prevButton) {
     prevButton.addEventListener('click', () => {
       handleInteraction();
-      const prevIndex = currentSlide === 0 ? slideCount - 1 : currentSlide - 1;
-      updateCarousel(prevIndex);
+      updateCarousel(patterns.prevSlide());
     });
   }
 
   if (nextButton) {
     nextButton.addEventListener('click', () => {
       handleInteraction();
-      const nextIndex = (currentSlide + 1) % slideCount;
-      updateCarousel(nextIndex);
+      updateCarousel(patterns.nextSlide());
     });
   }
 
@@ -228,10 +245,12 @@ function initializeCarousel(block, track, slideCount, options) {
   // Use event delegation for dots - more efficient
   if (dotsContainer) {
     dotsContainer.addEventListener('click', (e) => {
-      if (e.target.classList.contains('carousel-dot')) {
+      if (e.target && e.target.classList.contains(selectors.dot.replace('.', ''))) {
         handleInteraction();
         const slideIndex = parseInt(e.target.dataset.slideIndex, 10);
-        updateCarousel(slideIndex);
+        if (!Number.isNaN(slideIndex) && slideIndex >= 0 && slideIndex < slideCount) {
+          updateCarousel(slideIndex);
+        }
       }
     });
   }
@@ -245,13 +264,11 @@ function initializeCarousel(block, track, slideCount, options) {
     if (e.key === 'ArrowLeft') {
       e.preventDefault();
       handleInteraction();
-      const prevIndex = currentSlide === 0 ? slideCount - 1 : currentSlide - 1;
-      updateCarousel(prevIndex);
+      updateCarousel(patterns.prevSlide());
     } else if (e.key === 'ArrowRight') {
       e.preventDefault();
       handleInteraction();
-      const nextIndex = (currentSlide + 1) % slideCount;
-      updateCarousel(nextIndex);
+      updateCarousel(patterns.nextSlide());
     }
   });
 
@@ -260,14 +277,14 @@ function initializeCarousel(block, track, slideCount, options) {
   updatePlayPauseButton();
 
   // Check if we're in editor mode - if so, don't start autoplay
-  const inEditorMode = checkEditorMode();
+  const isEditorModeInitial = inEditorMode();
 
   // Start autoplay by default if multiple slides AND not in editor mode
-  if (slideCount > 1 && !inEditorMode) {
+  if (slideCount > 1 && !isEditorModeInitial) {
     isPlaying = true;
     startAutoPlay();
     updatePlayPauseButton();
-  } else if (inEditorMode) {
+  } else if (isEditorModeInitial) {
     // In editor mode, explicitly disable autoplay
     isPlaying = false;
     updatePlayPauseButton();
@@ -286,7 +303,7 @@ function initializeCarousel(block, track, slideCount, options) {
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
         // Resume autoplay when carousel becomes visible (if it was playing and not in editor mode)
-        if (isPlaying && !autoPlayTimer && slideCount > 1 && !checkEditorMode()) {
+        if (isPlaying && !autoPlayTimer && slideCount > 1 && !inEditorMode()) {
           startAutoPlay();
         }
       } else if (isPlaying) {
@@ -318,15 +335,24 @@ function initializeCarousel(block, track, slideCount, options) {
 
   // Cleanup function for memory management
   const cleanup = () => {
+    // Stop autoplay
     if (autoPlayTimer) {
       clearInterval(autoPlayTimer);
+      autoPlayTimer = null;
     }
+    // Clear interaction timeout
     if (interactionTimeout) {
       clearTimeout(interactionTimeout);
+      interactionTimeout = null;
     }
+    // Remove event listeners
     window.removeEventListener('resize', handleResize);
+    // Disconnect observers
     observer.disconnect();
-    editorModeObserverCleanup();
+    // Cleanup editor mode observer
+    if (editorModeObserverCleanup && typeof editorModeObserverCleanup === 'function') {
+      editorModeObserverCleanup();
+    }
   };
 
   // Store cleanup function for potential future use
@@ -337,9 +363,10 @@ function initializeCarousel(block, track, slideCount, options) {
 }
 
 export default function decorate(block) {
-  const slides = [...block.children];
+  // Defensive check - ensure block exists and has content
+  if (!block || block.children.length === 0) return;
 
-  if (slides.length === 0) return;
+  const slides = [...block.children];
 
   // Check for variations
   const showDots = !block.classList.contains('no-dots');
@@ -354,6 +381,9 @@ export default function decorate(block) {
 
   // Process slides
   slides.forEach((row, index) => {
+    // Defensive check - ensure row exists
+    if (!row) return;
+
     const slide = document.createElement('div');
     slide.className = 'carousel-slide';
     slide.dataset.slideIndex = index;
@@ -367,14 +397,17 @@ export default function decorate(block) {
     // Process each element in the row
     const elements = [...row.children];
     elements.forEach((element) => {
+      // Defensive check - ensure element exists
+      if (!element) return;
+
       // Handle images
       if (element.querySelector('picture')) {
         element.className = 'carousel-slide-image';
         slide.append(element);
-      } else if (element.textContent.trim()) {
+      } else if (element.textContent && element.textContent.trim()) {
         // Determine if it's title or text based on content or position
         const isTitle = element.querySelector('h1, h2, h3, h4, h5, h6')
-                       || elements.indexOf(element) === elements.findIndex((el) => !el.querySelector('picture'));
+                       || elements.indexOf(element) === elements.findIndex((el) => el && !el.querySelector('picture'));
 
         if (isTitle) {
           const titleDiv = document.createElement('div');
@@ -403,6 +436,9 @@ export default function decorate(block) {
   // Optimize images - batch process for better performance
   const imagesToOptimize = carouselTrack.querySelectorAll('picture > img');
   imagesToOptimize.forEach((img) => {
+    // Defensive check - ensure img exists and has src
+    if (!img || !img.src) return;
+
     const optimizedPic = createOptimizedPicture(
       img.src,
       img.alt,
@@ -410,7 +446,10 @@ export default function decorate(block) {
       [{ width: '750' }, { width: '1200' }],
     );
     moveInstrumentation(img, optimizedPic.querySelector('img'));
-    img.closest('picture').replaceWith(optimizedPic);
+    const pictureParent = img.closest('picture');
+    if (pictureParent) {
+      pictureParent.replaceWith(optimizedPic);
+    }
   });
 
   // Create navigation arrows
