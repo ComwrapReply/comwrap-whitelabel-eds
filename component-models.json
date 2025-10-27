@@ -158,14 +158,14 @@
         "name": "accordion-item-title",
         "label": "Accordion Item Title",
         "valueType": "string",
-        "value": ""
+        "value": "New Accordion Item"
       },
       {
         "component": "richtext",
         "name": "accordion-item-content",
         "label": "Accordion Item Content",
         "valueType": "string",
-        "value": ""
+        "value": "<p>Add your content here</p>"
       },
       {
         "component": "reference",
@@ -187,7 +187,8 @@
       {
         "component": "text",
         "name": "button-text",
-        "label": "Button Text"
+        "label": "Button Text",
+        "value": "Learn More"
       },
       {
         "component": "select",
