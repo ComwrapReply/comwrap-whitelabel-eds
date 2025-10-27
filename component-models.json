@@ -165,15 +165,13 @@
         "component": "text",
         "name": "accordion-item-title",
         "label": "Accordion Item Title",
-        "valueType": "string",
-        "value": "New Accordion Item"
+        "valueType": "string"
       },
       {
         "component": "richtext",
         "name": "accordion-item-content",
         "label": "Accordion Item Content",
-        "valueType": "string",
-        "value": "<p>Add your content here</p>"
+        "valueType": "string"
       },
       {
         "component": "reference",
@@ -195,8 +193,7 @@
       {
         "component": "text",
         "name": "button-text",
-        "label": "Button Text",
-        "value": "Learn More"
+        "label": "Button Text"
       },
       {
         "component": "select",
@@ -210,10 +207,6 @@
           {
             "name": "Secondary",
             "value": "secondary"
-          },
-          {
-            "name": "Tertiary",
-            "value": "tertiary"
           }
         ],
         "value": "primary"
