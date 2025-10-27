@@ -65,20 +65,23 @@ export const moveClassToTargetedChild = (block, target, removeBlockClass = false
 
 /**
  * Check if the page is currently in editor mode
- * Editor mode is detected by the presence of the 'appContainer' element
+ * Editor mode is detected by the presence of the 'appContainer' class element
  * This checks both the current document and parent/top frame for Universal Editor
  * @returns {boolean} True if in editor mode, false otherwise
  */
 export const isEditorMode = () => {
+  // Helper function to check for appContainer class in a document
+  const hasAppContainer = (doc) => doc.querySelector('.appContainer') !== null;
+
   // Check current document
-  if (document.getElementById('appContainer') !== null) {
+  if (hasAppContainer(document)) {
     return true;
   }
 
   // Check parent window (iframe context)
   try {
     if (window.parent && window.parent !== window) {
-      if (window.parent.document.getElementById('appContainer') !== null) {
+      if (hasAppContainer(window.parent.document)) {
         return true;
       }
     }
@@ -89,7 +92,7 @@ export const isEditorMode = () => {
   // Check top window (Universal Editor context)
   try {
     if (window.top && window.top !== window) {
-      if (window.top.document.getElementById('appContainer') !== null) {
+      if (hasAppContainer(window.top.document)) {
         return true;
       }
     }
