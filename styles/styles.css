@@ -1149,8 +1149,8 @@ blockquote::before {
   position: fixed;
   bottom: var(--space-32);
   right: var(--space-32);
-  width: 56px;
-  height: 56px;
+  width: 560px;
+  height: 560px;
   background-color: var(--color-primary-blue);
   color: var(--color-white);
   border: none;
