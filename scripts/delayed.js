@@ -9,12 +9,13 @@ function createBackToTopButton() {
   button.setAttribute('title', 'Back to top');
 
   // Add the up arrow icon
-  button.innerHTML = `
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <line x1="12" y1="19" x2="12" y2="5"></line>
-      <polyline points="5 12 12 5 19 12"></polyline>
-    </svg>
-  `;
+  const icon = document.createElement('img');
+  icon.src = '/icons/arrow-up.svg';
+  icon.alt = 'Back to top';
+  icon.style.filter = 'brightness(0) invert(1)'; // Makes the SVG white
+  icon.style.width = '24px';
+  icon.style.height = '24px';
+  button.appendChild(icon);
 
   // Add click event listener
   button.addEventListener('click', () => {
