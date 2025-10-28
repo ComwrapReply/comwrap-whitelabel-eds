@@ -25,7 +25,8 @@
           "component": "text",
           "name": "teaser-title",
           "value": "",
-          "label": "Title"
+          "label": "Title",
+          "required": true
         },
         {
           "component": "richtext",
