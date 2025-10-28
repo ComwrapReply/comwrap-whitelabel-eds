@@ -21,6 +21,11 @@
       "id": "teaser",
       "fields": [
         {
+          "component": "tab",
+          "label": "Content",
+          "name": "teaser-content"
+        },
+        {
           "component": "reference",
           "name": "image",
           "label": "Image",
@@ -53,6 +58,11 @@
           "label": "Teaser Link",
           "valueType": "string",
           "value": ""
+        },
+        {
+          "component": "tab",
+          "label": "CTAs",
+          "name": "teaser-ctas"
         },
         {
           "component": "aem-content",
@@ -159,6 +169,11 @@
               ]
             }
           ]
+        },
+        {
+          "component": "tab",
+          "label": "Layout",
+          "name": "teaser-layout"
         },
         {
           "component": "select",
