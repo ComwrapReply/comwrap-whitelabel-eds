@@ -5504,6 +5504,9 @@
         "component": "select",
         "name": "classes",
         "label": "Style",
+        "valueType": "string",
+        "value": "",
+        "description": "The style of the fragment",
         "options": [
           {
             "name": "Default",
