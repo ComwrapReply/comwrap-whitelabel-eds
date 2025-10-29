@@ -237,7 +237,8 @@
             "name": "Image Bottom",
             "value": "image-bottom"
           }
-        ]
+        ],
+        "value": "image-left"
       },
       {
         "component": "boolean",
