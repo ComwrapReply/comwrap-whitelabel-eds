@@ -458,7 +458,15 @@
         "label": "Width (px)",
         "description": "Custom width in pixels (when using Custom aspect ratio)",
         "valueType": "number",
-        "value": "800"
+        "value": "800",
+        "condition": {
+          "===": [
+            {
+              "var": "aspectRatio"
+            },
+            "custom"
+          ]
+        }
       },
       {
         "component": "text",
@@ -466,7 +474,15 @@
         "label": "Height (px)",
         "description": "Custom height in pixels (when using Custom aspect ratio)",
         "valueType": "number",
-        "value": "450"
+        "value": "450",
+        "condition": {
+          "===": [
+            {
+              "var": "aspectRatio"
+            },
+            "custom"
+          ]
+        }
       }
     ]
   },
