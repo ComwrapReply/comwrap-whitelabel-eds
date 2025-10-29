@@ -33,6 +33,27 @@
   ],
   "models": [
     {
+      "id": "carousel",
+      "fields": [
+        {
+          "component": "classes",
+          "name": "carousel-background-color",
+          "label": "Carousel background color",
+          "valueType": "string",
+          "options": [
+            {
+              "name": "default",
+              "value": ""
+            },
+            {
+              "name": "dark",
+              "value": "dark"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "carousel-slide",
       "fields": [
         {
