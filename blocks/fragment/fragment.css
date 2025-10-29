@@ -1,5 +1,6 @@
 /* stylelint-disable no-empty-source */
 .fragment.dark {
+    padding: var(--spacing-24) 0;
   box-shadow: 0 0 0 100vmax  var(--color-dark-blue);
   clip-path: inset(0 -100vmax);
   background-color: var(--color-dark-blue);
