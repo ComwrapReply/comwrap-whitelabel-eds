@@ -102,6 +102,7 @@
 
 .accordion-content img {
   height: auto;
+  width: 100%;
 }
 
 .accordion-text-button-wrapper {
@@ -208,8 +209,24 @@
 
 .accordion-content.image-top {
   flex-direction: column;
+
+  picture {
+    width: 100%;
+  }
+
+  .accordion-text-button-wrapper {
+    width: 100%;
+  }
 }
 
 .accordion-content.image-bottom {
   flex-direction: column-reverse;
+
+  picture {
+    width: 100%;
+  }
+
+  .accordion-text-button-wrapper {
+    width: 100%;
+  }
 }

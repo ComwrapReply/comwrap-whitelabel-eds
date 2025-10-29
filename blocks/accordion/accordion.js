@@ -88,6 +88,7 @@ export default function decorate(block) {
 
     // Get image from third div if it exists
     const imageDiv = row.querySelector(':scope > div:nth-child(3) picture');
+    console.log(imageDiv?.querySelector('img')?.alt);
     if (imageDiv) {
       const img = imageDiv.querySelector('img');
       if (img) {
