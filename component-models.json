@@ -236,54 +236,44 @@
       {
         "component": "select",
         "name": "classes",
-        "value": "",
-        "label": "Background Color",
-        "description": "The button background color",
+        "label": "Carousel background color",
         "valueType": "string",
+        "value": "",
         "options": [
           {
-            "name": "Red",
-            "value": "bg-red"
+            "name": "Default",
+            "value": ""
           },
           {
-            "name": "Green",
-            "value": "bg-green"
-          },
-          {
-            "name": "Blue",
-            "value": "bg-blue"
+            "name": "Dark",
+            "value": "dark"
           }
         ]
       }
     ]
   },
   {
-    "id": "carouselitem",
+    "id": "carousel-slide",
     "fields": [
       {
         "component": "reference",
         "valueType": "string",
         "name": "image",
-        "label": "Image",
+        "label": "Carousel image",
         "multi": false
       },
       {
         "component": "text",
         "valueType": "string",
         "name": "imageAlt",
-        "label": "Image Alt Text",
+        "label": "Carousel image alt text",
         "value": ""
       },
       {
         "component": "richtext",
-        "name": "slide_title",
-        "label": "Slide Title",
-        "valueType": "string"
-      },
-      {
-        "component": "button",
-        "name": "slide_button",
-        "label": "Slide Button",
+        "name": "text",
+        "value": "",
+        "label": "Carousel description",
         "valueType": "string"
       }
     ]
