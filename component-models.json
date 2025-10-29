@@ -5852,43 +5852,64 @@
     "id": "teaser",
     "fields": [
       {
-        "component": "text",
-        "name": "teaser-title",
-        "value": "",
-        "label": "Title"
-      },
-      {
-        "component": "richtext",
-        "name": "teaser-description",
-        "value": "",
-        "label": "Description"
+        "component": "tab",
+        "label": "Content",
+        "name": "teaser-content"
       },
       {
         "component": "reference",
-        "name": "teaser-image",
+        "name": "image",
         "label": "Image",
         "valueType": "string",
         "multi": false
       },
       {
-        "name": "teaser-imageAlt",
         "component": "text",
-        "title": "Image Alt Text"
+        "name": "imageAlt",
+        "label": "Image Alt Text",
+        "value": ""
+      },
+      {
+        "component": "text",
+        "name": "heading",
+        "label": "Heading",
+        "valueType": "string",
+        "value": ""
+      },
+      {
+        "component": "richtext",
+        "name": "description",
+        "label": "Description",
+        "valueType": "string",
+        "value": ""
+      },
+      {
+        "component": "text",
+        "name": "fullBlockLink",
+        "label": "Teaser Link",
+        "valueType": "string",
+        "value": ""
+      },
+      {
+        "component": "tab",
+        "label": "CTAs",
+        "name": "teaser-ctas"
       },
       {
         "component": "aem-content",
-        "name": "custom-button-link",
-        "label": "Button Link"
+        "name": "primaryButton_link",
+        "label": "Primary Button Link"
       },
       {
         "component": "text",
-        "name": "custom-button-label",
-        "label": "Button Label"
+        "name": "primaryButton_label",
+        "label": "Primary Button Label",
+        "value": ""
       },
       {
         "component": "select",
-        "name": "custom-button-target",
-        "label": "Link Target",
+        "name": "primaryButton_target",
+        "label": "Primary Button Target",
         "options": [
           {
             "name": "Same Window",
@@ -5898,12 +5919,13 @@
             "name": "New Tab",
             "value": "_blank"
           }
-        ]
+        ],
+        "value": ""
       },
       {
         "component": "multiselect",
-        "name": "classes",
-        "label": "Style",
+        "name": "primaryButton_classes",
+        "label": "Primary Button Style",
         "valueType": "string",
         "maxSize": 2,
         "options": [
@@ -5923,23 +5945,92 @@
                 "value": "text"
               }
             ]
+          }
+        ]
+      },
+      {
+        "component": "aem-content",
+        "name": "secondaryButton_link",
+        "label": "Secondary Button Link (optional)"
+      },
+      {
+        "component": "text",
+        "name": "secondaryButton_label",
+        "label": "Secondary Button Label",
+        "value": ""
+      },
+      {
+        "component": "select",
+        "name": "secondaryButton_target",
+        "label": "Secondary Button Target",
+        "options": [
+          {
+            "name": "Same Window",
+            "value": ""
           },
           {
-            "name": "Type",
+            "name": "New Tab",
+            "value": "_blank"
+          }
+        ],
+        "value": ""
+      },
+      {
+        "component": "multiselect",
+        "name": "secondaryButton_classes",
+        "label": "Secondary Button Style",
+        "valueType": "string",
+        "maxSize": 2,
+        "options": [
+          {
+            "name": "Style",
             "children": [
               {
-                "name": "Download",
-                "value": "download"
+                "name": "Primary",
+                "value": "primary"
               },
               {
-                "name": "Email",
-                "value": "email"
+                "name": "Secondary",
+                "value": "secondary"
               },
               {
-                "name": "Telephone",
-                "value": "telephone"
+                "name": "Text",
+                "value": "text"
               }
             ]
+          }
+        ]
+      },
+      {
+        "component": "tab",
+        "label": "Layout",
+        "name": "teaser-layout"
+      },
+      {
+        "component": "select",
+        "name": "classes",
+        "label": "Layout Style",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "Image Left",
+            "value": "image-left"
+          },
+          {
+            "name": "Image Right",
+            "value": "image-right"
+          },
+          {
+            "name": "Image Top",
+            "value": "image-top"
+          },
+          {
+            "name": "Image Bottom",
+            "value": "image-bottom"
+          },
+          {
+            "name": "Image Background",
+            "value": "image-background"
           }
         ]
       }
