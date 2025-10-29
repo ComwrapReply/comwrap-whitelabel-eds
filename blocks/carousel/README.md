@@ -678,7 +678,7 @@ function setupAccessibility() {
 }
 ```
 
-### Keyboard Navigation
+### Keyboard Navigation  
 
 ```javascript
 /**
@@ -1451,6 +1451,10 @@ All PRs must include:
 - [Lighthouse](https://developers.google.com/web/tools/lighthouse)
 - [axe DevTools](https://www.deque.com/axe/devtools/)
 - [BrowserStack](https://www.browserstack.com/)
+
+### Developer Guides
+
+- [**Adding Select and Multiselect Components Guide**](./BLOCK_OPTIONS_GUIDE.md) - Complete guide for adding block options (select/multiselect) to any block
 
 ---
 

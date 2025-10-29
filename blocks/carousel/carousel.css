@@ -4,9 +4,11 @@
   width: 100vw; /* Full bleed width */
   margin-left: calc(-50vw + 50%); /* Center and extend full width */
   overflow: hidden;
-  box-shadow: 0 0 0 100vmax #0C2863;
   clip-path: inset(0 -100vmax);
-  background-color: var(--color-secondary);
+}
+
+.carousel.dark {
+  background-color: var(--color-dark-blue);
 }
 
 .carousel-container {
@@ -82,25 +84,56 @@
   .carousel-slide-content h4,
   .carousel-slide-content h5,
   .carousel-slide-content h6 {
+    color: var(--color-secondary);
     font-size: clamp(1.5rem, 4vw, 2.5rem);
     line-height: 1.2;
     margin-bottom: clamp(1rem, 3vw, 2rem);
   }
 
+  
   .carousel-slide-content p {
-    font-size: clamp(0.875rem, 2.5vw, 1.125rem);
-    line-height: 1.5;
-    margin: 0 0 clamp(1rem, 2vw, 1.5rem);
-    text-align: left;
-  }
+      color: var(--color-secondary);
+      font-size: clamp(0.875rem, 2.5vw, 1.125rem);
+      line-height: 1.5;
+      margin: 0 0 clamp(1rem, 2vw, 1.5rem);
+      text-align: left;
+    }
+    
+    .carousel.dark {
+      .carousel-slide-content h1,
+      .carousel-slide-content h2,
+      .carousel-slide-content h3,
+      .carousel-slide-content h4,
+      .carousel-slide-content h5,
+      .carousel-slide-content h6 {
+        color: var(--color-white);
+      }
+  
+      .carousel-slide-content p {
+          color: var(--color-white);
+        }
+    }
 
   .carousel-slide-content .carousel-button {
     margin-left: 0;
     font-size: 18px;
     padding: 8px 24px;
-    background-color: #FFF;
-    color: var(--color-light-blue);
+    background-color: var(--color-secondary);
+    color: var(--color-white);
   }
+
+  .carousel.dark {
+    .carousel-slide-content .carousel-button {
+      background-color: var(--color-white);
+      color: var(--color-secondary);
+    }
+
+  .carousel-slide-content .carousel-button:hover {
+    background-color: var(--color-white);
+    color: var(--color-secondary);
+  }
+    
+    }
 
   .carousel-slide-image img {
     width: 100%;
@@ -157,8 +190,6 @@
 .carousel-slide-image img {
   width: 100%;
   height: 100%;
-
-  /* max-height: 60vh; */
   object-fit: cover;
   display: block;
 }
@@ -205,12 +236,7 @@
   min-width: clamp(180px, 20vw, 220px);
   height: clamp(40px, 5vw, 48px);
   justify-content: center;
-}
-
-.carousel-slide-content .carousel-button:hover {
-  background-color: var(--color-secondary);
-  color: var(--color-white);
-}
+}§
 
 /* Navigation Arrows - Hidden by default, will be shown via variations */
 .carousel-arrows {
