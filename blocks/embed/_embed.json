@@ -49,7 +49,7 @@
           "description": "Custom width in pixels (when using Custom aspect ratio)",
           "valueType": "number",
           "value": "800",
-          "condition": { "==": [{ "var": "aspectRatio" }, "custom"] }
+          "condition": { "===": [{ "var": "aspectRatio" }, "custom"] }
         },
         {
           "component": "text",
@@ -58,7 +58,7 @@
           "description": "Custom height in pixels (when using Custom aspect ratio)",
           "valueType": "number",
           "value": "450",
-          "condition": { "==": [{ "var": "aspectRatio" }, "custom"] }
+          "condition": { "===": [{ "var": "aspectRatio" }, "custom"] }
         }
       ]
     }
