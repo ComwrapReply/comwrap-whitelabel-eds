@@ -55,25 +55,15 @@ export default function decorate(block) {
     const contentDiv = document.createElement('div');
     contentDiv.className = 'accordion-content';
 
+    // Create wrapper div for text and button content
+    const textButtonWrapper = document.createElement('div');
+    textButtonWrapper.className = 'accordion-text-button-wrapper';
+
     const answerDiv = row.querySelector(':scope > div:nth-child(2)');
 
     if (answerDiv && answerDiv.firstChild) {
-      contentDiv.innerHTML = answerDiv.innerHTML;
-      contentDiv.firstChild.classList.add('accordion-text');
-    }
-
-    // Get image from third div if it exists
-    const imageDiv = row.querySelector(':scope > div:nth-child(3) picture');
-    if (imageDiv) {
-      const img = imageDiv.querySelector('img');
-      if (img) {
-        const optimizedPic = createOptimizedPicture(img.src, img.alt, false, [
-          { width: '750' },
-        ]);
-        optimizedPic.classList.add('accordion-image');
-        moveInstrumentation(img, optimizedPic.querySelector('img'));
-        contentDiv.insertBefore(optimizedPic, contentDiv.firstChild);
-      }
+      textButtonWrapper.innerHTML = answerDiv.innerHTML;
+      textButtonWrapper.firstChild.classList.add('accordion-text');
     }
 
     // Process button fields (divs 4-6)
@@ -92,9 +82,26 @@ export default function decorate(block) {
         buttonElement.textContent = text;
         buttonElement.className = `button ${style} accordion-button`;
 
-        contentDiv.appendChild(buttonElement);
+        textButtonWrapper.appendChild(buttonElement);
       }
     }
+
+    // Get image from third div if it exists
+    const imageDiv = row.querySelector(':scope > div:nth-child(3) picture');
+    if (imageDiv) {
+      const img = imageDiv.querySelector('img');
+      if (img) {
+        const optimizedPic = createOptimizedPicture(img.src, img.alt, false, [
+          { width: '750' },
+        ]);
+        optimizedPic.classList.add('accordion-image');
+        moveInstrumentation(img, optimizedPic.querySelector('img'));
+        contentDiv.appendChild(optimizedPic);
+      }
+    }
+
+    // Add the text/button wrapper to content
+    contentDiv.appendChild(textButtonWrapper);
 
     panel.appendChild(contentDiv);
     li.appendChild(panel);
