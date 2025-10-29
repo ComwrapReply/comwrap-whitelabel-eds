@@ -24,6 +24,21 @@
           "component": "aem-content",
           "name": "reference",
           "label": "Reference"
+        },
+        {
+          "component": "select",
+          "name": "style",
+          "label": "Style",
+          "options": [
+            {
+              "name": "Default",
+              "value": ""
+            },
+            {
+              "name": "Dark",
+              "value": "dark"
+            }
+          ]
         }
       ]
     }
