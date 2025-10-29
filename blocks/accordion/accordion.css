@@ -91,7 +91,7 @@
 .accordion-content {
   display: flex;
   gap: 2rem;
-  padding: 2rem 0 2rem 0;
+  padding: 2rem 0;
 }
 
 .accordion-content picture {
