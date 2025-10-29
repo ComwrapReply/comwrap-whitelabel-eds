@@ -238,13 +238,14 @@
         "name": "classes",
         "label": "Carousel background color",
         "valueType": "string",
+        "value": "",
         "options": [
           {
-            "name": "default",
+            "name": "Default",
             "value": ""
           },
           {
-            "name": "dark",
+            "name": "Dark",
             "value": "dark"
           }
         ]
