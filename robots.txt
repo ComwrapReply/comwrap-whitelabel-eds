@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://feat-edge-26-search--comwrap-whitelabel-eds--comwrapreply.aem.page/sitemap.xml
