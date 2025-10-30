@@ -9,12 +9,11 @@
 }
 
 .block.tags .tag {
-  background: var(--link-color);
-  color: var(--background-color);
-  font-family: var(--body-font-family);
-  font-size: var(--body-font-size-xs);
+  background: var(--color-primary);
+  color: var(--color-white);
+  font-family: var(--font-family-body);
   line-height: 1;
-  padding: 0.35rem 0.6rem;
+  padding: 0.5rem 0.75rem;
   border-radius: 9999px;
   white-space: nowrap;
 }
