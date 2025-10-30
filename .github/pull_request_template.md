@@ -4,4 +4,4 @@ Fix #<gh-issue-id>
 
 Test URLs:
 - Before: https://main--comwrap-whitelabel-eds--comwrapreply.aem.live/
-- After: https://feat-EDGE-79-header--comwrap-whitelabel-eds--comwrapreply.aem.live/
+- After: https://feat-EDGE-79-header--comwrap-whitelabel-eds--comwrapreply.aem.page/
