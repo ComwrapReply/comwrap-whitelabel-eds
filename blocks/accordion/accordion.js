@@ -67,9 +67,9 @@ export default function decorate(block) {
     }
 
     // Process button fields (divs 4-6)
-    const buttonLinkDiv = row.querySelector(':scope > div:nth-child(4)');
-    const buttonTextDiv = row.querySelector(':scope > div:nth-child(5)');
-    const buttonStyleDiv = row.querySelector(':scope > div:nth-child(6)');
+    const buttonLinkDiv = row.querySelector(':scope > div:nth-child(5)');
+    const buttonTextDiv = row.querySelector(':scope > div:nth-child(6)');
+    const buttonStyleDiv = row.querySelector(':scope > div:nth-child(7)');
 
     if (buttonLinkDiv && buttonTextDiv) {
       const link = buttonLinkDiv.querySelector('a')?.href || buttonLinkDiv.textContent?.trim();
@@ -88,11 +88,11 @@ export default function decorate(block) {
 
     // Get image from third div if it exists
     const imageDiv = row.querySelector(':scope > div:nth-child(3) picture');
-    console.log(imageDiv?.querySelector('img')?.alt);
+    const imageAlt = row.querySelector(':scope > div:nth-child(4)').textContent.trim();
     if (imageDiv) {
       const img = imageDiv.querySelector('img');
       if (img) {
-        const optimizedPic = createOptimizedPicture(img.src, img.alt, false, [
+        const optimizedPic = createOptimizedPicture(img.src, imageAlt, false, [
           { width: '750' },
         ]);
         optimizedPic.classList.add('accordion-image');
@@ -115,7 +115,7 @@ export default function decorate(block) {
 
     ul.appendChild(li);
 
-    const layout = row.querySelector(':scope > div:nth-child(7)');
+    const layout = row.querySelector(':scope > div:nth-child(8)');
     if (layout && layout.firstChild) {
       contentDiv.classList.add(layout.firstChild.innerHTML);
     }

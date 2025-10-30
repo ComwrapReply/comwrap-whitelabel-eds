@@ -181,6 +181,12 @@
         "multi": false
       },
       {
+        "component": "text",
+        "name": "image-alt",
+        "label": "Image Alt Text",
+        "valueType": "string"
+      },
+      {
         "component": "tab",
         "label": "CTA",
         "name": "accordion-cta"
