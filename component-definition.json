@@ -117,6 +117,21 @@
           }
         },
         {
+          "title": "Algolia Autocomplete",
+          "id": "algolia-autocomplete",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block",
+                "template": {
+                  "name": "Algolia Autocomplete",
+                  "model": "algolia-autocomplete"
+                }
+              }
+            }
+          }
+        },
+        {
           "title": "Article feed",
           "id": "articlefeed",
           "plugins": {
@@ -548,21 +563,6 @@
                   "jcr:title": "Reset",
                   "buttonType": "reset",
                   "fieldType": "button"
-                }
-              }
-            }
-          }
-        },
-        {
-          "title": "Search",
-          "id": "search",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/franklin/components/block/v1/block",
-                "template": {
-                  "name": "Search",
-                  "model": "search"
                 }
               }
             }

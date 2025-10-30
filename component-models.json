@@ -186,6 +186,39 @@
     ]
   },
   {
+    "id": "algolia-autocomplete",
+    "fields": [
+      {
+        "component": "text",
+        "name": "appId",
+        "label": "Algolia App ID",
+        "valueType": "string",
+        "value": "YOUR_APP_ID"
+      },
+      {
+        "component": "text",
+        "name": "searchKey",
+        "label": "Algolia Search-Only API Key",
+        "valueType": "string",
+        "value": "YOUR_SEARCH_ONLY_API_KEY"
+      },
+      {
+        "component": "text",
+        "name": "indexName",
+        "label": "Algolia Index Name",
+        "valueType": "string",
+        "value": "YOUR_INDEX_NAME"
+      },
+      {
+        "component": "text",
+        "name": "placeholder",
+        "label": "Placeholder Text",
+        "valueType": "string",
+        "value": "Search…"
+      }
+    ]
+  },
+  {
     "id": "articlefeed",
     "fields": [
       {

@@ -30,7 +30,8 @@
       "quote",
       "video",
       "article-feeds",
-      "search"
+      "search",
+      "algolia-autocomplete"
     ]
   },
   {
