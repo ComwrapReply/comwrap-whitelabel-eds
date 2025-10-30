@@ -30,6 +30,13 @@ export default async function decorate(block) {
   const ALGOLIA_INDEX_NAME = indexNameDiv?.textContent.trim();
   const PLACEHOLDER = placeholderDiv?.textContent.trim() || 'Search…'; // fallback placeholder
 
+  // Hide all children of the block except the autocomplete container
+  [...block.children].forEach((child) => {
+    if (!child.classList.contains('autocomplete-container')) {
+      child.style.display = 'none';
+    }
+  });
+
   // Ensure there is a container for the autocomplete widget
   let container = block.querySelector('.autocomplete-container');
   if (!container) {
