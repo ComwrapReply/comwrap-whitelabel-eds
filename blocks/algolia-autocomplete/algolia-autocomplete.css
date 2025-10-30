@@ -1,0 +1,12 @@
+.block.algolia-autocomplete {
+  margin: 2rem auto;
+  max-width: 520px;
+}
+
+.block.algolia-autocomplete .autocomplete-container {
+  min-width: 300px;
+}
+
+.block.algolia-autocomplete .aa-ItemTitle {
+  font-size: var(--body-font-size-s, 18px);
+}
