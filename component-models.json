@@ -219,6 +219,32 @@
     ]
   },
   {
+    "id": "algolia-instantsearch",
+    "fields": [
+      {
+        "component": "text",
+        "name": "appId",
+        "label": "Algolia App ID",
+        "valueType": "string",
+        "value": "YOUR_APP_ID"
+      },
+      {
+        "component": "text",
+        "name": "searchKey",
+        "label": "Algolia Search-Only API Key",
+        "valueType": "string",
+        "value": "YOUR_SEARCH_ONLY_API_KEY"
+      },
+      {
+        "component": "text",
+        "name": "indexName",
+        "label": "Algolia Index Name",
+        "valueType": "string",
+        "value": "YOUR_INDEX_NAME"
+      }
+    ]
+  },
+  {
     "id": "articlefeed",
     "fields": [
       {

@@ -73,7 +73,8 @@
         "quote",
         "video",
         "article-feeds",
-        "algolia-autocomplete"
+        "algolia-autocomplete",
+        "algolia-instantsearch"
       ]
     }
   ]
