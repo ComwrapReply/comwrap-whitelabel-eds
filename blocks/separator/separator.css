@@ -1,30 +1,30 @@
-/* Base separator block styles */
+/* Base separator block container */
 .block.separator {
   width: 100%;
-  height: 1px;
   margin: 2rem 0;
-  border: none;
+}
+
+/* Separator line element (child of block) */
+.block.separator .separator-line {
+  width: 100%;
+  height: 1px;
   background: transparent;
+  border: none;
 }
 
-/* Blue variant */
-.block.separator.blue {
+/* Blue variant - applies to separator line */
+.block.separator.blue .separator-line {
   background: var(--color-primary-blue, #0073dd);
-  border: none;
   height: 2px;
 }
 
-/* Black/Dark Grey variant */
-.block.separator.grey {
+/* Grey variant - applies to separator line */
+.block.separator.grey .separator-line {
   background: var(--color-natural-grey, #8f8d87);
-  border: none;
   height: 2px;
 }
 
-/* Responsive adjustments */
-@media (width <= 768px) {
-  .block.separator {
-    margin: 1.5rem 0;
-  }
+/* Editor mode - add padding to block container */
+.block.separator.editor-mode {
+  padding: 2rem 0;
 }
-

@@ -7,11 +7,16 @@ import { isEditorMode } from '../../scripts/utils.js';
  * @param {HTMLElement} block - The block's DOM element
  */
 export default function decorate(block) {
-  // Minimal decoration - separator is primarily a visual element
-  // The block structure is simple and doesn't require extensive DOM manipulation
-  block.classList.add('separator-block');
+  // Create a child separator element
+  const separatorLine = document.createElement('div');
+  separatorLine.classList.add('separator-line');
 
+  // Clear block content and add the separator line as a child
+  block.innerHTML = '';
+  block.appendChild(separatorLine);
+
+  // Add editor mode padding to the block container, not the separator line
   if (isEditorMode()) {
-    block.parentElement.style.padding = '2rem 0';
+    block.classList.add('editor-mode');
   }
 }
