@@ -76,6 +76,8 @@
         "article-feeds",
         "teaser",
         "tags"
+        "embed",
+        "teaser"
       ]
     }
   ]
