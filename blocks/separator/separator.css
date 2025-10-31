@@ -1,0 +1,31 @@
+/* Base separator block styles */
+.block.separator {
+  width: 100%;
+  height: 1px;
+  margin: 2rem 0;
+  border: none;
+  background: transparent;
+  border-top: 1px solid rgb(0 0 0 / 10%);
+}
+
+/* Blue variant */
+.block.separator.blue {
+  background: var(--color-primary-blue, #0073dd);
+  border: none;
+  height: 2px;
+}
+
+/* Black/Dark Grey variant */
+.block.separator.black {
+  background: var(--color-natural-grey, #8f8d87);
+  border: none;
+  height: 2px;
+}
+
+/* Responsive adjustments */
+@media (width <= 768px) {
+  .block.separator {
+    margin: 1.5rem 0;
+  }
+}
+

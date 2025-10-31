@@ -5694,6 +5694,32 @@
     ]
   },
   {
+    "id": "separator",
+    "fields": [
+      {
+        "component": "select",
+        "name": "classes",
+        "label": "Color",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "Transparent",
+            "value": ""
+          },
+          {
+            "name": "Blue",
+            "value": "blue"
+          },
+          {
+            "name": "Black",
+            "value": "black"
+          }
+        ],
+        "value": ""
+      }
+    ]
+  },
+  {
     "id": "table",
     "fields": [
       {
