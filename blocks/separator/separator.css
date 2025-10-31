@@ -5,7 +5,6 @@
   margin: 2rem 0;
   border: none;
   background: transparent;
-  border-top: 1px solid rgb(0 0 0 / 10%);
 }
 
 /* Blue variant */
@@ -16,7 +15,7 @@
 }
 
 /* Black/Dark Grey variant */
-.block.separator.black {
+.block.separator.grey {
   background: var(--color-natural-grey, #8f8d87);
   border: none;
   height: 2px;
