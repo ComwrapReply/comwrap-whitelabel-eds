@@ -1,7 +1,7 @@
 /* Base separator block container */
 .block.separator {
   width: 100%;
-  margin: 2rem 0;
+  margin: 4rem 0;
 }
 
 /* Separator line element (child of block) */
