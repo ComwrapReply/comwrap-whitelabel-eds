@@ -12,6 +12,6 @@ export default function decorate(block) {
   block.classList.add('separator-block');
 
   if (isEditorMode()) {
-    block.style.padding = '2rem 0';
+    block.parentElement.style.padding = '2rem 0';
   }
 }
