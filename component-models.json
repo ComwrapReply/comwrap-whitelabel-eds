@@ -20,13 +20,6 @@
         "name": "keywords",
         "multi": true,
         "label": "Keywords"
-      },
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "tags",
-        "multi": true,
-        "label": "Tags"
       }
     ]
   },

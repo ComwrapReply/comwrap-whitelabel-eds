@@ -5,7 +5,7 @@ alwaysApply: false
 
 ## How to Add Tags
 
-> **INSTRUCTION:** The Tags block automatically displays page tags from the page metadata. You don't need to add content to the block itself—it reads tags from the page's meta tags.
+> **INSTRUCTION:** The Tags block automatically displays page tags from AEM's native tag system (cq:tags). You don't need to add content to the block itself—it reads tags from the page properties.
 
 ### Creating Your First Tags Block in Universal Editor
 
@@ -16,14 +16,18 @@ alwaysApply: false
 3. Search for or select "Tags" from the block library
 4. The Tags block will be inserted into your page
 
-**Step 2: Set Up Page Tags**
+**Step 2: Set Up Page Tags Using AEM Tag System**
 
-> **Note:** The Tags block reads from the page's meta tags. To display tags, you need to configure them in the page metadata.
+> **Note:** The Tags block reads from AEM's native tag system (cq:tags) configured in page properties. You'll use the standard AEM tag picker interface to select tags.
 
 1. Open the page properties panel in Universal Editor
-2. Navigate to the "Metadata" or "Page Properties" section
-3. Find the "Tags" field (or `meta[name="tags"]` in the page head)
-4. Enter your tags separated by commas (e.g., "Design, Marketing, Tutorial")
+2. Navigate to the "Basic" or "Tags" tab in Page Properties
+3. Click on the "Tags" field (labeled "cq:tags")
+4. Use the AEM tag picker to browse and select tags:
+   - Search for tags using the search bar
+   - Navigate through tag categories in the left panel
+   - Select tags by checking the boxes next to tag names
+   - Click "Select" to confirm your tag selections
 5. Save the page properties
 
 **Step 3: Verify Tags Display**
@@ -46,7 +50,8 @@ alwaysApply: false
 
 The Tags block currently has no configurable options in the Properties panel. The block automatically:
 
-- Reads tags from page metadata (`meta[name="tags"]`)
+- Reads tags from AEM's native tag system (`cq:tags` / `meta[name="cq-tags"]`)
+- Extracts readable tag names from AEM tag IDs
 - Displays each tag as a blue pill-shaped badge
 - Wraps to multiple lines on smaller screens
 - Hides itself if no tags are found
@@ -55,34 +60,35 @@ The Tags block currently has no configurable options in the Properties panel. Th
 
 ## Content Guidelines
 
-### Page Tags (Metadata)
+### Page Tags (AEM Tag System)
 
-> **INSTRUCTION:** Provide guidance for setting up tags in page metadata.
+> **INSTRUCTION:** Provide guidance for using AEM's native tag system through the tag picker interface.
 
-**Format:**
-- Tags must be separated by commas in the meta tag
-- Example: `content="Design, Marketing, Tutorial"`
-- Each tag will be trimmed of whitespace automatically
+**Using the AEM Tag Picker:**
+- Tags are managed through AEM's centralized tag system
+- Use the tag picker interface in Page Properties to select from existing tags
+- Tags can be organized in hierarchical structures (categories/subcategories)
+- Tag IDs are automatically handled—the block extracts readable tag names for display
 
 **Best Practices:**
 - **Length**: Keep tag names short and descriptive (1-2 words)
-- **Format**: Use title case or sentence case (e.g., "Web Design" or "web design")
+- **Organization**: Use tag categories to organize related tags
 - **Relevance**: Only include tags that accurately describe the page content
 - **Quantity**: Use 3-8 tags per page for optimal display
-- **Consistency**: Use consistent tag naming across similar pages
+- **Consistency**: Reuse existing tags from your tag library rather than creating duplicates
+- **Naming**: Use clear, descriptive tag names that match your content taxonomy
 
 **Good Examples:**
-- "Design, User Experience, Interface"
-- "Marketing, Strategy, Digital"
-- "Tutorial, JavaScript, Web Development"
-- "Product, Features, Overview"
+- Categories: "Content Types" with tags like "Blog Post", "Case Study", "Tutorial"
+- Topics: "Web Design", "User Experience", "Interface Design"
+- Industries: "Healthcare", "Finance", "Technology"
 
 **Avoid:**
+- ❌ Creating duplicate tags with slight variations (e.g., "Design" and "design")
 - ❌ Very long tag names that don't fit well in the pill shape
-- ❌ Special characters that may break formatting
-- ❌ Duplicate tags on the same page
-- ❌ Too many tags (more than 10 makes the display cluttered)
-- ❌ Tags with inconsistent casing (e.g., mixing "design", "Design", and "DESIGN")
+- ❌ Using too many tags (more than 10 makes the display cluttered)
+- ❌ Creating tags without considering your site's content taxonomy
+- ❌ Using inconsistent tag naming conventions
 
 ### Tag Display Behavior
 
@@ -154,19 +160,21 @@ The Tags block currently has no configurable options in the Properties panel. Th
 
 ### Q: Why aren't tags showing on my page?
 
-**A:** The Tags block reads from the page's meta tags. Check that:
-1. You've added a `<meta name="tags" content="...">` tag in the page head
-2. The content attribute contains at least one tag
-3. Tags are separated by commas
-4. The page has been saved and published
+**A:** The Tags block reads from AEM's native tag system (cq:tags). Check that:
+1. You've selected tags using the tag picker in Page Properties
+2. The tags are saved in the page properties
+3. The page has been saved and published
+4. Tags are properly configured in your AEM tag library
 
 ### Q: How do I edit or remove tags?
 
-**A:** Tags are managed in the page metadata, not in the block itself:
+**A:** Tags are managed through AEM's tag system in page properties:
 1. Open page properties in Universal Editor
-2. Navigate to the metadata section
-3. Edit the "Tags" field (or meta tag content)
-4. Save and republish the page
+2. Navigate to the "Basic" or "Tags" tab
+3. Click on the "cq:tags" field
+4. Use the tag picker to add or remove tags
+5. Click "Select" to confirm changes
+6. Save and republish the page
 
 ### Q: Can I change the color or style of tags?
 
@@ -199,49 +207,53 @@ The Tags block currently has no configurable options in the Properties panel. Th
 ### Tags Not Showing on Published Page
 
 **Check:**
-- Verify the page has a `<meta name="tags" content="...">` tag in the head
-- Ensure the content attribute contains tags separated by commas
-- Check browser console for any JavaScript errors
+- Verify you've selected tags using the AEM tag picker in Page Properties
+- Ensure tags are saved in the page properties (cq:tags field)
+- Check that a `<meta name="cq-tags" content="...">` tag exists in the page head
 - Verify the Tags block is properly placed on the page
 - Ensure the page has been published after adding tags
+- Check browser console for any JavaScript errors
 
 **If issue persists:**
 - Clear browser cache and reload the page
 - Check that the Tags block JavaScript file is loading correctly
-- Verify the page metadata is properly saved
+- Verify tags are properly configured in your AEM tag library
+- Check the page source to confirm the cq-tags meta tag exists
 
 ### Tags Displaying Incorrectly
 
 **Check:**
-- Ensure tags are properly formatted (comma-separated)
-- Check for special characters that might break parsing
-- Verify tags don't contain HTML entities or code
-- Ensure there are no extra spaces or formatting issues
+- Verify tags are properly selected in the AEM tag picker
+- Check that tag names are displaying correctly (tag IDs are automatically converted to readable names)
+- Ensure tags don't have unusual characters that might break display
+- Check browser developer tools for rendering issues
 
 **If issue persists:**
-- Review the actual meta tag content in the page source
-- Check browser developer tools for rendering issues
+- Review the actual meta tag content in the page source (`meta[name="cq-tags"]`)
 - Verify CSS is loading correctly
+- Check that tag IDs are in the expected format (the block handles various AEM tag ID formats)
 
 ### Can't Find Tags Field in Page Properties
 
 **Check:**
 - Ensure you have access to edit page properties
-- Look for "Metadata" or "Page Properties" in the Universal Editor
-- Check if your site uses a different meta tag field name
-- Verify page template supports custom metadata fields
+- Look for the "Basic" or "Tags" tab in Page Properties
+- Check for the "cq:tags" field (may be labeled as "Tags" or "cq:tags")
+- Verify your page template includes the standard tag field
+- Ensure you have permissions to edit page properties
 
-**Note:** If you can't find a tags field, you may need to:
-1. Ask your AEM administrator to add a tags metadata field
-2. Or ensure tags are set in the page head HTML directly
+**Note:** The Tags block uses AEM's native tag system (cq:tags), which should be available by default in page properties. If you can't find it:
+1. Ask your AEM administrator to verify the page template includes the tag field
+2. Check if custom page templates are overriding the default properties
 
 ### Tags Block Shows but is Empty
 
 **Check:**
-- Verify the meta tag exists and has a content attribute
-- Ensure the content is not empty or just whitespace
-- Check that commas are used as separators (not other characters)
-- Verify tags are properly saved in page metadata
+- Verify you've selected tags in the AEM tag picker
+- Ensure tags are saved in page properties (not just selected temporarily)
+- Check that the `<meta name="cq-tags" content="...">` tag exists and has content
+- Verify tags are properly formatted in the meta tag (comma-separated tag IDs)
+- Ensure the page has been saved and published after selecting tags
 
 ### Tags Not Updating After Changes
 
@@ -256,10 +268,11 @@ The Tags block currently has no configurable options in the Properties panel. Th
 > **Note:** This is a known behavior—the block hides if it can't find tags. This is intentional to keep pages clean.
 
 **Check:**
-- Verify the meta tag name is exactly `meta[name="tags"]`
-- Check that the content attribute has non-empty values
+- Verify the meta tag name is exactly `meta[name="cq-tags"]` (not "tags")
+- Check that the content attribute has non-empty values (comma-separated tag IDs)
 - Ensure JavaScript is running and can access the meta tag
 - Verify there are no JavaScript errors preventing tag reading
+- Check that tags were properly saved after selecting them in the tag picker
 
 ### Styling Issues (Colors, Spacing)
 
@@ -305,13 +318,15 @@ While the Tags block is accessible by default, ensure your tag names are clear a
 
 ## Quick Reference
 
-**Meta Tag Format**: `<meta name="tags" content="Tag1, Tag2, Tag3">`  
+**Tag Source**: AEM native tag system (cq:tags) via Page Properties  
+**Meta Tag Format**: `<meta name="cq-tags" content="tagId1,tagId2,tagId3">` (automatically generated)  
 **Recommended Tag Count**: 3-8 tags per page  
-**Tag Separator**: Comma (`,`)  
-**Tag Display**: Blue rounded pills in horizontal row  
+**Tag Selection**: Use AEM tag picker in Page Properties  
+**Tag Display**: Blue rounded pills in horizontal row (shows readable tag names)  
+**Tag ID Handling**: Automatically extracts readable names from AEM tag IDs  
 **Responsive Behavior**: Tags wrap to multiple lines on smaller screens  
 **Empty State**: Block automatically hides if no tags found  
-**Configuration Options**: None (auto-populated from metadata)
+**Configuration Options**: None (auto-populated from AEM tag system)
 
 ---
 
