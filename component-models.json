@@ -20,27 +20,89 @@
         "name": "keywords",
         "multi": true,
         "label": "Keywords"
+      }
+    ]
+  },
+  {
+    "id": "blog-post-metadata",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "article-title",
+        "label": "Article Title",
+        "description": "Main title of the blog post"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "article-description",
+        "label": "Article Description",
+        "description": "SEO meta description",
+        "multi": true
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "author-email",
+        "label": "Author Email",
+        "description": "Email of the article author"
+      },
+      {
+        "component": "date-time",
+        "valueType": "date-time",
+        "name": "article_publish_date",
+        "label": "Publish Date",
+        "placeholder": "YYYY-MM-DD",
+        "displayFormat": null,
+        "valueFormat": null
+      },
+      {
+        "component": "aem-tag",
+        "valueType": "string",
+        "name": "cq:tags",
+        "label": "Tags",
+        "description": "Tags for categorizing the article"
+      },
+      {
+        "component": "text",
+        "valueType": "number",
+        "name": "reading-time",
+        "label": "Estimated Reading Time (minutes)",
+        "description": "Estimated time to read the article"
+      },
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "featured-image",
+        "label": "Featured Image",
+        "description": "Main image for the blog post",
+        "multi": false
+      },
+      {
+        "component": "boolean",
+        "valueType": "boolean",
+        "name": "enable-comments",
+        "label": "Enable Comments",
+        "description": "Allow readers to comment on this post"
       },
       {
         "component": "select",
-        "name": "template",
-        "label": "Template name",
+        "valueType": "string",
+        "name": "blog-category",
+        "label": "Blog Category",
         "options": [
           {
-            "name": "Library",
-            "value": "library"
+            "name": "Technology",
+            "value": "technology"
           },
           {
-            "name": "Author",
-            "value": "author"
+            "name": "Business",
+            "value": "business"
           },
           {
-            "name": "Blog Post",
-            "value": "blogpost"
-          },
-          {
-            "name": "Category",
-            "value": "category"
+            "name": "Product Updates",
+            "value": "product-updates"
           }
         ]
       }
