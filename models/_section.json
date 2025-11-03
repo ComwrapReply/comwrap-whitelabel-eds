@@ -57,6 +57,7 @@
         "title",
         "hero",
         "cards",
+        "card",
         "columns",
         "fragment",
         "accordion",
@@ -72,7 +73,11 @@
         "table",
         "quote",
         "video",
-        "article-feeds"
+        "article-feeds",
+        "teaser",
+        "tags",
+        "embed",
+        "teaser"
       ]
     }
   ]
