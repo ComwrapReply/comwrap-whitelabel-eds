@@ -5839,6 +5839,10 @@
     ]
   },
   {
+    "id": "tags",
+    "fields": []
+  },
+  {
     "id": "teaser",
     "fields": [
       {

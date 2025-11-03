@@ -1,0 +1,19 @@
+.block.tags {
+  margin: 0.5rem 0;
+}
+
+.block.tags .tags-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.block.tags .tag {
+  background: var(--color-primary);
+  color: var(--color-white);
+  font-family: var(--font-family-body);
+  line-height: 1;
+  padding: 0.5rem 0.75rem;
+  border-radius: 9999px;
+  white-space: nowrap;
+}
