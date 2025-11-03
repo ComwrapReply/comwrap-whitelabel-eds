@@ -490,6 +490,8 @@ function addRequestContextToForm(formDef) {
       });
     } catch (e) {
       // Error reading URL parameters
+      // eslint-disable-next-line no-console
+      console.warn('Error reading URL parameters:', e);
     }
 
     // Add cookies
@@ -504,6 +506,8 @@ function addRequestContextToForm(formDef) {
       });
     } catch (e) {
       // Error reading cookies
+      // eslint-disable-next-line no-console
+      console.warn('Error reading cookies:', e);
     }
   }
 }

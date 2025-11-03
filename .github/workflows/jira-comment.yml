@@ -48,7 +48,7 @@ jobs:
                   by_issue = {}
 
                   def create_adf_hyperlink(text, url):
-                      """Create ADF hyperlink structure"""
+                      # Create ADF hyperlink structure
                       return {
                           "type": "text",
                           "text": text,
@@ -63,14 +63,14 @@ jobs:
                       }
 
                   def create_adf_text(text):
-                      """Create plain ADF text"""
+                      # Create plain ADF text
                       return {
                           "type": "text",
                           "text": text
                       }
 
                   def convert_urls_in_text(text):
-                      """Convert any URLs in text to ADF hyperlink format"""
+                      # Convert any URLs in text to ADF hyperlink format
                       import re
                       url_pattern = r'https?://[^\s<>"{}|\\^`\[\]]+[^\s<>"{}|\\^`\[\].,;:!?\'")\]]'
                       
@@ -110,11 +110,22 @@ jobs:
                       
                       return result
 
+                  # Extract Jira keys from branch name
+                  branch_name = os.environ.get('GITHUB_REF_NAME', '')
+                  branch_keys = set(key_re.findall(branch_name))
+
+                  if branch_keys:
+                      print(f"Found Jira keys in branch '{branch_name}': {list(branch_keys)}")
+
                   for c in commits:
                       msg = f"{c['message']}".strip()
                       commit_url = c.get('url') or f"{os.environ['GITHUB_SERVER_URL']}/{os.environ['GITHUB_REPOSITORY']}/commit/{c['id']}"
-                      found = set(key_re.findall(msg))
-                      if not found: 
+                      
+                      # Get Jira keys from both commit message and branch name
+                      commit_keys = set(key_re.findall(msg))
+                      all_keys = branch_keys.union(commit_keys)
+                      
+                      if not all_keys: 
                           continue
                       
                       # Create ADF content with proper hyperlinks
@@ -164,7 +175,7 @@ jobs:
                           "content": content
                       }
                       
-                      for key in found:
+                      for key in all_keys:
                           by_issue.setdefault(key, []).append(line_content)
 
                   # Create proper ADF payloads
@@ -176,6 +187,11 @@ jobs:
                           "content": v  # v is already a list of ADF paragraph objects
                       }
                       payloads.append({"key": k, "comment": adf_comment})
+
+                  print(f"Final payloads count: {len(payloads)}")
+                  for p in payloads:
+                      print(f"Will comment on issue: {p['key']}")
+
                   with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
                       f.write(f"payloads={json.dumps(payloads)}\n")
                   PY

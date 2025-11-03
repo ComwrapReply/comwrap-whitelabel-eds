@@ -1,1 +1,4 @@
-node .husky/pre-commit.mjs
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+node "$(dirname "$0")/pre-commit.mjs"
