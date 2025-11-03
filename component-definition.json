@@ -56,6 +56,42 @@
               }
             }
           }
+        },
+        {
+          "title": "Table",
+          "id": "table",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/table/v1/table",
+                "template": {}
+              }
+            }
+          }
+        },
+        {
+          "title": "Table Row",
+          "id": "table-row",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/table/v1/table/row",
+                "template": {}
+              }
+            }
+          }
+        },
+        {
+          "title": "Table Column",
+          "id": "table-column",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/table/v1/table/column",
+                "template": {}
+              }
+            }
+          }
         }
       ]
     },
