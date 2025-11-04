@@ -93,7 +93,7 @@ Create a new file in the `models/` directory:
         {
           "component": "date-time",
           "valueType": "date-time",
-          "name": "article_publish_date",
+          "name": "article-publish-date",
           "label": "Publish Date",
           "placeholder": "YYYY-MM-DD",
           "displayFormat": null,
@@ -241,7 +241,7 @@ Let's create a complete example for a blog post template with template-specific 
         {
           "component": "date-time",
           "valueType": "date-time",
-          "name": "article_publish_date",
+          "name": "article-publish-date",
           "label": "Publish Date",
           "placeholder": "YYYY-MM-DD"
         },

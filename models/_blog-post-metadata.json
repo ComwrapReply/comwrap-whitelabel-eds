@@ -29,7 +29,7 @@
         {
           "component": "date-time",
           "valueType": "date-time",
-          "name": "article_publish_date",
+          "name": "article-publish-date",
           "label": "Publish Date",
           "placeholder": "YYYY-MM-DD",
           "displayFormat": null,
