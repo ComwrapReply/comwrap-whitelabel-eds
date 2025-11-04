@@ -3,6 +3,29 @@
     "id": "page-metadata",
     "fields": [
       {
+        "component": "select",
+        "name": "template",
+        "label": "Template",
+        "options": [
+          {
+            "name": "Default",
+            "value": ""
+          },
+          {
+            "name": "Article",
+            "value": "article"
+          }
+        ],
+        "condition": {
+          "===": [
+            {
+              "var": "initialContentRefTarget"
+            },
+            "true"
+          ]
+        }
+      },
+      {
         "component": "text",
         "valueType": "string",
         "name": "jcr:title",
@@ -22,128 +45,67 @@
         "label": "Keywords"
       },
       {
-        "component": "text",
-        "valueType": "string",
-        "name": "author-name",
-        "label": "Author Name",
-        "value": ""
-      },
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "author-role",
-        "label": "Author Role",
-        "value": ""
-      },
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "author-email",
-        "label": "Author Email",
-        "value": ""
-      },
+        "component": "container",
+        "name": "social",
+        "label": "Social",
+        "fields": [
+          {
+            "component": "text",
+            "name": "og:title",
+            "label": "Title"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "article-metadata",
+    "fields": [
       {
         "component": "select",
         "name": "template",
         "label": "Template",
         "options": [
           {
-            "name": "Blog Post",
-            "value": "blog"
+            "name": "Default",
+            "value": ""
           },
           {
-            "name": "News Post",
-            "value": "news"
-          },
-          {
-            "name": "Events Post",
-            "value": "events"
+            "name": "Article",
+            "value": "article"
           }
         ],
-        "value": ""
-      }
-    ]
-  },
-  {
-    "id": "blog-post-metadata",
-    "fields": [
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "article-title",
-        "label": "Article Title",
-        "description": "Main title of the blog post"
+        "condition": {
+          "===": [
+            {
+              "var": "initialContentRefTarget"
+            },
+            "true"
+          ]
+        }
       },
       {
-        "component": "text",
-        "valueType": "string",
-        "name": "article-description",
-        "label": "Article Description",
-        "description": "SEO meta description",
-        "multi": true
-      },
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "author-email",
-        "label": "Author Email",
-        "description": "Email of the article author"
-      },
-      {
-        "component": "date-time",
-        "valueType": "date-time",
-        "name": "article_publish_date",
-        "label": "Publish Date",
-        "placeholder": "YYYY-MM-DD",
-        "displayFormat": null,
-        "valueFormat": null
-      },
-      {
-        "component": "aem-tag",
-        "valueType": "string",
-        "name": "cq:tags",
-        "label": "Tags",
-        "description": "Tags for categorizing the article"
-      },
-      {
-        "component": "text",
-        "valueType": "number",
-        "name": "reading-time",
-        "label": "Estimated Reading Time (minutes)",
-        "description": "Estimated time to read the article"
-      },
-      {
-        "component": "reference",
-        "valueType": "string",
-        "name": "featured-image",
-        "label": "Featured Image",
-        "description": "Main image for the blog post",
-        "multi": false
-      },
-      {
-        "component": "boolean",
-        "valueType": "boolean",
-        "name": "enable-comments",
-        "label": "Enable Comments",
-        "description": "Allow readers to comment on this post"
-      },
-      {
-        "component": "select",
-        "valueType": "string",
-        "name": "blog-category",
-        "label": "Blog Category",
-        "options": [
+        "component": "container",
+        "name": "social",
+        "label": "Social",
+        "fields": [
           {
-            "name": "Technology",
-            "value": "technology"
+            "component": "text",
+            "name": "og:title",
+            "label": "Title"
           },
           {
-            "name": "Business",
-            "value": "business"
-          },
-          {
-            "name": "Product Updates",
-            "value": "product-updates"
+            "component": "text",
+            "name": "article:author",
+            "label": "Author",
+            "condition": {
+              "===": [
+                {
+                  "var": "template"
+                },
+                "article"
+              ]
+            }
           }
         ]
       }
