@@ -44,20 +44,20 @@
       },
       {
         "component": "select",
-        "name": "category",
-        "label": "Category",
+        "name": "template",
+        "label": "Template",
         "valueType": "string",
         "options": [
           {
-            "name": "Blog",
+            "name": "Blog Post",
             "value": "blog"
           },
           {
-            "name": "News",
+            "name": "News Post",
             "value": "news"
           },
           {
-            "name": "Events",
+            "name": "Events Post",
             "value": "events"
           }
         ],
