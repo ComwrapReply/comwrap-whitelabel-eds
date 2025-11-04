@@ -46,7 +46,6 @@
         "component": "select",
         "name": "template",
         "label": "Template",
-        "valueType": "string",
         "options": [
           {
             "name": "Blog Post",

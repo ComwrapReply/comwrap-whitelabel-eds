@@ -1,0 +1,69 @@
+{
+  "models": [
+    {
+      "id": "page-metadata",
+      "fields": [
+        {
+          "component": "text",
+          "valueType": "string",
+          "name": "jcr:title",
+          "label": "Title"
+        },
+        {
+          "component": "text",
+          "valueType": "string",
+          "name": "jcr:description",
+          "label": "Description"
+        },
+        {
+          "component": "text",
+          "valueType": "string",
+          "name": "keywords",
+          "multi": true,
+          "label": "Keywords"
+        },
+        {
+          "component": "text",
+          "valueType": "string",
+          "name": "author-name",
+          "label": "Author Name",
+          "value": ""
+        },
+        {
+          "component": "text",
+          "valueType": "string",
+          "name": "author-role",
+          "label": "Author Role",
+          "value": ""
+        },
+        {
+          "component": "text",
+          "valueType": "string",
+          "name": "author-email",
+          "label": "Author Email",
+          "value": ""
+        },
+        {
+          "component": "select",
+          "name": "template",
+          "label": "Template",
+          "options": [
+            {
+              "name": "Blog Post",
+              "value": "blog"
+            },
+            {
+              "name": "News Post",
+              "value": "news"
+            },
+            {
+              "name": "Events",
+              "value": "events"
+            }
+          ],
+          "value": ""
+        }
+      ]
+    }
+  ]
+}
