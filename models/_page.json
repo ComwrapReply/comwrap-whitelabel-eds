@@ -15,16 +15,12 @@
             {
               "name": "Article",
               "value": "article"
+            },
+            {
+              "name": "Events",
+              "value": "events"
             }
-          ],
-          "condition": {
-            "===": [
-              {
-                "var": "initialContentRefTarget"
-              },
-              "true"
-            ]
-          }
+          ]
         },
         {
           "component": "text",
@@ -97,6 +93,14 @@
               }
             }
           ]
+        }
+      ]
+    },
+    {
+      "id": "events-metadata",
+      "fields": [
+        {
+          "...": "#/models/page-metadata/fields/template"
         }
       ]
     }
