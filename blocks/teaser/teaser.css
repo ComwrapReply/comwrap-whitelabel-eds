@@ -22,7 +22,7 @@
 .teaser-image {
   position: relative;
   flex-shrink: 0;
-  width: 760px;
+  width: 50%;
   height: 513px;
   overflow: hidden;
 }
@@ -47,7 +47,7 @@
   flex-direction: column;
   gap: 48px;
   padding-left: 20px;
-  width: 740px;
+  width: 50%;
   flex-shrink: 0;
 }
 
