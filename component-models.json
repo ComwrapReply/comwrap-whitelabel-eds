@@ -158,6 +158,19 @@
             "true"
           ]
         }
+      },
+      {
+        "component": "text",
+        "name": "events:organizer",
+        "label": "Organizer",
+        "condition": {
+          "===": [
+            {
+              "var": "template"
+            },
+            "events"
+          ]
+        }
       }
     ]
   },
