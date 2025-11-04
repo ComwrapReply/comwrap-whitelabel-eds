@@ -20,6 +20,218 @@
         "name": "keywords",
         "multi": true,
         "label": "Keywords"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "author-name",
+        "label": "Author Name",
+        "value": ""
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "author-role",
+        "label": "Author Role",
+        "value": ""
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "author-email",
+        "label": "Author Email",
+        "value": ""
+      },
+      {
+        "component": "select",
+        "name": "category",
+        "label": "Category",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "Blog",
+            "value": "blog"
+          },
+          {
+            "name": "News",
+            "value": "news"
+          },
+          {
+            "name": "Events",
+            "value": "events"
+          }
+        ],
+        "value": ""
+      }
+    ]
+  },
+  {
+    "id": "blog-post-metadata",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "article-title",
+        "label": "Article Title",
+        "description": "Main title of the blog post"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "article-description",
+        "label": "Article Description",
+        "description": "SEO meta description",
+        "multi": true
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "author-email",
+        "label": "Author Email",
+        "description": "Email of the article author"
+      },
+      {
+        "component": "date-time",
+        "valueType": "date-time",
+        "name": "article_publish_date",
+        "label": "Publish Date",
+        "placeholder": "YYYY-MM-DD",
+        "displayFormat": null,
+        "valueFormat": null
+      },
+      {
+        "component": "aem-tag",
+        "valueType": "string",
+        "name": "cq:tags",
+        "label": "Tags",
+        "description": "Tags for categorizing the article"
+      },
+      {
+        "component": "text",
+        "valueType": "number",
+        "name": "reading-time",
+        "label": "Estimated Reading Time (minutes)",
+        "description": "Estimated time to read the article"
+      },
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "featured-image",
+        "label": "Featured Image",
+        "description": "Main image for the blog post",
+        "multi": false
+      },
+      {
+        "component": "boolean",
+        "valueType": "boolean",
+        "name": "enable-comments",
+        "label": "Enable Comments",
+        "description": "Allow readers to comment on this post"
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "blog-category",
+        "label": "Blog Category",
+        "options": [
+          {
+            "name": "Technology",
+            "value": "technology"
+          },
+          {
+            "name": "Business",
+            "value": "business"
+          },
+          {
+            "name": "Product Updates",
+            "value": "product-updates"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "blog-post-metadata",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "article-title",
+        "label": "Article Title",
+        "description": "Main title of the blog post"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "article-description",
+        "label": "Article Description",
+        "description": "SEO meta description",
+        "multi": true
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "author-email",
+        "label": "Author Email",
+        "description": "Email of the article author"
+      },
+      {
+        "component": "date-time",
+        "valueType": "date-time",
+        "name": "article_publish_date",
+        "label": "Publish Date",
+        "placeholder": "YYYY-MM-DD",
+        "displayFormat": null,
+        "valueFormat": null
+      },
+      {
+        "component": "aem-tag",
+        "valueType": "string",
+        "name": "cq:tags",
+        "label": "Tags",
+        "description": "Tags for categorizing the article"
+      },
+      {
+        "component": "text",
+        "valueType": "number",
+        "name": "reading-time",
+        "label": "Estimated Reading Time (minutes)",
+        "description": "Estimated time to read the article"
+      },
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "featured-image",
+        "label": "Featured Image",
+        "description": "Main image for the blog post",
+        "multi": false
+      },
+      {
+        "component": "boolean",
+        "valueType": "boolean",
+        "name": "enable-comments",
+        "label": "Enable Comments",
+        "description": "Allow readers to comment on this post"
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "blog-category",
+        "label": "Blog Category",
+        "options": [
+          {
+            "name": "Technology",
+            "value": "technology"
+          },
+          {
+            "name": "Business",
+            "value": "business"
+          },
+          {
+            "name": "Product Updates",
+            "value": "product-updates"
+          }
+        ]
       }
     ]
   },
@@ -321,54 +533,44 @@
       {
         "component": "select",
         "name": "classes",
-        "value": "",
-        "label": "Background Color",
-        "description": "The button background color",
+        "label": "Carousel background color",
         "valueType": "string",
+        "value": "",
         "options": [
           {
-            "name": "Red",
-            "value": "bg-red"
+            "name": "Default",
+            "value": ""
           },
           {
-            "name": "Green",
-            "value": "bg-green"
-          },
-          {
-            "name": "Blue",
-            "value": "bg-blue"
+            "name": "Dark",
+            "value": "dark"
           }
         ]
       }
     ]
   },
   {
-    "id": "carouselitem",
+    "id": "carousel-slide",
     "fields": [
       {
         "component": "reference",
         "valueType": "string",
         "name": "image",
-        "label": "Image",
+        "label": "Carousel image",
         "multi": false
       },
       {
         "component": "text",
         "valueType": "string",
         "name": "imageAlt",
-        "label": "Image Alt Text",
+        "label": "Carousel image alt text",
         "value": ""
       },
       {
         "component": "richtext",
-        "name": "slide_title",
-        "label": "Slide Title",
-        "valueType": "string"
-      },
-      {
-        "component": "button",
-        "name": "slide_button",
-        "label": "Slide Button",
+        "name": "text",
+        "value": "",
+        "label": "Carousel description",
         "valueType": "string"
       }
     ]
@@ -493,6 +695,80 @@
         "valueType": "string",
         "validation": {
           "rootPath": "/content/dam/aem-xwalk"
+        }
+      }
+    ]
+  },
+  {
+    "id": "embed",
+    "fields": [
+      {
+        "component": "text",
+        "name": "embedUrl",
+        "label": "Embed URL",
+        "description": "Enter the iframe source URL",
+        "valueType": "string",
+        "value": ""
+      },
+      {
+        "component": "select",
+        "name": "aspectRatio",
+        "label": "Aspect Ratio",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "16:9 (Widescreen)",
+            "value": "16-9"
+          },
+          {
+            "name": "4:3 (Standard)",
+            "value": "4-3"
+          },
+          {
+            "name": "1:1 (Square)",
+            "value": "1-1"
+          },
+          {
+            "name": "21:9 (Ultrawide)",
+            "value": "21-9"
+          },
+          {
+            "name": "Custom",
+            "value": "custom"
+          }
+        ],
+        "value": "16-9"
+      },
+      {
+        "component": "text",
+        "name": "customWidth",
+        "label": "Width (px)",
+        "description": "Custom width in pixels (when using Custom aspect ratio)",
+        "valueType": "number",
+        "value": "800",
+        "condition": {
+          "===": [
+            {
+              "var": "aspectRatio"
+            },
+            "custom"
+          ]
+        }
+      },
+      {
+        "component": "text",
+        "name": "customHeight",
+        "label": "Height (px)",
+        "description": "Custom height in pixels (when using Custom aspect ratio)",
+        "valueType": "number",
+        "value": "450",
+        "condition": {
+          "===": [
+            {
+              "var": "aspectRatio"
+            },
+            "custom"
+          ]
         }
       }
     ]
@@ -5584,6 +5860,24 @@
         "component": "aem-content",
         "name": "reference",
         "label": "Reference"
+      },
+      {
+        "component": "select",
+        "name": "classes",
+        "label": "Style",
+        "valueType": "string",
+        "value": "",
+        "description": "The style of the fragment",
+        "options": [
+          {
+            "name": "Default",
+            "value": ""
+          },
+          {
+            "name": "Dark",
+            "value": "dark"
+          }
+        ]
       }
     ]
   },
@@ -5711,6 +6005,32 @@
             "description": "The light background style"
           }
         ]
+      }
+    ]
+  },
+  {
+    "id": "separator",
+    "fields": [
+      {
+        "component": "select",
+        "name": "classes",
+        "label": "Color",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "Transparent",
+            "value": ""
+          },
+          {
+            "name": "Blue",
+            "value": "blue"
+          },
+          {
+            "name": "Grey",
+            "value": "grey"
+          }
+        ],
+        "value": "grey"
       }
     ]
   },
@@ -5860,46 +6180,71 @@
     ]
   },
   {
+    "id": "tags",
+    "fields": []
+  },
+  {
     "id": "teaser",
     "fields": [
       {
-        "component": "text",
-        "name": "teaser-title",
-        "value": "",
-        "label": "Title"
-      },
-      {
-        "component": "richtext",
-        "name": "teaser-description",
-        "value": "",
-        "label": "Description"
+        "component": "tab",
+        "label": "Content",
+        "name": "teaser-content"
       },
       {
         "component": "reference",
-        "name": "teaser-image",
+        "name": "image",
         "label": "Image",
         "valueType": "string",
         "multi": false
       },
       {
-        "name": "teaser-imageAlt",
         "component": "text",
-        "title": "Image Alt Text"
+        "name": "imageAlt",
+        "label": "Image Alt Text",
+        "value": ""
+      },
+      {
+        "component": "text",
+        "name": "heading",
+        "label": "Heading",
+        "valueType": "string",
+        "value": ""
+      },
+      {
+        "component": "richtext",
+        "name": "description",
+        "label": "Description",
+        "valueType": "string",
+        "value": ""
+      },
+      {
+        "component": "text",
+        "name": "fullBlockLink",
+        "label": "Teaser Link",
+        "valueType": "string",
+        "value": ""
+      },
+      {
+        "component": "tab",
+        "label": "CTAs",
+        "name": "teaser-ctas"
       },
       {
         "component": "aem-content",
-        "name": "custom-button-link",
-        "label": "Button Link"
+        "name": "primaryButton_link",
+        "label": "Primary Button Link"
       },
       {
         "component": "text",
-        "name": "custom-button-label",
-        "label": "Button Label"
+        "name": "primaryButton_label",
+        "label": "Primary Button Label",
+        "value": ""
       },
       {
         "component": "select",
-        "name": "custom-button-target",
-        "label": "Link Target",
+        "name": "primaryButton_target",
+        "label": "Primary Button Target",
         "options": [
           {
             "name": "Same Window",
@@ -5909,12 +6254,13 @@
             "name": "New Tab",
             "value": "_blank"
           }
-        ]
+        ],
+        "value": ""
       },
       {
         "component": "multiselect",
-        "name": "classes",
-        "label": "Style",
+        "name": "primaryButton_classes",
+        "label": "Primary Button Style",
         "valueType": "string",
         "maxSize": 2,
         "options": [
@@ -5934,23 +6280,92 @@
                 "value": "text"
               }
             ]
+          }
+        ]
+      },
+      {
+        "component": "aem-content",
+        "name": "secondaryButton_link",
+        "label": "Secondary Button Link (optional)"
+      },
+      {
+        "component": "text",
+        "name": "secondaryButton_label",
+        "label": "Secondary Button Label",
+        "value": ""
+      },
+      {
+        "component": "select",
+        "name": "secondaryButton_target",
+        "label": "Secondary Button Target",
+        "options": [
+          {
+            "name": "Same Window",
+            "value": ""
           },
           {
-            "name": "Type",
+            "name": "New Tab",
+            "value": "_blank"
+          }
+        ],
+        "value": ""
+      },
+      {
+        "component": "multiselect",
+        "name": "secondaryButton_classes",
+        "label": "Secondary Button Style",
+        "valueType": "string",
+        "maxSize": 2,
+        "options": [
+          {
+            "name": "Style",
             "children": [
               {
-                "name": "Download",
-                "value": "download"
+                "name": "Primary",
+                "value": "primary"
               },
               {
-                "name": "Email",
-                "value": "email"
+                "name": "Secondary",
+                "value": "secondary"
               },
               {
-                "name": "Telephone",
-                "value": "telephone"
+                "name": "Text",
+                "value": "text"
               }
             ]
+          }
+        ]
+      },
+      {
+        "component": "tab",
+        "label": "Layout",
+        "name": "teaser-layout"
+      },
+      {
+        "component": "select",
+        "name": "classes",
+        "label": "Layout Style",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "Image Left",
+            "value": "image-left"
+          },
+          {
+            "name": "Image Right",
+            "value": "image-right"
+          },
+          {
+            "name": "Image Top",
+            "value": "image-top"
+          },
+          {
+            "name": "Image Bottom",
+            "value": "image-bottom"
+          },
+          {
+            "name": "Image Background",
+            "value": "image-background"
           }
         ]
       }

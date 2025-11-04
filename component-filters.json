@@ -14,6 +14,7 @@
       "title",
       "hero",
       "cards",
+      "card",
       "columns",
       "fragment",
       "accordion",
@@ -29,7 +30,12 @@
       "table",
       "quote",
       "video",
-      "article-feeds"
+      "article-feeds",
+      "teaser",
+      "tags",
+      "embed",
+      "teaser",
+      "separator"
     ]
   },
   {
@@ -47,7 +53,7 @@
   {
     "id": "carousel",
     "components": [
-      "carouselitem"
+      "carousel-slide"
     ]
   },
   {
@@ -63,6 +69,7 @@
       "image",
       "button",
       "title",
+      "teaser",
       "accordion",
       "custom-button"
     ]

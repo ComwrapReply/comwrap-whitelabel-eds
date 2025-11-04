@@ -1,225 +1,309 @@
-// TODO: Create missing utility functions
-// import { moveClassToTargetedChild } from '../../scripts/utils.js';
-// import { renderButton } from '../../components/button/button.js';
-
 /**
- * Teaser block implementation with element grouping for block options
- * Supports multiple styling variants through classes_ prefixed fields
+ * Teaser block implementation
+ * Based on Figma design with image, heading, description, and up to 2 CTA buttons
+ * Supports full block linking and multiple layout variants
+ * Uses element grouping for buttons (primaryButton_, secondaryButton_)
  */
 
 /**
- * Simple button renderer (temporary implementation)
- * @param {Object} options - Button options
- * @returns {HTMLElement} Button element
- */
-function renderButton({ link, label, target }) {
-  const button = document.createElement('a');
-  button.href = link || '#';
-  button.textContent = label || 'Click here';
-  button.className = 'button';
-  if (target) {
-    button.target = target;
-  }
-  return button;
-}
-
-/**
- * Move classes from block to target child (temporary implementation)
- * @param {HTMLElement} block - Source block element
- * @param {HTMLElement} target - Target child element
- */
-function moveClassToTargetedChild(block, target) {
-  if (!target) return;
-  // Simple implementation - could be enhanced
-  const blockClasses = Array.from(block.classList);
-  blockClasses.forEach((className) => {
-    if (className !== 'block' && className !== 'teaser') {
-      target.classList.add(className);
-    }
-  });
-}
-
-/**
- * Extract block options from classes_ prefixed fields
+ * Add semantic CSS classes to block elements
  * @param {HTMLElement} block - The block DOM element
- * @returns {Object} Object containing all block options
  */
-function extractBlockOptions(block) {
-  const options = {
-    variant: '',
-    background: 'light',
-    layout: 'image-left',
-    effects: [],
-    fullwidth: false,
-    centered: false,
-  };
+const addSemanticClasses = (block) => {
+  // Add class to image wrapper
+  const picture = block.querySelector('picture');
+  if (picture) {
+    const imageWrapper = picture.parentElement;
+    if (imageWrapper) {
+      imageWrapper.classList.add('teaser-image');
+    }
+  }
 
-  // Extract all classes_ prefixed fields from the block
+  // Mark content area
   const rows = Array.from(block.children);
-  rows.forEach((row, index) => {
-    const textContent = row.textContent?.trim();
-    if (!textContent) return;
-
-    // Map field positions to option names
-    const fieldMapping = {
-      5: 'classes_variant',
-      6: 'classes_background',
-      7: 'classes_layout',
-      8: 'classes_effects',
-      9: 'classes_fullwidth',
-      10: 'classes_centered',
-    };
-
-    const fieldName = fieldMapping[index];
-    if (!fieldName) return;
-
-    // Process different field types
-    switch (fieldName) {
-      case 'classes_variant':
-      case 'classes_background':
-      case 'classes_layout':
-        options[fieldName.replace('classes_', '')] = textContent;
-        break;
-      case 'classes_effects':
-        // Handle multiselect - split by comma and trim
-        options.effects = textContent ? textContent.split(',').map((effect) => effect.trim()) : [];
-        break;
-      case 'classes_fullwidth':
-      case 'classes_centered':
-        // Handle boolean fields
-        options[fieldName.replace('classes_', '')] = textContent.toLowerCase() === 'true';
-        break;
-      default:
-        // No action needed for unknown field types
-        break;
-    }
-  });
-
-  return options;
-}
+  if (rows.length > 1) {
+    const contentDiv = rows[1];
+    contentDiv.classList.add('teaser-content');
+  }
+};
 
 /**
- * Apply block options as CSS classes to the block element
+ * Create the teaser structure
  * @param {HTMLElement} block - The block DOM element
- * @param {Object} options - Block options object
+ * @param {Object} data - Teaser data
  */
-function applyBlockOptions(block, options) {
-  // Apply variant class
-  if (options.variant) {
-    block.classList.add(options.variant);
-  }
-
-  // Apply background class
-  if (options.background) {
-    block.classList.add(options.background);
-  }
-
-  // Apply layout class
-  if (options.layout) {
-    block.classList.add(options.layout);
-  }
-
-  // Apply effects classes
-  if (options.effects && options.effects.length > 0) {
-    options.effects.forEach((effect) => {
-      if (effect) {
-        block.classList.add(effect);
-      }
-    });
-  }
-
-  // Apply boolean classes
-  if (options.fullwidth) {
-    block.classList.add('fullwidth');
-  }
-
-  if (options.centered) {
-    block.classList.add('centered');
-  }
-}
-
-export default function decorate(block) {
-  // Extract block options from classes_ fields
-  const blockOptions = extractBlockOptions(block);
-  // Apply block options as CSS classes
-  applyBlockOptions(block, blockOptions);
-
-  const [
-    title,
-    description,
-    image,
-    link,
-    label,
-    target,
-  ] = Array.from(block.children)
-    .map((row, index) => {
-      switch (index) {
-        case 0: // Title
-        case 1: // Description
-        case 3: // Link
-        case 4: // Label
-        case 5: // Target
-        { // Read value and remove row from the DOM
-          const value = row.textContent.trim();
-          row.remove();
-          return value;
-        }
-        case 2: // Image
-        { // Get the picture element and remove row from the DOM
-          const picture = row.querySelector('picture');
-          row.remove();
-          return picture;
-        }
-        default:
-          return '';
-      }
-    });
-
+const createTeaserStructure = (block, data) => {
   const wrapper = document.createElement('div');
-  wrapper.className = 'teaser-block';
+  wrapper.className = 'teaser-wrapper';
 
+  // Create image container
   const imageDiv = document.createElement('div');
   imageDiv.className = 'teaser-image';
 
-  if (image) {
-    imageDiv.appendChild(image);
-  } else {
-    const img = document.createElement('img');
-    img.src = 'https://via.placeholder.com/400x200';
-    img.alt = 'Teaser Image';
-    imageDiv.appendChild(img);
+  if (data.image) {
+    imageDiv.appendChild(data.image);
   }
 
+  // Create content container
   const contentDiv = document.createElement('div');
   contentDiv.className = 'teaser-content';
 
-  const titleEl = document.createElement('h2');
-  titleEl.className = 'teaser-title';
-  titleEl.textContent = title || '';
+  // Create heading
+  if (data.heading) {
+    const headingWrapper = document.createElement('div');
+    headingWrapper.className = 'teaser-heading-wrapper';
 
-  const descEl = document.createElement('p');
-  descEl.className = 'teaser-description';
-  descEl.textContent = description || '';
+    const heading = document.createElement('h2');
+    heading.className = 'teaser-heading';
+    heading.textContent = data.heading;
 
-  const buttonDiv = document.createElement('div');
-  buttonDiv.className = 'teaser-button';
-  if (label) {
-    buttonDiv.appendChild(renderButton({
-      link,
-      label,
-      target,
-      block,
-    }));
-    moveClassToTargetedChild(block, buttonDiv.querySelector('.button'));
+    headingWrapper.appendChild(heading);
+    contentDiv.appendChild(headingWrapper);
   }
 
-  contentDiv.appendChild(titleEl);
-  contentDiv.appendChild(descEl);
-  contentDiv.appendChild(buttonDiv);
+  // Create description
+  if (data.description) {
+    const descriptionWrapper = document.createElement('div');
+    descriptionWrapper.className = 'teaser-description-wrapper';
 
+    const description = document.createElement('div');
+    description.className = 'teaser-description';
+    description.innerHTML = data.description;
+
+    descriptionWrapper.appendChild(description);
+    contentDiv.appendChild(descriptionWrapper);
+  }
+
+  // Create buttons container
+  const hasButtons = data.primaryButton || data.secondaryButton;
+  if (hasButtons) {
+    const buttonsDiv = document.createElement('div');
+    buttonsDiv.className = 'teaser-buttons';
+
+    if (data.primaryButton) {
+      buttonsDiv.appendChild(data.primaryButton);
+    }
+
+    if (data.secondaryButton) {
+      buttonsDiv.appendChild(data.secondaryButton);
+    }
+
+    contentDiv.appendChild(buttonsDiv);
+  }
+
+  // Assemble wrapper
   wrapper.appendChild(imageDiv);
   wrapper.appendChild(contentDiv);
 
-  block.textContent = '';
-  block.appendChild(wrapper);
+  // Handle full block link
+  if (data.fullBlockLink && !hasButtons) {
+    const blockLink = document.createElement('a');
+    blockLink.href = data.fullBlockLink;
+    blockLink.className = 'teaser-block-link';
+    blockLink.setAttribute('aria-label', data.heading || 'Teaser link');
+
+    // Add external link attributes if needed
+    if (data.fullBlockLink.startsWith('http') && !data.fullBlockLink.includes(window.location.hostname)) {
+      blockLink.target = '_blank';
+      blockLink.rel = 'noopener noreferrer';
+    }
+
+    blockLink.appendChild(wrapper);
+    block.textContent = '';
+    block.appendChild(blockLink);
+  } else {
+    block.textContent = '';
+    block.appendChild(wrapper);
+  }
+};
+
+/**
+ * Extract data from block children
+ * With element grouping, buttons are already rendered as <a> tags
+ * @param {HTMLElement} block - The block DOM element
+ * @returns {Object} Extracted data
+ */
+const extractData = (block) => {
+  const data = {
+    image: null,
+    imageAlt: '',
+    heading: '',
+    description: '',
+    fullBlockLink: '',
+    primaryButton: null,
+    secondaryButton: null,
+  };
+
+  const rows = Array.from(block.children);
+
+  // Extract fields based on position
+  // Note: The order matches the JSON field definition order
+  rows.forEach((row, index) => {
+    const text = row.textContent?.trim();
+
+    switch (index) {
+      case 0: // image (with alt text)
+        {
+          const picture = row.querySelector('picture');
+          if (picture) {
+            data.image = picture;
+            const img = picture.querySelector('img');
+            if (img && img.alt) {
+              data.imageAlt = img.alt;
+            }
+          }
+        }
+        break;
+      case 1: // heading
+        data.heading = text;
+        break;
+      case 2: // description (richtext)
+        {
+          // For richtext, get the inner HTML content
+          const descDiv = row.querySelector('div');
+          const content = descDiv?.innerHTML?.trim() || row.innerHTML?.trim();
+          data.description = content;
+        }
+        break;
+      case 3: // fullBlockLink
+        data.fullBlockLink = text;
+        break;
+      case 4: // primaryButton (element grouped)
+        {
+          const button = row.querySelector('a');
+          if (button && button.href) {
+            // Element grouping creates: P0=button, P1=label, P2=style classes
+            const allParagraphs = Array.from(row.querySelectorAll('p'));
+
+            // Get label from second paragraph
+            if (allParagraphs[1]) {
+              const label = allParagraphs[1].textContent?.trim();
+              if (label) {
+                button.textContent = label;
+              }
+            }
+
+            // Get style classes from third paragraph and apply to button
+            if (allParagraphs[2]) {
+              const styleClasses = allParagraphs[2].textContent?.trim();
+              if (styleClasses) {
+                // Add each class (could be comma-separated for multiselect)
+                styleClasses.split(',').forEach((cls) => {
+                  const trimmedClass = cls.trim();
+                  if (trimmedClass) {
+                    button.classList.add(trimmedClass);
+                  }
+                });
+              }
+            }
+
+            data.primaryButton = button;
+            // Ensure button has proper class
+            if (!button.classList.contains('button')) {
+              button.classList.add('button');
+            }
+          }
+        }
+        break;
+      case 5: // secondaryButton (element grouped)
+        {
+          const button = row.querySelector('a');
+          if (button && button.href) {
+            // Element grouping creates: P0=button, P1=label, P2=style classes
+            const allParagraphs = Array.from(row.querySelectorAll('p'));
+
+            // Get label from second paragraph
+            if (allParagraphs[1]) {
+              const label = allParagraphs[1].textContent?.trim();
+              if (label) {
+                button.textContent = label;
+              }
+            }
+
+            // Get style classes from third paragraph and apply to button
+            if (allParagraphs[2]) {
+              const styleClasses = allParagraphs[2].textContent?.trim();
+              if (styleClasses) {
+                // Add each class (could be comma-separated for multiselect)
+                styleClasses.split(',').forEach((cls) => {
+                  const trimmedClass = cls.trim();
+                  if (trimmedClass) {
+                    button.classList.add(trimmedClass);
+                  }
+                });
+              }
+            }
+
+            data.secondaryButton = button;
+            // Ensure button has proper class
+            if (!button.classList.contains('button')) {
+              button.classList.add('button');
+            }
+          }
+        }
+        break;
+      default:
+        break;
+    }
+  });
+
+  return data;
+};
+
+/**
+ * Add event tracking for analytics
+ * @param {HTMLElement} block - The block DOM element
+ */
+const addAnalytics = (block) => {
+  // Track button clicks
+  const buttonsContainer = block.querySelector('.teaser-buttons');
+  if (buttonsContainer) {
+    const buttons = buttonsContainer.querySelectorAll('a');
+    buttons.forEach((button, index) => {
+      button.addEventListener('click', () => {
+        if (window.dataLayer) {
+          window.dataLayer.push({
+            event: 'teaser_cta_click',
+            block_type: 'teaser',
+            button_position: index === 0 ? 'primary' : 'secondary',
+            button_text: button.textContent?.trim(),
+            button_url: button.href,
+            button_style: button.className,
+          });
+        }
+      });
+    });
+  }
+
+  // Track full block link clicks
+  const blockLink = block.querySelector('.teaser-block-link');
+  if (blockLink) {
+    blockLink.addEventListener('click', () => {
+      if (window.dataLayer) {
+        window.dataLayer.push({
+          event: 'teaser_block_click',
+          block_type: 'teaser',
+          block_url: blockLink.href,
+        });
+      }
+    });
+  }
+};
+
+/**
+ * Main decoration function
+ * @param {HTMLElement} block - The block DOM element
+ */
+export default async function decorate(block) {
+  // Extract data from block children
+  const data = extractData(block);
+
+  // Create teaser structure
+  createTeaserStructure(block, data);
+
+  // Add semantic classes
+  addSemanticClasses(block);
+
+  // Add analytics tracking
+  addAnalytics(block);
 }
