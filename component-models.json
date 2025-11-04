@@ -53,6 +53,16 @@
             "component": "text",
             "name": "og:title",
             "label": "Title"
+          },
+          {
+            "component": "aem-content",
+            "name": "link",
+            "label": "Link"
+          },
+          {
+            "component": "text",
+            "name": "linkText",
+            "label": "Text"
           }
         ]
       }
