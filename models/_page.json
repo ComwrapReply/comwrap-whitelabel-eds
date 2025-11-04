@@ -20,7 +20,15 @@
               "name": "Events",
               "value": "events"
             }
-          ]
+          ],
+          "condition": {
+            "===": [
+              {
+                "var": "initialContentRefTarget"
+              },
+              "true"
+            ]
+          }
         },
         {
           "component": "text",
