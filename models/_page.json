@@ -63,6 +63,23 @@
             }
           ],
           "value": ""
+        },
+        {
+          "component": "select",
+          "name": "template",
+          "label": "Template",
+          "valueType": "string",
+          "options": [
+            {
+              "name": "template-1",
+              "value": "template-1"
+            },
+            {
+              "name": "template-2",
+              "value": "template-2"
+            }
+          ],
+          "value": ""
         }
       ]
     }
