@@ -376,6 +376,11 @@ li {
     margin-bottom: var(--space-8);
 }
 
+strong {
+    font-family: var(--font-family-base);
+    font-weight: 600;
+}
+
 /* Custom List Styles */
 .list-styled ol {
     list-style: none;
@@ -671,11 +676,21 @@ blockquote::before {
     line-height: var(--button-line-height);
     font-weight: 600;
     text-decoration: none;
-    border: var(--button-border-weight) var(--button-border-style) transparent;
+    border: var(--button-border-weight) var(--button-border-style) var(--color-primary-blue);
     border-radius: var(--button-radius);
     cursor: pointer;
     transition: var(--transition-base);
+    color: var(--color-white);
+    background-color: var(--color-primary-blue);
     min-height: 44px; /* Accessibility: minimum touch target */
+}
+
+.button:hover,
+.button:focus {
+    color: var(--color-white);
+    background-color: var(--color-dark-blue);
+    border-color: var(--color-dark-blue);
+    text-decoration: none;
 }
 
 .button:disabled {
@@ -683,32 +698,12 @@ blockquote::before {
     opacity: 0.6;
 }
 
-/* Primary Button */
-.btn-primary,
-.button.primary {
-    color: var(--color-white);
-    background-color: var(--color-primary-blue);
-    border-color: var(--color-primary-blue);
-}
-
-.btn-primary:hover,
-.button.primary:hover,
-.btn-primary:focus,
-.button.primary:focus {
-    color: var(--color-white);
+.button:active {
     background-color: var(--color-dark-blue);
     border-color: var(--color-dark-blue);
-    text-decoration: none;
-}
-
-.btn-primary:active,
-.button.primary:active {
-    background-color: var(--color-blue);
-    border-color: var(--color-blue);
 }
 
 /* Secondary Button */
-.btn-secondary,
 .button.secondary {
     font-style: normal;
     color: var(--color-primary-blue);
@@ -716,8 +711,6 @@ blockquote::before {
     border-color: var(--color-primary-blue);
 }
 
-.btn-secondary:hover,
-.btn-secondary:focus,
 .button.secondary:hover,
 .button.secondary:focus {
     color: var(--color-white);
@@ -725,7 +718,6 @@ blockquote::before {
     text-decoration: none;
 }
 
-.btn-secondary:active,
 .button.secondary:active {
     background-color: var(--color-dark-blue);
     border-color: var(--color-dark-blue);
