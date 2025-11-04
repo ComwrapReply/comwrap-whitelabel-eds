@@ -57,16 +57,6 @@
             "component": "text",
             "name": "og:title",
             "label": "Title"
-          },
-          {
-            "component": "aem-content",
-            "name": "link",
-            "label": "Link"
-          },
-          {
-            "component": "text",
-            "name": "linkText",
-            "label": "Text"
           }
         ]
       }
@@ -87,6 +77,10 @@
           {
             "name": "Article",
             "value": "article"
+          },
+          {
+            "name": "Events",
+            "value": "events"
           }
         ],
         "condition": {
@@ -139,7 +133,31 @@
     "id": "events-metadata",
     "fields": [
       {
-        "...": "#/models/page-metadata/fields/template"
+        "component": "select",
+        "name": "template",
+        "label": "Template",
+        "options": [
+          {
+            "name": "Default",
+            "value": ""
+          },
+          {
+            "name": "Article",
+            "value": "article"
+          },
+          {
+            "name": "Events",
+            "value": "events"
+          }
+        ],
+        "condition": {
+          "===": [
+            {
+              "var": "initialContentRefTarget"
+            },
+            "true"
+          ]
+        }
       }
     ]
   },

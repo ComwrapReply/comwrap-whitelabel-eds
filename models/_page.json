@@ -109,6 +109,19 @@
       "fields": [
         {
           "...": "#/models/page-metadata/fields/template"
+        },
+        {
+          "component": "text",
+          "name": "events:author",
+          "label": "Author",
+          "condition": {
+            "===": [
+              {
+                "var": "template"
+              },
+              "article"
+            ]
+          }
         }
       ]
     }
