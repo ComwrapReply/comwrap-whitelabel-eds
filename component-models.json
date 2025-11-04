@@ -5775,6 +5775,24 @@
         "component": "aem-content",
         "name": "reference",
         "label": "Reference"
+      },
+      {
+        "component": "select",
+        "name": "classes",
+        "label": "Style",
+        "valueType": "string",
+        "value": "",
+        "description": "The style of the fragment",
+        "options": [
+          {
+            "name": "Default",
+            "value": ""
+          },
+          {
+            "name": "Dark",
+            "value": "dark"
+          }
+        ]
       }
     ]
   },
