@@ -112,14 +112,14 @@
         },
         {
           "component": "text",
-          "name": "events:author",
-          "label": "Author",
+          "name": "events:organizer",
+          "label": "Organizer",
           "condition": {
             "===": [
               {
                 "var": "template"
               },
-              "article"
+              "events"
             ]
           }
         }
