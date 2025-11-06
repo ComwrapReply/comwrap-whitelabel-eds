@@ -34,7 +34,8 @@
   ],
   "models": [
     {
-      "id": "accordion"
+      "id": "accordion",
+      "fields": []
     },
     {
       "id": "accordionitem",
