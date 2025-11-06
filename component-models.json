@@ -176,6 +176,12 @@
         }
       },
       {
+        "component": "aem-tag",
+        "name": "tags",
+        "label": "Tags",
+        "valueType": "string"
+      },
+      {
         "component": "text",
         "name": "events:organizer",
         "label": "Organizer",
@@ -5900,7 +5906,7 @@
             "value": "grey"
           }
         ],
-        "value": "grey"
+        "value": ""
       }
     ]
   },

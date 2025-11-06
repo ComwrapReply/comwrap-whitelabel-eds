@@ -117,6 +117,12 @@
           "...": "#/models/page-metadata/fields/template"
         },
         {
+          "component": "aem-tag",
+          "name": "tags",
+          "label": "Tags",
+          "valueType": "string"
+        },
+        {
           "component": "text",
           "name": "events:organizer",
           "label": "Organizer",
