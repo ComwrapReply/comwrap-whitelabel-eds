@@ -256,24 +256,23 @@
         "label": "Style",
         "options": [
           {
+            "name": "Default",
+            "value": "Default"
+          },
+          {
             "name": "Highlight",
             "value": "highlight"
+          },
+          {
+            "name": "Gradient",
+            "value": "gradient"
           }
         ]
       }
     ]
   },
   {
-    "id": "accordion",
-    "fields": [
-      {
-        "component": "text",
-        "name": "accordion-title",
-        "label": "Accordion Title",
-        "valueType": "string",
-        "value": ""
-      }
-    ]
+    "id": "accordion"
   },
   {
     "id": "accordionitem",
