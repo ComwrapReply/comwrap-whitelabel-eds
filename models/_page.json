@@ -81,8 +81,8 @@
         },
         {
           "component": "container",
-          "name": "social",
-          "label": "Social",
+          "name": "article-metadata",
+          "label": "Article Metadata",
           "fields": [
             {
               "...": "#/models/page-metadata/fields/social/fields"
