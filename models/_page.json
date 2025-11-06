@@ -21,6 +21,48 @@
           "name": "keywords",
           "multi": true,
           "label": "Keywords"
+        },
+        {
+          "component": "text",
+          "valueType": "string",
+          "name": "author-name",
+          "label": "Author Name",
+          "value": ""
+        },
+        {
+          "component": "text",
+          "valueType": "string",
+          "name": "author-role",
+          "label": "Author Role",
+          "value": ""
+        },
+        {
+          "component": "text",
+          "valueType": "string",
+          "name": "author-email",
+          "label": "Author Email",
+          "value": ""
+        },
+        {
+          "component": "select",
+          "name": "category",
+          "label": "Category",
+          "valueType": "string",
+          "options": [
+            {
+              "name": "Blog",
+              "value": "blog"
+            },
+            {
+              "name": "News",
+              "value": "news"
+            },
+            {
+              "name": "Events",
+              "value": "events"
+            }
+          ],
+          "value": ""
         }
       ]
     }

@@ -1,16 +1,31 @@
 version: 1
 
 indices:
-  pages:
+  default:
     include:
-      - '/**'
+      - /**
     exclude:
-      - '/**.json'
+      - /drafts/**
     target: /query-index.json
     properties:
+      # Standard AEM properties (automatically extracted)
       lastModified:
         select: none
         value: parseTimestamp(headers["last-modified"], "ddd, DD MMM YYYY hh:mm:ss GMT")
-      robots:
-        select: head > meta[name="robots"]
+      
+      # Your custom page metadata properties
+      title:
+        select: head > meta[property="og:title"]
+        value: attribute(el, "content")
+      
+      description:
+        select: head > meta[name="description"]
+        value: attribute(el, "content")
+      
+      keywords:
+        select: head > meta[name="keywords"]
+        value: attribute(el, "content")
+
+      template:
+        select: head > meta[name="template"]
         value: attribute(el, "content")
