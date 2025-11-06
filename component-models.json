@@ -25,7 +25,7 @@
             {
               "var": "initialContentRefTarget"
             },
-            "false"
+            "true"
           ]
         }
       },
@@ -98,7 +98,7 @@
             {
               "var": "initialContentRefTarget"
             },
-            "false"
+            "true"
           ]
         }
       },
@@ -165,7 +165,7 @@
             {
               "var": "initialContentRefTarget"
             },
-            "false"
+            "true"
           ]
         }
       },
