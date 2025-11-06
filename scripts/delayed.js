@@ -10,7 +10,7 @@ function createBackToTopButton() {
 
   // Add the up arrow icon
   const icon = document.createElement('img');
-  icon.src = '/icons/arrow-up.svg';
+  icon.src = `${window.hlx.codeBasePath}/icons/arrow-up.svg`;
   icon.alt = 'Back to top';
   icon.style.filter = 'brightness(0) invert(1)'; // Makes the SVG white
   icon.style.width = '24px';
