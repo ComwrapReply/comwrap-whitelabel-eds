@@ -103,6 +103,12 @@
         }
       },
       {
+        "component": "aem-tag",
+        "name": "tags",
+        "label": "Tags",
+        "valueType": "string"
+      },
+      {
         "component": "container",
         "name": "social",
         "label": "Social",
@@ -121,13 +127,6 @@
             "component": "text",
             "name": "linkText",
             "label": "Text"
-          },
-          {
-            "component": "aem-tag",
-            "name": "tags",
-            "label": "Tags",
-            "valueType": "string",
-            "multi": true
           },
           {
             "component": "text",

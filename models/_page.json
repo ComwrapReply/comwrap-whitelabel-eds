@@ -80,19 +80,18 @@
           "...": "#/models/page-metadata/fields/template"
         },
         {
+          "component": "aem-tag",
+          "name": "tags",
+          "label": "Tags",
+          "valueType": "string"
+        },
+        {
           "component": "container",
-          "name": "article-metadata",
-          "label": "Article Metadata",
+          "name": "social",
+          "label": "Social",
           "fields": [
             {
               "...": "#/models/page-metadata/fields/social/fields"
-            },
-            {
-              "component": "aem-tag",
-              "name": "tags",
-              "label": "Tags",
-              "valueType": "string",
-              "multi": true
             },
             {
               "component": "text",
