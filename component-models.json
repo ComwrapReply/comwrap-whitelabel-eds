@@ -123,6 +123,13 @@
             "label": "Text"
           },
           {
+            "component": "aem-tag",
+            "name": "tags",
+            "label": "Tags",
+            "valueType": "string",
+            "multi": true
+          },
+          {
             "component": "text",
             "name": "article:author",
             "label": "Author",
