@@ -1,7 +1,7 @@
 .accordion {
   list-style: none;
-  padding: 0;
   margin: 0;
+  padding-top: 4rem;
 }
 
 .accordion > li {
@@ -76,7 +76,6 @@
   overflow: hidden;
   transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   max-height: 0;
-  padding: 0 1rem;
   will-change: max-height;
 }
 
@@ -89,17 +88,27 @@
 }
 
 .accordion-content {
-  padding: 0 0 1rem;
+  display: flex;
+  gap: 2rem;
+  padding: 2rem 0;
 }
 
 .accordion-content picture {
   margin-bottom: 1rem;
   display: block;
+  width: 100%;
 }
 
 .accordion-content img {
-  max-width: 100%;
   height: auto;
+  width: 100%;
+}
+
+.accordion-text-button-wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 2rem;
 }
 
 .accordion button:hover, 
@@ -107,4 +116,115 @@
   background: unset;
   border-radius: 0;
   border: unset;
+}
+
+/* Button Styles within Accordion */
+.accordion .button {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  font-family: var(--body-font-family);
+  font-size: var(--body-font-size-xs);
+  font-weight: 500;
+  text-decoration: none;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin: 1rem 0;
+  border: 2px solid;
+  max-width: fit-content;
+  max-height: fit-content;
+}
+
+/* Primary Button */
+.accordion .button.primary {
+  color: var(--color-white);
+  background-color: var(--color-primary-blue);
+  border-color: var(--color-primary-blue);
+}
+
+.accordion .button.primary:hover,
+.accordion .button.primary:focus {
+  color: var(--color-white);
+  background-color: var(--color-dark-blue);
+  border-color: var(--color-dark-blue);
+  text-decoration: none;
+}
+
+.accordion .button.primary:active {
+  background-color: var(--color-blue);
+  border-color: var(--color-blue);
+}
+
+/* Secondary Button */
+.accordion .button.secondary {
+  color: var(--color-primary-blue);
+  background-color: transparent;
+  border-color: var(--color-primary-blue);
+}
+
+.accordion .button.secondary:hover,
+.accordion .button.secondary:focus {
+  color: var(--color-white);
+  background-color: var(--color-primary-blue);
+  text-decoration: none;
+}
+
+.accordion .button.secondary:active {
+  background-color: var(--color-dark-blue);
+  border-color: var(--color-dark-blue);
+}
+
+/* Tertiary Button */
+.accordion .button.tertiary {
+  color: var(--color-primary-blue);
+  background-color: transparent;
+  border-color: var(--color-primary-blue);
+  border-style: dashed;
+}
+
+.accordion .button.tertiary:hover,
+.accordion .button.tertiary:focus {
+  color: var(--color-white);
+  background-color: var(--color-primary-blue);
+  border-style: solid;
+  text-decoration: none;
+}
+
+.accordion .button.tertiary:active {
+  background-color: var(--color-dark-blue);
+  border-color: var(--color-dark-blue);
+}
+
+
+/* ========================================
+   ACCORDION LAYOUTS
+   ======================================== */
+
+.accordion-content.image-right {
+  flex-direction: row-reverse;
+}
+
+.accordion-content.image-top {
+  flex-direction: column;
+
+  picture {
+    width: 100%;
+  }
+
+  .accordion-text-button-wrapper {
+    width: 100%;
+  }
+}
+
+.accordion-content.image-bottom {
+  flex-direction: column-reverse;
+
+  picture {
+    width: 100%;
+  }
+
+  .accordion-text-button-wrapper {
+    width: 100%;
+  }
 }

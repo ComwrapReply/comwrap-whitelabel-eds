@@ -93,8 +93,7 @@
                 "template": {
                   "name": "Accordion",
                   "filter": "accordion",
-                  "model": "accordion",
-                  "accordion-single-open": false
+                  "model": "accordion"
                 }
               }
             }
@@ -109,8 +108,7 @@
                 "resourceType": "core/franklin/components/block/v1/block/item",
                 "template": {
                   "name": "Accordion Item",
-                  "model": "accordionitem",
-                  "accordion-item-open": false
+                  "model": "accordionitem"
                 }
               }
             }
