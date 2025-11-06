@@ -120,15 +120,7 @@
           "component": "aem-tag",
           "name": "tags",
           "label": "Tags",
-          "valueType": "string",
-          "condition": {
-            "===": [
-              {
-                "var": "template"
-              },
-              "events"
-            ]
-          }
+          "valueType": "string"
         },
         {
           "component": "text",
