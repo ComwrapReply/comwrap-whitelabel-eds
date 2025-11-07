@@ -12,29 +12,6 @@ import {
   loadCSS,
 } from './aem.js';
 
-// Lazy import modal functions to avoid circular dependencies
-let openModal;
-async function getOpenModal() {
-  if (!openModal) {
-    // Defensive check - ensure codeBasePath is available
-    if (!window.hlx || !window.hlx.codeBasePath) {
-      // eslint-disable-next-line no-console
-      console.warn('getOpenModal: window.hlx.codeBasePath is not available');
-      return null;
-    }
-
-    try {
-      const modalModule = await import(`${window.hlx.codeBasePath}/blocks/modal/modal.js`);
-      openModal = modalModule.openModal;
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.warn('Failed to load modal module', error);
-      return null;
-    }
-  }
-  return openModal;
-}
-
 /**
  * Moves all the attributes from a given elmenet to another given element.
  * @param {Element} from the element to copy attributes from
@@ -81,47 +58,14 @@ async function loadFonts() {
   }
 }
 
-/**
- * Sets up global modal link handlers
- * Intercepts clicks on links to /modals/ paths and opens them as modals
- * @returns {void}
- */
-function setupModalLinks() {
-  // Config constants
-  const MODAL_PATH_PREFIX = '/modals/';
-  const LINK_SELECTOR = 'a[href]';
+function autolinkModals(element) {
+  element.addEventListener('click', async (e) => {
+    const origin = e.target.closest('a');
 
-  // Defensive check - ensure document is ready
-  if (!document || !document.body) {
-    return;
-  }
-
-  // Use event delegation to handle all modal links
-  document.addEventListener('click', async (e) => {
-    // Find the closest link element
-    const link = e.target.closest(LINK_SELECTOR);
-    if (!link) {
-      return;
-    }
-
-    const href = link.getAttribute('href');
-    if (!href) {
-      return;
-    }
-
-    // Check if link points to a modal path
-    const isModalLink = href.includes(MODAL_PATH_PREFIX) || href.startsWith('/modals/');
-
-    if (isModalLink) {
-      // Prevent default navigation
+    if (origin && origin.href && origin.href.includes('/modals/')) {
       e.preventDefault();
-      e.stopPropagation();
-
-      // Get openModal function and open the modal
-      const openModalFn = await getOpenModal();
-      if (openModalFn) {
-        await openModalFn(href);
-      }
+      const { openModal } = await import(`${window.hlx.codeBasePath}/blocks/modal/modal.js`);
+      openModal(origin.href);
     }
   });
 }
@@ -182,6 +126,8 @@ async function loadEager(doc) {
  * @param {Element} doc The container element
  */
 async function loadLazy(doc) {
+  autolinkModals(doc);
+
   const main = doc.querySelector('main');
   await loadSections(main);
 
@@ -194,9 +140,6 @@ async function loadLazy(doc) {
 
   loadCSS(`${window.hlx.codeBasePath}/styles/lazy-styles.css`);
   loadFonts();
-
-  // Setup global modal link handlers
-  setupModalLinks();
 }
 
 /**
