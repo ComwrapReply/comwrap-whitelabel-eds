@@ -1,0 +1,120 @@
+/* Modal block styles */
+body.modal-open {
+  overflow: hidden;
+}
+
+/* Modal backdrop */
+.modal dialog::backdrop {
+  background-color: rgb(19 19 19 / 75%);
+}
+
+/* Modal dialog container */
+.modal dialog {
+  overscroll-behavior: none;
+  overflow-y: hidden;
+  width: calc(100vw - 48px);
+  max-width: 900px;
+  max-height: calc(100dvh - (2 * var(--header-height, 0px)));
+  padding: 0;
+  border: 1px solid var(--dark-color, #333);
+}
+
+/* Modal content area */
+.modal dialog .modal-content {
+  box-sizing: border-box;
+  overflow-y: auto;
+  overscroll-behavior: none;
+  width: 100%;
+  max-height: calc(100dvh - (2 * var(--header-height, 0px)) - 48px);
+  padding: 24px;
+  padding-top: 0;
+  margin-top: 44px;
+}
+
+/* Desktop styles */
+@media (width >= 900px) {
+  .modal dialog {
+    width: calc(100vw - 64px);
+  }
+
+  .modal dialog .modal-content {
+    max-height: calc(100dvh - (2 * var(--header-height, 0px)) - 64px);
+    padding: 32px;
+    padding-top: 0;
+  }
+}
+
+/* Close button */
+.modal .close-button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 44px;
+  height: 44px;
+  margin: 0;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  background-color: transparent;
+  color: var(--text-color, #131313);
+  line-height: 0;
+  cursor: pointer;
+  z-index: 1;
+}
+
+/* Close button hover state */
+.modal .close-button:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* Close button focus state */
+.modal .close-button:focus {
+  outline: 2px solid var(--link-color, #3b63fb);
+  outline-offset: 2px;
+}
+
+/* Close icon */
+.modal .close-button .icon.icon-close {
+  content: '';
+  width: 24px;
+  height: 24px;
+  position: relative;
+  display: block;
+}
+
+/* Close icon X shape */
+.modal .close-button .icon.icon-close::before,
+.modal .close-button .icon.icon-close::after {
+  content: '';
+  box-sizing: border-box;
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(45deg);
+  width: 24px;
+  height: 2px;
+  border-radius: 2px;
+  background-color: currentcolor;
+}
+
+.modal .close-button .icon.icon-close::after {
+  transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+/* Section styling within modal */
+.modal dialog .section {
+  padding: 0;
+}
+
+/* Accessibility: Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .modal dialog {
+    transition: none;
+  }
+
+  .modal dialog::backdrop {
+    transition: none;
+  }
+}
+
