@@ -35,7 +35,15 @@
   "models": [
     {
       "id": "accordion",
-      "fields": []
+      "fields": [
+        {
+          "component": "text",
+          "name": "accordion-title",
+          "label": "Accordion Title",
+          "valueType": "string",
+          "value": ""
+        }
+      ]
     },
     {
       "id": "accordionitem",
