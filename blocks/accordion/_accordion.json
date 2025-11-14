@@ -10,8 +10,7 @@
             "template": {
               "name": "Accordion",
               "filter": "accordion",
-              "model": "accordion",
-              "accordion-single-open": false
+              "model": "accordion"
             }
           }
         }
@@ -26,8 +25,7 @@
             "resourceType": "core/franklin/components/block/v1/block/item",
             "template": {
               "name": "Accordion Item",
-              "model": "accordionitem",
-              "accordion-item-open": false
+              "model": "accordionitem"
             }
           }
         }
@@ -37,30 +35,27 @@
   "models": [
     {
       "id": "accordion",
-      "fields": [
-        {
-          "component": "boolean",
-          "name": "accordion-single-open",
-          "label": "Allow Only One Item Open at a Time"
-        }
-      ]
+      "fields": []
     },
     {
       "id": "accordionitem",
       "fields": [
         {
+          "component": "tab",
+          "label": "Content",
+          "name": "content"
+        },
+        {
           "component": "text",
           "name": "accordion-item-title",
           "label": "Accordion Item Title",
-          "valueType": "string",
-          "value": ""
+          "valueType": "string"
         },
         {
           "component": "richtext",
           "name": "accordion-item-content",
           "label": "Accordion Item Content",
-          "valueType": "string",
-          "value": ""
+          "valueType": "string"
         },
         {
           "component": "reference",
@@ -68,6 +63,72 @@
           "label": "Image",
           "valueType": "string",
           "multi": false
+        },
+        {
+          "component": "text",
+          "name": "image-alt",
+          "label": "Image Alt Text",
+          "valueType": "string"
+        },
+        {
+          "component": "tab",
+          "label": "CTA",
+          "name": "accordion-cta"
+        },
+        {
+          "component": "aem-content",
+          "name": "button-link",
+          "label": "Button Link"
+        },
+        {
+          "component": "text",
+          "name": "button-text",
+          "label": "Button Text"
+        },
+        {
+          "component": "select",
+          "name": "button-style",
+          "label": "Button Style",
+          "options": [
+            {
+              "name": "Primary",
+              "value": "primary"
+            },
+            {
+              "name": "Secondary",
+              "value": "secondary"
+            }
+          ],
+          "value": "primary"
+        },
+        {
+          "component": "tab",
+          "label": "Layout",
+          "name": "layout"
+        },
+        {
+          "component": "select",
+          "name": "layout-style",
+          "label": "Accordion Layout",
+          "options": [
+            {
+              "name": "Image Left",
+              "value": "image-left"
+            },
+            {
+              "name": "Image Right",
+              "value": "image-right"
+            },
+            {
+              "name": "Image Top",
+              "value": "image-top"
+            },
+            {
+              "name": "Image Bottom",
+              "value": "image-bottom"
+            }
+          ],
+          "value": "image-left"
         },
         {
           "component": "boolean",
@@ -78,11 +139,11 @@
     }
   ],
   "filters": [
-    {
-      "id": "accordion",
-      "components": [
-        "accordionitem"
-      ]
-    }
+      {
+        "id": "accordion",
+        "components": [
+          "accordionitem"
+        ]
+      }
   ]
 }
