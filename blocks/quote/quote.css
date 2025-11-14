@@ -92,7 +92,7 @@ blockquote::before {
     box-shadow: 0 4px 12px rgb(0 0 0 / 30%);
 }
 
-.block.quote.dark blockquote {
+.block.quote.dark blockquote::before {
     color: var(--light-color, #f8f9fa);
 }
 
@@ -112,7 +112,7 @@ blockquote::before {
     box-shadow: 0 2px 8px rgb(0 0 0 / 10%);
 }
 
-.block.quote.light blockquote {
+.block.quote.light blockquote::before {
     color: var(--text-color, #495057);
 }
 
