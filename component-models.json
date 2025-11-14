@@ -278,8 +278,16 @@
         "label": "Style",
         "options": [
           {
+            "name": "Default",
+            "value": "Default"
+          },
+          {
             "name": "Highlight",
             "value": "highlight"
+          },
+          {
+            "name": "Gradient",
+            "value": "gradient"
           }
         ]
       }
