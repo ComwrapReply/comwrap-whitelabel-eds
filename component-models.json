@@ -278,8 +278,16 @@
         "label": "Style",
         "options": [
           {
+            "name": "Default",
+            "value": "Default"
+          },
+          {
             "name": "Highlight",
             "value": "highlight"
+          },
+          {
+            "name": "Gradient",
+            "value": "gradient"
           }
         ]
       }
@@ -5883,43 +5891,6 @@
         "value": "",
         "label": "Quote",
         "valueType": "string"
-      },
-      {
-        "component": "text",
-        "name": "author",
-        "value": "",
-        "label": "Author",
-        "valueType": "string"
-      },
-      {
-        "component": "select",
-        "name": "classes",
-        "value": "",
-        "label": "Background Styles",
-        "description": "The background styles of the quote",
-        "valueType": "string",
-        "options": [
-          {
-            "name": "Default",
-            "value": "",
-            "description": "The default background style"
-          },
-          {
-            "name": "Highlight",
-            "value": "highlight",
-            "description": "The highlight background style"
-          },
-          {
-            "name": "Dark",
-            "value": "dark",
-            "description": "The dark background style"
-          },
-          {
-            "name": "Light",
-            "value": "light",
-            "description": "The light background style"
-          }
-        ]
       }
     ]
   },
