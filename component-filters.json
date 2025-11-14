@@ -35,7 +35,9 @@
       "tags",
       "embed",
       "teaser",
-      "separator"
+      "separator",
+      "tabs",
+      "info-counter"
     ]
   },
   {
@@ -138,6 +140,12 @@
     "id": "table-4-columns",
     "components": [
       "table-col-4"
+    ]
+  },
+  {
+    "id": "tabs",
+    "components": [
+      "tab"
     ]
   }
 ]
