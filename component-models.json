@@ -93,7 +93,7 @@
       {
         "component": "date-time",
         "valueType": "date-time",
-        "name": "article-publish-date",
+        "name": "article_publish_date",
         "label": "Publish Date",
         "placeholder": "YYYY-MM-DD",
         "displayFormat": null,
@@ -5853,6 +5853,41 @@
     ]
   },
   {
+    "id": "info-counter",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "number",
+        "label": "Target Number",
+        "value": ""
+      },
+      {
+        "component": "richtext",
+        "name": "text",
+        "value": "",
+        "label": "Description Text",
+        "valueType": "string"
+      },
+      {
+        "component": "select",
+        "name": "mode",
+        "label": "Color Mode",
+        "options": [
+          {
+            "name": "On Dark (White Text)",
+            "value": "dark"
+          },
+          {
+            "name": "On Light (Brand Blue Text)",
+            "value": "light"
+          }
+        ],
+        "value": "light"
+      }
+    ]
+  },
+  {
     "id": "quote",
     "fields": [
       {
@@ -5923,7 +5958,7 @@
             "value": "grey"
           }
         ],
-        "value": ""
+        "value": "grey"
       }
     ]
   },
@@ -6069,6 +6104,28 @@
         "valueType": "string",
         "name": "column4text",
         "label": "Column4"
+      }
+    ]
+  },
+  {
+    "id": "tab",
+    "fields": [
+      {
+        "component": "text",
+        "name": "title",
+        "value": "",
+        "label": "Tab Title",
+        "description": "Short descriptive title for the tab (e.g., 'Tab 1', 'Getting Started')",
+        "valueType": "string",
+        "required": true
+      },
+      {
+        "component": "richtext",
+        "name": "content",
+        "value": "",
+        "label": "Tab Content",
+        "description": "Rich content displayed when tab is active (headings, paragraphs, lists, images, links)",
+        "valueType": "string"
       }
     ]
   },
