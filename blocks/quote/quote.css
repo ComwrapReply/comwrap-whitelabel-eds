@@ -121,5 +121,5 @@ blockquote::before {
 }
 
 .block.quote.light .quote-author {
-    color: var(--secondary-color, #6c757d);
+    color: var(--secondary-color, #495057);
 }
