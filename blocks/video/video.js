@@ -148,13 +148,11 @@ async function decorateFullScreenVideo(fullScreenVideoLink, teaserPicture, targe
 }
 
 function decorateVideoOptions(block) {
-
-
   const video = block.querySelector('video');
   if (!video) {
     return;
   }
-  
+
   // Handle video width (third field: video-width, after video and video_description)
   const widthField = block.children[1];
   if (widthField) {
@@ -166,7 +164,7 @@ function decorateVideoOptions(block) {
       }
     }
   }
-  
+
   // Handle boolean options (autoplay, loop, muted, controls)
   // Indices shift after removing width field, so autoplay is now at index 2
   const autoplay = block.children[2];
