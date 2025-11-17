@@ -178,7 +178,7 @@ function decorateVideoOptions(block) {
   video.toggleAttribute('autoplay', autoplayValue === 'true');
   video.toggleAttribute('loop', loopValue === 'true');
   video.toggleAttribute('muted', mutedValue === 'true');
-  video.setAttribute('controls', controlsValue === 'true');
+  video.controls = controlsValue === 'true';
   autoplay.remove();
   loop.remove();
   muted.remove();
