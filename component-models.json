@@ -6280,6 +6280,26 @@
         "valueType": "string"
       },
       {
+        "component": "select",
+        "name": "video-width",
+        "label": "Video Width",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "100%",
+            "value": "100%"
+          },
+          {
+            "name": "75%",
+            "value": "75%"
+          },
+          {
+            "name": "50%",
+            "value": "50%"
+          }
+        ]
+      },
+      {
         "component": "boolean",
         "name": "video-autoplay",
         "label": "Autoplay"
