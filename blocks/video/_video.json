@@ -27,12 +27,6 @@
               "valueType": "string"
             },
             {
-              "component": "text",
-              "name": "video_description",
-              "label": "Video Description",
-              "valueType": "string"
-            },
-            {
               "component": "select",
               "name": "video-width",
               "label": "Video Width",
@@ -50,7 +44,8 @@
                   "name": "50%",
                   "value": "50%"
                 }
-              ]
+              ],
+              "value": "100%"
             },
             {
               "component": "boolean",

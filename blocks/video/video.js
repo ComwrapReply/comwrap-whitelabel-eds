@@ -50,10 +50,6 @@ function decorateTeaser(video, teaserPicture, target) {
   }
 
   videoTag.classList.add('video-cover');
-  videoTag.toggleAttribute('muted', true);
-  videoTag.toggleAttribute('loop', true);
-  videoTag.setAttribute('controls', true);
-  videoTag.setAttribute('title', video.title);
 
   const mql = window.matchMedia('only screen and (max-width: 768px)');
   if (mql.matches && teaserPicture) {
@@ -151,6 +147,47 @@ async function decorateFullScreenVideo(fullScreenVideoLink, teaserPicture, targe
   target.appendChild(fullVideoContainer);
 }
 
+function decorateVideoOptions(block) {
+
+
+  const video = block.querySelector('video');
+  if (!video) {
+    return;
+  }
+  
+  // Handle video width (third field: video-width, after video and video_description)
+  const widthField = block.children[1];
+  if (widthField) {
+    const widthValue = widthField.querySelector('p')?.textContent.trim();
+    if (widthValue) {
+      const videoContainer = video.closest('.teaser-video-container') || video.parentElement;
+      if (videoContainer) {
+        videoContainer.style.width = widthValue;
+      }
+    }
+  }
+  
+  // Handle boolean options (autoplay, loop, muted, controls)
+  // Indices shift after removing width field, so autoplay is now at index 2
+  const autoplay = block.children[2];
+  const autoplayValue = autoplay.querySelector('p').textContent.trim();
+  const loop = block.children[3];
+  const loopValue = loop.querySelector('p').textContent.trim();
+  const muted = block.children[4];
+  const mutedValue = muted.querySelector('p').textContent.trim();
+  const controls = block.children[5];
+  const controlsValue = controls.querySelector('p').textContent.trim();
+  video.toggleAttribute('autoplay', autoplayValue === 'true');
+  video.toggleAttribute('loop', loopValue === 'true');
+  video.toggleAttribute('muted', mutedValue === 'true');
+  video.setAttribute('controls', controlsValue === 'true');
+  autoplay.remove();
+  loop.remove();
+  muted.remove();
+  controls.remove();
+  widthField.remove();
+}
+
 export default function decorate(block) {
   const videoBanner = block.children[0];
   videoBanner.classList.add('hero-video-banner');
@@ -168,6 +205,7 @@ export default function decorate(block) {
 
   // preloadLCPImage(teaserPicture.src);
   decorateTeaser(teaserVideoLink, teaserPicture, heroContent, placeholderImage);
+  decorateVideoOptions(block);
 
   const overlay = videoBanner.children[1];
   overlay.classList = 'overlay';
