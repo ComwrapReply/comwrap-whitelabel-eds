@@ -6297,22 +6297,26 @@
       {
         "component": "boolean",
         "name": "video-autoplay",
-        "label": "Autoplay"
+        "label": "Autoplay",
+        "description": "Allows the video to play automatically"
       },
       {
         "component": "boolean",
         "name": "video-loop",
-        "label": "Loop"
+        "label": "Loop",
+        "description": "Allows video to replay automatically when finished"
       },
       {
         "component": "boolean",
         "name": "video-muted",
-        "label": "Muted"
+        "label": "Muted",
+        "description": "Allows video to be muted by default"
       },
       {
         "component": "boolean",
         "name": "video-controls",
-        "label": "Controls"
+        "label": "Controls",
+        "description": "Allows users to control the video playback"
       }
     ]
   }
