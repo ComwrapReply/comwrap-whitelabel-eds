@@ -6278,6 +6278,26 @@
         "name": "video_description",
         "label": "Video Description",
         "valueType": "string"
+      },
+      {
+        "component": "boolean",
+        "name": "video-autoplay",
+        "label": "Autoplay"
+      },
+      {
+        "component": "boolean",
+        "name": "video-loop",
+        "label": "Loop"
+      },
+      {
+        "component": "boolean",
+        "name": "video-muted",
+        "label": "Muted"
+      },
+      {
+        "component": "boolean",
+        "name": "video-controls",
+        "label": "Controls"
       }
     ]
   }
