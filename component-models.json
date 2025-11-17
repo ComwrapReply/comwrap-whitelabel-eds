@@ -208,28 +208,6 @@
     ]
   },
   {
-    "id": "text",
-    "fields": [
-      {
-        "component": "select",
-        "name": "classes",
-        "label": "Text Style",
-        "valueType": "string",
-        "value": "",
-        "options": [
-          {
-            "name": "Default",
-            "value": ""
-          },
-          {
-            "name": "Quote",
-            "value": "quote"
-          }
-        ]
-      }
-    ]
-  },
-  {
     "id": "button",
     "fields": [
       {
@@ -295,15 +273,7 @@
   },
   {
     "id": "accordion",
-    "fields": [
-      {
-        "component": "text",
-        "name": "accordion-title",
-        "label": "Accordion Title",
-        "valueType": "string",
-        "value": ""
-      }
-    ]
+    "fields": []
   },
   {
     "id": "accordionitem",

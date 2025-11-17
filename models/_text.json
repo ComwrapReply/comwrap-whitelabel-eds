@@ -7,37 +7,11 @@
         "xwalk": {
           "page": {
             "resourceType": "core/franklin/components/text/v1/text",
-            "template": {
-              "name": "Text",
-              "model": "text"
-            }
+            "template": {}
           }
         }
       }
     }
   ],
-  "models": [
-    {
-      "id": "text",
-      "fields": [
-        {
-          "component": "select",
-          "name": "classes",
-          "label": "Text Style",
-          "valueType": "string",
-          "value": "",
-          "options": [
-            {
-              "name": "Default",
-              "value": ""
-            },
-            {
-              "name": "Quote",
-              "value": "quote"
-            }
-          ]
-        }
-      ]
-    }
-  ]
+  "models": []
 }
