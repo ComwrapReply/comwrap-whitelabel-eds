@@ -15,7 +15,7 @@ indices:
       
       # Your custom page metadata properties
       title:
-        select: head > title
+        select: head > meta[name="viewport"]
         value: attribute(el, "content")
       
       description:
