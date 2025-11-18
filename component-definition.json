@@ -237,7 +237,7 @@
           }
         },
         {
-          "title": "dynamic content",
+          "title": "Dynamic Content",
           "id": "dynamiccontent",
           "plugins": {
             "xwalk": {
