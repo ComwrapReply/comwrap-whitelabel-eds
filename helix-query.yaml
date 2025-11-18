@@ -15,7 +15,7 @@ indices:
       
       # Your custom page metadata properties
       title:
-        select: head > meta[property="og:title"]
+        select: head > title
         value: attribute(el, "content")
       
       description:
