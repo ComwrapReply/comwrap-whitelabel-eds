@@ -78,7 +78,8 @@
         "tags",
         "embed",
         "teaser",
-        "separator"
+        "separator",
+        "article-feed"
       ]
     }
   ]
