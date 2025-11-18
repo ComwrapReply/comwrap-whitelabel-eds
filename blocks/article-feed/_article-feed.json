@@ -28,7 +28,7 @@
           "value": "",
           "valueType": "string",
           "validation": {
-            "rootPath": "/content"
+            "rootPath": "/content/comwrap-whitelabel-eds"
           }
         }
       ]
