@@ -16,7 +16,7 @@ indices:
       # Your custom page metadata properties
       title:
         select: head > title
-        value: text(el)
+        value: textContent(el)
       
       description:
         select: head > meta[name="description"]
