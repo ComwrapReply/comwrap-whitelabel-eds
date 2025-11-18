@@ -36,7 +36,8 @@
       "embed",
       "teaser",
       "separator",
-      "dynamiccontent"
+      "dynamiccontent",
+      "dynamiccontentfilter"
     ]
   },
   {

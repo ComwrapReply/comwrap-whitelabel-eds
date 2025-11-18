@@ -578,6 +578,24 @@
     ]
   },
   {
+    "id": "dynamiccontentfilter",
+    "fields": [
+      {
+        "component": "select",
+        "name": "filterParameter",
+        "label": "Filter Parameter",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "Tags",
+            "value": "cq-tags"
+          }
+        ],
+        "value": "cq-tags"
+      }
+    ]
+  },
+  {
     "id": "dynamiccontent",
     "fields": [
       {
