@@ -376,21 +376,6 @@
     ]
   },
   {
-    "id": "articlefeed",
-    "fields": [
-      {
-        "component": "aem-content",
-        "name": "link",
-        "label": "Parent page",
-        "value": "",
-        "valueType": "string",
-        "validation": {
-          "rootPath": "/content/comwrap-whitelabel-eds"
-        }
-      }
-    ]
-  },
-  {
     "id": "breadcrumbs",
     "fields": [
       {
@@ -588,6 +573,21 @@
         "valueType": "string",
         "validation": {
           "rootPath": "/content/dam/aem-xwalk"
+        }
+      }
+    ]
+  },
+  {
+    "id": "dynamiccontent",
+    "fields": [
+      {
+        "component": "aem-content",
+        "name": "link",
+        "label": "Parent page",
+        "value": "",
+        "valueType": "string",
+        "validation": {
+          "rootPath": "/content/comwrap-whitelabel-eds"
         }
       }
     ]
