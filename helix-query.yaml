@@ -29,3 +29,7 @@ indices:
       template:
         select: head > meta[name="template"]
         value: attribute(el, "content")
+
+      tags:
+        select: head > meta[name="cq-tags"]
+        value: attribute(el, "content")
