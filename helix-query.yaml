@@ -12,11 +12,11 @@ indices:
       lastModified:
         select: none
         value: parseTimestamp(headers["last-modified"], "ddd, DD MMM YYYY hh:mm:ss GMT")
-      
+  
       # Your custom page metadata properties
       title:
-        select: title
-        value: textContent(el)
+        select: head > meta[property="og:title"]
+        value: attribute(el, "content")
       
       description:
         select: head > meta[name="description"]
