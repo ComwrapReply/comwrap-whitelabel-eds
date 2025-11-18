@@ -28,7 +28,7 @@
           "value": "",
           "valueType": "string",
           "validation": {
-            "rootPath": "/content/blog-blueprint"
+            "rootPath": "/content"
           }
         }
       ]
