@@ -3,6 +3,33 @@
     "id": "page-metadata",
     "fields": [
       {
+        "component": "select",
+        "name": "template",
+        "label": "Template",
+        "options": [
+          {
+            "name": "Default",
+            "value": ""
+          },
+          {
+            "name": "Article",
+            "value": "article"
+          },
+          {
+            "name": "Events",
+            "value": "events"
+          }
+        ],
+        "condition": {
+          "===": [
+            {
+              "var": "initialContentRefTarget"
+            },
+            "true"
+          ]
+        }
+      },
+      {
         "component": "text",
         "valueType": "string",
         "name": "jcr:title",
@@ -22,216 +49,150 @@
         "label": "Keywords"
       },
       {
-        "component": "text",
-        "valueType": "string",
-        "name": "author-name",
-        "label": "Author Name",
-        "value": ""
-      },
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "author-role",
-        "label": "Author Role",
-        "value": ""
-      },
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "author-email",
-        "label": "Author Email",
-        "value": ""
-      },
-      {
-        "component": "select",
-        "name": "category",
-        "label": "Category",
-        "valueType": "string",
-        "options": [
+        "component": "container",
+        "name": "social",
+        "label": "Social",
+        "fields": [
           {
-            "name": "Blog",
-            "value": "blog"
+            "component": "text",
+            "name": "og:title",
+            "label": "Title"
           },
           {
-            "name": "News",
-            "value": "news"
+            "component": "aem-content",
+            "name": "link",
+            "label": "Link"
+          },
+          {
+            "component": "text",
+            "name": "linkText",
+            "label": "Text"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "article-metadata",
+    "fields": [
+      {
+        "component": "select",
+        "name": "template",
+        "label": "Template",
+        "options": [
+          {
+            "name": "Default",
+            "value": ""
+          },
+          {
+            "name": "Article",
+            "value": "article"
           },
           {
             "name": "Events",
             "value": "events"
           }
         ],
-        "value": ""
-      }
-    ]
-  },
-  {
-    "id": "blog-post-metadata",
-    "fields": [
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "article-title",
-        "label": "Article Title",
-        "description": "Main title of the blog post"
-      },
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "article-description",
-        "label": "Article Description",
-        "description": "SEO meta description",
-        "multi": true
-      },
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "author-email",
-        "label": "Author Email",
-        "description": "Email of the article author"
-      },
-      {
-        "component": "date-time",
-        "valueType": "date-time",
-        "name": "article_publish_date",
-        "label": "Publish Date",
-        "placeholder": "YYYY-MM-DD",
-        "displayFormat": null,
-        "valueFormat": null
+        "condition": {
+          "===": [
+            {
+              "var": "initialContentRefTarget"
+            },
+            "true"
+          ]
+        }
       },
       {
         "component": "aem-tag",
-        "valueType": "string",
-        "name": "cq:tags",
+        "name": "tags",
         "label": "Tags",
-        "description": "Tags for categorizing the article"
+        "valueType": "string"
       },
       {
-        "component": "text",
-        "valueType": "number",
-        "name": "reading-time",
-        "label": "Estimated Reading Time (minutes)",
-        "description": "Estimated time to read the article"
-      },
-      {
-        "component": "reference",
-        "valueType": "string",
-        "name": "featured-image",
-        "label": "Featured Image",
-        "description": "Main image for the blog post",
-        "multi": false
-      },
-      {
-        "component": "boolean",
-        "valueType": "boolean",
-        "name": "enable-comments",
-        "label": "Enable Comments",
-        "description": "Allow readers to comment on this post"
-      },
-      {
-        "component": "select",
-        "valueType": "string",
-        "name": "blog-category",
-        "label": "Blog Category",
-        "options": [
+        "component": "container",
+        "name": "social",
+        "label": "Social",
+        "fields": [
           {
-            "name": "Technology",
-            "value": "technology"
+            "component": "text",
+            "name": "og:title",
+            "label": "Title"
           },
           {
-            "name": "Business",
-            "value": "business"
+            "component": "aem-content",
+            "name": "link",
+            "label": "Link"
           },
           {
-            "name": "Product Updates",
-            "value": "product-updates"
+            "component": "text",
+            "name": "linkText",
+            "label": "Text"
+          },
+          {
+            "component": "text",
+            "name": "article:author",
+            "label": "Author",
+            "condition": {
+              "===": [
+                {
+                  "var": "template"
+                },
+                "article"
+              ]
+            }
           }
         ]
       }
     ]
   },
   {
-    "id": "blog-post-metadata",
+    "id": "events-metadata",
     "fields": [
       {
-        "component": "text",
-        "valueType": "string",
-        "name": "article-title",
-        "label": "Article Title",
-        "description": "Main title of the blog post"
-      },
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "article-description",
-        "label": "Article Description",
-        "description": "SEO meta description",
-        "multi": true
-      },
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "author-email",
-        "label": "Author Email",
-        "description": "Email of the article author"
-      },
-      {
-        "component": "date-time",
-        "valueType": "date-time",
-        "name": "article_publish_date",
-        "label": "Publish Date",
-        "placeholder": "YYYY-MM-DD",
-        "displayFormat": null,
-        "valueFormat": null
+        "component": "select",
+        "name": "template",
+        "label": "Template",
+        "options": [
+          {
+            "name": "Default",
+            "value": ""
+          },
+          {
+            "name": "Article",
+            "value": "article"
+          },
+          {
+            "name": "Events",
+            "value": "events"
+          }
+        ],
+        "condition": {
+          "===": [
+            {
+              "var": "initialContentRefTarget"
+            },
+            "true"
+          ]
+        }
       },
       {
         "component": "aem-tag",
-        "valueType": "string",
-        "name": "cq:tags",
+        "name": "tags",
         "label": "Tags",
-        "description": "Tags for categorizing the article"
+        "valueType": "string"
       },
       {
         "component": "text",
-        "valueType": "number",
-        "name": "reading-time",
-        "label": "Estimated Reading Time (minutes)",
-        "description": "Estimated time to read the article"
-      },
-      {
-        "component": "reference",
-        "valueType": "string",
-        "name": "featured-image",
-        "label": "Featured Image",
-        "description": "Main image for the blog post",
-        "multi": false
-      },
-      {
-        "component": "boolean",
-        "valueType": "boolean",
-        "name": "enable-comments",
-        "label": "Enable Comments",
-        "description": "Allow readers to comment on this post"
-      },
-      {
-        "component": "select",
-        "valueType": "string",
-        "name": "blog-category",
-        "label": "Blog Category",
-        "options": [
-          {
-            "name": "Technology",
-            "value": "technology"
-          },
-          {
-            "name": "Business",
-            "value": "business"
-          },
-          {
-            "name": "Product Updates",
-            "value": "product-updates"
-          }
-        ]
+        "name": "events:organizer",
+        "label": "Organizer",
+        "condition": {
+          "===": [
+            {
+              "var": "template"
+            },
+            "events"
+          ]
+        }
       }
     ]
   },
@@ -358,30 +319,27 @@
   },
   {
     "id": "accordion",
-    "fields": [
-      {
-        "component": "boolean",
-        "name": "accordion-single-open",
-        "label": "Allow Only One Item Open at a Time"
-      }
-    ]
+    "fields": []
   },
   {
     "id": "accordionitem",
     "fields": [
       {
+        "component": "tab",
+        "label": "Content",
+        "name": "content"
+      },
+      {
         "component": "text",
         "name": "accordion-item-title",
         "label": "Accordion Item Title",
-        "valueType": "string",
-        "value": ""
+        "valueType": "string"
       },
       {
         "component": "richtext",
         "name": "accordion-item-content",
         "label": "Accordion Item Content",
-        "valueType": "string",
-        "value": ""
+        "valueType": "string"
       },
       {
         "component": "reference",
@@ -389,6 +347,72 @@
         "label": "Image",
         "valueType": "string",
         "multi": false
+      },
+      {
+        "component": "text",
+        "name": "image-alt",
+        "label": "Image Alt Text",
+        "valueType": "string"
+      },
+      {
+        "component": "tab",
+        "label": "CTA",
+        "name": "accordion-cta"
+      },
+      {
+        "component": "aem-content",
+        "name": "button-link",
+        "label": "Button Link"
+      },
+      {
+        "component": "text",
+        "name": "button-text",
+        "label": "Button Text"
+      },
+      {
+        "component": "select",
+        "name": "button-style",
+        "label": "Button Style",
+        "options": [
+          {
+            "name": "Primary",
+            "value": "primary"
+          },
+          {
+            "name": "Secondary",
+            "value": "secondary"
+          }
+        ],
+        "value": "primary"
+      },
+      {
+        "component": "tab",
+        "label": "Layout",
+        "name": "layout"
+      },
+      {
+        "component": "select",
+        "name": "layout-style",
+        "label": "Accordion Layout",
+        "options": [
+          {
+            "name": "Image Left",
+            "value": "image-left"
+          },
+          {
+            "name": "Image Right",
+            "value": "image-right"
+          },
+          {
+            "name": "Image Top",
+            "value": "image-top"
+          },
+          {
+            "name": "Image Bottom",
+            "value": "image-bottom"
+          }
+        ],
+        "value": "image-left"
       },
       {
         "component": "boolean",
@@ -4598,7 +4622,7 @@
     ]
   },
   {
-    "id": "accordion",
+    "id": "form-accordion",
     "fields": [
       {
         "component": "tab",

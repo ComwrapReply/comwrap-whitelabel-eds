@@ -3,9 +3,6 @@
     "...": "./_page.json#/models"
   },
   {
-    "...": "./_blog-post-metadata.json#/models"
-  },
-  {
     "...": "./_image.json#/models"
   },
   {

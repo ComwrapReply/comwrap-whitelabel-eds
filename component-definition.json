@@ -56,42 +56,6 @@
               }
             }
           }
-        },
-        {
-          "title": "Table",
-          "id": "table",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/franklin/components/table/v1/table",
-                "template": {}
-              }
-            }
-          }
-        },
-        {
-          "title": "Table Row",
-          "id": "table-row",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/franklin/components/table/v1/table/row",
-                "template": {}
-              }
-            }
-          }
-        },
-        {
-          "title": "Table Column",
-          "id": "table-column",
-          "plugins": {
-            "xwalk": {
-              "page": {
-                "resourceType": "core/franklin/components/table/v1/table/column",
-                "template": {}
-              }
-            }
-          }
         }
       ]
     },
@@ -129,8 +93,7 @@
                 "template": {
                   "name": "Accordion",
                   "filter": "accordion",
-                  "model": "accordion",
-                  "accordion-single-open": false
+                  "model": "accordion"
                 }
               }
             }
@@ -145,8 +108,7 @@
                 "resourceType": "core/franklin/components/block/v1/block/item",
                 "template": {
                   "name": "Accordion Item",
-                  "model": "accordionitem",
-                  "accordion-item-open": false
+                  "model": "accordionitem"
                 }
               }
             }
