@@ -423,23 +423,7 @@ strong {
     color: var(--color-primary-blue);
 }
 
-/* Blockquotes */
-blockquote {
-    font-family: var(--font-family-base);
-    font-size: var(--font-size-h4);
-    line-height: var(--line-height-h4);
-    margin-bottom: var(--space-48);
-    display: flex;
-    align-items: flex-start;
-}
 
-blockquote::before {
-    content: '"';
-    color: var(--color-blue);
-    font-size: var(--space-88);
-    line-height: var(--space-80);
-    padding-right: var(--space-24);
-}
 
 /* ========================================
    RESPONSIVE TYPOGRAPHY

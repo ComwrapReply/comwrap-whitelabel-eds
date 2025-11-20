@@ -1,3 +1,21 @@
+/* Blockquotes */
+blockquote {
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-h4);
+    line-height: var(--line-height-h4);
+    margin-bottom: var(--space-48);
+    display: flex;
+    align-items: flex-start;
+}
+
+blockquote::before {
+    content: '"';
+    color: var(--color-blue);
+    font-size: var(--space-88);
+    line-height: var(--space-80);
+    padding-right: var(--space-24);
+}
+
 /* Base styles for all quote blocks */
 .block.quote {
     background: rgb(201 232 251 / 30%);
@@ -17,12 +35,27 @@
     line-height: 1.6;
 }
 
+.block.quote blockquote p {
+    color: var(--color-primary-blue);
+    font-style: italic;
+    font-size: var(--font-size-h4);
+    line-height: var(--line-height-h4);
+}
+
 .block.quote .quote-author {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--space-8);
     font-size: small;
     font-style: italic;
     margin: 16px;
     position: relative;
     text-align: right;
+}
+
+.block.quote .quote-author p{
+    margin: 0;
 }
 
 .block.quote .quote-author::before {
@@ -38,8 +71,16 @@
     box-shadow: 0 4px 12px rgb(255 193 7 / 20%);
 }
 
-.block.quote.highlight blockquote {
+.block.quote.highlight blockquote::before {
     font-weight: 500;
+    color: var(--dark-color, #333);
+}
+
+.block.quote.highlight blockquote p {
+    color: var(--dark-color, #333);
+}
+
+.block.quote.highlight .quote-author {
     color: var(--dark-color, #333);
 }
 
@@ -51,12 +92,16 @@
     box-shadow: 0 4px 12px rgb(0 0 0 / 30%);
 }
 
-.block.quote.dark blockquote {
+.block.quote.dark blockquote::before {
+    color: var(--light-color, #f8f9fa);
+}
+
+.block.quote.dark blockquote p {
     color: var(--light-color, #f8f9fa);
 }
 
 .block.quote.dark .quote-author {
-    color: var(--light-color, #dee2e6);
+    color: var(--light-color, #f8f9fa);
 }
 
 /* Light theme */
@@ -67,10 +112,14 @@
     box-shadow: 0 2px 8px rgb(0 0 0 / 10%);
 }
 
-.block.quote.light blockquote {
+.block.quote.light blockquote::before {
+    color: var(--text-color, #495057);
+}
+
+.block.quote.light blockquote p {
     color: var(--text-color, #495057);
 }
 
 .block.quote.light .quote-author {
-    color: var(--secondary-color, #6c757d);
+    color: var(--secondary-color, #495057);
 }
