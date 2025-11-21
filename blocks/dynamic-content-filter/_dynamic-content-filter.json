@@ -21,17 +21,12 @@
       "id": "dynamiccontentfilter",
       "fields": [
         {
-          "component": "select",
-          "name": "filterParameter",
-          "label": "Filter Parameter",
-          "valueType": "string",
-          "options": [
-            {
-              "name": "Tags",
-              "value": "cq-tags"
-            }
-          ],
-          "value": "cq-tags"
+            "component": "boolean",
+            "name": "multipleSelect",
+            "label": "Multiple Select",
+            "description": "Allow multiple tags to be selected",
+            "valueType": "boolean",
+            "value": true
         }
       ]
     }
