@@ -7,12 +7,10 @@ export default async function decorate(block) {
   const referencePath = referenceLink ? referenceLink.getAttribute('href').replace('/content/comwrap-whitelabel-eds', '') : '';
 
   const [currentCountry, currentLanguage] = getCurrentCountryLanguage();
-  // Temporarily use mock data for feature branch testing
-  // Change back to '/query-index.json' when merged to main
-  let response = await fetch('/blocks/dynamic-content/mock-query-index.json');
+  let response = await fetch('/query-index.json');
 
   if (currentCountry && currentLanguage) {
-    response = await fetch('/blocks/dynamic-content/mock-query-index.json');
+    response = await fetch('/query-index.json');
   }
 
   const dynamicContentRaw = await response.json();
@@ -75,6 +73,11 @@ export default async function decorate(block) {
     readMoreButton.textContent = 'Read more';
     readMoreButton.href = content.path;
     contentBody.appendChild(readMoreButton);
+
+    // Add data-tags attribute for filtering
+    if (content.tags) {
+      contentLink.setAttribute('data-tags', content.tags);
+    }
 
     container.appendChild(contentLink);
     block.textContent = '';
