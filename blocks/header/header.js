@@ -258,18 +258,37 @@ function processXfContent(xfContent) {
     // Handle relative paths like /magazine, /about-us, /faqs
     if (href.startsWith('/')) {
       try {
-        // Build full AEM URL
-        const xfPath = AEM_XF_CONFIG.xfPath;
+        // Try to extract the navigation root from cmp-navigation__group data-cmp-data-layer
+        const navGroup = content.querySelector('.cmp-navigation__group');
+        let contentPath = '';
         
-        // Extract language from XF path (default to 'en')
-        let lang = 'en';
-        const langMatch = xfPath.match(/\/language-masters\/([a-z]{2})\//);
-        if (langMatch) {
-          lang = langMatch[1];
+        if (navGroup) {
+          // Try to find the first link with a full content path to extract the base path
+          const firstNavLink = navGroup.querySelector('a[href*="/content/"]');
+          if (firstNavLink) {
+            const firstHref = firstNavLink.getAttribute('href');
+            // Extract everything up to and including language-masters/[lang]
+            const pathMatch = firstHref.match(/(\/content\/[^\/]+\/language-masters\/[^\/]+)/);
+            if (pathMatch) {
+              contentPath = pathMatch[1];
+              console.log(`  → Extracted content path from navigation: ${contentPath}`);
+            }
+          }
+        }
+        
+        // Fallback: Extract from XF path if we couldn't get it from navigation
+        if (!contentPath) {
+          const xfPath = AEM_XF_CONFIG.xfPath;
+          let lang = 'en';
+          const langMatch = xfPath.match(/\/language-masters\/([a-z]{2})\//);
+          if (langMatch) {
+            lang = langMatch[1];
+          }
+          contentPath = `/content/wknd/language-masters/${lang}`;
+          console.log(`  → Using fallback content path: ${contentPath}`);
         }
         
         // Build the full URL
-        const contentPath = `/content/wknd/language-masters/${lang}/home`;
         const fullUrl = `${baseUrl}${contentPath}${href}.html`;
         
         link.setAttribute('href', fullUrl);
