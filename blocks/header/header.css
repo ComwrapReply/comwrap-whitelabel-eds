@@ -266,3 +266,5 @@ header nav .nav-sections ul > li > ul > li {
 header nav .nav-tools {
   grid-area: tools;
 }
+
+.cmp-layoutcontainer--utility {display: none;}
