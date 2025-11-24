@@ -7,7 +7,7 @@ const AEM_XF_CONFIG = {
   authorUrl: 'https://author-p24706-e491522.adobeaemcloud.com',
   publishUrl: 'https://publish-p24706-e491522.adobeaemcloud.com',
   useDev: true,
-  xfPath: '/content/experience-fragments/wknd-spa/language-masters/en/site/header/master',
+  xfPath: '/content/experience-fragments/wknd/language-masters/en/site/header/master',
 };
 
 // Media query for desktop/mobile detection
