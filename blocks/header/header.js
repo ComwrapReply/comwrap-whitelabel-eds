@@ -9,7 +9,7 @@ const AEM_XF_CONFIG = {
   authorUrl: 'https://author-p24706-e491522.adobeaemcloud.com',
   publishUrl: 'https://publish-p24706-e491522.adobeaemcloud.com',
   useDev: true, // Set to true for development (uses Author), false for production (uses Publish)
-  xfPath: '/content/experience-fragments/wknd/language-masters/en/site/header/master',
+  xfPath: '/content/experience-fragments/wknd/language-masters/en/site/header/master/home',
 };
 
 // media query match that indicates mobile/tablet width
