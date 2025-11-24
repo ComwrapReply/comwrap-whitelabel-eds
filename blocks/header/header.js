@@ -269,7 +269,7 @@ function processXfContent(xfContent) {
         }
         
         // Build the full URL
-        const contentPath = `/content/wknd/language-masters/${lang}`;
+        const contentPath = `/content/wknd/language-masters/${lang}/home`;
         const fullUrl = `${baseUrl}${contentPath}${href}.html`;
         
         link.setAttribute('href', fullUrl);
