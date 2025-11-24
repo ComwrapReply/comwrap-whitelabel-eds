@@ -302,6 +302,55 @@ function processXfContent(xfContent) {
   });
   
   console.log('Link processing complete. Links after processing:', content.querySelectorAll('a').length);
+  
+  // Filter navigation to show only nested cmp-navigation__group items
+  const navigation = content.querySelector('.cmp-navigation');
+  if (navigation) {
+    console.log('Processing navigation structure...');
+    
+    // Find the main navigation group (level-0)
+    const mainNavGroup = navigation.querySelector(':scope > ul.cmp-navigation__group');
+    
+    if (mainNavGroup) {
+      // Get all level-0 items
+      const level0Items = mainNavGroup.querySelectorAll(':scope > li.cmp-navigation__item--level-0');
+      console.log('Found', level0Items.length, 'level-0 navigation items');
+      
+      level0Items.forEach((level0Item) => {
+        // Find the nested cmp-navigation__group within this level-0 item
+        const nestedNavGroup = level0Item.querySelector(':scope > ul.cmp-navigation__group');
+        
+        if (nestedNavGroup) {
+          console.log('Found nested navigation group, promoting its children...');
+          
+          // Get all level-1 items from the nested group
+          const level1Items = nestedNavGroup.querySelectorAll(':scope > li.cmp-navigation__item--level-1');
+          
+          // Remove the parent link (level-0 > a)
+          const parentLink = level0Item.querySelector(':scope > a');
+          if (parentLink) {
+            parentLink.remove();
+            console.log('Removed parent link');
+          }
+          
+          // Move level-1 items up to replace the level-0 item
+          level1Items.forEach((level1Item) => {
+            // Clone the item to avoid DOM issues
+            const clonedItem = level1Item.cloneNode(true);
+            // Insert before the level-0 item
+            mainNavGroup.insertBefore(clonedItem, level0Item);
+          });
+          
+          // Remove the original level-0 item (which now only contains the nested group)
+          level0Item.remove();
+          console.log('Promoted', level1Items.length, 'level-1 items to main navigation');
+        }
+      });
+      
+      console.log('Navigation structure processed');
+    }
+  }
+  
   console.log('XF content processed');
   return content;
 }
