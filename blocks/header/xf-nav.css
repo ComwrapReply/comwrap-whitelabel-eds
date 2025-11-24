@@ -50,6 +50,8 @@
 
 .cmp-layoutcontainer--header .cmp-image--logo img {
   height: 40px;
+  width: 128px;
+  max-width: max-content;
   width: auto;
   display: block;
 }
