@@ -7,3 +7,10 @@ helix-importer-ui
 .DS_Store
 *.bak
 .idea
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/
