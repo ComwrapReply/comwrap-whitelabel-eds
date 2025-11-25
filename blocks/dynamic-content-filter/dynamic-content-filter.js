@@ -1,9 +1,7 @@
 export default async function decorate(block) {
   // Find the dynamic-content block - it's in the next sibling wrapper
   const contentWrapper = block.parentElement.nextElementSibling;
-  console.log('contentWrapper:', contentWrapper);
   const dynamicContentBlock = contentWrapper?.querySelector('.dynamic-content.block');
-  console.log('dynamicContentBlock:', dynamicContentBlock);
 
   if (!dynamicContentBlock) {
     console.log('No dynamic content block found');
@@ -50,12 +48,17 @@ export default async function decorate(block) {
     });
 
     if (booleanDiv) {
-      return booleanDiv.textContent.trim().toLowerCase() === 'true';
+      const value = booleanDiv.textContent.trim().toLowerCase() === 'true';
+      // Remove the div after reading its value
+      booleanDiv.remove();
+      return value;
     }
 
     // Default to true if not found
     return true;
   };
+
+  const multipleSelect = getMultipleSelect();
 
   // Process tags when content is found - non-blocking
   const processTags = (contentLinks) => {
@@ -70,7 +73,6 @@ export default async function decorate(block) {
     });
 
     const uniqueTagPills = [...new Set(tagPills)].sort();
-    const multipleSelect = getMultipleSelect();
 
     const tags = document.createElement('div');
     tags.classList.add('tags');
