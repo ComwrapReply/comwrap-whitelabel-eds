@@ -1,0 +1,265 @@
+/* Tabs Block - Vertical Layout with Dark Background */
+.tabs-container {
+  display: flex;
+  gap: 40px;
+  align-items: flex-start;
+  background-color: #0c2863;
+  padding: 104px 200px;
+  min-height: 472px;
+}
+
+/* Tab List - Vertical Tabs on the Left */
+.tabs-tab-list {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  width: 480px;
+  padding-left: 3px;
+}
+
+/* Indicator Line */
+.tabs-indicator {
+  position: absolute;
+  left: 0;
+  width: 3px;
+  background-color: #f7f6f5;
+  transition: top 0.3s ease, height 0.3s ease;
+  pointer-events: none;
+}
+
+/* Tab Buttons Wrapper */
+.tabs-tab-buttons-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Tab Button */
+.tabs-tab-button {
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.3s ease;
+  min-height: 57px;
+}
+
+.tabs-tab-button:hover {
+  background: transparent;
+}
+
+.tabs-tab-button-content {
+  font-family: 'Albert Sans', sans-serif;
+  font-weight: 600;
+  font-size: 32px;
+  line-height: 40px;
+  color: rgb(255 255 255 / 50%);
+  transition: all 0.3s ease;
+}
+
+/* Active Tab Button */
+.tabs-tab-button.active .tabs-tab-button-content {
+  font-size: 44px;
+  line-height: 56px;
+  color: #fff;
+}
+
+/* Tab Button Focus State */
+.tabs-tab-button:focus {
+  outline: 2px solid #23d7b6;
+  outline-offset: 2px;
+  background: transparent;
+}
+
+.tabs-tab-button:focus-visible {
+  outline: 2px solid #23d7b6;
+  outline-offset: 2px;
+}
+
+/* Tab Panels Container - Content Area on the Right */
+.tabs-tab-panels {
+  flex: 1;
+  min-width: 0;
+  max-width: 1000px;
+}
+
+/* Individual Tab Panel */
+.tabs-tab-panel {
+  display: none;
+  color: #ffffff;
+}
+
+.tabs-tab-panel.active {
+  display: block;
+}
+
+.tabs-tab-panel[hidden] {
+  display: none;
+}
+
+/* Tab Panel Content Styling */
+.tabs-tab-panel h2 {
+  font-family: 'Albert Sans', sans-serif;
+  font-weight: 600;
+  font-size: 32px;
+  line-height: 40px;
+  color: #fff;
+  margin-top: 0;
+  padding-bottom: 32px;
+}
+
+.tabs-tab-panel p {
+  font-family: 'Albert Sans', sans-serif;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 32px;
+  color: #fff;
+  margin-bottom: 24px;
+}
+
+.tabs-tab-panel sup {
+  font-size: 12.9px;
+  vertical-align: super;
+}
+
+.tabs-tab-panel a {
+  color: #fff;
+  text-decoration: underline;
+  text-decoration-skip-ink: none;
+  text-underline-position: from-font;
+}
+
+.tabs-tab-panel a:hover {
+  color: #23d7b6;
+}
+
+/* Footnotes Styling */
+.tabs-tab-panel .footnotes {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.tabs-tab-panel .footnotes p {
+  font-size: 18px;
+  line-height: 24px;
+  margin-bottom: 0;
+}
+
+.tabs-tab-panel .footnotes sup {
+  font-size: 11.61px;
+}
+
+/* Responsive Design - Tablet */
+@media (width <= 1200px) {
+  .tabs-container {
+    padding: 80px 100px;
+  }
+
+  .tabs-tab-list {
+    width: 360px;
+  }
+
+  .tabs-tab-button-content {
+    font-size: 28px;
+    line-height: 36px;
+  }
+
+  .tabs-tab-button.active .tabs-tab-button-content {
+    font-size: 36px;
+    line-height: 44px;
+  }
+}
+
+/* Responsive Design - Mobile */
+@media (width <= 768px) {
+  .tabs-container {
+    flex-direction: column;
+    padding: 40px 24px;
+    gap: 24px;
+  }
+
+  .tabs-tab-list {
+    width: 100%;
+    flex-direction: row;
+    overflow-x: auto;
+    padding-left: 0;
+  }
+
+  .tabs-indicator {
+    left: 0;
+    bottom: 0;
+    top: auto;
+    width: auto;
+    height: 3px;
+    transition: left 0.3s ease, width 0.3s ease;
+  }
+
+  .tabs-tab-buttons-wrapper {
+    flex-direction: row;
+    gap: 8px;
+  }
+
+  .tabs-tab-button {
+    padding: 12px 16px;
+    white-space: nowrap;
+    min-height: 0;
+  }
+
+  .tabs-tab-button-content {
+    font-size: 20px;
+    line-height: 28px;
+  }
+
+  .tabs-tab-button.active .tabs-tab-button-content {
+    font-size: 24px;
+    line-height: 32px;
+  }
+
+  .tabs-tab-panels {
+    max-width: 100%;
+  }
+
+  .tabs-tab-panel h2 {
+    font-size: 24px;
+    line-height: 32px;
+    padding-bottom: 24px;
+  }
+
+  .tabs-tab-panel p {
+    font-size: 16px;
+    line-height: 24px;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .tabs-container {
+    display: block;
+    background-color: transparent;
+    padding: 0;
+  }
+
+  .tabs-tab-list {
+    display: none;
+  }
+
+  .tabs-tab-panels {
+    max-width: 100%;
+  }
+
+  .tabs-tab-panel {
+    display: block !important;
+    page-break-inside: avoid;
+  }
+
+  .tabs-tab-panel:not(:first-child) {
+    page-break-before: always;
+  }
+}
+
