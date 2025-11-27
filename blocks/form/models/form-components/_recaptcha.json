@@ -26,6 +26,39 @@
                     "label": "Name",
                     "valueType": "string",
                     "required": true
+                },
+                {
+                    "component": "text",
+                    "name": "siteKey",
+                    "label": "reCAPTCHA Site Key",
+                    "valueType": "string",
+                    "required": true,
+                    "description": "Your Google reCAPTCHA Site Key"
+                },
+                {
+                    "component": "select",
+                    "name": "version",
+                    "label": "reCAPTCHA Version",
+                    "valueType": "string",
+                    "options": [
+                        {
+                            "name": "Standard v3",
+                            "value": "standard"
+                        },
+                        {
+                            "name": "Enterprise",
+                            "value": "enterprise"
+                        }
+                    ],
+                    "value": "standard"
+                },
+                {
+                    "component": "text",
+                    "name": "uri",
+                    "label": "Enterprise URI",
+                    "valueType": "string",
+                    "description": "Enterprise API URI (only for enterprise version)",
+                    "condition": { "==": [{ "var": "version" }, "enterprise"] }
                 }
             ]
         }
