@@ -3877,11 +3877,11 @@
       },
       {
         "component": "text",
-        "name": "siteKey",
+        "name": "value",
         "label": "reCAPTCHA Site Key",
         "valueType": "string",
         "required": true,
-        "description": "Your Google reCAPTCHA Site Key"
+        "description": "Your Google reCAPTCHA Site Key (e.g., 6LcXXXXXXXXXXXXXX...)"
       },
       {
         "component": "select",
@@ -3905,15 +3905,8 @@
         "name": "uri",
         "label": "Enterprise URI",
         "valueType": "string",
-        "description": "Enterprise API URI (only for enterprise version)",
-        "condition": {
-          "==": [
-            {
-              "var": "version"
-            },
-            "enterprise"
-          ]
-        }
+        "value": "https://www.google.com/recaptcha/enterprise.js",
+        "description": "Enterprise API URI (only needed for enterprise version)"
       }
     ]
   },
