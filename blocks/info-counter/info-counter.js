@@ -4,7 +4,6 @@
  * Animation triggers when block enters viewport and counts from 0 to target
  */
 
-
 const ANIMATION_CONFIG = {
   DURATION: 10000, // Animation duration in milliseconds
   EASING: 'ease-out', // Animation easing function
