@@ -6172,11 +6172,10 @@
       {
         "component": "select",
         "name": "classes",
-        "value": "default",
+        "value": "",
         "label": "Style",
         "description": "Style for the tabs (e.g., 'default', 'primary')",
         "valueType": "string",
-        "required": true,
         "options": [
           {
             "name": "Default",

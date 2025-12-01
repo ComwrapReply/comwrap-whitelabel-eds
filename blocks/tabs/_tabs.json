@@ -42,7 +42,6 @@
           "label": "Style",
           "description": "Style for the tabs (e.g., 'default', 'primary')",
           "valueType": "string",
-          "required": true,
           "options": [
             {
               "name": "Default",
@@ -52,8 +51,7 @@
               "name": "Primary",
               "value": "primary"
             }
-          ],
-          "value": "default"
+          ]
         }
       ]
     },
