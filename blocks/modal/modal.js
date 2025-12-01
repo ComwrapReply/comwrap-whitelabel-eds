@@ -1,4 +1,5 @@
 import { loadFragment } from '../fragment/fragment.js';
+import { getPlaceholder } from '../../scripts/utils.js';
 
 /**
  * Modal Block - Simple popup dialog
@@ -99,11 +100,13 @@ export default async function decorate(block) {
   const link = block.querySelector('a');
   const fragmentPath = link?.getAttribute('href') || '';
 
-  // Get trigger text from second row
-  const triggerText = block.children[1]?.textContent?.trim() || 'Open Modal';
+  // Get trigger text from second row, fallback to placeholder
+  const defaultTriggerText = await getPlaceholder('modal-open', 'Open Modal');
+  const triggerText = block.children[1]?.textContent?.trim() || defaultTriggerText;
 
   if (!fragmentPath) {
-    block.textContent = 'Modal: No reference path';
+    const noLinkText = await getPlaceholder('modal-no-link', 'Modal: No reference path');
+    block.textContent = noLinkText;
     return;
   }
 

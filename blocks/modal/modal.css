@@ -1,11 +1,16 @@
 /* Modal trigger link */
-.modal.block .modal-link {
+.modal .modal-link {
   color: var(--color-primary);
   text-decoration: underline;
   cursor: pointer;
 }
 
-.modal.block .modal-link:hover {
+.button .modal-link {
+  color: var(--color-white);
+  text-decoration: none;
+}
+
+.modal .modal-link:hover {
  text-decoration: none;
 }
 
