@@ -62,7 +62,7 @@ export default async function decorate(block) {
 
   // Create tabs container structure
   const tabsContainer = document.createElement('div');
-  tabsContainer.className = 'tabs-container';
+  tabsContainer.className = 'tabs-block';
 
   // Create tab list (vertical buttons on the left)
   const tabList = document.createElement('div');
