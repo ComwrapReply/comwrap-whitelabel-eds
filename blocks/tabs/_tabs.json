@@ -36,7 +36,7 @@
       "id": "tabs",
       "fields": [
         {
-          "component": "string",
+          "component": "select",
           "name": "classes",
           "value": "",
           "label": "Style",
