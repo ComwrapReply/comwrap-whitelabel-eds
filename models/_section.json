@@ -80,7 +80,9 @@
         "teaser",
         "separator",
         "tabs",
-        "info-counter"
+        "info-counter",
+        "dynamiccontent",
+        "dynamiccontentfilter"
       ]
     }
   ]

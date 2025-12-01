@@ -422,21 +422,6 @@
     ]
   },
   {
-    "id": "articlefeed",
-    "fields": [
-      {
-        "component": "aem-content",
-        "name": "link",
-        "label": "Parent page",
-        "value": "",
-        "valueType": "string",
-        "validation": {
-          "rootPath": "/content/blog-blueprint"
-        }
-      }
-    ]
-  },
-  {
     "id": "breadcrumbs",
     "fields": [
       {
@@ -634,6 +619,34 @@
         "valueType": "string",
         "validation": {
           "rootPath": "/content/dam/aem-xwalk"
+        }
+      }
+    ]
+  },
+  {
+    "id": "dynamiccontentfilter",
+    "fields": [
+      {
+        "component": "boolean",
+        "name": "multipleSelect",
+        "label": "Multiple Select",
+        "description": "Allow multiple tags to be selected",
+        "valueType": "boolean",
+        "value": true
+      }
+    ]
+  },
+  {
+    "id": "dynamiccontent",
+    "fields": [
+      {
+        "component": "aem-content",
+        "name": "link",
+        "label": "Parent page",
+        "value": "",
+        "valueType": "string",
+        "validation": {
+          "rootPath": "/content/comwrap-whitelabel-eds"
         }
       }
     ]
@@ -6377,10 +6390,49 @@
         "valueType": "string"
       },
       {
-        "component": "text",
-        "name": "video_description",
-        "label": "Video Description",
-        "valueType": "string"
+        "component": "select",
+        "name": "video-width",
+        "label": "Video Width",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "100%",
+            "value": "100%"
+          },
+          {
+            "name": "75%",
+            "value": "75%"
+          },
+          {
+            "name": "50%",
+            "value": "50%"
+          }
+        ],
+        "value": "100%"
+      },
+      {
+        "component": "boolean",
+        "name": "video-autoplay",
+        "label": "Autoplay",
+        "description": "Allows the video to play automatically"
+      },
+      {
+        "component": "boolean",
+        "name": "video-loop",
+        "label": "Loop",
+        "description": "Allows video to replay automatically when finished"
+      },
+      {
+        "component": "boolean",
+        "name": "video-muted",
+        "label": "Muted",
+        "description": "Allows video to be muted by default"
+      },
+      {
+        "component": "boolean",
+        "name": "video-controls",
+        "label": "Controls",
+        "description": "Allows users to control the video playback"
       }
     ]
   }
