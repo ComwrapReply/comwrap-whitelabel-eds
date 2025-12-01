@@ -58,6 +58,10 @@ async function loadFonts() {
   }
 }
 
+/**
+ * Auto-links modals for links with href containing '/modals/'
+ * @param {Element} element - The container element to attach listener to
+ */
 function autolinkModals(element) {
   element.addEventListener('click', async (e) => {
     const origin = e.target.closest('a');

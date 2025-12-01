@@ -31,6 +31,22 @@
           "label": "Trigger Link Text",
           "valueType": "string",
           "value": "Open Modal"
+        },
+        {
+          "component": "select",
+          "name": "classes",
+          "label": "Style",
+          "options": [
+            {
+              "name": "link",
+              "value": ""
+            },
+            {
+              "name": "button",
+              "value": "button"
+            }
+          ],
+          "value": "link"
         }
       ]
     }
