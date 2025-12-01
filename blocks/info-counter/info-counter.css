@@ -25,8 +25,9 @@
 .info-counter-number {
   display: flex;
   align-items: flex-end;
-  justify-content: flex-end;
+  justify-content: center;
   height: 168px;
+  min-width: 300px;
   overflow: hidden;
   position: relative;
   flex-shrink: 0;
