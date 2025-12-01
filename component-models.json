@@ -6175,10 +6175,11 @@
         "label": "Style",
         "description": "Style for the tabs (e.g., 'default', 'primary')",
         "value": "",
+        "valueType": "string",
         "options": [
           {
             "name": "Default",
-            "value": ""
+            "value": "default"
           },
           {
             "name": "Primary",
