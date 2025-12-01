@@ -1,0 +1,45 @@
+/* Dynamic Content Filter Block */
+.block.dynamic-content-filter .tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.block.dynamic-content-filter .tag-pill {
+  display: inline-block;
+  padding: 0.5rem 1.25rem;
+  background-color: transparent;
+  border: 2px solid orange;
+  border-radius: 1.5rem;
+  font-size: var(--body-font-size-xs, 17px);
+  font-weight: 500;
+  line-height: 1.4;
+  white-space: nowrap;
+  font-family: var(--body-font-family, roboto, roboto-fallback, sans-serif);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.block.dynamic-content-filter .tag-pill .tag-pill-text {
+  color: orange;
+}
+
+.block.dynamic-content-filter .tag-pill:hover {
+  background-color: rgb(255 165 0 / 10%);
+}
+
+.block.dynamic-content-filter .tag-pill.active {
+  background-color: orange;
+  border-color: orange;
+}
+
+.block.dynamic-content-filter .tag-pill.active .tag-pill-text {
+  color: white;
+}
+
+.block.dynamic-content-filter .tag-pill:focus {
+  outline: 2px solid orange;
+  outline-offset: 2px;
+}
+

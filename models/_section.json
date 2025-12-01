@@ -78,7 +78,9 @@
         "tags",
         "embed",
         "teaser",
-        "separator"
+        "separator",
+        "dynamiccontent",
+        "dynamiccontentfilter"
       ]
     }
   ]
