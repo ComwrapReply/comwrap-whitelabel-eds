@@ -6,56 +6,88 @@ import { loadFragment } from '../fragment/fragment.js';
  */
 
 /**
+ * Normalizes AEM content path to relative path
+ * Removes /content/{site-name} prefix for EDS compatibility
+ * @param {string} path - The path to normalize
+ * @returns {string} - Normalized relative path
+ */
+function normalizePath(path) {
+  // Handle full URLs
+  if (path.startsWith('http')) {
+    const url = new URL(path, window.location);
+    return normalizePath(url.pathname);
+  }
+
+  // Remove /content/{site-name} prefix if present (AEM author paths)
+  // Pattern: /content/site-name/... → /...
+  const aemPathMatch = path.match(/^\/content\/[^/]+(\/.*)$/);
+  if (aemPathMatch) {
+    return aemPathMatch[1];
+  }
+
+  return path;
+}
+
+// Track if modal is currently opening to prevent duplicates
+let isModalOpening = false;
+
+/**
  * Opens a modal with fragment content
  * @param {string} fragmentUrl - Path to the fragment
  */
 export async function openModal(fragmentUrl) {
-  const path = fragmentUrl.startsWith('http')
-    ? new URL(fragmentUrl, window.location).pathname
-    : fragmentUrl;
+  // Prevent duplicate modal opening
+  if (isModalOpening) return;
+  isModalOpening = true;
 
-  const fragment = await loadFragment(path);
-  if (!fragment) {
-    // eslint-disable-next-line no-console
-    console.error(`Failed to load modal fragment: ${path}`);
-    return;
+  try {
+    const path = normalizePath(fragmentUrl);
+
+    const fragment = await loadFragment(path);
+    if (!fragment) {
+      // eslint-disable-next-line no-console
+      console.error(`Failed to load modal fragment: ${path}`);
+      return;
+    }
+
+    // Create dialog
+    const dialog = document.createElement('dialog');
+    dialog.classList.add('modal-dialog');
+
+    // Close button
+    const closeButton = document.createElement('button');
+    closeButton.classList.add('close-button');
+    closeButton.setAttribute('aria-label', 'Close');
+    closeButton.type = 'button';
+    closeButton.innerHTML = '<span class="icon icon-close"></span>';
+    closeButton.addEventListener('click', () => dialog.close());
+
+    // Content wrapper
+    const content = document.createElement('div');
+    content.classList.add('modal-content');
+    content.append(...fragment.childNodes);
+
+    dialog.append(closeButton, content);
+    document.body.append(dialog);
+
+    // Close on backdrop click
+    dialog.addEventListener('click', (e) => {
+      if (e.target === dialog) dialog.close();
+    });
+
+    // Cleanup on close
+    dialog.addEventListener('close', () => {
+      document.body.classList.remove('modal-open');
+      dialog.remove();
+    });
+
+    // Show modal
+    dialog.showModal();
+    document.body.classList.add('modal-open');
+    content.scrollTop = 0;
+  } finally {
+    isModalOpening = false;
   }
-
-  // Create dialog
-  const dialog = document.createElement('dialog');
-  dialog.classList.add('modal-dialog');
-
-  // Close button
-  const closeButton = document.createElement('button');
-  closeButton.classList.add('close-button');
-  closeButton.setAttribute('aria-label', 'Close');
-  closeButton.type = 'button';
-  closeButton.innerHTML = '<span class="icon icon-close"></span>';
-  closeButton.addEventListener('click', () => dialog.close());
-
-  // Content wrapper
-  const content = document.createElement('div');
-  content.classList.add('modal-content');
-  content.append(...fragment.childNodes);
-
-  dialog.append(closeButton, content);
-  document.body.append(dialog);
-
-  // Close on backdrop click
-  dialog.addEventListener('click', (e) => {
-    if (e.target === dialog) dialog.close();
-  });
-
-  // Cleanup on close
-  dialog.addEventListener('close', () => {
-    document.body.classList.remove('modal-open');
-    dialog.remove();
-  });
-
-  // Show modal
-  dialog.showModal();
-  document.body.classList.add('modal-open');
-  content.scrollTop = 0;
 }
 
 /**
@@ -84,6 +116,7 @@ export default async function decorate(block) {
 
   trigger.addEventListener('click', (e) => {
     e.preventDefault();
+    e.stopPropagation();
     openModal(fragmentPath);
   });
 
