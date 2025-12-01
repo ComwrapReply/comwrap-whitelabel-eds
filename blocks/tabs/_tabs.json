@@ -46,7 +46,7 @@
           "options": [
             {
               "name": "Default",
-              "value": "default"
+              "value": ""
             },
             {
               "name": "Primary",
