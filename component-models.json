@@ -6171,7 +6171,7 @@
     "fields": [
       {
         "component": "string",
-        "name": "style",
+        "name": "classes",
         "value": "default",
         "label": "Style",
         "description": "Style for the tabs (e.g., 'default', 'primary')",
