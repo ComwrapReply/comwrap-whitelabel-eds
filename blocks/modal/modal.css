@@ -1,120 +1,113 @@
-/* Modal block styles */
+/* Modal trigger link */
+.modal.block .modal-link {
+  color: var(--link-color, #3b63fb);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.modal.block .modal-link:hover {
+  color: var(--link-hover-color, #1d3ecf);
+}
+
+/* Prevent body scroll when modal open */
 body.modal-open {
   overflow: hidden;
 }
 
-/* Modal backdrop */
-.modal dialog::backdrop {
-  background-color: rgb(19 19 19 / 75%);
-}
-
-/* Modal dialog container */
-.modal dialog {
-  overscroll-behavior: none;
-  overflow-y: hidden;
+/* Modal dialog */
+.modal-dialog {
+  position: fixed;
   width: calc(100vw - 48px);
   max-width: 900px;
-  max-height: calc(100dvh - (2 * var(--header-height, 0px)));
+  max-height: calc(100dvh - 48px);
   padding: 0;
   border: 1px solid var(--dark-color, #333);
+  border-radius: 4px;
 }
 
-/* Modal content area */
-.modal dialog .modal-content {
-  box-sizing: border-box;
+.modal-dialog::backdrop {
+  background-color: rgb(0 0 0 / 60%);
+}
+
+/* Modal content */
+.modal-dialog .modal-content {
   overflow-y: auto;
-  overscroll-behavior: none;
-  width: 100%;
-  max-height: calc(100dvh - (2 * var(--header-height, 0px)) - 48px);
-  padding: 24px;
-  padding-top: 0;
-  margin-top: 44px;
+  max-height: calc(100dvh - 96px);
+  padding: 48px 24px 24px;
 }
 
-/* Desktop styles */
-@media (width >= 900px) {
-  .modal dialog {
-    width: calc(100vw - 64px);
-  }
-
-  .modal dialog .modal-content {
-    max-height: calc(100dvh - (2 * var(--header-height, 0px)) - 64px);
-    padding: 32px;
-    padding-top: 0;
-  }
+.modal-dialog .modal-content .section {
+  padding: 0;
 }
 
 /* Close button */
-.modal .close-button {
+.modal-dialog .close-button {
   position: absolute;
-  top: 0;
-  right: 0;
-  width: 44px;
-  height: 44px;
-  margin: 0;
-  border: none;
-  border-radius: 0;
+  top: 8px;
+  right: 8px;
+  width: 32px;
+  height: 32px;
   padding: 0;
-  background-color: transparent;
-  color: var(--text-color, #131313);
-  line-height: 0;
+  border: none;
+  background: transparent;
   cursor: pointer;
-  z-index: 1;
+  color: var(--text-color, #333);
 }
 
-/* Close button hover state */
-.modal .close-button:hover {
-  background-color: rgba(0, 0, 0, 0.05);
+.modal-dialog .close-button:hover {
+  background: rgb(0 0 0 / 5%);
+  border-radius: 4px;
 }
 
-/* Close button focus state */
-.modal .close-button:focus {
+.modal-dialog .close-button:focus {
   outline: 2px solid var(--link-color, #3b63fb);
   outline-offset: 2px;
 }
 
-/* Close icon */
-.modal .close-button .icon.icon-close {
-  content: '';
+/* Close icon X */
+.modal-dialog .close-button .icon.icon-close {
+  display: block;
   width: 24px;
   height: 24px;
   position: relative;
-  display: block;
+  margin: 4px;
 }
 
-/* Close icon X shape */
-.modal .close-button .icon.icon-close::before,
-.modal .close-button .icon.icon-close::after {
+.modal-dialog .close-button .icon.icon-close::before,
+.modal-dialog .close-button .icon.icon-close::after {
   content: '';
-  box-sizing: border-box;
-  display: block;
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%) rotate(45deg);
-  width: 24px;
+  width: 20px;
   height: 2px;
-  border-radius: 2px;
-  background-color: currentcolor;
+  background: currentcolor;
+  border-radius: 1px;
 }
 
-.modal .close-button .icon.icon-close::after {
+.modal-dialog .close-button .icon.icon-close::before {
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.modal-dialog .close-button .icon.icon-close::after {
   transform: translate(-50%, -50%) rotate(-45deg);
 }
 
-/* Section styling within modal */
-.modal dialog .section {
-  padding: 0;
+/* Desktop */
+@media (width >= 900px) {
+  .modal-dialog {
+    width: calc(100vw - 64px);
+  }
+
+  .modal-dialog .modal-content {
+    padding: 48px 32px 32px;
+  }
 }
 
-/* Accessibility: Reduced motion support */
+/* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
-  .modal dialog {
-    transition: none;
-  }
-
-  .modal dialog::backdrop {
+  .modal-dialog,
+  .modal-dialog::backdrop {
     transition: none;
   }
 }
-
