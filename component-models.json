@@ -6167,6 +6167,30 @@
     ]
   },
   {
+    "id": "tabs",
+    "fields": [
+      {
+        "component": "string",
+        "name": "style",
+        "value": "default",
+        "label": "Style",
+        "description": "Style for the tabs (e.g., 'default', 'primary')",
+        "valueType": "string",
+        "required": true,
+        "options": [
+          {
+            "name": "Default",
+            "value": "default"
+          },
+          {
+            "name": "Primary",
+            "value": "primary"
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "tab",
     "fields": [
       {

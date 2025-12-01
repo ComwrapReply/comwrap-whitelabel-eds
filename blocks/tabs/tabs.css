@@ -3,7 +3,7 @@
   display: flex;
   gap: 40px;
   align-items: flex-start;
-  background-color: #0c2863;
+  background-color: var(--color-secondary);
   padding: 104px 200px;
   min-height: 472px;
 }
@@ -23,7 +23,7 @@
   position: absolute;
   left: 0;
   width: 3px;
-  background-color: #f7f6f5;
+  background-color: var(--color-light-grey);
   transition: top 0.3s ease, height 0.3s ease;
   pointer-events: none;
 }
@@ -65,19 +65,19 @@
 .tabs-tab-button.active .tabs-tab-button-content {
   font-size: 44px;
   line-height: 56px;
-  color: #fff;
+  color: var(--color-white);
 }
 
 /* Tab Button Focus State */
+.tabs-tab-button:focus-visible,
 .tabs-tab-button:focus {
-  outline: 2px solid #23d7b6;
-  outline-offset: 2px;
+  outline: none;
+  color: var(--color-white) !important;
   background: transparent;
 }
 
 .tabs-tab-button:focus-visible {
-  outline: 2px solid #23d7b6;
-  outline-offset: 2px;
+    outline: 2px solid var(--color-white);
 }
 
 /* Tab Panels Container - Content Area on the Right */
@@ -90,7 +90,7 @@
 /* Individual Tab Panel */
 .tabs-tab-panel {
   display: none;
-  color: #ffffff;
+  color: var(--color-white);
 }
 
 .tabs-tab-panel.active {
@@ -107,7 +107,7 @@
   font-weight: 600;
   font-size: 32px;
   line-height: 40px;
-  color: #fff;
+  color: var(--color-white);
   margin-top: 0;
   padding-bottom: 32px;
 }
@@ -117,7 +117,7 @@
   font-weight: 400;
   font-size: 20px;
   line-height: 32px;
-  color: #fff;
+  color: var(--color-white);
   margin-bottom: 24px;
 }
 
@@ -127,14 +127,10 @@
 }
 
 .tabs-tab-panel a {
-  color: #fff;
+  color: var(--color-white);
   text-decoration: underline;
   text-decoration-skip-ink: none;
   text-underline-position: from-font;
-}
-
-.tabs-tab-panel a:hover {
-  color: #23d7b6;
 }
 
 /* Footnotes Styling */

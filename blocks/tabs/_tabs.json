@@ -33,6 +33,31 @@
   ],
   "models": [
     {
+      "id": "tabs",
+      "fields": [
+        {
+          "component": "string",
+          "name": "style",
+          "value": "",
+          "label": "Style",
+          "description": "Style for the tabs (e.g., 'default', 'primary')",
+          "valueType": "string",
+          "required": true,
+          "options": [
+            {
+              "name": "Default",
+              "value": "default"
+            },
+            {
+              "name": "Primary",
+              "value": "primary"
+            }
+          ],
+          "value": "default"
+        }
+      ]
+    },
+    {
       "id": "tab",
       "fields": [
         {
