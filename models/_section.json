@@ -79,7 +79,9 @@
         "embed",
         "teaser",
         "separator",
-        "modal"
+        "modal",
+        "dynamiccontent",
+        "dynamiccontentfilter"
       ]
     }
   ]
