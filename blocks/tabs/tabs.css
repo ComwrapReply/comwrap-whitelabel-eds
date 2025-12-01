@@ -324,6 +324,7 @@
     .tabs-tab-panel .footnotes sup {
       color: var(--color-secondary);
     }
+
     .tabs-indicator {
       background-color: var(--color-secondary);
     }
