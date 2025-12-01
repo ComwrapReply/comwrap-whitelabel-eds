@@ -4,7 +4,6 @@
  * Animation triggers when block enters viewport and counts from 0 to target
  */
 
-import { isEditorMode as checkEditorMode, observeEditorMode } from '../../scripts/utils.js';
 
 const ANIMATION_CONFIG = {
   DURATION: 10000, // Animation duration in milliseconds
@@ -79,7 +78,6 @@ function animateCounter(counterElement, targetNumber) {
 
 /**
  * Initialize counter animation when block enters viewport
- * Only animates when NOT in editor mode
  * @param {HTMLElement} block - The info-counter block element
  */
 function initializeCounterAnimation(block) {
@@ -94,16 +92,6 @@ function initializeCounterAnimation(block) {
 
   // Mark as animated to prevent re-animation
   if (block.dataset.animated === 'true') {
-    return;
-  }
-
-  // Check if in editor mode
-  const isInEditorMode = checkEditorMode();
-
-  // If in editor mode, show target number immediately without animation
-  if (isInEditorMode) {
-    updateCounterDisplay(counterElement, targetNumber);
-    block.dataset.animated = 'true';
     return;
   }
 
@@ -350,11 +338,8 @@ export default function decorate(block) {
   const digitContainers = createDigitContainers(numberString);
   numberContainer.appendChild(digitContainers);
 
-  // Check if in editor mode
-  const isInEditorMode = checkEditorMode();
-
-  // Initialize display to 0 (or target if in editor mode)
-  updateCounterDisplay(numberContainer, isInEditorMode ? targetNumber : 0);
+  // Initialize display to 0
+  updateCounterDisplay(numberContainer, 0);
 
   // Store target number for animation
   block.dataset.targetNumber = targetNumber.toString();
@@ -374,26 +359,6 @@ export default function decorate(block) {
   wrapper.appendChild(textContainer);
   block.appendChild(wrapper);
 
-  // Initialize animation (will check editor mode internally)
+  // Initialize animation
   initializeCounterAnimation(block);
-
-  // Observe editor mode changes and update display accordingly
-  observeEditorMode((isEditorActive) => {
-    const counterEl = block.querySelector('.info-counter-number');
-    if (!counterEl) return;
-
-    const target = parseInt(block.dataset.targetNumber, 10);
-    if (Number.isNaN(target)) return;
-
-    if (isEditorActive) {
-      // In editor mode: show target number immediately
-      updateCounterDisplay(counterEl, target);
-      block.dataset.animated = 'true';
-    } else {
-      // Not in editor mode: reset to 0 and re-enable animation
-      updateCounterDisplay(counterEl, 0);
-      block.dataset.animated = 'false';
-      initializeCounterAnimation(block);
-    }
-  }, false); // Don't call initially, we already handled it above
 }
