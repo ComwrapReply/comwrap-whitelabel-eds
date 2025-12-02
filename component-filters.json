@@ -35,7 +35,12 @@
       "tags",
       "embed",
       "teaser",
-      "separator"
+      "separator",
+      "modal",
+      "tabs",
+      "info-counter",
+      "dynamiccontent",
+      "dynamiccontentfilter"
     ]
   },
   {
@@ -138,6 +143,12 @@
     "id": "table-4-columns",
     "components": [
       "table-col-4"
+    ]
+  },
+  {
+    "id": "tabs",
+    "components": [
+      "tab"
     ]
   }
 ]

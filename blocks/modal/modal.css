@@ -1,0 +1,122 @@
+/* Modal trigger link */
+.modal .modal-link {
+  color: var(--color-primary);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.button .modal-link {
+  color: var(--color-white);
+  text-decoration: none;
+}
+
+.modal .modal-link:hover {
+ text-decoration: none;
+}
+
+/* Prevent body scroll when modal open */
+body.modal-open {
+  overflow: hidden;
+}
+
+/* Modal dialog */
+.modal-dialog {
+  position: fixed;
+  width: calc(100vw - 48px);
+  max-width: 900px;
+  max-height: calc(100dvh - 48px);
+  padding: 0;
+  border: 1px solid var(--color-black);
+  border-radius: 4px;
+}
+
+.modal-dialog::backdrop {
+  background-color: rgb(0 0 0 /80%);
+}
+
+/* Modal content */
+.modal-dialog .modal-content {
+  overflow-y: auto;
+  max-height: calc(100dvh - 96px);
+  padding: 48px 24px 24px;
+}
+
+.modal-dialog .modal-content .section {
+  padding: 0;
+}
+
+/* Close button */
+.modal-dialog .close-button {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: var(--color-black);
+}
+
+.modal-dialog .close-button:hover {
+  background: rgb(0 0 0 / 5%);
+  border-radius: 4px;
+}
+
+.modal-dialog .close-button:focus {
+  outline: none;
+}
+
+.modal-dialog .close-button:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Close icon X */
+.modal-dialog .close-button .icon.icon-close {
+  display: block;
+  width: 24px;
+  height: 24px;
+  position: relative;
+  margin: 4px;
+}
+
+.modal-dialog .close-button .icon.icon-close::before,
+.modal-dialog .close-button .icon.icon-close::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;
+  height: 2px;
+  background: currentcolor;
+  border-radius: 1px;
+}
+
+.modal-dialog .close-button .icon.icon-close::before {
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.modal-dialog .close-button .icon.icon-close::after {
+  transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+/* Desktop */
+@media (width >= 900px) {
+  .modal-dialog {
+    width: calc(100vw - 64px);
+  }
+
+  .modal-dialog .modal-content {
+    padding: 48px 32px 32px;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .modal-dialog,
+  .modal-dialog::backdrop {
+    transition: none;
+  }
+}

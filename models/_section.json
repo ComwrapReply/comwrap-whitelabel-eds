@@ -78,7 +78,12 @@
         "tags",
         "embed",
         "teaser",
-        "separator"
+        "separator",
+        "modal",
+        "tabs",
+        "info-counter",
+        "dynamiccontent",
+        "dynamiccontentfilter"
       ]
     }
   ]
