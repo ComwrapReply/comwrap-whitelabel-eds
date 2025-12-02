@@ -80,6 +80,8 @@
         "teaser",
         "separator",
         "modal",
+        "tabs",
+        "info-counter",
         "dynamiccontent",
         "dynamiccontentfilter"
       ]
