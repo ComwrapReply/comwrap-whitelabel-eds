@@ -1,0 +1,58 @@
+{
+  "definitions": [
+    {
+      "title": "Info Counter",
+      "id": "info-counter",
+      "plugins": {
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/block/v1/block",
+            "template": {
+              "name": "Info Counter",
+              "model": "info-counter"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "models": [
+    {
+      "id": "info-counter",
+      "fields": [
+        {
+          "component": "text",
+          "valueType": "string",
+          "name": "number",
+          "label": "Target Number",
+          "value": ""
+        },
+        {
+          "component": "richtext",
+          "name": "text",
+          "value": "",
+          "label": "Description Text",
+          "valueType": "string"
+        },
+        {
+          "component": "select",
+          "name": "mode",
+          "label": "Color Mode",
+          "options": [
+            {
+              "name": "On Dark (White Text)",
+              "value": "dark"
+            },
+            {
+              "name": "On Light (Brand Blue Text)",
+              "value": "light"
+            }
+          ],
+          "value": "light"
+        }
+      ]
+    }
+  ],
+  "filters": []
+}
+

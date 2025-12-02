@@ -1,0 +1,210 @@
+/**
+ * Info Counter Block Styles
+ * Based on Figma design specifications
+ */
+
+/* Info Counter Container */
+.info-counter-container .info-counter-wrapper {
+  max-width: unset;
+  display: flex;
+}
+
+/* Main info counter block */
+.info-counter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+  padding: 50px 200px;
+  min-height: 168px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Number container */
+.info-counter-number {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  height: 168px;
+  min-width: 300px;
+  overflow: hidden;
+  position: relative;
+  flex-shrink: 0;
+}
+
+/* Individual digit container */
+.info-counter-digit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  height: 168px;
+  line-height: 168px;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Digit value span */
+.info-counter-digit-value {
+  font-family: 'Albert Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-weight: 600; /* SemiBold */
+  font-size: 160px;
+  line-height: 168px;
+  text-align: right;
+  white-space: nowrap;
+  display: block;
+  transition: transform 0.3s ease-out;
+}
+
+/* Text container */
+.info-counter-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex-shrink: 0;
+  max-width: 460px;
+}
+
+.info-counter-text p {
+  margin: 0;
+  padding: 0;
+}
+
+/* Dark mode (On Dark) - White text */
+.info-counter-mode-dark .info-counter-digit-value {
+  color: #fff;
+}
+
+.info-counter-mode-dark .info-counter-text p {
+  color: #fff;
+}
+
+.info-counter-mode-dark {
+  background: transparent;
+}
+
+/* Light mode (On Light) - Brand Blue number, Black text */
+.info-counter-mode-light .info-counter-digit-value {
+  color: #0063be;
+}
+
+.info-counter-mode-light .info-counter-text p {
+  color: #000;
+}
+
+.info-counter-mode-light {
+  background: linear-gradient(to right, #f7f6f5, #fff);
+}
+
+/* Variant classes for mode selection */
+.info-counter.dark,
+.info-counter.on-dark {
+  background: transparent;
+}
+
+.info-counter.dark .info-counter-digit-value,
+.info-counter.on-dark .info-counter-digit-value {
+  color: #fff;
+}
+
+.info-counter.dark .info-counter-text p,
+.info-counter.on-dark .info-counter-text p {
+  color: #fff;
+}
+
+.info-counter.light,
+.info-counter.on-light {
+  background: linear-gradient(to right, #f7f6f5, #fff);
+}
+
+.info-counter.light .info-counter-digit-value,
+.info-counter.on-light .info-counter-digit-value {
+  color: #0063be;
+}
+
+.info-counter.light .info-counter-text p,
+.info-counter.on-light .info-counter-text p {
+  color: #000;
+}
+
+/* Mobile Responsive Design */
+@media (width < 900px) {
+  .info-counter {
+    padding: 50px 20px;
+    gap: 0;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .info-counter-number {
+    height: 100px;
+    margin-bottom: 0;
+  }
+
+  .info-counter-digit {
+    height: 100px;
+    line-height: 100px;
+  }
+
+  .info-counter-digit-value {
+    font-size: 88px;
+    line-height: 100px;
+  }
+
+  .info-counter-text {
+    height: auto;
+    max-width: 100%;
+    text-align: center;
+    padding: 0 20px;
+  }
+
+  .info-counter-text p {
+    font-size: 18px;
+    line-height: 24px;
+    text-align: left;
+  }
+
+  /* Mobile dark mode adjustments */
+  .info-counter-mode-dark .info-counter-text p {
+    text-align: left;
+  }
+
+  /* Mobile light mode adjustments */
+  .info-counter-mode-light .info-counter-text p {
+    text-align: left;
+  }
+}
+
+/* Tablet breakpoint */
+@media (width >= 600px) and (width < 900px) {
+  .info-counter {
+    padding: 50px 40px;
+  }
+
+  .info-counter-text {
+    max-width: 500px;
+  }
+
+  .info-counter-text p {
+    font-size: 22px;
+    line-height: 28px;
+  }
+}
+
+/* Accessibility: Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .info-counter-digit-value {
+    transition: none;
+  }
+
+  .info-counter {
+    animation: none;
+  }
+}
+
+/* Focus styles for accessibility */
+.info-counter:focus-visible {
+  outline: 2px solid #0063be;
+  outline-offset: 4px;
+}
