@@ -5912,6 +5912,39 @@
     ]
   },
   {
+    "id": "modal",
+    "fields": [
+      {
+        "component": "aem-content",
+        "name": "reference",
+        "label": "Modal Content Reference"
+      },
+      {
+        "component": "text",
+        "name": "triggerText",
+        "label": "Trigger Link Text",
+        "valueType": "string",
+        "value": "Open Modal"
+      },
+      {
+        "component": "select",
+        "name": "classes",
+        "label": "Style",
+        "options": [
+          {
+            "name": "link",
+            "value": ""
+          },
+          {
+            "name": "button",
+            "value": "button"
+          }
+        ],
+        "value": "link"
+      }
+    ]
+  },
+  {
     "id": "info-counter",
     "fields": [
       {
