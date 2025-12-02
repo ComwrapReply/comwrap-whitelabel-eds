@@ -58,21 +58,21 @@ async function loadFonts() {
   }
 }
 
-/**
- * Auto-links modals for links with href containing '/modals/'
- * @param {Element} element - The container element to attach listener to
- */
-function autolinkModals(element) {
-  element.addEventListener('click', async (e) => {
-    const origin = e.target.closest('a');
+// /**
+//  * Auto-links modals for links with href containing '/modals/'
+//  * @param {Element} element - The container element to attach listener to
+//  */
+// function autolinkModals(element) {
+//   element.addEventListener('click', async (e) => {
+//     const origin = e.target.closest('a');
 
-    if (origin && origin.href && origin.href.includes('/modals/')) {
-      e.preventDefault();
-      const { openModal } = await import(`${window.hlx.codeBasePath}/blocks/modal/modal.js`);
-      openModal(origin.href);
-    }
-  });
-}
+//     if (origin && origin.href && origin.href.includes('/modals/')) {
+//       e.preventDefault();
+//       const { openModal } = await import(`${window.hlx.codeBasePath}/blocks/modal/modal.js`);
+//       openModal(origin.href);
+//     }
+//   });
+// }
 
 /**
  * Builds all synthetic blocks in a container element.
